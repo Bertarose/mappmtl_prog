@@ -2,7 +2,7 @@
 //  MAPP_MTL 2026 — Service Worker
 //  Stratégie : Network First + Cache Fallback
 // ══════════════════════════════════════════════════════════
-const CACHE = 'mapp-2026-v1';
+const CACHE = 'mapp-2026-v2';
 const ASSETS = [
   '/',
   '/index.html',
