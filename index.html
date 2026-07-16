@@ -306,9 +306,9 @@ nav{
 .sheet-head .t{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
 .sheet-close{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--black);background:var(--white);padding:6px 11px;cursor:pointer;transition:.12s}
 .sheet-close:hover{background:var(--lime)}
-.sheet .ph{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-bottom:1px solid var(--black)}
+.sheet .ph{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-bottom:1px solid var(--black);view-transition-name:sheet-photo}
 .sheet-body{padding:20px 18px 26px}
-.sheet-body h2{font-family:var(--cond);font-weight:500;font-size:32px;text-transform:uppercase;line-height:.95;letter-spacing:-0.02em}
+.sheet-body h2{font-family:var(--cond);font-weight:500;font-size:32px;text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;view-transition-name:sheet-title}
 .sheet-body .disc{font-family:var(--mono);font-size:10.5px;color:var(--grey);text-transform:uppercase;letter-spacing:.1em;margin-top:7px}
 .sheet-body .when{
   display:inline-flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;
@@ -337,8 +337,8 @@ nav{
 @media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none}}
 
 /* ── Map ─────────────────────────────────────────── */
-#map{height:400px;border:1px solid var(--black);isolation:isolate}
-.leaflet-container{background:#f4f4f4;font-family:var(--font)}.leaflet-pane,.leaflet-top,.leaflet-bottom{z-index:10!important}
+#map{height:400px;border:1px solid var(--black)}
+.leaflet-container{background:#f4f4f4;font-family:var(--font)}
 .map-legend{display:flex;flex-wrap:wrap;gap:0;margin-top:0;border:1px solid var(--black);border-top:none}
 .map-chip{
   font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
@@ -372,6 +372,98 @@ footer a{color:var(--lime);text-decoration:none}
 
 .hide{display:none!important}
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Festival",
+      "name": "MAPP_MTL 2026",
+      "alternateName": "Festival MAPP MTL",
+      "description": "Festival de projection et d'art numérique · Montréal · 29 sept — 4 oct 2026",
+      "url": "https://festival.mappmtl.com",
+      "startDate": "2026-09-29T19:00:00-04:00",
+      "endDate": "2026-10-04T20:00:00-04:00",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "isAccessibleForFree": true,
+      "inLanguage": ["fr", "en"],
+      "image": "https://festival.mappmtl.com/og.jpg",
+      "organizer": {
+        "@type": "Organization",
+        "name": "MAPP_MTL",
+        "url": "https://www.mappmtl.com"
+      },
+      "location": {
+        "@type": "Place",
+        "name": "Skatepark Van Horne",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Skatepark Van Horne",
+          "addressLocality": "Montréal",
+          "addressRegion": "QC",
+          "addressCountry": "CA"
+        },
+        "geo": { "@type": "GeoCoordinates", "latitude": 45.529, "longitude": -73.612 }
+      },
+      "subEvent": [
+        {
+          "@type": "Event",
+          "name": "Lancement Cité Mémoire × MAPP 2026",
+          "startDate": "2026-09-29T19:00:00-04:00",
+          "location": { "@type": "Place", "name": "Vieux-Montréal — Cité Mémoire", "address": "Montréal, QC" }
+        },
+        {
+          "@type": "Event",
+          "name": "Tournoi de Ping-Pong de la créativité numérique",
+          "startDate": "2026-09-30T17:00:00-04:00",
+          "endDate": "2026-09-30T22:00:00-04:00",
+          "location": { "@type": "Place", "name": "Moment Factory", "address": "Montréal, QC" }
+        },
+        {
+          "@type": "Event",
+          "name": "Ouverture — Fête de quartier numérique",
+          "startDate": "2026-10-01T17:00:00-04:00",
+          "endDate": "2026-10-01T22:00:00-04:00",
+          "isAccessibleForFree": true,
+          "location": { "@type": "Place", "name": "Skatepark Van Horne", "address": "Montréal, QC" }
+        },
+        {
+          "@type": "Event",
+          "name": "Fête de quartier numérique",
+          "startDate": "2026-10-02T17:00:00-04:00",
+          "endDate": "2026-10-02T22:00:00-04:00",
+          "isAccessibleForFree": true,
+          "location": { "@type": "Place", "name": "Skatepark Van Horne", "address": "Montréal, QC" }
+        },
+        {
+          "@type": "Event",
+          "name": "Soirée MAPP",
+          "startDate": "2026-10-02T22:00:00-04:00",
+          "endDate": "2026-10-03T03:00:00-04:00",
+          "location": { "@type": "Place", "name": "Moment Factory", "address": "Montréal, QC" }
+        },
+        {
+          "@type": "Event",
+          "name": "Fête de quartier numérique — Journée complète",
+          "startDate": "2026-10-03T12:00:00-04:00",
+          "endDate": "2026-10-03T22:00:00-04:00",
+          "isAccessibleForFree": true,
+          "location": { "@type": "Place", "name": "Skatepark Van Horne", "address": "Montréal, QC" }
+        },
+        {
+          "@type": "Event",
+          "name": "Jam Tagtool × Kahnawake Survival School",
+          "startDate": "2026-10-04T14:00:00-04:00",
+          "endDate": "2026-10-04T20:00:00-04:00",
+          "isAccessibleForFree": true,
+          "location": { "@type": "Place", "name": "Caserne 26", "address": "Montréal, QC" }
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -785,16 +877,30 @@ function openArtist(slug, fromHash){
       ${a.links.ig?`<a href="${a.links.ig}" target="_blank" rel="noopener">Instagram ↗</a>`:''}
     </div>`;
   paintPortraits(document.getElementById('sheet-media'));
-  document.getElementById('sheet-back').classList.add('open');
-  document.getElementById('sheet').classList.add('open');
+  if (document.startViewTransition) {
+    document.startViewTransition(() => {
+      document.getElementById('sheet-back').classList.add('open');
+      document.getElementById('sheet').classList.add('open');
+    });
+  } else {
+    document.getElementById('sheet-back').classList.add('open');
+    document.getElementById('sheet').classList.add('open');
+  }
   document.body.style.overflow = 'hidden';
   document.getElementById('sheet-close').focus({preventScroll:true});
   if(!fromHash) history.replaceState(null,'','#a/'+slug);
 }
 function closeArtist(){
   currentArtist = null;
-  document.getElementById('sheet-back').classList.remove('open');
-  document.getElementById('sheet').classList.remove('open');
+  if (document.startViewTransition) {
+    document.startViewTransition(() => {
+      document.getElementById('sheet-back').classList.remove('open');
+      document.getElementById('sheet').classList.remove('open');
+    });
+  } else {
+    document.getElementById('sheet-back').classList.remove('open');
+    document.getElementById('sheet').classList.remove('open');
+  }
   document.body.style.overflow = '';
   if(location.hash.startsWith('#a/')) history.replaceState(null,'','#');
 }
