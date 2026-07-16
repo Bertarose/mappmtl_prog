@@ -139,7 +139,7 @@ nav{
 .hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:2}
 .hero h1{
   font-family:var(--cond);font-weight:500;
-  font-size:clamp(40px,9.5vw,110px);line-height:.9;
+  font-size:clamp(34px,8vw,110px);line-height:.9;
   text-transform:uppercase;letter-spacing:-0.03em;
   color:var(--white);white-space:nowrap;
 }
@@ -645,6 +645,21 @@ function renderHeroStatus(){
     </div>`;
 }
 function localDateStr(d){ return d.toLocaleDateString('en-CA',{timeZone:'America/Montreal'}); }
+
+// ============================================================
+// TITRE : s'ajuste exactement à la largeur, quelle que soit la police
+// ============================================================
+function fitTitle(){
+  const h = document.querySelector('.hero h1');
+  if(!h) return;
+  const max = h.parentElement.clientWidth;
+  h.style.fontSize = '100px';                 // taille de mesure
+  const w = h.scrollWidth;
+  if(!w) return;
+  h.style.fontSize = Math.min(110, Math.floor(100 * max / w * 0.995)) + 'px';
+}
+window.addEventListener('resize', fitTitle);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle);
 setInterval(renderHeroStatus, 30000);
 
 // ============================================================
@@ -948,6 +963,7 @@ function boot(){
   initMap();
   initHalftone();
   applyLang();
+  fitTitle();
   initReveals();
   if(location.hash.startsWith('#a/')) openArtist(location.hash.slice(3), true);
 }
