@@ -99,26 +99,26 @@ body{
 /* ── Nav ─────────────────────────────────────────── */
 nav{
   position:sticky;top:34px;z-index:190;
-  background:var(--paper);border-bottom:1px solid var(--black);
+  background:var(--black);border-bottom:1px solid #1e1e1e;
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px 18px;
+  padding:14px 18px;color:var(--white);
 }
 .brand{font-size:19px;font-weight:800;letter-spacing:-0.02em;display:flex;align-items:center;gap:10px}
-.brand span{color:var(--black)}
+.brand span{color:var(--white)}
 .logo{display:block;fill:currentColor}
-.brand .logo{width:30px;height:30px;color:var(--black)}
+.brand .logo{width:30px;height:30px;color:var(--white)}
 .f-mark{width:76px;height:76px;margin:0 auto 6px;color:var(--white)}
 .nav-right{display:flex;gap:8px;align-items:center}
 .nav-link{
   font-family:var(--mono);font-size:11px;font-weight:700;
   text-transform:uppercase;letter-spacing:.1em;
-  border:1px solid var(--black);color:var(--black);
+  border:1px solid var(--white);color:var(--white);
   padding:7px 12px;background:transparent;cursor:pointer;
   text-decoration:none;transition:.15s;
 }
-.nav-link:hover{background:var(--lime);border-color:var(--black)}
-.nav-link.solid{background:var(--black);border-color:var(--black);color:var(--white)}
-.nav-link.solid:hover{background:var(--lime);color:var(--black)}
+.nav-link:hover{background:var(--lime);border-color:var(--lime);color:var(--black)}
+.nav-link.solid{background:var(--white);border-color:var(--white);color:var(--black)}
+.nav-link.solid:hover{background:var(--lime);border-color:var(--lime)}
 
 /* ── Section scaffolding ─────────────────────────── */
 .sec{padding:54px 18px;border-bottom:1px solid var(--black);position:relative}
@@ -133,7 +133,7 @@ nav{
 
 /* ── Hero ────────────────────────────────────────── */
 .hero{
-  padding:56px 18px 0;background:var(--paper);
+  padding:56px 18px 0;background:var(--black);color:var(--white);
   border-bottom:1px solid var(--black);position:relative;overflow:hidden;
 }
 .hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:2}
@@ -141,19 +141,20 @@ nav{
   font-family:var(--cond);font-weight:500;
   font-size:clamp(40px,9.5vw,110px);line-height:.9;
   text-transform:uppercase;letter-spacing:-0.03em;
-  color:var(--black);white-space:nowrap;
+  color:var(--white);white-space:nowrap;
 }
 .hero .sub{
   font-family:var(--mono);font-size:13px;letter-spacing:.14em;
   color:var(--grey);margin-top:26px;text-transform:uppercase;
 }
-.hero .ed{color:var(--lime-deep);font-weight:700}
+.hero .ed{color:var(--lime);font-weight:700}
 
 /* generative halftone visual */
 .halftone-wrap{
   position:relative;margin-top:38px;height:min(46vh,340px);
-  border-top:1px solid var(--black);
+  border-top:1px solid #2a2a2a;
 }
+.ht-src{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 #halftone{display:block;width:100%;height:100%}
 .halftone-cap{
   position:absolute;left:0;bottom:14px;
@@ -164,16 +165,16 @@ nav{
 
 /* status: countdown / live */
 #hero-status{margin-top:30px}
-.count-box{display:flex;gap:0;border:1px solid var(--black);width:fit-content;background:var(--white)}
+.count-box{display:flex;gap:0;border:1px solid #3a3a3a;width:fit-content;background:transparent}
 .count-cell{
-  padding:14px 18px;border-right:1px solid var(--black);text-align:center;
+  padding:14px 18px;border-right:1px solid #3a3a3a;text-align:center;
 }
 .count-cell:last-child{border-right:none}
-.count-cell b{font-family:var(--mono);font-size:26px;font-weight:700;color:var(--black);display:block;line-height:1}
+.count-cell b{font-family:var(--mono);font-size:26px;font-weight:700;color:var(--lime);display:block;line-height:1}
 .count-cell span{font-family:var(--mono);font-size:9px;color:var(--grey);text-transform:uppercase;letter-spacing:.14em;margin-top:6px;display:block}
 .live-badge{
   display:inline-flex;align-items:center;gap:12px;
-  background:var(--lime);color:var(--black);border:1px solid var(--black);
+  background:var(--lime);color:var(--black);border:1px solid var(--lime);
   font-family:var(--cond);font-weight:500;font-size:18px;
   text-transform:uppercase;letter-spacing:.04em;padding:12px 22px;
 }
@@ -405,6 +406,8 @@ footer a{color:var(--lime);text-decoration:none}
     <div class="sub">29 SEPT — 4 OCT 2026 · MONTRÉAL · <span class="ed" data-fr="10e ÉDITION" data-en="10th EDITION">10e ÉDITION</span></div>
     <div id="hero-status"></div>
     <div class="halftone-wrap">
+      <video class="ht-src" id="ht-video" src="/media/mapp-hero.mp4"
+             muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
       <canvas id="halftone"></canvas>
       <div class="halftone-cap" data-fr="MAPP_MTL · Festival de projection numérique" data-en="MAPP_MTL · Digital projection festival">MAPP_MTL · Festival de projection numérique</div>
       <div class="halftone-cap r">45.528°N · 73.603°O</div>
@@ -854,6 +857,31 @@ function initHalftone(){
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let t = 0;
 
+  // vidéo du site principal, échantillonnée cellule par cellule :
+  // la même image que mappmtl.com, mais traduite en trame de points
+  const vid = document.getElementById('ht-video');
+  const off = document.createElement('canvas');
+  const octx = off.getContext('2d', {willReadFrequently:true});
+  let lum = null, cols = 0, rows = 0;
+  if(!reduce && vid){
+    vid.play().catch(()=>{});
+    document.addEventListener('touchstart', ()=>vid.play().catch(()=>{}), {once:true, passive:true});
+  }
+  function sampleVideo(){
+    if(reduce || !vid || vid.readyState < 2 || !vid.videoWidth) { lum = null; return; }
+    cols = Math.ceil(W/GAP); rows = Math.ceil(H/GAP);
+    if(off.width !== cols || off.height !== rows){ off.width = cols; off.height = rows; }
+    // recadrage « cover »
+    const va = vid.videoWidth/vid.videoHeight, ca = cols/rows;
+    let sw = vid.videoWidth, sh = vid.videoHeight, sx = 0, sy = 0;
+    if(va > ca){ sw = vid.videoHeight*ca; sx = (vid.videoWidth-sw)/2; }
+    else       { sh = vid.videoWidth/ca; sy = (vid.videoHeight-sh)/2; }
+    try{
+      octx.drawImage(vid, sx, sy, sw, sh, 0, 0, cols, rows);
+      lum = octx.getImageData(0, 0, cols, rows).data;
+    }catch(e){ lum = null; }
+  }
+
   // le champ réagit au doigt / à la souris : un « faisceau de projecteur »
   let px = -1e4, py = -1e4;
   function setPointer(clientX, clientY){
@@ -868,13 +896,23 @@ function initHalftone(){
   const R = 100, R2 = R*R;
 
   function frame(){
+    sampleVideo();
     ctx.clearRect(0,0,W,H);
-    for(let y=GAP/2; y<H; y+=GAP){
-      for(let x=GAP/2; x<W; x+=GAP){
+    let cy = 0;
+    for(let y=GAP/2; y<H; y+=GAP, cy++){
+      let cxI = 0;
+      for(let x=GAP/2; x<W; x+=GAP, cxI++){
         const nx = x/W, ny = y/H;
-        const v = Math.sin((nx*7)+t) * Math.cos((ny*5)-t*0.7)
-                + Math.sin((nx*3 - ny*4)+t*0.5);
-        let m = (v+2)/4;                 // 0..1
+        const wave = (Math.sin((nx*7)+t) * Math.cos((ny*5)-t*0.7)
+                    + Math.sin((nx*3 - ny*4)+t*0.5) + 2)/4;   // 0..1
+        let m;
+        if(lum){
+          const i = (Math.min(cy,rows-1)*cols + Math.min(cxI,cols-1))*4;
+          const l = (lum[i]*0.2126 + lum[i+1]*0.7152 + lum[i+2]*0.0722)/255;
+          m = Math.min(1, l*1.15 + wave*0.08);   // la vidéo mène, la vague texture
+        } else {
+          m = wave;                               // repli génératif si pas de vidéo
+        }
         // amplification autour du pointeur
         const dx = x-px, dy = y-py, d2 = dx*dx+dy*dy;
         let boost = 0;
@@ -882,10 +920,10 @@ function initHalftone(){
         const r = Math.max(0, m*GAP*0.62);
         if(r < 0.4) continue;
         if(boost > 0.3 || m > 0.86){
-          ctx.fillStyle = 'rgba(0,192,74,'+ (0.55+m*0.45) +')';
+          ctx.fillStyle = 'rgba(34,255,98,'+ (0.55+m*0.45) +')';
         } else {
-          const k = 0.08 + m*0.82;       // densité d'encre
-          ctx.fillStyle = 'rgba(0,0,0,'+k+')';
+          const g = 105 + Math.round(m*150);
+          ctx.fillStyle = 'rgba('+g+','+g+','+g+','+(0.18+m*0.72)+')';
         }
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI*2);
