@@ -154,7 +154,7 @@ nav{
 .hero .ed{color:var(--lime);font-weight:700}
 
 /* generative halftone visual */
-.halftone-wrap{
+.halftone-wrap{position:relative;
   position:relative;margin-top:38px;height:min(46vh,340px);
   border-top:1px solid #2a2a2a;
 }
@@ -425,7 +425,7 @@ footer a{color:var(--lime);text-decoration:none}
 
 <!-- NAV -->
 <nav>
-  <div class="brand">
+  <div class="brand" id="brand-logo">
     <svg class="logo" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
       <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
@@ -452,6 +452,7 @@ footer a{color:var(--lime);text-decoration:none}
       <video class="ht-src" id="ht-video" src="/media/mapp-hero.mp4"
              muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
       <canvas id="halftone"></canvas>
+      <canvas id="vhs-overlay" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:0.55;"></canvas>
       <div class="halftone-cap" data-fr="MAPP_MTL · Festival de projection numérique" data-en="MAPP_MTL · Digital projection festival">MAPP_MTL · Festival de projection numérique</div>
       <div class="halftone-cap r">45.528°N · 73.603°O</div>
     </div>
@@ -1021,25 +1022,86 @@ function boot(){
 }
 boot();
 
-// ── SW — version auto (se régénère chaque jour sans toucher sw.js) ──
+// ── SW — version auto ──
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js?v=' + Math.floor(Date.now()/86400000))
     .catch(()=>{});
 }
 
-// ── HAPTIQUE — helper global ──
-function vib(ms){ if(navigator.vibrate) navigator.vibrate(ms); }
-window.addEventListener('load', ()=>{ vib(12); }); // vibration d'arrivée
+// ── HAPTIQUE (iOS bloque vibrate — on détecte) ──
+const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent);
+function vib(ms) {
+  if (isIOS) return;
+  if (!navigator.vibrate) return;
+  try { navigator.vibrate(ms); } catch(e) {}
+}
+// Vibration au premier vrai touch (Android uniquement)
+document.addEventListener('touchstart', function onFirst() {
+  vib(18);
+  document.removeEventListener('touchstart', onFirst);
+}, {once: true, passive: true});
 
-// ── HAPTIQUE sur artistes ──
+// Haptique sur artistes
 const _oa = window.openArtist;
-if(typeof _oa==='function'){
-  window.openArtist = function(...a){ vib(8); return _oa.apply(this,a); };
+if (typeof _oa === 'function') {
+  window.openArtist = function(...a) { vib(8); return _oa.apply(this, a); };
 }
 const _ca = window.closeArtist;
-if(typeof _ca==='function'){
-  window.closeArtist = function(...a){ vib(6); return _ca.apply(this,a); };
+if (typeof _ca === 'function') {
+  window.closeArtist = function(...a) { vib(6); return _ca.apply(this, a); };
 }
+
+// ── EASTER EGG — 5 taps sur le logo ──
+(function() {
+  let taps = 0, timer = null;
+  function doTap(e) {
+    e.stopPropagation();
+    if (e.type === 'touchend') e.preventDefault();
+    clearTimeout(timer);
+    taps++;
+    timer = setTimeout(() => { taps = 0; }, 2500);
+    const el = document.getElementById('brand-logo');
+    if (el) {
+      el.style.opacity = taps >= 3 ? '0.4' : '1';
+      setTimeout(() => { if(el) el.style.opacity = '1'; }, 100);
+    }
+    if (taps >= 5) {
+      taps = 0;
+      vib([15, 30, 15, 30, 80]);
+      launchLimeRain();
+    }
+  }
+  function initEgg() {
+    const logo = document.getElementById('brand-logo');
+    if (!logo) { setTimeout(initEgg, 200); return; }
+    logo.style.cursor = 'pointer';
+    logo.style.userSelect = 'none';
+    logo.style.webkitUserSelect = 'none';
+    logo.addEventListener('touchend', doTap, {passive: false});
+    logo.addEventListener('click', doTap);
+  }
+  initEgg();
+  function launchLimeRain() {
+    const c = document.createElement('div');
+    c.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;';
+    document.body.appendChild(c);
+    ['●','◆','▲','★','✦','◉'].forEach(() => {
+      for (let i = 0; i < 14; i++) {
+        const el = document.createElement('span');
+        el.textContent = ['●','◆','▲','★','✦','◉'][Math.floor(Math.random()*6)];
+        el.style.cssText = `position:absolute;top:-30px;left:${Math.random()*100}%;color:#22ff62;font-size:${10+Math.random()*20}px;opacity:0;will-change:transform;animation:lime-fall ${1.8+Math.random()*1.6}s ${Math.random()*1.5}s ease-in forwards;`;
+        c.appendChild(el);
+      }
+    });
+    if (!document.getElementById('lime-kf')) {
+      const s = document.createElement('style');
+      s.id = 'lime-kf';
+      s.textContent = '@keyframes lime-fall{0%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}100%{opacity:0;transform:translateY(110vh) rotate(720deg) scale(.5)}}';
+      document.head.appendChild(s);
+    }
+    setTimeout(() => { if(c.parentNode) c.remove(); }, 4500);
+  }
+})();
 
 // ── FICHE ÉVÉNEMENT ──
 function openEvent(dayIdx, evIdx){
@@ -1084,6 +1146,49 @@ function closeEvent(){
 document.addEventListener('keydown', e=>{
   if(e.key==='Escape') closeEvent();
 });
+
+// ── VHS OVERLAY ──
+(function initVHS(){
+  const cv = document.getElementById('vhs-overlay');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+  let W, H;
+  function resize(){ W=cv.clientWidth; H=cv.clientHeight; cv.width=W; cv.height=H; }
+  resize();
+  window.addEventListener('resize', resize);
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let t=0, gt=0, ga=false, gy=0, gh=0;
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='rgba(0,0,0,0.18)';
+    for(let y=0;y<H;y+=3) ctx.fillRect(0,y,W,1);
+    for(let i=0;i<400;i++){
+      ctx.fillStyle=`rgba(255,255,255,${Math.random()*.25})`;
+      ctx.fillRect(Math.random()*W,Math.random()*H,Math.random()*2,Math.random()*2);
+    }
+    const sh=Math.sin(t*1.5)*2.5;
+    ctx.fillStyle='rgba(255,30,30,0.06)';   ctx.fillRect(sh,0,W,H);
+    ctx.fillStyle='rgba(0,255,230,0.05)';   ctx.fillRect(-sh,0,W,H);
+    const ty=(t*25)%(H+40)-20;
+    const tg=ctx.createLinearGradient(0,ty-12,0,ty+12);
+    tg.addColorStop(0,'transparent'); tg.addColorStop(.5,'rgba(255,255,255,.12)'); tg.addColorStop(1,'transparent');
+    ctx.fillStyle=tg; ctx.fillRect(0,ty-12,W,24);
+    gt++;
+    if(gt>90+Math.random()*150){ gt=0; ga=true; gy=Math.random()*H*.8; gh=1+Math.random()*6; }
+    if(ga){
+      const off=(Math.random()-.5)*18;
+      ctx.fillStyle=`rgba(255,255,255,${.08+Math.random()*.12})`; ctx.fillRect(off,gy,W,gh);
+      ctx.fillStyle=`rgba(${Math.random()>.5?'255,0,100':'0,200,255'},.1)`; ctx.fillRect(off-2,gy,W,gh);
+      if(Math.random()<.25) ga=false;
+    }
+    const vg=ctx.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,H*.85);
+    vg.addColorStop(0,'transparent'); vg.addColorStop(1,'rgba(0,0,0,.35)');
+    ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
+    t+=.008;
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
 </script>
 </body>
 </html>
