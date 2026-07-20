@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MAPP_MTL 2026 — Festival international de projection mapping</title>
+  <meta name="description" content="MAPP_X · 10ème édition du Festival international de projection mapping · 29 sept — 3 oct 2026 · Montréal">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+  <link rel="apple-touch-icon" href="/icon-512.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=Archivo+Narrow:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #000;
+      --white: #fff;
+      --grey: #5f5f5f;
+      --paper: #ffffff;
+      --font: 'Archivo', -apple-system, sans-serif;
+      --cond: 'Archivo Narrow', 'Archivo', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    html { background: var(--paper); color: var(--black); font-family: var(--font); }
+    body { min-height: 100vh; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 200;
+      background: var(--black); border-bottom: 1px solid #1e1e1e;
+      padding: 14px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      transform: translateZ(0); will-change: transform;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand svg { width: 28px; height: 28px; color: #fff; display: block; fill: currentColor; }
+    .brand span { font-family: var(--cond); font-size: 18px; font-weight: 700; color: #fff; letter-spacing: .08em; text-transform: uppercase; }
+    .nav-url { font-family: var(--mono); font-size: 10px; color: #666; letter-spacing: .16em; text-transform: uppercase; }
+
+    /* ── TICKER ── */
+    .ticker {
+      position: sticky; top: 57px; z-index: 190;
+      background: var(--black); border-bottom: 1px solid #222;
+      height: 34px; overflow: hidden;
+      display: flex; align-items: center;
+      transform: translateZ(0); will-change: transform;
+    }
+    .ticker-track { display: flex; white-space: nowrap; animation: ticker-scroll 32s linear infinite; }
+    .ticker-item { font-family: var(--mono); font-size: 10px; color: #fff; letter-spacing: .18em; text-transform: uppercase; padding: 0 28px; }
+    .ticker-item span { color: #888; }
+    @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      background: var(--paper);
+      border-bottom: 1px solid var(--black);
+      overflow: hidden;
+      min-height: min(56vh, 480px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 40px 20px;
+    }
+
+    /* Vidéo cachée — source pour le halftone */
+    .ht-src { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+    #halftone { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+    /* Dégradé sur les bords du hero pour douceur */
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 30%, rgba(255,255,255,.7) 100%);
+      pointer-events: none; z-index: 1;
+    }
+
+    .hero-inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
+
+    .eyebrow {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 10px; color: var(--grey);
+      letter-spacing: .2em; text-transform: uppercase; margin-bottom: 14px;
+    }
+    .eyebrow::before { content: ''; display: inline-block; width: 10px; height: 10px; background: var(--black); border: 1px solid var(--black); }
+
+    h1 {
+      font-family: var(--cond); font-size: clamp(28px, 5vw, 52px); font-weight: 700;
+      color: var(--black); letter-spacing: -.01em; line-height: 1.0;
+      text-align: center; text-transform: uppercase; margin-bottom: 8px;
+    }
+
+    .hero-dates {
+      font-family: var(--mono); font-size: 12px; color: var(--grey);
+      letter-spacing: .16em; text-transform: uppercase;
+      margin-bottom: 28px; text-align: center;
+    }
+    .hero-dates b { color: var(--black); font-weight: 700; }
+
+    /* ── COMPTE À REBOURS ── */
+    .countdown { display: flex; gap: 0; margin-bottom: 28px; border: 1px solid var(--black); }
+    .count-cell {
+      display: flex; flex-direction: column; align-items: center;
+      min-width: 74px; padding: 14px 10px 10px;
+      border-right: 1px solid var(--black);
+    }
+    .count-cell:last-child { border-right: none; }
+    .count-cell b { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--black); line-height: 1; display: block; }
+    .count-cell span { font-family: var(--mono); font-size: 9px; color: var(--grey); letter-spacing: .18em; text-transform: uppercase; margin-top: 5px; }
+
+    /* ── RÉSEAUX SOCIAUX ── */
+    .socials { display: flex; gap: 0; flex-wrap: wrap; justify-content: center; border: 1px solid var(--black); }
+    .soc {
+      display: flex; align-items: center; gap: 7px;
+      font-family: var(--mono); font-size: 10px; color: var(--grey);
+      letter-spacing: .1em; text-transform: uppercase;
+      border-right: 1px solid var(--black);
+      padding: 10px 16px;
+      transition: background .12s, color .12s;
+      text-decoration: none;
+    }
+    .soc:last-child { border-right: none; }
+    .soc:hover { background: var(--black); color: var(--white); }
+    .soc svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+    /* ── VIDÉO ── */
+    .video-wrap {
+      border-bottom: 1px solid var(--black);
+      background: var(--black);
+    }
+    .video-wrap video {
+      display: block; width: 100%; max-height: 56vh;
+      object-fit: cover;
+    }
+
+    /* ── SECTIONS ── */
+    .sec { padding: 36px 18px; border-bottom: 1px solid var(--black); }
+    .sec-inner { max-width: 640px; margin: 0 auto; }
+    .sec-label {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 10px; color: var(--grey);
+      letter-spacing: .2em; text-transform: uppercase; margin-bottom: 16px;
+    }
+    .sec-label::before { content: ''; display: inline-block; width: 10px; height: 10px; background: var(--black); border: 1px solid var(--black); }
+
+    .desc { font-size: 14px; color: var(--black); line-height: 1.75; }
+
+    /* ── DON ── */
+    .don-box {
+      border: 1px solid var(--black); padding: 18px 20px; margin-top: 24px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .don-icon { font-size: 20px; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+    .don-text { font-size: 13px; color: var(--grey); line-height: 1.65; }
+    .don-text b { color: var(--black); font-weight: 700; }
+    .don-text a { color: var(--black); text-decoration: underline; text-underline-offset: 3px; font-weight: 700; }
+    .don-text a:hover { opacity: .6; }
+
+    /* ── ÉVÉNEMENTS ── */
+    .ev-grid { display: flex; flex-direction: column; border: 1px solid var(--black); }
+    .ev { padding: 18px 20px; border-bottom: 1px solid var(--black); }
+    .ev:last-child { border-bottom: none; }
+    .ev-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .ev-dot { width: 8px; height: 8px; background: var(--black); flex-shrink: 0; }
+    .ev-name { font-family: var(--cond); font-size: 20px; font-weight: 700; color: var(--black); text-transform: uppercase; letter-spacing: .02em; }
+    .ev-meta { font-family: var(--mono); font-size: 10px; color: var(--grey); letter-spacing: .1em; margin-bottom: 2px; }
+    .ev-cta {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 12px;
+      font-family: var(--mono); font-size: 10px; color: var(--white);
+      background: var(--black); border: 1px solid var(--black);
+      padding: 9px 16px; text-decoration: none;
+      letter-spacing: .1em; text-transform: uppercase; font-weight: 700;
+      transition: opacity .12s;
+    }
+    .ev-cta:hover { opacity: .7; }
+
+    /* ── HALFTONE CAP ── */
+    .halftone-cap {
+      position: absolute; left: 0; bottom: 14px;
+      font-family: var(--mono); font-size: 10px; letter-spacing: .2em;
+      color: var(--grey); text-transform: uppercase; z-index: 3;
+      padding: 0 14px;
+    }
+    .halftone-cap.r { left: auto; right: 0; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--black); padding: 36px 18px 48px; text-align: center; }
+    footer svg { width: 56px; height: 56px; color: #fff; fill: currentColor; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
+    footer p { font-family: var(--mono); font-size: 10px; color: #666; margin-top: 8px; letter-spacing: .08em; text-transform: uppercase; line-height: 1.8; }
+    footer a { color: #fff; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 540px) {
+      .count-cell { min-width: 58px; padding: 10px 6px 8px; }
+      .count-cell b { font-size: 24px; }
+      .soc { padding: 10px 12px; font-size: 9px; }
+      h1 { font-size: clamp(24px, 7vw, 36px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="brand">
+      <svg viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg">
+        <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+        <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
+        <path d="M16.511,28.213l-3.718-15.266h-.051v15.266h-3.103V9.639h5.168l3.686,15.139h.051l3.688-15.139h5.168v18.574h-3.105v-15.266h-.051l-3.718,15.266h-4.014Z"/>
+        <path d="M9.639,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM17.964,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+        <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
+        <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
+      </svg>
+      <span>MAPP _MTL</span>
+    </div>
+    <div class="nav-url">app.mappmtl.com</div>
+  </nav>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <span class="ticker-item">MAPP_X · <span>10ème édition</span></span>
+      <span class="ticker-item">29 SEPT — 3 OCT 2026 · <span>Montréal</span></span>
+      <span class="ticker-item">Festival international de projection mapping · <span>Entrée gratuite</span></span>
+      <span class="ticker-item">Skatepark Van Horne · <span>Moment Factory · Cité Mémoire · Caserne 26</span></span>
+      <span class="ticker-item">MAPP_X · <span>10ème édition</span></span>
+      <span class="ticker-item">29 SEPT — 3 OCT 2026 · <span>Montréal</span></span>
+      <span class="ticker-item">Festival international de projection mapping · <span>Entrée gratuite</span></span>
+      <span class="ticker-item">Skatepark Van Horne · <span>Moment Factory · Cité Mémoire · Caserne 26</span></span>
+    </div>
+  </div>
+
+  <!-- HERO avec halftone alimenté par la vidéo -->
+  <section class="hero">
+    <video class="ht-src" id="ht-video" src="/media/mapp-hero.mp4"
+           muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
+    <canvas id="halftone"></canvas>
+    <div class="halftone-cap">MAPP_MTL · Festival de projection numérique</div>
+    <div class="halftone-cap r">45.528°N · 73.603°O</div>
+
+    <div class="hero-inner">
+      <div class="eyebrow">MAPP_X</div>
+      <h1>10ème édition du Festival<br>international de<br>projection mapping</h1>
+      <div class="hero-dates"><b>29 sept — 3 oct 2026</b> · Montréal · Entrée gratuite</div>
+
+      <div class="countdown">
+        <div class="count-cell"><b id="dd">--</b><span>Jours</span></div>
+        <div class="count-cell"><b id="hh">--</b><span>Heures</span></div>
+        <div class="count-cell"><b id="mm">--</b><span>Min</span></div>
+        <div class="count-cell"><b id="ss">--</b><span>Sec</span></div>
+      </div>
+
+      <div class="socials">
+        <a class="soc" href="https://www.instagram.com/mapp_mtl" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          @mapp_mtl
+        </a>
+        <a class="soc" href="https://www.facebook.com/mappmtl" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          mappmtl
+        </a>
+        <a class="soc" href="https://mappmtl.com" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+          mappmtl.com
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDÉO COMPLÈTE en dessous -->
+  <div class="video-wrap">
+    <video src="/media/mapp-hero.mp4" muted loop playsinline autoplay preload="metadata"></video>
+  </div>
+
+  <!-- DESCRIPTION -->
+  <section class="sec">
+    <div class="sec-inner">
+      <div class="sec-label">À propos</div>
+      <p class="desc">Du <strong>29 septembre au 3 octobre 2026</strong>, venez célébrer les <strong>10 ans du festival MAPP</strong> ! Un programme festif, entre projections mapping, performances de musiques électroniques, stands de nourriture, ateliers de création dans une ambiance de fête de quartier !</p>
+      <div class="don-box">
+        <div class="don-icon">💚</div>
+        <div class="don-text">
+          <b>Vous aimez le festival MAPP ? Soutenez-le pour qu'il continue d'exister.</b><br>
+          Faites un don de 5 $ ou plus sur Zeffy pour contribuer à la suite.<br><br>
+          <a href="https://urls.fr/oh2IyQ" target="_blank" rel="noopener">Faire un don →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAMME -->
+  <section class="sec">
+    <div class="sec-inner">
+      <div class="sec-label">Au programme</div>
+      <div class="ev-grid">
+        <div class="ev">
+          <div class="ev-head"><div class="ev-dot"></div><div class="ev-name">Fête de quartier numérique</div></div>
+          <div class="ev-meta">📍 Du 1 au 3 octobre 2026 · Skatepark Van Horne</div>
+          <div class="ev-meta">🎟 Billets gratuits</div>
+          <a class="ev-cta" href="https://bit.ly/4f6h3Mh" target="_blank" rel="noopener">Réserver ici →</a>
+        </div>
+        <div class="ev">
+          <div class="ev-head"><div class="ev-dot"></div><div class="ev-name">MINUTE_MAPP</div></div>
+          <div class="ev-meta">📍 1 octobre 2026 · Skatepark Van Horne</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <svg viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg">
+      <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
+      <path d="M16.511,28.213l-3.718-15.266h-.051v15.266h-3.103V9.639h5.168l3.686,15.139h.051l3.688-15.139h5.168v18.574h-3.105v-15.266h-.051l-3.718,15.266h-4.014Z"/>
+      <path d="M9.639,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM17.964,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
+      <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
+    </svg>
+    <p data-fr="Festival de projection et d'art numérique · Montréal · 2026">Festival de projection et d'art numérique · Montréal · 2026</p>
+    <p><a href="https://www.mappmtl.com" target="_blank" rel="noopener">WWW.MAPPMTL.COM</a></p>
+  </footer>
+
+  <script>
+    // ── HALFTONE alimenté par la vidéo (identique à l'app) ──
+    function initHalftone(){
+      const cv = document.getElementById('halftone');
+      if(!cv) return;
+      const ctx = cv.getContext('2d');
+      let W, H, dpr;
+      function resize(){
+        dpr = Math.min(window.devicePixelRatio||1, 2);
+        W = cv.clientWidth; H = cv.clientHeight;
+        cv.width = W*dpr; cv.height = H*dpr;
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+      }
+      resize();
+      window.addEventListener('resize', resize);
+      const GAP = 8;
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let t = 0;
+      const vid = document.getElementById('ht-video');
+      const off = document.createElement('canvas');
+      const octx = off.getContext('2d', {willReadFrequently:true});
+      let lum = null, cols = 0, rows = 0;
+      if(!reduce && vid){
+        vid.play().catch(()=>{});
+        document.addEventListener('touchstart', ()=>vid.play().catch(()=>{}), {once:true, passive:true});
+      }
+      function sampleVideo(){
+        if(reduce || !vid || vid.readyState < 2 || !vid.videoWidth){ lum = null; return; }
+        cols = Math.ceil(W/GAP); rows = Math.ceil(H/GAP);
+        if(off.width !== cols || off.height !== rows){ off.width = cols; off.height = rows; }
+        const va = vid.videoWidth/vid.videoHeight, ca = cols/rows;
+        let sw = vid.videoWidth, sh = vid.videoHeight, sx = 0, sy = 0;
+        if(va > ca){ sw = vid.videoHeight*ca; sx = (vid.videoWidth-sw)/2; }
+        else       { sh = vid.videoWidth/ca;  sy = (vid.videoHeight-sh)/2; }
+        try{
+          octx.drawImage(vid, sx, sy, sw, sh, 0, 0, cols, rows);
+          lum = octx.getImageData(0, 0, cols, rows).data;
+        }catch(e){ lum = null; }
+      }
+      let px = -1e4, py = -1e4;
+      function setPointer(clientX, clientY){
+        const r = cv.getBoundingClientRect();
+        px = clientX - r.left; py = clientY - r.top;
+      }
+      cv.addEventListener('pointermove', e=>setPointer(e.clientX, e.clientY));
+      cv.addEventListener('pointerleave', ()=>{ px = py = -1e4; });
+      cv.addEventListener('touchmove', e=>setPointer(e.touches[0].clientX, e.touches[0].clientY), {passive:true});
+      cv.addEventListener('touchend', ()=>{ px = py = -1e4; });
+      const R = 100, R2 = R*R;
+      function frame(){
+        sampleVideo();
+        ctx.clearRect(0,0,W,H);
+        let cy = 0;
+        for(let y=GAP/2; y<H; y+=GAP, cy++){
+          let cxI = 0;
+          for(let x=GAP/2; x<W; x+=GAP, cxI++){
+            const nx = x/W, ny = y/H;
+            const wave = (Math.sin((nx*7)+t)*Math.cos((ny*5)-t*0.7)+Math.sin((nx*3-ny*4)+t*0.5)+2)/4;
+            let m, vr=0, vg=0, vb=0, useVid=false;
+            if(lum){
+              const i=(Math.min(cy,rows-1)*cols+Math.min(cxI,cols-1))*4;
+              vr=lum[i]; vg=lum[i+1]; vb=lum[i+2]; useVid=true;
+              const l=(vr*0.2126+vg*0.7152+vb*0.0722)/255;
+              m=Math.min(1, Math.pow(l,0.75)*1.35+wave*0.05);
+            } else {
+              m = wave;
+            }
+            const dx=x-px, dy=y-py, d2=dx*dx+dy*dy;
+            let boost=0;
+            if(d2<R2){ boost=1-Math.sqrt(d2)/R; m=Math.min(1,m+boost*0.8); }
+            const r=Math.max(0, m*GAP*0.68);
+            if(r<0.35) continue;
+            if(useVid){
+              const cr=Math.min(255,vr*1.25+30), cg=Math.min(255,vg*1.25+30), cb=Math.min(255,vb*1.25+30);
+              ctx.fillStyle='rgba('+(cr|0)+','+(cg|0)+','+(cb|0)+','+(0.3+m*0.7)+')';
+            } else {
+              const g=105+Math.round(m*150);
+              ctx.fillStyle='rgba('+g+','+g+','+g+','+(0.18+m*0.72)+')';
+            }
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI*2);
+            ctx.fill();
+          }
+        }
+        if(!reduce){ t+=0.012; requestAnimationFrame(frame); }
+      }
+      frame();
+    }
+    initHalftone();
+
+    // ── COMPTE À REBOURS ──
+    function pad(n){ return String(n).padStart(2,'0'); }
+    function tick(){
+      const diff = Math.max(0, (new Date('2026-09-29T19:00:00-04:00') - new Date()) / 1000);
+      document.getElementById('dd').textContent = pad(Math.floor(diff/86400));
+      document.getElementById('hh').textContent = pad(Math.floor((diff%86400)/3600));
+      document.getElementById('mm').textContent = pad(Math.floor((diff%3600)/60));
+      document.getElementById('ss').textContent = pad(Math.floor(diff%60));
+    }
+    tick(); setInterval(tick, 1000);
+
+    // ── SW ──
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('/sw.js?v='+Math.floor(Date.now()/86400000)).catch(()=>{});
+    }
+  </script>
+</body>
+</html>
