@@ -202,7 +202,6 @@ nav{
 .legend-chip:last-child{border-right:none}
 .legend-chip:hover{background:#f2f2f2}
 .legend-chip.active{background:var(--lime)!important;font-weight:700;}
-.legend-chip.dim{opacity:0.25;filter:grayscale(0.5);transition:.2s;}
 .card{transition:opacity .2s,filter .2s;}
 .card.dim{opacity:0.12;filter:grayscale(0.8);pointer-events:none;transform:none!important;box-shadow:none!important;}
 .gcol.dim .ghead{opacity:0.25;}
@@ -903,13 +902,15 @@ function initMap(){
 let activeVenue = null;
 function filterVenue(key) {
   activeVenue = (activeVenue === key) ? null : key;
+  // Chips — toujours visibles, juste indiquer lequel est actif
   document.querySelectorAll('.legend-chip[data-venue]').forEach(c => {
     c.classList.toggle('active', c.dataset.venue === activeVenue);
-    c.classList.toggle('dim', !!activeVenue && c.dataset.venue !== activeVenue);
   });
+  // Cards — estomper celles des autres lieux
   document.querySelectorAll('.card[data-venue]').forEach(card => {
     card.classList.toggle('dim', !!activeVenue && card.dataset.venue !== activeVenue);
   });
+  // Colonnes — estomper le header si aucun event visible ce jour
   document.querySelectorAll('.gcol').forEach(col => {
     col.classList.toggle('dim', !!activeVenue && !col.querySelector('.card:not(.dim)'));
   });
