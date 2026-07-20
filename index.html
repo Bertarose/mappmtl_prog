@@ -475,7 +475,7 @@ footer a{color:var(--lime);text-decoration:none}
     <div id="hero-status"></div>
     <div class="halftone-wrap">
       <video id="hero-video" src="/media/mapp-hero.mp4"
-             muted loop playsinline autoplay preload="metadata"></video>
+             muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
       <canvas id="halftone-canvas"></canvas>
       <div class="video-scrim"></div>
       <button type="button" class="halftone-toggle" id="halftone-toggle" onclick="toggleHalftone()" aria-pressed="false" data-fr-on="Effet trame activé" data-fr-off="Activer l'effet trame" data-en-on="Halftone effect on" data-en-off="Turn on halftone effect" aria-label="Activer l'effet trame">◆</button>
@@ -1033,12 +1033,23 @@ function startHalftone(){
   htOn = true;
   const cv = document.getElementById('halftone-canvas');
   const vid = document.getElementById('hero-video');
+
+  // recalcule les dimensions au cas où la mise en page ait changé
+  // depuis la première ouverture (ex. rotation d'écran, resize)
+  ht.dpr = Math.min(window.devicePixelRatio||1, 2);
+  ht.W = cv.clientWidth; ht.H = cv.clientHeight;
+  cv.width = ht.W*ht.dpr; cv.height = ht.H*ht.dpr;
+  ht.ctx.setTransform(ht.dpr,0,0,ht.dpr,0,0);
+
   cv.classList.add('on'); cv.style.opacity = '1';
   if(vid) vid.style.opacity = '0';
   setHaltoneBtnLabel();
 
   const GAP = 8;
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Note : on continue d'animer même si le système demande de réduire
+  // les animations (Windows « Afficher les animations » désactivé, etc.) —
+  // cet effet est déclenché volontairement par un clic, pas une animation
+  // ambiante automatique.
   const R = 100, R2 = R*R;
   let t = 0;
 
@@ -1082,7 +1093,8 @@ function startHalftone(){
         ctx.fill();
       }
     }
-    if(!reduce){ t += 0.012; htRAF = requestAnimationFrame(frame); }
+    t += 0.012;
+    htRAF = requestAnimationFrame(frame);
   }
   frame();
 }
