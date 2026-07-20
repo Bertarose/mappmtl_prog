@@ -159,8 +159,28 @@ nav{
   position:relative;margin-top:38px;height:min(46vh,340px);
   border-top:1px solid #2a2a2a;
 }
-.ht-src{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
-#halftone{display:block;width:100%;height:100%}
+.halftone-wrap video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;display:block;transition:opacity .35s;
+}
+#halftone-canvas{
+  position:absolute;inset:0;width:100%;height:100%;
+  display:block;opacity:0;pointer-events:none;transition:opacity .35s;
+}
+#halftone-canvas.on{pointer-events:auto}
+.halftone-wrap .video-scrim{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg, rgba(0,0,0,.28) 0%, rgba(0,0,0,.18) 45%, rgba(0,0,0,.55) 100%);
+}
+.halftone-toggle{
+  position:absolute;top:12px;right:12px;z-index:4;
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.4);color:var(--lime);
+  font-size:15px;line-height:1;cursor:pointer;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
+  transition:.15s;
+}
+.halftone-toggle:hover{background:var(--lime);color:var(--black);border-color:var(--lime)}
+.halftone-toggle[aria-pressed="true"]{background:var(--lime);color:var(--black);border-color:var(--lime)}
 .halftone-cap{
   position:absolute;left:0;bottom:14px;
   font-family:var(--mono);font-size:10px;letter-spacing:.2em;
@@ -454,10 +474,11 @@ footer a{color:var(--lime);text-decoration:none}
     <div class="sub">29 SEPT — 4 OCT 2026 · MONTRÉAL · <span class="ed" data-fr="10e ÉDITION" data-en="10th EDITION">10e ÉDITION</span></div>
     <div id="hero-status"></div>
     <div class="halftone-wrap">
-      <video class="ht-src" id="ht-video" src="/media/mapp-hero.mp4"
-             muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
-      <canvas id="halftone"></canvas>
-      <canvas id="vhs-overlay" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:0.55;"></canvas>
+      <video id="hero-video" src="/media/mapp-hero.mp4"
+             muted loop playsinline autoplay preload="metadata"></video>
+      <canvas id="halftone-canvas"></canvas>
+      <div class="video-scrim"></div>
+      <button type="button" class="halftone-toggle" id="halftone-toggle" onclick="toggleHalftone()" aria-pressed="false" data-fr-on="Effet trame activé" data-fr-off="Activer l'effet trame" data-en-on="Halftone effect on" data-en-off="Turn on halftone effect" aria-label="Activer l'effet trame">◆</button>
       <div class="halftone-cap" data-fr="MAPP_MTL · Festival de projection numérique" data-en="MAPP_MTL · Digital projection festival">MAPP_MTL · Festival de projection numérique</div>
       <div class="halftone-cap r">45.528°N · 73.603°O</div>
     </div>
@@ -663,6 +684,7 @@ function applyLang(){
   renderArtists();
   renderLegend();
   renderHeroStatus();
+  setHaltoneBtnLabel();
   if(currentArtist) openArtist(currentArtist.slug, true);
 }
 
@@ -926,66 +948,104 @@ function renderLegend(){
 }
 
 // ============================================================
-// HALFTONE — champ tramé génératif (encre sur papier)
+// HERO VIDEO — lecture simple, sans filtre par défaut
 // ============================================================
-function initHalftone(){
-  const cv = document.getElementById('halftone');
-  if(!cv) return;
-  const ctx = cv.getContext('2d');
-  let W, H, dpr;
+function initHeroVideo(){
+  const vid = document.getElementById('hero-video');
+  if(!vid) return;
+  vid.play().catch(()=>{});
+  document.addEventListener('touchstart', ()=>vid.play().catch(()=>{}), {once:true, passive:true});
+}
+
+// ============================================================
+// HALFTONE — champ tramé génératif (encre sur papier), activé
+// à la demande via l'icône ◆ en haut à droite de la vidéo
+// ============================================================
+let htOn = false, htRAF = null, htReady = false;
+let ht = {}; // ctx, W, H, dpr, cols, rows, lum, off, octx, px, py
+
+function toggleHalftone(){
+  if(htOn) stopHalftone(); else startHalftone();
+}
+
+function setHaltoneBtnLabel(){
+  const btn = document.getElementById('halftone-toggle');
+  if(!btn) return;
+  btn.setAttribute('aria-pressed', htOn ? 'true' : 'false');
+  const key = htOn ? (lang+'-on') : (lang+'-off');
+  const label = htOn
+    ? (lang==='fr' ? "Effet trame activé — cliquer pour revenir à la vidéo" : "Halftone effect on — click to return to video")
+    : (lang==='fr' ? "Activer l'effet trame" : "Turn on halftone effect");
+  btn.setAttribute('aria-label', label);
+  btn.title = label;
+}
+
+function initHalftoneCanvas(){
+  const cv = document.getElementById('halftone-canvas');
+  if(!cv) return null;
+  ht.ctx = cv.getContext('2d');
   function resize(){
-    dpr = Math.min(window.devicePixelRatio||1, 2);
-    W = cv.clientWidth; H = cv.clientHeight;
-    cv.width = W*dpr; cv.height = H*dpr;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ht.dpr = Math.min(window.devicePixelRatio||1, 2);
+    ht.W = cv.clientWidth; ht.H = cv.clientHeight;
+    cv.width = ht.W*ht.dpr; cv.height = ht.H*ht.dpr;
+    ht.ctx.setTransform(ht.dpr,0,0,ht.dpr,0,0);
   }
   resize();
   window.addEventListener('resize', resize);
 
-  const GAP = 8;
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let t = 0;
+  ht.off = document.createElement('canvas');
+  ht.octx = ht.off.getContext('2d', {willReadFrequently:true});
+  ht.lum = null; ht.cols = 0; ht.rows = 0;
+  ht.px = -1e4; ht.py = -1e4;
 
-  // vidéo du site principal, échantillonnée cellule par cellule :
-  // la même image que mappmtl.com, mais traduite en trame de points
-  const vid = document.getElementById('ht-video');
-  const off = document.createElement('canvas');
-  const octx = off.getContext('2d', {willReadFrequently:true});
-  let lum = null, cols = 0, rows = 0;
-  if(!reduce && vid){
-    vid.play().catch(()=>{});
-    document.addEventListener('touchstart', ()=>vid.play().catch(()=>{}), {once:true, passive:true});
-  }
-  function sampleVideo(){
-    if(reduce || !vid || vid.readyState < 2 || !vid.videoWidth) { lum = null; return; }
-    cols = Math.ceil(W/GAP); rows = Math.ceil(H/GAP);
-    if(off.width !== cols || off.height !== rows){ off.width = cols; off.height = rows; }
-    // recadrage « cover »
-    const va = vid.videoWidth/vid.videoHeight, ca = cols/rows;
-    let sw = vid.videoWidth, sh = vid.videoHeight, sx = 0, sy = 0;
-    if(va > ca){ sw = vid.videoHeight*ca; sx = (vid.videoWidth-sw)/2; }
-    else       { sh = vid.videoWidth/ca; sy = (vid.videoHeight-sh)/2; }
-    try{
-      octx.drawImage(vid, sx, sy, sw, sh, 0, 0, cols, rows);
-      lum = octx.getImageData(0, 0, cols, rows).data;
-    }catch(e){ lum = null; }
-  }
-
-  // le champ réagit au doigt / à la souris : un « faisceau de projecteur »
-  let px = -1e4, py = -1e4;
   function setPointer(clientX, clientY){
     const r = cv.getBoundingClientRect();
-    px = clientX - r.left; py = clientY - r.top;
+    ht.px = clientX - r.left; ht.py = clientY - r.top;
   }
   cv.addEventListener('pointermove', e=>setPointer(e.clientX, e.clientY));
-  cv.addEventListener('pointerleave', ()=>{ px = py = -1e4; });
+  cv.addEventListener('pointerleave', ()=>{ ht.px = ht.py = -1e4; });
   cv.addEventListener('touchmove', e=>{ setPointer(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
-  cv.addEventListener('touchend', ()=>{ px = py = -1e4; });
+  cv.addEventListener('touchend', ()=>{ ht.px = ht.py = -1e4; });
 
+  htReady = true;
+  return cv;
+}
+
+function sampleHeroVideo(){
+  const vid = document.getElementById('hero-video');
+  const GAP = 8;
+  if(!vid || vid.readyState < 2 || !vid.videoWidth){ ht.lum = null; return; }
+  ht.cols = Math.ceil(ht.W/GAP); ht.rows = Math.ceil(ht.H/GAP);
+  if(ht.off.width !== ht.cols || ht.off.height !== ht.rows){ ht.off.width = ht.cols; ht.off.height = ht.rows; }
+  const va = vid.videoWidth/vid.videoHeight, ca = ht.cols/ht.rows;
+  let sw = vid.videoWidth, sh = vid.videoHeight, sx = 0, sy = 0;
+  if(va > ca){ sw = vid.videoHeight*ca; sx = (vid.videoWidth-sw)/2; }
+  else       { sh = vid.videoWidth/ca; sy = (vid.videoHeight-sh)/2; }
+  try{
+    ht.octx.drawImage(vid, sx, sy, sw, sh, 0, 0, ht.cols, ht.rows);
+    ht.lum = ht.octx.getImageData(0, 0, ht.cols, ht.rows).data;
+  }catch(e){ ht.lum = null; }
+}
+
+function startHalftone(){
+  if(htOn) return;
+  if(!htReady && !initHalftoneCanvas()) return;
+  htOn = true;
+  const cv = document.getElementById('halftone-canvas');
+  const vid = document.getElementById('hero-video');
+  cv.classList.add('on'); cv.style.opacity = '1';
+  if(vid) vid.style.opacity = '0';
+  setHaltoneBtnLabel();
+
+  const GAP = 8;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const R = 100, R2 = R*R;
+  let t = 0;
 
   function frame(){
-    sampleVideo();
+    if(!htOn) return;
+    sampleHeroVideo();
+    const ctx = ht.ctx, W = ht.W, H = ht.H;
     ctx.clearRect(0,0,W,H);
     let cy = 0;
     for(let y=GAP/2; y<H; y+=GAP, cy++){
@@ -995,16 +1055,15 @@ function initHalftone(){
         const wave = (Math.sin((nx*7)+t) * Math.cos((ny*5)-t*0.7)
                     + Math.sin((nx*3 - ny*4)+t*0.5) + 2)/4;   // 0..1
         let m, vr=0, vg=0, vb=0, useVid=false;
-        if(lum){
-          const i = (Math.min(cy,rows-1)*cols + Math.min(cxI,cols-1))*4;
-          vr=lum[i]; vg=lum[i+1]; vb=lum[i+2]; useVid=true;
+        if(ht.lum){
+          const i = (Math.min(cy,ht.rows-1)*ht.cols + Math.min(cxI,ht.cols-1))*4;
+          vr=ht.lum[i]; vg=ht.lum[i+1]; vb=ht.lum[i+2]; useVid=true;
           const l = (vr*0.2126 + vg*0.7152 + vb*0.0722)/255;
-          m = Math.min(1, Math.pow(l,0.75)*1.35 + wave*0.05); // gamma + gain : la vidéo ressort
+          m = Math.min(1, Math.pow(l,0.75)*1.35 + wave*0.05);
         } else {
-          m = wave;                               // repli génératif si pas de vidéo
+          m = wave;
         }
-        // amplification autour du pointeur
-        const dx = x-px, dy = y-py, d2 = dx*dx+dy*dy;
+        const dx = x-ht.px, dy = y-ht.py, d2 = dx*dx+dy*dy;
         let boost = 0;
         if(d2 < R2){ boost = 1 - Math.sqrt(d2)/R; m = Math.min(1, m + boost*0.8); }
         const r = Math.max(0, m*GAP*0.68);
@@ -1012,7 +1071,6 @@ function initHalftone(){
         if(boost > 0.3 || m > 0.92){
           ctx.fillStyle = 'rgba(34,255,98,'+ (0.55+m*0.45) +')';
         } else if(useVid){
-          // le point prend la couleur réelle de la vidéo, légèrement éclaircie
           const cr = Math.min(255, vr*1.25+30), cg = Math.min(255, vg*1.25+30), cb = Math.min(255, vb*1.25+30);
           ctx.fillStyle = 'rgba('+(cr|0)+','+(cg|0)+','+(cb|0)+','+(0.3+m*0.7)+')';
         } else {
@@ -1024,9 +1082,20 @@ function initHalftone(){
         ctx.fill();
       }
     }
-    if(!reduce){ t += 0.012; requestAnimationFrame(frame); }
+    if(!reduce){ t += 0.012; htRAF = requestAnimationFrame(frame); }
   }
   frame();
+}
+
+function stopHalftone(){
+  if(!htOn) return;
+  htOn = false;
+  if(htRAF) cancelAnimationFrame(htRAF);
+  const cv = document.getElementById('halftone-canvas');
+  const vid = document.getElementById('hero-video');
+  if(cv){ cv.classList.remove('on'); cv.style.opacity = '0'; }
+  if(vid) vid.style.opacity = '1';
+  setHaltoneBtnLabel();
 }
 
 // ============================================================
@@ -1035,7 +1104,7 @@ function initHalftone(){
 function boot(){
   if(typeof L === 'undefined'){ return setTimeout(boot, 60); }
   initMap();
-  initHalftone();
+  initHeroVideo();
   applyLang();
   fitTitle();
   initReveals();
@@ -1168,48 +1237,6 @@ document.addEventListener('keydown', e=>{
   if(e.key==='Escape') closeEvent();
 });
 
-// ── VHS OVERLAY ──
-(function initVHS(){
-  const cv = document.getElementById('vhs-overlay');
-  if(!cv) return;
-  const ctx = cv.getContext('2d');
-  let W, H;
-  function resize(){ W=cv.clientWidth; H=cv.clientHeight; cv.width=W; cv.height=H; }
-  resize();
-  window.addEventListener('resize', resize);
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let t=0, gt=0, ga=false, gy=0, gh=0;
-  function frame(){
-    ctx.clearRect(0,0,W,H);
-    ctx.fillStyle='rgba(0,0,0,0.18)';
-    for(let y=0;y<H;y+=3) ctx.fillRect(0,y,W,1);
-    for(let i=0;i<400;i++){
-      ctx.fillStyle=`rgba(255,255,255,${Math.random()*.25})`;
-      ctx.fillRect(Math.random()*W,Math.random()*H,Math.random()*2,Math.random()*2);
-    }
-    const sh=Math.sin(t*1.5)*2.5;
-    ctx.fillStyle='rgba(255,30,30,0.06)';   ctx.fillRect(sh,0,W,H);
-    ctx.fillStyle='rgba(0,255,230,0.05)';   ctx.fillRect(-sh,0,W,H);
-    const ty=(t*25)%(H+40)-20;
-    const tg=ctx.createLinearGradient(0,ty-12,0,ty+12);
-    tg.addColorStop(0,'transparent'); tg.addColorStop(.5,'rgba(255,255,255,.12)'); tg.addColorStop(1,'transparent');
-    ctx.fillStyle=tg; ctx.fillRect(0,ty-12,W,24);
-    gt++;
-    if(gt>90+Math.random()*150){ gt=0; ga=true; gy=Math.random()*H*.8; gh=1+Math.random()*6; }
-    if(ga){
-      const off=(Math.random()-.5)*18;
-      ctx.fillStyle=`rgba(255,255,255,${.08+Math.random()*.12})`; ctx.fillRect(off,gy,W,gh);
-      ctx.fillStyle=`rgba(${Math.random()>.5?'255,0,100':'0,200,255'},.1)`; ctx.fillRect(off-2,gy,W,gh);
-      if(Math.random()<.25) ga=false;
-    }
-    const vg=ctx.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,H*.85);
-    vg.addColorStop(0,'transparent'); vg.addColorStop(1,'rgba(0,0,0,.35)');
-    ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
-    t+=.008;
-    requestAnimationFrame(frame);
-  }
-  frame();
-})();
 </script>
 </body>
 </html>
