@@ -83,7 +83,7 @@ body{
 
 /* ── Marquee ─────────────────────────────────────── */
 .marquee{
-  position:sticky;top:0;z-index:200;transform:translateZ(0);will-change:transform;transform:translateZ(0);will-change:transform;
+  position:sticky;top:0;z-index:200;transform:translateZ(0);will-change:transform;
   background:var(--lime);color:var(--black);
   border-bottom:1px solid var(--black);
   overflow:hidden;white-space:nowrap;
@@ -103,7 +103,7 @@ body{
 
 /* ── Nav ─────────────────────────────────────────── */
 nav{
-  position:sticky;top:34px;z-index:190;transform:translateZ(0);will-change:transform;transform:translateZ(0);will-change:transform;
+  position:sticky;top:34px;z-index:190;transform:translateZ(0);will-change:transform;
   background:var(--black);border-bottom:1px solid #1e1e1e;
   display:flex;align-items:center;justify-content:space-between;
   padding:14px 18px;color:var(--white);
@@ -904,17 +904,14 @@ let activeVenue = null;
 function filterVenue(key) {
   activeVenue = (activeVenue === key) ? null : key;
   document.querySelectorAll('.legend-chip[data-venue]').forEach(c => {
-    const k = c.dataset.venue;
-    c.classList.toggle('active', k === activeVenue);
-    c.classList.toggle('dim', !!activeVenue && k !== activeVenue);
+    c.classList.toggle('active', c.dataset.venue === activeVenue);
+    c.classList.toggle('dim', !!activeVenue && c.dataset.venue !== activeVenue);
   });
   document.querySelectorAll('.card[data-venue]').forEach(card => {
-    const k = card.dataset.venue;
-    card.classList.toggle('dim', !!activeVenue && k !== activeVenue);
+    card.classList.toggle('dim', !!activeVenue && card.dataset.venue !== activeVenue);
   });
   document.querySelectorAll('.gcol').forEach(col => {
-    const hasVisible = col.querySelector('.card:not(.dim)');
-    col.classList.toggle('dim', !!activeVenue && !hasVisible);
+    col.classList.toggle('dim', !!activeVenue && !col.querySelector('.card:not(.dim)'));
   });
 }
 function focusVenue(key){
