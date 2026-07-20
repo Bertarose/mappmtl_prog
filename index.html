@@ -124,6 +124,8 @@ nav{
 .nav-link:hover{background:var(--lime);border-color:var(--lime);color:var(--black)}
 .nav-link.solid{background:var(--white);border-color:var(--white);color:var(--black)}
 .nav-link.solid:hover{background:var(--lime);border-color:var(--lime)}
+.nav-link.tix{background:var(--lime);border-color:var(--lime);color:var(--black);font-weight:800}
+.nav-link.tix:hover{background:var(--white);border-color:var(--white)}
 
 /* ── Section scaffolding ─────────────────────────── */
 .sec{padding:54px 18px;border-bottom:1px solid var(--black);position:relative}
@@ -153,6 +155,19 @@ nav{
   color:var(--grey-light);margin-top:26px;text-transform:uppercase;
 }
 .hero .ed{color:var(--lime);font-weight:700}
+
+.hero-tix{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-weight:700;font-size:13px;
+  letter-spacing:.08em;text-transform:uppercase;
+  background:var(--lime);color:var(--black);
+  border:1px solid var(--lime);
+  padding:13px 22px;margin-top:22px;
+  text-decoration:none;transition:.15s;
+}
+.hero-tix:hover{background:var(--black);color:var(--lime);border-color:var(--lime)}
+.hero-tix .arrow{transition:transform .15s}
+.hero-tix:hover .arrow{transform:translateX(4px)}
 
 /* generative halftone visual */
 .halftone-wrap{position:relative;
@@ -294,6 +309,14 @@ nav{
 .card.p-dots .desc,.card.p-hatch .desc{
   background:var(--white);padding:5px 6px;
 }
+.card .tix{
+  display:inline-flex;align-items:center;gap:6px;margin-top:11px;
+  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  background:var(--lime);color:var(--black);border:1px solid var(--black);
+  padding:5px 9px;text-decoration:none;position:relative;z-index:2;
+}
+.card.p-black .tix{border-color:var(--lime)}
+.card .tix:hover{background:var(--black);color:var(--lime);border-color:var(--lime)}
 
 /* responsive : la grille devient un flux vertical */
 @media(max-width:960px){
@@ -350,6 +373,13 @@ nav{
   color:var(--black);
 }
 .ev-sheet .ev-map-link:hover{background:var(--lime)}
+.ev-sheet .ev-tix-link{
+  display:inline-flex;align-items:center;gap:8px;margin-top:14px;margin-right:8px;cursor:pointer;
+  font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  border:1px solid var(--black);padding:8px 12px;transition:.12s;
+  background:var(--lime);color:var(--black);text-decoration:none;
+}
+.ev-sheet .ev-tix-link:hover{background:var(--black);color:var(--lime);border-color:var(--lime)}
 .ev-sheet .ev-desc{font-size:14px;line-height:1.7;margin-top:16px;color:rgba(0,0,0,.8)}
 @media(max-width:640px){
   .ev-sheet{left:0;right:0;top:auto;bottom:0;width:100%;max-height:88vh;
@@ -462,6 +492,7 @@ footer a{color:var(--lime);text-decoration:none}
     MAPP<span>_MTL</span>
   </div>
   <div class="nav-right">
+    <a class="nav-link tix" href="https://bit.ly/4f6h3Mh" target="_blank" rel="noopener" data-fr="🎟 Billets" data-en="🎟 Tickets">🎟 Billets</a>
     <a class="nav-link" href="https://www.mappmtl.com" target="_blank" rel="noopener" data-fr="Site" data-en="Site">Site</a>
     <button class="nav-link solid" id="lang-btn" onclick="toggleLang()">EN</button>
   </div>
@@ -473,6 +504,7 @@ footer a{color:var(--lime);text-decoration:none}
     <h1>PROGRAMMATION</h1>
     <div class="sub">29 SEPT — 4 OCT 2026 · MONTRÉAL · <span class="ed" data-fr="10e ÉDITION" data-en="10th EDITION">10e ÉDITION</span></div>
     <div id="hero-status"></div>
+    <a class="hero-tix" href="https://bit.ly/4f6h3Mh" target="_blank" rel="noopener"><span data-fr="Réservez votre billet ici" data-en="Reserve your ticket here">Réservez votre billet ici</span> <span class="arrow">→</span></a>
     <div class="halftone-wrap">
       <video id="hero-video" src="/media/mapp-hero.mp4"
              muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
@@ -764,6 +796,7 @@ function renderGrid(){
         <h3>${c.t}</h3>
         <span class="venue">📍 ${v[lang]}</span>
         <div class="desc">${c.d}</div>
+        <a class="tix" href="https://bit.ly/4f6h3Mh" target="_blank" rel="noopener" onclick="event.stopPropagation()">🎟 ${lang==='fr'?'Billets':'Tickets'} →</a>
       </div>`;
     }).join('');
     return `
@@ -1227,6 +1260,9 @@ function openEvent(dayIdx, evIdx){
       <h2 style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
       ${freeTag}
       <p class="ev-desc">${c.d}</p>
+      <a class="ev-tix-link" href="https://bit.ly/4f6h3Mh" target="_blank" rel="noopener">
+        🎟 ${lang==='fr'?'Réservez votre billet ici':'Reserve your ticket here'} →
+      </a>
       <button class="ev-map-link" onclick="closeEvent();focusVenue('${ev.venue}')">
         📍 ${v[lang]} <span style="opacity:.5;margin-left:4px;">→ voir sur la carte</span>
       </button>
