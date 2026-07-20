@@ -510,6 +510,7 @@ footer a{color:var(--lime);text-decoration:none}
       <button type="button" class="halftone-toggle" id="halftone-toggle" onclick="toggleHalftone()" aria-pressed="false" data-fr-on="Effet trame activé" data-fr-off="Activer l'effet trame" data-en-on="Halftone effect on" data-en-off="Turn on halftone effect" aria-label="Activer l'effet trame">◆</button>
       <div class="halftone-cap" data-fr="MAPP_MTL · Festival de projection numérique" data-en="MAPP_MTL · Digital projection festival">MAPP_MTL · Festival de projection numérique</div>
       <div class="halftone-cap r">45.528°N · 73.603°O</div>
+      <audio id="halftone-sound" src="/media/halftone-toggle.webm" preload="auto"></audio>
     </div>
   </div>
 </div>
@@ -998,6 +999,18 @@ function toggleHalftone(){
   if(htOn) stopHalftone(); else startHalftone();
 }
 
+// son joué à l'activation de l'effet trame (coupé à la désactivation)
+function playToggleSound(){
+  const snd = document.getElementById('halftone-sound');
+  if(!snd) return;
+  try{ snd.currentTime = 0; snd.play().catch(()=>{}); }catch(e){}
+}
+function stopToggleSound(){
+  const snd = document.getElementById('halftone-sound');
+  if(!snd) return;
+  try{ snd.pause(); snd.currentTime = 0; }catch(e){}
+}
+
 function setHaltoneBtnLabel(){
   const btn = document.getElementById('halftone-toggle');
   if(!btn) return;
@@ -1074,6 +1087,7 @@ function startHalftone(){
   cv.classList.add('on'); cv.style.opacity = '1';
   if(vid) vid.style.opacity = '0';
   setHaltoneBtnLabel();
+  playToggleSound();
 
   const GAP = 8;
   // Note : on continue d'animer même si le système demande de réduire
@@ -1138,6 +1152,7 @@ function stopHalftone(){
   if(cv){ cv.classList.remove('on'); cv.style.opacity = '0'; }
   if(vid) vid.style.opacity = '1';
   setHaltoneBtnLabel();
+  stopToggleSound();
 }
 
 // ============================================================
