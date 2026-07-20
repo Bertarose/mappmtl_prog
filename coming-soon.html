@@ -30,9 +30,30 @@
     html { background: var(--paper); color: var(--black); font-family: var(--font); }
     body { min-height: 100vh; }
 
+    /* ── MARQUEE ── */
+    .marquee {
+      position: sticky; top: 0; z-index: 210;
+      background: #22ff62; color: var(--black);
+      border-bottom: 1px solid var(--black);
+      overflow: hidden; white-space: nowrap;
+      height: 34px; display: flex; align-items: center;
+      transform: translateZ(0); will-change: transform;
+    }
+    .marquee-track {
+      display: inline-flex; gap: 0; animation: marquee-scroll 28s linear infinite;
+      will-change: transform;
+    }
+    .marquee-track span {
+      font-family: var(--cond); font-weight: 700; font-size: 14px;
+      letter-spacing: .04em; padding: 0 26px; text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 26px;
+    }
+    @keyframes marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
+
     /* ── NAV ── */
     nav {
-      position: sticky; top: 0; z-index: 200;
+      position: sticky; top: 34px; z-index: 200;
       background: var(--black); border-bottom: 1px solid #1e1e1e;
       padding: 14px 18px;
       display: flex; align-items: center; justify-content: space-between;
@@ -42,19 +63,6 @@
     .brand svg { width: 28px; height: 28px; color: #fff; display: block; fill: currentColor; }
     .brand span { font-family: var(--cond); font-size: 18px; font-weight: 700; color: #fff; letter-spacing: .08em; text-transform: uppercase; }
     .nav-url { font-family: var(--mono); font-size: 10px; color: #666; letter-spacing: .16em; text-transform: uppercase; }
-
-    /* ── TICKER ── */
-    .ticker {
-      position: sticky; top: 57px; z-index: 190;
-      background: var(--black); border-bottom: 1px solid #222;
-      height: 34px; overflow: hidden;
-      display: flex; align-items: center;
-      transform: translateZ(0); will-change: transform;
-    }
-    .ticker-track { display: flex; white-space: nowrap; animation: ticker-scroll 32s linear infinite; }
-    .ticker-item { font-family: var(--mono); font-size: 10px; color: #fff; letter-spacing: .18em; text-transform: uppercase; padding: 0 28px; }
-    .ticker-item span { color: #888; }
-    @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
     /* ── HERO ── */
     .hero {
@@ -107,6 +115,20 @@
     .count-cell:last-child { border-right: none; }
     .count-cell b { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--black); line-height: 1; display: block; }
     .count-cell span { font-family: var(--mono); font-size: 9px; color: var(--grey); letter-spacing: .18em; text-transform: uppercase; margin-top: 5px; }
+
+    /* ── CTA BILLETTERIE ── */
+    .hero-tix {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-weight: 700; font-size: 13px;
+      letter-spacing: .08em; text-transform: uppercase;
+      background: #22ff62; color: var(--black);
+      border: 1px solid var(--black);
+      padding: 13px 22px; margin-bottom: 28px;
+      text-decoration: none; transition: .15s;
+    }
+    .hero-tix:hover { background: var(--black); color: #22ff62; border-color: #22ff62; }
+    .hero-tix .arrow { transition: transform .15s; }
+    .hero-tix:hover .arrow { transform: translateX(4px); }
 
     /* ── RÉSEAUX SOCIAUX ── */
     .socials { display: flex; gap: 0; flex-wrap: wrap; justify-content: center; border: 1px solid var(--black); }
@@ -219,6 +241,11 @@
 </head>
 <body>
 
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="marquee-track" id="marquee-track"></div>
+  </div>
+
   <!-- NAV -->
   <nav>
     <div class="brand">
@@ -235,20 +262,6 @@
     <div class="nav-url">app.mappmtl.com</div>
   </nav>
 
-  <!-- TICKER -->
-  <div class="ticker">
-    <div class="ticker-track">
-      <span class="ticker-item">MAPP_X · <span>10ème édition</span></span>
-      <span class="ticker-item">29 SEPT — 3 OCT 2026 · <span>Montréal</span></span>
-      <span class="ticker-item">Festival international de projection mapping · <span>Entrée gratuite</span></span>
-      <span class="ticker-item">Skatepark Van Horne · <span>Moment Factory · Cité Mémoire · Caserne 26</span></span>
-      <span class="ticker-item">MAPP_X · <span>10ème édition</span></span>
-      <span class="ticker-item">29 SEPT — 3 OCT 2026 · <span>Montréal</span></span>
-      <span class="ticker-item">Festival international de projection mapping · <span>Entrée gratuite</span></span>
-      <span class="ticker-item">Skatepark Van Horne · <span>Moment Factory · Cité Mémoire · Caserne 26</span></span>
-    </div>
-  </div>
-
   <!-- HERO avec halftone alimenté par la vidéo -->
   <section class="hero">
     <div class="hero-inner">
@@ -262,6 +275,8 @@
         <div class="count-cell"><b id="mm">--</b><span>Min</span></div>
         <div class="count-cell"><b id="ss">--</b><span>Sec</span></div>
       </div>
+
+      <a class="hero-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener">Réservez votre billet ici <span class="arrow">→</span></a>
 
       <div class="socials">
         <a class="soc" href="https://www.instagram.com/mapp_mtl" target="_blank" rel="noopener">
@@ -316,7 +331,7 @@
           <div class="ev-head"><div class="ev-dot"></div><div class="ev-name">Fête de quartier numérique</div></div>
           <div class="ev-meta">📍 Du 1 au 3 octobre 2026 · Skatepark Van Horne</div>
           <div class="ev-meta">🎟 Billets gratuits</div>
-          <a class="ev-cta" href="https://bit.ly/4f6h3Mh" target="_blank" rel="noopener">Réserver ici →</a>
+          <a class="ev-cta" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener">Réserver ici →</a>
         </div>
         <div class="ev">
           <div class="ev-head"><div class="ev-dot"></div><div class="ev-name">MINUTE_MAPP</div></div>
@@ -341,6 +356,20 @@
   </footer>
 
   <script>
+    // ── MARQUEE — bandeau animé, identique au site ──
+    (function renderMarquee(){
+      const items = [
+        "10ème ÉDITION",
+        "29 SEPT — 3 OCT 2026",
+        "FÊTE DE QUARTIER NUMÉRIQUE",
+        "ENTRÉE GRATUITE AU SKATEPARK VAN HORNE",
+        "🎟 RÉSERVEZ VOS BILLETS"
+      ];
+      const one = items.map(t=>`<span>${t} <span style="opacity:.55">↗</span></span>`).join('');
+      const track = document.getElementById('marquee-track');
+      if(track) track.innerHTML = one + one;
+    })();
+
     // ── VIDÉO HERO — lecture simple, sans filtre ──
     (function initHeroVideo(){
       const vid = document.getElementById('hero-video');
