@@ -124,8 +124,6 @@ nav{
 .nav-link:hover{background:var(--lime);border-color:var(--lime);color:var(--black)}
 .nav-link.solid{background:var(--white);border-color:var(--white);color:var(--black)}
 .nav-link.solid:hover{background:var(--lime);border-color:var(--lime)}
-.nav-link.tix{background:var(--lime);border-color:var(--lime);color:var(--black);font-weight:800}
-.nav-link.tix:hover{background:var(--white);border-color:var(--white)}
 
 /* ── Section scaffolding ─────────────────────────── */
 .sec{padding:54px 18px;border-bottom:1px solid var(--black);position:relative}
@@ -492,7 +490,6 @@ footer a{color:var(--lime);text-decoration:none}
     MAPP<span>_MTL</span>
   </div>
   <div class="nav-right">
-    <a class="nav-link tix" href="https://bit.ly/4f6h3Mh" target="_blank" rel="noopener" data-fr="🎟 Billets" data-en="🎟 Tickets">🎟 Billets</a>
     <a class="nav-link" href="https://www.mappmtl.com" target="_blank" rel="noopener" data-fr="Site" data-en="Site">Site</a>
     <button class="nav-link solid" id="lang-btn" onclick="toggleLang()">EN</button>
   </div>
@@ -504,7 +501,7 @@ footer a{color:var(--lime);text-decoration:none}
     <h1>PROGRAMMATION</h1>
     <div class="sub">29 SEPT — 4 OCT 2026 · MONTRÉAL · <span class="ed" data-fr="10e ÉDITION" data-en="10th EDITION">10e ÉDITION</span></div>
     <div id="hero-status"></div>
-    <a class="hero-tix" href="https://bit.ly/4f6h3Mh" target="_blank" rel="noopener"><span data-fr="Réservez votre billet ici" data-en="Reserve your ticket here">Réservez votre billet ici</span> <span class="arrow">→</span></a>
+    <a class="hero-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener"><span data-fr="Réservez votre billet ici" data-en="Reserve your ticket here">Réservez votre billet ici</span> <span class="arrow">→</span></a>
     <div class="halftone-wrap">
       <video id="hero-video" src="/media/mapp-hero.mp4"
              muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
@@ -658,27 +655,27 @@ const DAYS = [
 // img : mettre le chemin d'une photo (ex. "/img/artistes/nom.jpg").
 // Sans photo, un portrait tramé génératif est dessiné automatiquement.
 const ARTISTS = [
-  { slug:"studio-lumen", name:"Studio Lumen", img:null, dayIdx:2, venue:"vanhorne",
+  { slug:"studio-lumen", name:"Studio Lumen", img:"img/artistes/artiste.png", dayIdx:2, venue:"vanhorne",
     fr:{ disc:"Mapping architectural", bio:"Collectif montréalais explorant la lumière comme matière première. Leurs projections monumentales transforment l'architecture en surface vivante." },
     en:{ disc:"Architectural mapping", bio:"Montreal collective exploring light as raw material. Their monumental projections turn architecture into a living surface." },
     links:{ web:"https://example.com", ig:"https://instagram.com/" } },
-  { slug:"v0lt", name:"V0LT", img:null, dayIdx:3, venue:"vanhorne",
+  { slug:"v0lt", name:"V0LT", img:"img/artistes/artiste.png", dayIdx:3, venue:"vanhorne",
     fr:{ disc:"Art génératif · audioréactif", bio:"Systèmes visuels génératifs pilotés par le son, entre glitch et géométrie. Première présence à MAPP." },
     en:{ disc:"Generative · audio-reactive", bio:"Sound-driven generative visual systems, between glitch and geometry. First time at MAPP." },
     links:{ ig:"https://instagram.com/" } },
-  { slug:"maya-tran", name:"Maya Tran", img:null, dayIdx:0, venue:"cite",
+  { slug:"maya-tran", name:"Maya Tran", img:"img/artistes/artiste.png", dayIdx:0, venue:"cite",
     fr:{ disc:"Vidéo · animation", bio:"Animatrice et vidéaste, elle tisse mémoire urbaine et imaginaire dans des fresques projetées." },
     en:{ disc:"Video · animation", bio:"Animator and video artist weaving urban memory and imagination into projected frescoes." },
     links:{ web:"https://example.com" } },
-  { slug:"atelier-phare", name:"Atelier Phare", img:null, dayIdx:3, venue:"moment",
+  { slug:"atelier-phare", name:"Atelier Phare", img:"img/artistes/artiste.png", dayIdx:3, venue:"moment",
     fr:{ disc:"Installation lumineuse", bio:"Duo d'artistes-ingénieurs. Installations lumineuses cinétiques présentées lors de la Soirée MAPP." },
     en:{ disc:"Light installation", bio:"Artist-engineer duo. Kinetic light installations presented at MAPP Night." },
     links:{ web:"https://example.com", ig:"https://instagram.com/" } },
-  { slug:"kss-tagtool", name:"Kahnawake Survival School", img:null, dayIdx:5, venue:"caserne",
+  { slug:"kss-tagtool", name:"Kahnawake Survival School", img:"img/artistes/artiste.png", dayIdx:5, venue:"caserne",
     fr:{ disc:"Jam Tagtool · dessin en direct", bio:"Les élèves de la Kahnawake Survival School dessinent en direct, projetés sur les murs de la Caserne 26." },
     en:{ disc:"Tagtool jam · live drawing", bio:"Students from the Kahnawake Survival School draw live, projected on the walls of Caserne 26." },
     links:{} },
-  { slug:"minute-mapp", name:"MINUTE_MAPP", img:null, dayIdx:2, venue:"vanhorne",
+  { slug:"minute-mapp", name:"MINUTE_MAPP", img:"img/artistes/artiste.png", dayIdx:2, venue:"vanhorne",
     fr:{ disc:"Programme de la relève", bio:"La cohorte MINUTE_MAPP : de courtes pièces de mapping créées par la relève, présentées en ouverture." },
     en:{ disc:"Emerging artists program", bio:"The MINUTE_MAPP cohort: short mapping pieces by emerging artists, presented at the opening." },
     links:{ web:"https://www.mappmtl.com" } }
@@ -796,7 +793,7 @@ function renderGrid(){
         <h3>${c.t}</h3>
         <span class="venue">📍 ${v[lang]}</span>
         <div class="desc">${c.d}</div>
-        <a class="tix" href="https://bit.ly/4f6h3Mh" target="_blank" rel="noopener" onclick="event.stopPropagation()">🎟 ${lang==='fr'?'Billets':'Tickets'} →</a>
+        <a class="tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="event.stopPropagation()">🎟 ${lang==='fr'?'Billets':'Tickets'} →</a>
       </div>`;
     }).join('');
     return `
@@ -1260,7 +1257,7 @@ function openEvent(dayIdx, evIdx){
       <h2 style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
       ${freeTag}
       <p class="ev-desc">${c.d}</p>
-      <a class="ev-tix-link" href="https://bit.ly/4f6h3Mh" target="_blank" rel="noopener">
+      <a class="ev-tix-link" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener">
         🎟 ${lang==='fr'?'Réservez votre billet ici':'Reserve your ticket here'} →
       </a>
       <button class="ev-map-link" onclick="closeEvent();focusVenue('${ev.venue}')">
