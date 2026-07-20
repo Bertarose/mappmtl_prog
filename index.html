@@ -17,10 +17,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="MAPP_MTL 2026">
 <meta name="theme-color" content="#ffffff">
-<link rel="icon" type="image/x-icon" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" href="/icon-512.png">
-<link rel="manifest" href="/manifest.json">
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -82,7 +78,7 @@ body{
 
 /* ── Marquee ─────────────────────────────────────── */
 .marquee{
-  position:sticky;top:0;z-index:200;transform:translateZ(0);will-change:transform;
+  position:sticky;top:0;z-index:200;
   background:var(--lime);color:var(--black);
   border-bottom:1px solid var(--black);
   overflow:hidden;white-space:nowrap;
@@ -102,7 +98,7 @@ body{
 
 /* ── Nav ─────────────────────────────────────────── */
 nav{
-  position:sticky;top:34px;z-index:190;transform:translateZ(0);will-change:transform;
+  position:sticky;top:34px;z-index:190;
   background:var(--black);border-bottom:1px solid #1e1e1e;
   display:flex;align-items:center;justify-content:space-between;
   padding:14px 18px;color:var(--white);
@@ -154,7 +150,7 @@ nav{
 .hero .ed{color:var(--lime);font-weight:700}
 
 /* generative halftone visual */
-.halftone-wrap{position:relative;
+.halftone-wrap{
   position:relative;margin-top:38px;height:min(46vh,340px);
   border-top:1px solid #2a2a2a;
 }
@@ -200,6 +196,10 @@ nav{
 }
 .legend-chip:last-child{border-right:none}
 .legend-chip:hover{background:#f2f2f2}
+.legend-chip.active{background:var(--lime) !important;font-weight:700;}
+.legend-chip.dimmed{opacity:0.28;filter:grayscale(0.6);}
+.card.dimmed{opacity:0.18;filter:grayscale(0.8);pointer-events:none;transform:none !important;box-shadow:none !important;}
+.card.highlighted{outline:2px solid var(--black);outline-offset:-2px;}
 .legend-sw{width:16px;height:16px;border:1px solid var(--black);flex:none}
 
 /* ── Grille programme (6 jours) ──────────────────── */
@@ -296,41 +296,6 @@ nav{
 .acard .ad{font-family:var(--mono);font-size:9.5px;color:var(--grey);text-transform:uppercase;letter-spacing:.08em;padding:0 11px 12px;display:block}
 
 /* fiche artiste : modale desktop / bottom-sheet mobile */
-.ev-back{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:402;opacity:0;pointer-events:none;transition:opacity .22s}
-.ev-back.open{opacity:1;pointer-events:auto}
-.ev-sheet{
-  position:fixed;z-index:403;background:var(--white);border:1px solid var(--black);
-  left:50%;top:50%;transform:translate(-50%,-50%) scale(.97);opacity:0;pointer-events:none;
-  width:min(560px,calc(100vw - 32px));max-height:86vh;overflow:auto;
-  transition:transform .22s,opacity .22s;box-shadow:7px 7px 0 var(--black);
-  overscroll-behavior:contain;
-}
-.ev-sheet.open{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
-.ev-sheet .ev-header{
-  aspect-ratio:21/9;display:flex;align-items:center;justify-content:center;
-  border-bottom:1px solid var(--black);padding:20px;
-}
-.ev-sheet .ev-header span{
-  font-family:var(--cond);font-weight:500;font-size:clamp(22px,4.5vw,40px);
-  text-transform:uppercase;letter-spacing:-0.02em;text-align:center;line-height:1;
-}
-.ev-sheet .ev-time{
-  font-family:var(--mono);font-size:11px;color:var(--grey);
-  letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:10px;
-}
-.ev-sheet .ev-map-link{
-  display:inline-flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
-  border:1px solid var(--black);padding:8px 12px;transition:.12s;background:none;
-  color:var(--black);
-}
-.ev-sheet .ev-map-link:hover{background:var(--lime)}
-.ev-sheet .ev-desc{font-size:14px;line-height:1.7;margin-top:16px;color:rgba(0,0,0,.8)}
-@media(max-width:640px){
-  .ev-sheet{left:0;right:0;top:auto;bottom:0;width:100%;max-height:88vh;
-    transform:translateY(102%);border-left:none;border-right:none;border-bottom:none;box-shadow:none}
-  .ev-sheet.open{transform:translateY(0)}
-}
 .sheet-back{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;opacity:0;pointer-events:none;transition:opacity .22s}
 .sheet-back.open{opacity:1;pointer-events:auto}
 .sheet{
@@ -376,12 +341,8 @@ nav{
 @media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none}}
 
 /* ── Map ─────────────────────────────────────────── */
-#map{height:400px;border:1px solid var(--black);isolation:isolate;transform:translateZ(0)}
+#map{height:400px;border:1px solid var(--black)}
 .leaflet-container{background:#f4f4f4;font-family:var(--font)}
-.leaflet-pane{z-index:4!important}.leaflet-tile-pane{z-index:2!important}
-.leaflet-overlay-pane{z-index:4!important}.leaflet-shadow-pane{z-index:5!important}
-.leaflet-marker-pane{z-index:6!important}.leaflet-tooltip-pane{z-index:7!important}
-.leaflet-popup-pane{z-index:8!important}.leaflet-top,.leaflet-bottom{z-index:9!important}
 .map-legend{display:flex;flex-wrap:wrap;gap:0;margin-top:0;border:1px solid var(--black);border-top:none}
 .map-chip{
   font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
@@ -425,7 +386,7 @@ footer a{color:var(--lime);text-decoration:none}
 
 <!-- NAV -->
 <nav>
-  <div class="brand" id="brand-logo">
+  <div class="brand">
     <svg class="logo" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
       <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
@@ -452,7 +413,6 @@ footer a{color:var(--lime);text-decoration:none}
       <video class="ht-src" id="ht-video" src="/media/mapp-hero.mp4"
              muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
       <canvas id="halftone"></canvas>
-      <canvas id="vhs-overlay" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;opacity:0.55;"></canvas>
       <div class="halftone-cap" data-fr="MAPP_MTL · Festival de projection numérique" data-en="MAPP_MTL · Digital projection festival">MAPP_MTL · Festival de projection numérique</div>
       <div class="halftone-cap r">45.528°N · 73.603°O</div>
     </div>
@@ -477,15 +437,6 @@ footer a{color:var(--lime);text-decoration:none}
 </section>
 
 <!-- FICHE ARTISTE (overlay) -->
-<div class="ev-back" id="ev-back" onclick="closeEvent()"></div>
-<div class="ev-sheet" id="ev-sheet" role="dialog" aria-modal="true">
-  <div class="handle"></div>
-  <div class="sheet-head">
-    <span class="t">MAPP_MTL 2026</span>
-    <button class="sheet-close" onclick="closeEvent()" data-fr="Fermer ✕" data-en="Close ✕">Fermer ✕</button>
-  </div>
-  <div id="ev-body" class="sheet-body"></div>
-</div>
 <div class="sheet-back" id="sheet-back" onclick="closeArtist()"></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-name">
   <div class="handle"></div>
@@ -498,7 +449,7 @@ footer a{color:var(--lime);text-decoration:none}
 </div>
 
 <!-- CARTE -->
-<section class="sec" id="carte" style="position:relative;z-index:0;">
+<section class="sec" id="carte">
   <div class="sec-inner narrow">
     <div class="eyebrow" data-fr="Les lieux" data-en="Venues">Les lieux</div>
     <div id="map" class="reveal"></div>
@@ -720,18 +671,18 @@ setInterval(renderHeroStatus, 30000);
 // ============================================================
 function renderVenueLegend(){
   document.getElementById('venue-legend').innerHTML = Object.entries(VENUES).map(([key,v])=>`
-    <span class="legend-chip" onclick="focusVenue('${key}')">
+    <span class="legend-chip" data-venue="${key}" onclick="filterVenue('${key}')">
       <span class="legend-sw ${v.pat}"></span>${v[lang]}
     </span>`).join('');
 }
 
 function renderGrid(){
   const today = localDateStr(new Date());
-  document.getElementById('grid').innerHTML = DAYS.map((day,dayIdx)=>{
-    const cards = day.events.map((ev,evIdx)=>{
+  document.getElementById('grid').innerHTML = DAYS.map(day=>{
+    const cards = day.events.map(ev=>{
       const v = VENUES[ev.venue]; const c = ev[lang];
       return `
-      <div class="card ${v.pat}" onclick="openEvent(${dayIdx},${evIdx})" style="cursor:pointer">
+      <div class="card ${v.pat}" onclick="focusVenue('${ev.venue}')" title="${v[lang]}">
         ${ev.free?`<span class="free">${lang==='fr'?'Gratuit':'Free'}</span>`:''}
         <span class="time">${ev.time}</span>
         <h3>${c.t}</h3>
@@ -894,6 +845,46 @@ function initMap(){
     markers[key] = mk;
   });
 }
+// ── Filtre par lieu (click sur chip) ──
+let activeVenue = null;
+function filterVenue(key) {
+  // Toggle : reclicker désélectionne
+  if (activeVenue === key) {
+    activeVenue = null;
+  } else {
+    activeVenue = key;
+  }
+  applyVenueFilter();
+}
+function applyVenueFilter() {
+  // Chips
+  document.querySelectorAll('.legend-chip').forEach(chip => {
+    const k = chip.dataset.venue;
+    if (!activeVenue) {
+      chip.classList.remove('active','dimmed');
+    } else if (k === activeVenue) {
+      chip.classList.add('active');
+      chip.classList.remove('dimmed');
+    } else {
+      chip.classList.add('dimmed');
+      chip.classList.remove('active');
+    }
+  });
+  // Cards
+  document.querySelectorAll('.card[data-venue]').forEach(card => {
+    const k = card.dataset.venue;
+    if (!activeVenue) {
+      card.classList.remove('highlighted','dimmed');
+    } else if (k === activeVenue) {
+      card.classList.add('highlighted');
+      card.classList.remove('dimmed');
+    } else {
+      card.classList.add('dimmed');
+      card.classList.remove('highlighted');
+    }
+  });
+}
+// Garder focusVenue pour la carte (depuis les fiches artistes)
 function focusVenue(key){
   const v = VENUES[key];
   document.getElementById('carte').scrollIntoView({behavior:'smooth'});
@@ -1021,174 +1012,6 @@ function boot(){
   if(location.hash.startsWith('#a/')) openArtist(location.hash.slice(3), true);
 }
 boot();
-
-// ── SW — version auto ──
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?v=' + Math.floor(Date.now()/86400000))
-    .catch(()=>{});
-}
-
-// ── HAPTIQUE (iOS bloque vibrate — on détecte) ──
-const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent);
-function vib(ms) {
-  if (isIOS) return;
-  if (!navigator.vibrate) return;
-  try { navigator.vibrate(ms); } catch(e) {}
-}
-// Vibration au premier vrai touch (Android uniquement)
-document.addEventListener('touchstart', function onFirst() {
-  vib(18);
-  document.removeEventListener('touchstart', onFirst);
-}, {once: true, passive: true});
-
-// Haptique sur artistes
-const _oa = window.openArtist;
-if (typeof _oa === 'function') {
-  window.openArtist = function(...a) { vib(8); return _oa.apply(this, a); };
-}
-const _ca = window.closeArtist;
-if (typeof _ca === 'function') {
-  window.closeArtist = function(...a) { vib(6); return _ca.apply(this, a); };
-}
-
-// ── EASTER EGG — 5 taps sur le logo ──
-(function() {
-  let taps = 0, timer = null;
-  function doTap(e) {
-    e.stopPropagation();
-    if (e.type === 'touchend') e.preventDefault();
-    clearTimeout(timer);
-    taps++;
-    timer = setTimeout(() => { taps = 0; }, 2500);
-    const el = document.getElementById('brand-logo');
-    if (el) {
-      el.style.opacity = taps >= 3 ? '0.4' : '1';
-      setTimeout(() => { if(el) el.style.opacity = '1'; }, 100);
-    }
-    if (taps >= 5) {
-      taps = 0;
-      vib([15, 30, 15, 30, 80]);
-      launchLimeRain();
-    }
-  }
-  function initEgg() {
-    const logo = document.getElementById('brand-logo');
-    if (!logo) { setTimeout(initEgg, 200); return; }
-    logo.style.cursor = 'pointer';
-    logo.style.userSelect = 'none';
-    logo.style.webkitUserSelect = 'none';
-    logo.addEventListener('touchend', doTap, {passive: false});
-    logo.addEventListener('click', doTap);
-  }
-  initEgg();
-  function launchLimeRain() {
-    const c = document.createElement('div');
-    c.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;';
-    document.body.appendChild(c);
-    ['●','◆','▲','★','✦','◉'].forEach(() => {
-      for (let i = 0; i < 14; i++) {
-        const el = document.createElement('span');
-        el.textContent = ['●','◆','▲','★','✦','◉'][Math.floor(Math.random()*6)];
-        el.style.cssText = `position:absolute;top:-30px;left:${Math.random()*100}%;color:#22ff62;font-size:${10+Math.random()*20}px;opacity:0;will-change:transform;animation:lime-fall ${1.8+Math.random()*1.6}s ${Math.random()*1.5}s ease-in forwards;`;
-        c.appendChild(el);
-      }
-    });
-    if (!document.getElementById('lime-kf')) {
-      const s = document.createElement('style');
-      s.id = 'lime-kf';
-      s.textContent = '@keyframes lime-fall{0%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}100%{opacity:0;transform:translateY(110vh) rotate(720deg) scale(.5)}}';
-      document.head.appendChild(s);
-    }
-    setTimeout(() => { if(c.parentNode) c.remove(); }, 4500);
-  }
-})();
-
-// ── FICHE ÉVÉNEMENT ──
-function openEvent(dayIdx, evIdx){
-  vib(8);
-  const day = DAYS[dayIdx], ev = day.events[evIdx];
-  const v = VENUES[ev.venue], c = ev[lang];
-  const dateFmt = lang==='fr'
-    ? day.wFr+' '+day.d+' '+day.moFr
-    : day.wEn+' '+day.d+' '+day.moEn;
-
-  const freeTag = ev.free
-    ? `<span style="display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:3px 8px;background:var(--lime);border:1px solid var(--black);margin-bottom:14px;">${lang==='fr'?'Gratuit · Entrée libre':'Free · All welcome'}</span><br>`
-    : '';
-
-  document.getElementById('ev-body').innerHTML = `
-    <div class="ev-header ${v.pat}">
-      <span>${c.t}</span>
-    </div>
-    <div style="padding:20px 18px 28px;">
-      <span class="ev-time">${dateFmt} · ${ev.time}</span>
-      <h2 style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
-      ${freeTag}
-      <p class="ev-desc">${c.d}</p>
-      <button class="ev-map-link" onclick="closeEvent();focusVenue('${ev.venue}')">
-        📍 ${v[lang]} <span style="opacity:.5;margin-left:4px;">→ voir sur la carte</span>
-      </button>
-    </div>`;
-
-  document.getElementById('ev-back').classList.add('open');
-  document.getElementById('ev-sheet').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeEvent(){
-  vib(6);
-  document.getElementById('ev-back').classList.remove('open');
-  document.getElementById('ev-sheet').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-// Escape ferme aussi ev-sheet
-document.addEventListener('keydown', e=>{
-  if(e.key==='Escape') closeEvent();
-});
-
-// ── VHS OVERLAY ──
-(function initVHS(){
-  const cv = document.getElementById('vhs-overlay');
-  if(!cv) return;
-  const ctx = cv.getContext('2d');
-  let W, H;
-  function resize(){ W=cv.clientWidth; H=cv.clientHeight; cv.width=W; cv.height=H; }
-  resize();
-  window.addEventListener('resize', resize);
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let t=0, gt=0, ga=false, gy=0, gh=0;
-  function frame(){
-    ctx.clearRect(0,0,W,H);
-    ctx.fillStyle='rgba(0,0,0,0.18)';
-    for(let y=0;y<H;y+=3) ctx.fillRect(0,y,W,1);
-    for(let i=0;i<400;i++){
-      ctx.fillStyle=`rgba(255,255,255,${Math.random()*.25})`;
-      ctx.fillRect(Math.random()*W,Math.random()*H,Math.random()*2,Math.random()*2);
-    }
-    const sh=Math.sin(t*1.5)*2.5;
-    ctx.fillStyle='rgba(255,30,30,0.06)';   ctx.fillRect(sh,0,W,H);
-    ctx.fillStyle='rgba(0,255,230,0.05)';   ctx.fillRect(-sh,0,W,H);
-    const ty=(t*25)%(H+40)-20;
-    const tg=ctx.createLinearGradient(0,ty-12,0,ty+12);
-    tg.addColorStop(0,'transparent'); tg.addColorStop(.5,'rgba(255,255,255,.12)'); tg.addColorStop(1,'transparent');
-    ctx.fillStyle=tg; ctx.fillRect(0,ty-12,W,24);
-    gt++;
-    if(gt>90+Math.random()*150){ gt=0; ga=true; gy=Math.random()*H*.8; gh=1+Math.random()*6; }
-    if(ga){
-      const off=(Math.random()-.5)*18;
-      ctx.fillStyle=`rgba(255,255,255,${.08+Math.random()*.12})`; ctx.fillRect(off,gy,W,gh);
-      ctx.fillStyle=`rgba(${Math.random()>.5?'255,0,100':'0,200,255'},.1)`; ctx.fillRect(off-2,gy,W,gh);
-      if(Math.random()<.25) ga=false;
-    }
-    const vg=ctx.createRadialGradient(W/2,H/2,H*.25,W/2,H/2,H*.85);
-    vg.addColorStop(0,'transparent'); vg.addColorStop(1,'rgba(0,0,0,.35)');
-    ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
-    t+=.008;
-    requestAnimationFrame(frame);
-  }
-  frame();
-})();
 </script>
 </body>
 </html>
