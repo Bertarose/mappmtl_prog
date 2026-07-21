@@ -88,11 +88,20 @@ body{
   border-bottom:1px solid var(--black);
   overflow:hidden;white-space:nowrap;
   height:34px;display:flex;align-items:center;
+  text-decoration:none;cursor:pointer;
 }
 .marquee-track{
   display:inline-flex;gap:0;animation:scroll 28s linear infinite;
   will-change:transform;
 }
+
+/* bandeau gris — même mécanique, entre deux sections, mène aussi à la billetterie */
+.marquee-grey{
+  position:static;top:auto;z-index:1;
+  background:#b3b3b3;color:var(--black);
+  border-top:1px solid var(--black);border-bottom:1px solid var(--black);
+}
+.marquee-grey .marquee-track{animation-duration:22s}
 .marquee-track span{
   font-family:var(--cond);font-weight:500;font-size:14px;
   letter-spacing:.04em;padding:0 26px;text-transform:uppercase;
@@ -135,6 +144,8 @@ nav{
   color:var(--black);
 }
 .eyebrow::before{content:'';display:inline-block;width:10px;height:10px;background:var(--lime);border:1px solid var(--black);margin-right:10px;vertical-align:baseline}
+.hero .eyebrow{color:var(--lime);margin-bottom:16px}
+.hero .eyebrow::before{border-color:var(--lime)}
 
 /* ── Hero ────────────────────────────────────────── */
 .hero{
@@ -155,7 +166,6 @@ nav{
   text-transform:none;line-height:1.25;
 }
 .hero .ed{color:var(--white);font-weight:300;font-family:var(--font);letter-spacing:.02em;white-space:nowrap}
-
 .hero-tix{
   display:inline-flex;align-items:center;gap:10px;
   font-family:var(--mono);font-weight:700;font-size:13px;
@@ -339,6 +349,29 @@ nav{
   .legend-chip{min-width:46%}
 }
 
+/* ── Lisibilité mobile : les petits libellés en mono grossissent un peu
+   pour rester confortables à lire sur un écran de téléphone ── */
+@media(max-width:640px){
+  .eyebrow{font-size:12px}
+  .ghead .wd,.ghead .mo{font-size:11px}
+  .card .time{font-size:12.5px}
+  .card h3{font-size:19px}
+  .card .venue{font-size:11.5px}
+  .card .desc{font-size:14px;line-height:1.55}
+  .card .tix{font-size:11.5px;padding:7px 11px}
+  .acard .an{font-size:17px}
+  .acard .ad{font-size:11px}
+  .hero-tix{font-size:14px}
+  .count-cell span{font-size:10px}
+  .sheet-body h2{font-size:28px}
+  .sheet-body .disc{font-size:11.5px}
+  .sheet-body .bio,.ev-sheet .ev-desc{font-size:15px;line-height:1.6}
+  .sheet-body .when,.ev-sheet .ev-map-link,.ev-sheet .ev-tix-link{font-size:11.5px}
+  .sheet-body .links a{font-size:11.5px}
+  .info-card h4{font-size:18px}
+  .info-card p{font-size:14.5px;line-height:1.55}
+}
+
 /* ── Artistes ────────────────────────────────────── */
 .agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
 .acard{border:1px solid var(--black);background:var(--white);cursor:pointer;transition:transform .12s,box-shadow .12s;text-align:left}
@@ -473,14 +506,78 @@ footer p{font-family:var(--mono);font-size:11px;color:#9a9a9a;margin-top:12px;le
 footer a{color:var(--lime);text-decoration:none}
 
 .hide{display:none!important}
+
+/* ── LOADER — logo glitché, esprit signal vidéo analogique / mapping ── */
+#page-loader{
+  position:fixed;inset:0;z-index:9999;background:var(--black);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .5s ease;
+}
+#page-loader.loader-hide{opacity:0;pointer-events:none}
+#page-loader::before{ /* trames scan (CRT) */
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 3px);
+  mix-blend-mode:overlay;
+  animation:loader-scan 5s linear infinite;
+}
+#page-loader::after{ /* vignette légère */
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55) 100%);
+}
+@keyframes loader-scan{from{background-position:0 0}to{background-position:0 60px}}
+
+.loader-logo{position:relative;width:104px;height:104px;z-index:2}
+.loader-logo .lg{position:absolute;inset:0;width:100%;height:100%;display:block;fill:currentColor;transition:transform .05s linear}
+.loader-logo .lg-w{color:var(--white);z-index:3}
+.loader-logo .lg-r{color:#ff2b4d;z-index:1;mix-blend-mode:screen;opacity:0}
+.loader-logo .lg-c{color:#22e0ff;z-index:2;mix-blend-mode:screen;opacity:0}
+
+.loader-logo.glitch .lg-w{clip-path:inset(var(--gy1,0) 0 var(--gy2,0) 0);transform:translate(var(--gx,0),0) skewX(var(--gskew,0deg))}
+.loader-logo.glitch .lg-r{opacity:.85;transform:translate(calc(-3px + var(--gx,0)),1px)}
+.loader-logo.glitch .lg-c{opacity:.85;transform:translate(calc(3px + var(--gx,0)),-1px)}
+
+@media (prefers-reduced-motion: reduce){
+  #page-loader::before{animation:none}
+}
+
 </style>
 </head>
 <body>
 
-<!-- MARQUEE -->
-<div class="marquee">
-  <div class="marquee-track" id="marquee-track"></div>
+<!-- LOADER -->
+<div id="page-loader">
+  <div class="loader-logo" id="loader-logo">
+    <svg class="lg lg-r" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
+      <path d="M16.511,28.213l-3.718-15.266h-.051v15.266h-3.103V9.639h5.168l3.686,15.139h.051l3.688-15.139h5.168v18.574h-3.105v-15.266h-.051l-3.718,15.266h-4.014Z"/>
+      <path d="M9.639,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM17.964,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
+      <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
+    </svg>
+    <svg class="lg lg-c" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
+      <path d="M16.511,28.213l-3.718-15.266h-.051v15.266h-3.103V9.639h5.168l3.686,15.139h.051l3.688-15.139h5.168v18.574h-3.105v-15.266h-.051l-3.718,15.266h-4.014Z"/>
+      <path d="M9.639,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM17.964,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
+      <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
+    </svg>
+    <svg class="lg lg-w" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
+      <path d="M16.511,28.213l-3.718-15.266h-.051v15.266h-3.103V9.639h5.168l3.686,15.139h.051l3.688-15.139h5.168v18.574h-3.105v-15.266h-.051l-3.718,15.266h-4.014Z"/>
+      <path d="M9.639,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM17.964,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
+      <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
+    </svg>
+  </div>
 </div>
+
+<!-- MARQUEE -->
+<a class="marquee" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" aria-label="Réserver un billet">
+  <div class="marquee-track" id="marquee-track"></div>
+</a>
 
 <!-- NAV -->
 <nav>
@@ -504,8 +601,9 @@ footer a{color:var(--lime);text-decoration:none}
 <!-- HERO -->
 <div class="hero">
   <div class="hero-inner">
+    <div class="eyebrow ed-eyebrow" data-fr="10e ÉDITION" data-en="10th EDITION">10e ÉDITION</div>
     <h1>PROGRAMMATION</h1>
-    <div class="sub">29 SEPT — 4 OCT 2026 · MONTRÉAL · <span class="ed" data-fr="10e ÉDITION" data-en="10th EDITION">10e ÉDITION</span></div>
+    <div class="sub">29 SEPT — 4 OCT 2026 · MONTRÉAL</div>
     <div id="hero-status"></div>
     <a class="hero-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener"><span data-fr="Réservez votre billet ici" data-en="Reserve your ticket here">Réservez votre billet ici</span> <span class="arrow">→</span></a>
     <div class="halftone-wrap">
@@ -560,6 +658,11 @@ footer a{color:var(--lime);text-decoration:none}
   <div class="sheet-body" id="sheet-body"></div>
 </div>
 
+<!-- BANDEAU BILLETTERIE (gris) -->
+<a class="marquee marquee-grey" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" aria-label="Réserver un billet">
+  <div class="marquee-track marquee-track-grey"></div>
+</a>
+
 <!-- CARTE -->
 <section class="sec" id="carte" style="position:relative;z-index:0;">
   <div class="sec-inner narrow">
@@ -568,6 +671,11 @@ footer a{color:var(--lime);text-decoration:none}
     <div class="map-legend" id="map-legend"></div>
   </div>
 </section>
+
+<!-- BANDEAU BILLETTERIE (gris) -->
+<a class="marquee marquee-grey" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" aria-label="Réserver un billet">
+  <div class="marquee-track marquee-track-grey"></div>
+</a>
 
 <!-- INFOS -->
 <section class="sec" id="infos">
@@ -613,6 +721,50 @@ footer a{color:var(--lime);text-decoration:none}
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+// ============================================================
+// LOADER — écran de chargement avec logo glitché (signal analogique)
+// ============================================================
+(function(){
+  const loader = document.getElementById('page-loader');
+  const logo = document.getElementById('loader-logo');
+  if(!loader || !logo) return;
+
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function burst(){
+    // décalages aléatoires façon décrochage de signal vidéo
+    logo.style.setProperty('--gx', (Math.random()*8-4).toFixed(1)+'px');
+    logo.style.setProperty('--gskew', (Math.random()*3-1.5).toFixed(2)+'deg');
+    const y1 = Math.random()*40, y2 = Math.random()*40;
+    logo.style.setProperty('--gy1', y1.toFixed(0)+'%');
+    logo.style.setProperty('--gy2', y2.toFixed(0)+'%');
+    logo.classList.add('glitch');
+    setTimeout(()=>logo.classList.remove('glitch'), 70 + Math.random()*160);
+  }
+
+  let timer = null;
+  function loop(){
+    burst();
+    timer = setTimeout(loop, 500 + Math.random()*1400);
+  }
+  if(!reduceMotion) loop();
+
+  function hide(){
+    if(timer) clearTimeout(timer);
+    loader.classList.add('loader-hide');
+    setTimeout(()=>{ loader.style.display='none'; }, 550);
+  }
+  const MIN_DISPLAY = 700; // évite un simple flash sur connexion rapide
+  const start = Date.now();
+  function ready(){
+    const wait = Math.max(0, MIN_DISPLAY - (Date.now()-start));
+    setTimeout(hide, wait);
+  }
+  if(document.readyState === 'complete') ready();
+  else window.addEventListener('load', ready);
+  setTimeout(hide, 5000); // filet de sécurité
+})();
+
 // ============================================================
 // DATA
 // ============================================================
@@ -732,6 +884,10 @@ function renderMarquee(){
   const items = MARQUEE[lang];
   const one = items.map(t=>`<span>${t} <span style="opacity:.55">↗</span></span>`).join('');
   document.getElementById('marquee-track').innerHTML = one + one;
+
+  const tixLabel = lang==='fr' ? 'BILLETTERIE' : 'TICKETS';
+  const tixOne = Array(8).fill(`<span>${tixLabel} <span style="opacity:.6">↗</span></span>`).join('');
+  document.querySelectorAll('.marquee-track-grey').forEach(el=>{ el.innerHTML = tixOne + tixOne; });
 }
 
 // ============================================================
