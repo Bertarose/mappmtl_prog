@@ -154,7 +154,7 @@ nav{
 .dixans-stats{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid #2a2a2a}
 .dixans-stat{flex:1 1 140px;padding:20px 16px;border-right:1px solid #2a2a2a;border-bottom:1px solid #2a2a2a}
 .dixans-stat b{font-family:var(--cond);font-weight:500;font-size:clamp(28px,4vw,44px);color:var(--lime);display:block;line-height:1}
-.dixans-stat span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#999;display:block;margin-top:6px}
+.dixans-stat span{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.65);display:block;margin-top:6px}
 
 /* ── Hero ────────────────────────────────────────── */
 .hero{
@@ -369,11 +369,22 @@ nav{
   .count-cell span{font-size:10px}
   .sheet-body h2{font-size:28px}
   .sheet-body .disc{font-size:11.5px}
+  .sheet-head .t{font-size:11px}
   .sheet-body .bio,.ev-sheet .ev-desc{font-size:15px;line-height:1.6}
   .sheet-body .when,.ev-sheet .ev-map-link,.ev-sheet .ev-tix-link{font-size:11.5px}
   .sheet-body .links a{font-size:11.5px}
   .info-card h4{font-size:18px}
   .info-card p{font-size:14.5px;line-height:1.55}
+  footer p{font-size:14px}
+  .f-links a{font-size:14px}
+  .f-legal{font-size:12px!important}
+  .sponsor-box span{font-size:11px}
+  .dixans-txt{font-size:15.5px}
+  .dixans-stat b{font-size:30px}
+  .dixans-stat span{font-size:11px}
+  .nl-intro{font-size:14.5px}
+  .nl-form input,.nl-form button{font-size:14px}
+  .nl-msg{font-size:13px}
 }
 
 /* ── Artistes ────────────────────────────────────── */
@@ -481,11 +492,14 @@ nav{
 .map-legend{display:flex;flex-wrap:wrap;gap:0;margin-top:0;border:1px solid var(--black);border-top:none}
 .map-chip{
   font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
-  color:var(--black);background:var(--white);border-right:1px solid var(--black);
+  color:var(--black);background:var(--white);
+  border-right:1px solid var(--black);border-bottom:1px solid var(--black);
   padding:11px 15px;cursor:pointer;transition:.12s;flex:1;text-align:center;min-width:120px;
 }
 .map-chip:last-child{border-right:none}
-.map-chip:hover,.map-chip.hot{background:var(--lime)}
+.map-chip:hover{background:#f2f2f2}
+.map-chip.active{background:var(--lime)!important;font-weight:700}
+.map-chip .star{opacity:.6}
 .leaflet-popup-content-wrapper{background:var(--white);color:var(--black);border-radius:0;border:1px solid var(--black);box-shadow:3px 3px 0 var(--black)}
 .leaflet-popup-tip{background:var(--white);border:1px solid var(--black)}
 .leaflet-popup-content{font-family:var(--font);font-size:13px;margin:12px 15px;line-height:1.5}
@@ -506,12 +520,12 @@ nav{
 
 /* ── Footer (noir) ───────────────────────────────── */
 footer{padding:48px 18px 60px;text-align:center;background:var(--black);color:var(--white)}
-footer p{font-family:var(--mono);font-size:11px;color:#9a9a9a;margin-top:12px;letter-spacing:.06em;text-transform:uppercase;line-height:1.8}
+footer p{font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.78);margin-top:12px;letter-spacing:.05em;text-transform:uppercase;line-height:1.8}
 footer a{color:var(--lime);text-decoration:none}
-.f-links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:16px}
-.f-links a{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid transparent;padding-bottom:2px}
+.f-links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.f-links a{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid transparent;padding-bottom:2px}
 .f-links a:hover{border-color:var(--lime)}
-.f-legal{color:#666!important;font-size:10px!important;margin-top:22px!important}
+.f-legal{color:rgba(255,255,255,.6)!important;font-size:11.5px!important;margin-top:22px!important}
 
 /* ── Infolettre ── */
 .nl-intro{font-family:var(--font);font-size:15px;line-height:1.6;color:rgba(0,0,0,.72);margin-bottom:18px;max-width:480px}
@@ -628,7 +642,7 @@ footer a{color:var(--lime);text-decoration:none}
 </div>
 
 <!-- MARQUEE -->
-<a class="marquee" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" aria-label="Réserver un billet">
+<a class="marquee" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)" aria-label="Réserver un billet">
   <div class="marquee-track" id="marquee-track"></div>
 </a>
 
@@ -658,7 +672,7 @@ footer a{color:var(--lime);text-decoration:none}
     <h1>PROGRAMMATION</h1>
     <div class="sub">29 SEPT — 4 OCT 2026 · MONTRÉAL</div>
     <div id="hero-status"></div>
-    <a class="hero-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener"><span data-fr="Réservez votre billet ici" data-en="Reserve your ticket here">Réservez votre billet ici</span> <span class="arrow">→</span></a>
+    <a class="hero-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)"><span data-fr="Réservez votre billet ici" data-en="Reserve your ticket here">Réservez votre billet ici</span> <span class="arrow">→</span></a>
     <div class="halftone-wrap">
       <video id="hero-video" src="/media/mapp-hero.mp4"
              muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
@@ -953,6 +967,7 @@ let map, markers = {};
 // LANG
 // ============================================================
 function toggleLang(){
+  vib(6);
   lang = lang === 'fr' ? 'en' : 'fr';
   localStorage.setItem('mapp_lang', lang);
   applyLang();
@@ -1229,21 +1244,29 @@ function applyFilters(){
   });
 }
 function filterVenue(key) {
+  vib(6);
   activeVenue = (activeVenue === key) ? null : key;
   applyFilters();
 }
 function toggleFreeOnly(){
+  vib(6);
   freeOnly = !freeOnly;
   applyFilters();
 }
+let mapActiveVenue = null;
 function focusVenue(key){
+  vib(6);
+  mapActiveVenue = key;
+  document.querySelectorAll('.map-chip[data-venue]').forEach(c=>{
+    c.classList.toggle('active', c.dataset.venue === key);
+  });
   const v = VENUES[key];
   document.getElementById('carte').scrollIntoView({behavior:'smooth'});
   setTimeout(()=>{ map.setView([v.lat,v.lng], 15, {animate:true}); markers[key].openPopup(); }, 450);
 }
 function renderLegend(){
   document.getElementById('map-legend').innerHTML = Object.entries(VENUES).map(([key,v])=>`
-    <span class="map-chip ${v.main?'hot':''}" onclick="focusVenue('${key}')">${v.main?'★ ':''}${v[lang]}</span>`).join('');
+    <span class="map-chip ${mapActiveVenue===key?'active':''}" data-venue="${key}" onclick="focusVenue('${key}')">${v.main?'<span class="star">★ </span>':''}${v[lang]}</span>`).join('');
 }
 
 // Infolettre — TODO (Kim) : brancher sur un vrai service d'envoi
@@ -1254,6 +1277,7 @@ function handleNewsletter(evt){
   const msg = document.getElementById('nl-msg');
   const email = input.value.trim();
   if(!email){ return false; }
+  vib([10,40,10]);
   msg.textContent = lang==='fr' ? 'Merci ! Vous êtes inscrit·e.' : "Thanks! You're subscribed.";
   msg.classList.add('ok');
   input.value = '';
@@ -1315,6 +1339,7 @@ let htOn = false, htRAF = null, htReady = false;
 let ht = {}; // ctx, W, H, dpr, cols, rows, lum, off, octx, px, py
 
 function toggleHalftone(){
+  vib(10);
   if(htOn) stopHalftone(true); else startHalftone(true);
 }
 
@@ -1593,7 +1618,7 @@ function openEvent(dayIdx, evIdx){
       <h2 style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
       ${freeTag}
       <p class="ev-desc">${c.d}</p>
-      <a class="ev-tix-link" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener">
+      <a class="ev-tix-link" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)">
         🎟 ${lang==='fr'?'Réservez votre billet ici':'Reserve your ticket here'} →
       </a>
       <button class="ev-map-link" onclick="closeEvent();focusVenue('${ev.venue}')">
@@ -1639,6 +1664,7 @@ function toICSDate(d){
   return d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'T'+p(d.getHours())+p(d.getMinutes())+'00';
 }
 function addToCalendar(dayIdx, evIdx){
+  vib(10);
   const day = DAYS[dayIdx], ev = day.events[evIdx];
   const v = VENUES[ev.venue], c = ev[lang];
   const { startDate, endDate } = eventDateRange(day, ev);
@@ -1663,6 +1689,7 @@ function addToCalendar(dayIdx, evIdx){
   setTimeout(()=>URL.revokeObjectURL(url), 2000);
 }
 function shareEvent(dayIdx, evIdx){
+  vib(10);
   const day = DAYS[dayIdx], ev = day.events[evIdx];
   const c = ev[lang];
   const dateFmt = lang==='fr' ? (day.wFr+' '+day.d+' '+day.moFr) : (day.wEn+' '+day.d+' '+day.moEn);
@@ -1688,7 +1715,7 @@ document.addEventListener('keydown', e=>{
 });
 
 </script>
-<a class="sticky-tix" id="sticky-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" data-fr="🎟 Réservez votre billet →" data-en="🎟 Reserve your ticket →">🎟 Réservez votre billet →</a>
+<a class="sticky-tix" id="sticky-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)" data-fr="🎟 Réservez votre billet →" data-en="🎟 Reserve your ticket →">🎟 Réservez votre billet →</a>
 
 </body>
 </html>
