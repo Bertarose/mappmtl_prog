@@ -164,7 +164,7 @@ nav{
 .hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:2}
 .hero h1{
   font-family:var(--cond);font-weight:500;
-  font-size:clamp(34px,8vw,150px);line-height:.9;
+  font-size:clamp(30px,7vw,96px);line-height:.9;
   text-transform:uppercase;letter-spacing:-0.03em;
   color:var(--white);white-space:nowrap;
 }
@@ -680,7 +680,10 @@ footer a{color:var(--lime);text-decoration:none}
       <div class="video-scrim"></div>
       <div class="green-fade"></div>
       <button type="button" class="halftone-toggle" id="halftone-toggle" onclick="toggleHalftone()" aria-pressed="true" data-fr-on="Effet trame activé" data-fr-off="Activer l'effet trame" data-en-on="Halftone effect on" data-en-off="Turn on halftone effect" aria-label="Effet trame activé — cliquer pour revenir à la vidéo">◆</button>
-      <audio id="halftone-sound" src="/media/halftone-toggle.webm" preload="auto"></audio>
+      <audio id="halftone-sound" preload="auto">
+        <source src="/media/halftone-toggle.webm" type="audio/webm">
+        <source src="/media/halftone-toggle.mp3" type="audio/mpeg">
+      </audio>
     </div>
   </div>
 </div>
@@ -1036,7 +1039,7 @@ function fitTitle(){
   h.style.fontSize = '100px';                 // taille de mesure
   const w = h.scrollWidth;
   if(!w) return;
-  h.style.fontSize = Math.min(150, Math.floor(100 * max / w * 0.995)) + 'px';
+  h.style.fontSize = Math.min(96, Math.floor(100 * max / w * 0.995)) + 'px';
 }
 window.addEventListener('resize', fitTitle);
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle);
