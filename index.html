@@ -1039,7 +1039,9 @@ function fitTitle(){
   h.style.fontSize = '100px';                 // taille de mesure
   const w = h.scrollWidth;
   if(!w) return;
-  h.style.fontSize = Math.min(96, Math.floor(100 * max / w * 0.995)) + 'px';
+  const vw = window.innerWidth;
+  const cap = vw < 480 ? 44 : vw < 768 ? 56 : vw < 1024 ? 68 : 96; // mobile / tablette portrait / tablette paysage / desktop
+  h.style.fontSize = Math.min(cap, Math.floor(100 * max / w * 0.995)) + 'px';
 }
 window.addEventListener('resize', fitTitle);
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle);
