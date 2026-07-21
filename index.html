@@ -95,13 +95,6 @@ body{
   will-change:transform;
 }
 
-/* bandeau gris — même mécanique, entre deux sections, mène aussi à la billetterie */
-.marquee-grey{
-  position:static;top:auto;z-index:1;
-  background:#b3b3b3;color:var(--black);
-  border-top:1px solid var(--black);border-bottom:1px solid var(--black);
-}
-.marquee-grey .marquee-track{animation-duration:22s}
 .marquee-track span{
   font-family:var(--cond);font-weight:500;font-size:14px;
   letter-spacing:.04em;padding:0 26px;text-transform:uppercase;
@@ -211,12 +204,6 @@ nav{
 }
 .halftone-toggle:hover{background:var(--lime);color:var(--black);border-color:var(--lime)}
 .halftone-toggle[aria-pressed="true"]{background:var(--lime);color:var(--black);border-color:var(--lime)}
-.halftone-cap{
-  position:absolute;left:0;bottom:14px;
-  font-family:var(--mono);font-size:10px;letter-spacing:.2em;
-  color:var(--black);text-transform:uppercase;z-index:3;font-weight:700;
-}
-.halftone-cap.r{left:auto;right:0}
 
 /* status: countdown / live */
 #hero-status{margin-top:30px}
@@ -613,9 +600,7 @@ footer a{color:var(--lime);text-decoration:none}
       <canvas id="halftone-canvas"></canvas>
       <div class="video-scrim"></div>
       <div class="green-fade"></div>
-      <button type="button" class="halftone-toggle" id="halftone-toggle" onclick="toggleHalftone()" aria-pressed="false" data-fr-on="Effet trame activé" data-fr-off="Activer l'effet trame" data-en-on="Halftone effect on" data-en-off="Turn on halftone effect" aria-label="Activer l'effet trame">◆</button>
-      <div class="halftone-cap" data-fr="MAPP_MTL · Festival de projection numérique" data-en="MAPP_MTL · Digital projection festival">MAPP_MTL · Festival de projection numérique</div>
-      <div class="halftone-cap r">45.528°N · 73.603°O</div>
+      <button type="button" class="halftone-toggle" id="halftone-toggle" onclick="toggleHalftone()" aria-pressed="true" data-fr-on="Effet trame activé" data-fr-off="Activer l'effet trame" data-en-on="Halftone effect on" data-en-off="Turn on halftone effect" aria-label="Effet trame activé — cliquer pour revenir à la vidéo">◆</button>
       <audio id="halftone-sound" src="/media/halftone-toggle.webm" preload="auto"></audio>
     </div>
   </div>
@@ -659,11 +644,6 @@ footer a{color:var(--lime);text-decoration:none}
   <div class="sheet-body" id="sheet-body"></div>
 </div>
 
-<!-- BANDEAU BILLETTERIE (gris) -->
-<a class="marquee marquee-grey" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" aria-label="Réserver un billet">
-  <div class="marquee-track marquee-track-grey"></div>
-</a>
-
 <!-- CARTE -->
 <section class="sec" id="carte" style="position:relative;z-index:0;">
   <div class="sec-inner narrow">
@@ -672,11 +652,6 @@ footer a{color:var(--lime);text-decoration:none}
     <div class="map-legend" id="map-legend"></div>
   </div>
 </section>
-
-<!-- BANDEAU BILLETTERIE (gris) -->
-<a class="marquee marquee-grey" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" aria-label="Réserver un billet">
-  <div class="marquee-track marquee-track-grey"></div>
-</a>
 
 <!-- INFOS -->
 <section class="sec" id="infos">
@@ -885,10 +860,6 @@ function renderMarquee(){
   const items = MARQUEE[lang];
   const one = items.map(t=>`<span>${t} <span style="opacity:.55">↗</span></span>`).join('');
   document.getElementById('marquee-track').innerHTML = one + one;
-
-  const tixLabel = lang==='fr' ? 'BILLETTERIE' : 'TICKETS';
-  const tixOne = Array(8).fill(`<span>${tixLabel} <span style="opacity:.6">↗</span></span>`).join('');
-  document.querySelectorAll('.marquee-track-grey').forEach(el=>{ el.innerHTML = tixOne + tixOne; });
 }
 
 // ============================================================
@@ -958,7 +929,6 @@ function renderGrid(){
         <h3>${c.t}</h3>
         <span class="venue">📍 ${v[lang]}</span>
         <div class="desc">${c.d}</div>
-        <a class="tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="event.stopPropagation()">🎟 ${lang==='fr'?'Billets':'Tickets'} →</a>
       </div>`;
     }).join('');
     return `
@@ -1160,7 +1130,7 @@ let htOn = false, htRAF = null, htReady = false;
 let ht = {}; // ctx, W, H, dpr, cols, rows, lum, off, octx, px, py
 
 function toggleHalftone(){
-  if(htOn) stopHalftone(); else startHalftone();
+  if(htOn) stopHalftone(true); else startHalftone(true);
 }
 
 // son joué à l'activation de l'effet trame (coupé à la désactivation)
@@ -1234,7 +1204,7 @@ function sampleHeroVideo(){
   }catch(e){ ht.lum = null; }
 }
 
-function startHalftone(){
+function startHalftone(playSound){
   if(htOn) return;
   if(!htReady && !initHalftoneCanvas()) return;
   htOn = true;
@@ -1251,7 +1221,7 @@ function startHalftone(){
   cv.classList.add('on'); cv.style.opacity = '1';
   if(vid) vid.style.opacity = '0';
   setHaltoneBtnLabel();
-  playToggleSound();
+  if(playSound) playToggleSound();
 
   const GAP = 8;
   // Note : on continue d'animer même si le système demande de réduire
@@ -1307,7 +1277,7 @@ function startHalftone(){
   frame();
 }
 
-function stopHalftone(){
+function stopHalftone(playSound){
   if(!htOn) return;
   htOn = false;
   if(htRAF) cancelAnimationFrame(htRAF);
@@ -1316,7 +1286,7 @@ function stopHalftone(){
   if(cv){ cv.classList.remove('on'); cv.style.opacity = '0'; }
   if(vid) vid.style.opacity = '1';
   setHaltoneBtnLabel();
-  stopToggleSound();
+  if(playSound) stopToggleSound();
 }
 
 // ============================================================
@@ -1329,6 +1299,7 @@ function boot(){
   applyLang();
   fitTitle();
   initReveals();
+  startHalftone(false); // effet trame activé par défaut ; l'icône permet de revenir à la vidéo
   if(location.hash.startsWith('#a/')) openArtist(location.hash.slice(3), true);
 }
 boot();
