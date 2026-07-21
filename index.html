@@ -1,1302 +1,1046 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>MAPP MTL 2026 — Festival de projection numérique · 29 sept – 4 oct</title>
-
-<meta name="description" content="MAPP_MTL 2026 — Festival de projection et d'art numérique à Montréal. 29 septembre au 4 octobre 2026. 10e édition.">
-<meta property="og:title" content="MAPP_MTL 2026 — Festival de projection numérique">
-<meta property="og:description" content="6 soirées de projections, mapping vidéo et art numérique. 29 sept – 4 oct 2026, Montréal. 10e édition.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://festival.mappmtl.com">
-<meta property="og:image" content="/img/og-mapp2026.jpg">
-<meta name="twitter:card" content="summary_large_image">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="MAPP_MTL 2026">
-<meta name="theme-color" content="#ffffff">
-<link rel="icon" type="image/x-icon" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" href="/icon-512.png">
-<link rel="manifest" href="/manifest.json">
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Narrow:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAPP MTL 2026 — Interne</title>
 <style>
-/* ── OTAlpha — auto-hébergée dans le repo ─────────────────────
-   1. Crée un dossier /fonts/ à la racine du repo
-   2. Dépose-y : OTAlpha-Medium.woff2 (+ .woff en secours)
-      → télécharge-les en ouvrant les URLs complètes du CDN Webflow
-        de mappmtl.com dans ton navigateur (clic droit → enregistrer)
-   Vercel les servira tel quel, aucun souci de CORS. */
-@font-face{
-  font-family:'OTAlpha';
-  src:url('/fonts/OTAlpha-Medium.woff2') format('woff2'),
-      url('/fonts/OTAlpha-Medium.woff') format('woff');
-  font-weight:500;
-  font-style:normal;
-  font-display:swap;
-}
-:root{
-  --black:#000;
-  --lime:#22ff62;
-  --lime-deep:#00c04a;
-  --white:#fff;
-  --grey:#5f5f5f;
-  --grey-light:#aaaaaa;
-  --paper:#ffffff;
-  --line:#000;
-  --line-soft:#dcdcdc;
-  --font:'Archivo',-apple-system,sans-serif;
-  --cond:'OTAlpha','Archivo Narrow','Archivo',sans-serif;
-  --mono:'JetBrains Mono',monospace;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-h1,h3,h4,.f-logo,.ghead .num,.live-badge,.marquee-track span{font-synthesis:none}
-html{scroll-behavior:smooth}
-body{
-  font-family:var(--font);
-  background:var(--paper);
-  color:var(--black);
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:#f5f5f5;color:#0a0a0a;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;min-height:100vh;font-size:16px;line-height:1.5}
+:root{--g:#00cc33;--mu:rgba(0,0,0,.45);--mu2:rgba(0,0,0,.1);--s:#ebebeb;--card:#fff;--pad:1.5rem}
+
+/* TICKER */
+.ticker{background:#0a0a0a;padding:8px 0;overflow:hidden;white-space:nowrap;position:sticky;top:0;z-index:200}
+.ti{display:inline-block;animation:tick 22s linear infinite}
+.titem{display:inline;font-size:12px;font-weight:700;letter-spacing:.08em;color:#00cc33;padding:0 2.5rem;text-transform:uppercase}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:1rem var(--pad);border-bottom:1px solid var(--mu2);position:sticky;top:36px;z-index:199;background:#f5f5f5;gap:1rem;flex-wrap:wrap}
+.nav-logo{font-size:16px;font-weight:900;letter-spacing:.05em;color:#0a0a0a}
+.nav-pages{display:flex;border:1px solid var(--mu2);overflow:hidden}
+.npbtn{font-size:12px;padding:10px 20px;background:transparent;color:var(--mu);cursor:pointer;border-right:1px solid var(--mu2);letter-spacing:.06em;text-transform:uppercase;transition:all .15s;border-top:none;border-bottom:none;border-left:none;white-space:nowrap}
+.npbtn:last-child{border-right:none}
+.npbtn:hover{color:#0a0a0a}
+.npbtn.active{background:#0a0a0a;color:#00cc33;font-weight:800}
+.nav-badge{font-size:11px;padding:6px 12px;border:1px solid #0a0a0a;color:#0a0a0a;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.admin-link{font-size:11px;padding:6px 10px;background:none;border:none;color:var(--mu);letter-spacing:.04em;cursor:pointer;white-space:nowrap;opacity:.65}
+.admin-link:hover{opacity:1;color:#0a0a0a}
+
+/* PAGE */
+.page{display:none}
+.page.active{display:block}
+
+/* MINUTAGE */
+.slot.mnow{box-shadow:inset 3px 0 0 var(--g);background:rgba(0,204,51,.05)}
+.m-note{font-size:12px;color:#cc8800;margin-top:4px}
+.m-rh-scroll{overflow-x:auto;border:1px solid var(--mu2);background:#fff}
+.m-rh{border-collapse:collapse;font-size:12px;min-width:680px;width:100%}
+.m-rh th,.m-rh td{padding:8px 12px;border-bottom:1px solid var(--mu2);text-align:left;white-space:nowrap}
+.m-rh thead th{background:var(--s);color:var(--mu);font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.m-rh td:first-child{font-weight:700;color:#0a0a0a}
+.m-rh td:nth-child(2){color:var(--mu)}
+.m-rh td.m-h{font-family:ui-monospace,'SF Mono',Menlo,monospace;color:var(--g);text-align:center;font-weight:600}
+.m-rh td.m-h:empty::after{content:'—';color:var(--mu2)}
+
+/* HERO */
+.hero{padding:3rem var(--pad) 2.5rem;border-bottom:1px solid var(--mu2);background:#fff}
+.hlabel{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--g);margin-bottom:1rem}
+.htitle{font-size:clamp(48px,10vw,96px);font-weight:900;line-height:.88;letter-spacing:-.03em;text-transform:uppercase;margin-bottom:1.5rem;color:#0a0a0a}
+.htitle .g{color:var(--g)}
+.hmeta{display:flex;gap:2rem;margin-bottom:2rem;flex-wrap:wrap}
+.hmi{font-size:12px;color:var(--mu);letter-spacing:.06em;text-transform:uppercase}
+.hmi strong{color:#0a0a0a;font-size:16px;font-weight:700;display:block;margin-bottom:3px}
+
+/* TABS */
+.tab-row{display:flex;border:1px solid var(--mu2);width:fit-content;flex-wrap:wrap;gap:0}
+.tabx{font-size:12px;padding:10px 18px;background:transparent;color:var(--mu);cursor:pointer;border-right:1px solid var(--mu2);letter-spacing:.06em;text-transform:uppercase;transition:all .15s;border-top:none;border-bottom:none;border-left:none;white-space:nowrap}
+.tabx:last-child{border-right:none}
+.tabx:hover{color:#0a0a0a}
+.tabx.active{background:#0a0a0a;color:#00cc33;font-weight:800}
+
+/* LEGEND */
+.legend-bar{display:flex;border-bottom:1px solid var(--mu2);overflow-x:auto;-webkit-overflow-scrolling:touch;background:#fff}
+.litem{display:flex;align-items:center;gap:8px;padding:.875rem 1.5rem;border-right:1px solid var(--mu2);white-space:nowrap;flex-shrink:0}
+.ldot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.lname{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+
+/* FILTER BAR */
+.fbar{display:flex;gap:8px;padding:.875rem var(--pad);border-bottom:1px solid var(--mu2);flex-wrap:wrap;align-items:center;background:var(--s)}
+.flabel{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-right:4px}
+.fbtn{font-size:11px;padding:7px 14px;border:1px solid var(--mu2);background:#fff;color:var(--mu);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .15s;display:flex;align-items:center;gap:6px;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.fbtn:hover,.fbtn:active{border-color:#0a0a0a;color:#0a0a0a}
+.fbtn.active{background:#0a0a0a;color:#00cc33;border-color:transparent;font-weight:700}
+.fdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--mu2);background:#fff}
+.stat{padding:1rem var(--pad);border-right:1px solid var(--mu2)}
+.stat:last-child{border-right:none}
+.stn{font-size:28px;font-weight:900;color:#0a0a0a;line-height:1}
+.stl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-top:4px}
+
+/* STATUS LEGEND */
+.status-bar-legend{display:flex;gap:2rem;padding:.75rem var(--pad);border-bottom:1px solid var(--mu2);background:var(--s);flex-wrap:wrap}
+.sli{display:flex;align-items:center;gap:7px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.sldot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* BODY */
+.body{padding:2rem var(--pad);max-width:1200px;margin:0 auto}
+
+/* DAY SECTIONS */
+.day-section{margin-bottom:3rem}
+.dhead{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mu);margin-bottom:1rem;display:flex;align-items:center;gap:12px}
+.dhead::after{content:'';flex:1;height:1px;background:rgba(0,0,0,.12)}
+
+/* TIMELINE SLOTS */
+.timeline{display:flex;flex-direction:column;gap:1px;background:rgba(0,0,0,.08)}
+.slot{background:#fff;cursor:pointer;transition:background .1s;-webkit-tap-highlight-color:transparent}
+.slot:hover,.slot:active{background:#f9f9f9}
+.slot.exp{background:var(--card)}
+.slot-main{display:flex;align-items:center;gap:16px;padding:14px var(--pad);min-height:64px}
+.stime{font-size:15px;font-weight:800;color:var(--g);font-variant-numeric:tabular-nums;min-width:52px;flex-shrink:0}
+.sinfo{flex:1;min-width:0}
+.sartist{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#0a0a0a}
+.scountry{font-size:11px;font-weight:400;color:rgba(0,0,0,.3);margin-left:6px}
+.swork{font-size:12px;color:var(--mu);margin-top:3px;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sright{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.stag{font-size:9px;padding:4px 9px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;white-space:nowrap}
+.sstatbar{width:4px;height:32px;flex-shrink:0;border-radius:2px}
+.sc-conf{background:#00cc33}.sc-pend{background:#ffb400}.sc-rev{background:rgba(0,180,60,.35)}
+.arr{font-size:11px;color:var(--mu);transition:transform .2s;user-select:none;padding:4px;flex-shrink:0}
+.arr.open{transform:rotate(90deg)}
+
+/* SLOT DETAIL */
+.slot-detail{display:none;border-top:1px solid var(--mu2);padding:16px var(--pad);background:#f9f9f9}
+.slot-detail.open{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px}
+.dil{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:4px}
+.div2{font-size:13px;color:#0a0a0a;font-weight:500}
+.di-full{grid-column:1/-1}
+.di-full .div2{font-size:12px;color:var(--mu);font-weight:400}
+
+/* CALENDAR */
+.cal-wrap{padding:1.5rem var(--pad)}
+.cal-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(0,0,0,.08)}
+.cal-day{background:#fff;min-height:280px}
+.cal-day-header{padding:14px 16px;border-bottom:1px solid rgba(0,0,0,.08);background:#0a0a0a}
+.cal-day-num{font-size:28px;font-weight:900;color:#00cc33;line-height:1;display:block}
+.cal-day-name{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-top:3px;display:block}
+.cal-events{padding:10px 8px;display:flex;flex-direction:column;gap:4px}
+.cal-event{padding:7px 10px;border-radius:3px;border-left:3px solid}
+.cal-event-name{font-size:11px;font-weight:700;line-height:1.3}
+.cal-event-time{font-size:10px;margin-top:2px;opacity:.65;font-variant-numeric:tabular-nums}
+.cal-event-site{font-size:9px;margin-top:2px;opacity:.5;letter-spacing:.04em}
+.cal-off-count{padding:6px 10px;font-size:10px;color:rgba(0,0,0,.25);font-style:italic}
+
+/* ROLE LEGEND */
+.role-legend-bar{display:flex;border-bottom:1px solid var(--mu2);overflow-x:auto;-webkit-overflow-scrolling:touch;background:#fff}
+.rl-item{display:flex;align-items:center;gap:7px;padding:.75rem 1.25rem;border-right:1px solid var(--mu2);white-space:nowrap;flex-shrink:0}
+.rl-dot{width:8px;height:8px;border-radius:50%}
+.rl-name{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+
+/* STAFF LIST */
+.staff-grid{display:flex;flex-direction:column;gap:1px;background:rgba(0,0,0,.08);overflow-x:auto}
+.srow{background:#fff;display:grid;grid-template-columns:1fr 150px 1fr 68px 68px;align-items:center;transition:background .1s;min-width:560px}
+.srow:hover{background:#f5f5f5}
+.srow.hdr{background:#0a0a0a;cursor:default}
+.srow.hdr:hover{background:#0a0a0a}
+.sc2{padding:12px 14px;font-size:13px;border-right:1px solid var(--mu2);color:#0a0a0a;overflow:hidden}
+.sc2:last-child{border-right:none}
+.sc2.nm{font-weight:600;font-size:14px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.sc2.hd{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.rpill{font-size:9px;padding:3px 8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;box-sizing:border-box}
+.tcell{font-size:13px;font-weight:700;color:var(--g);font-variant-numeric:tabular-nums}
+.sitecell{font-size:12px;color:rgba(0,0,0,.4)}
+.nores{padding:3rem;text-align:center;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
+
+/* LOCK SCREEN (accès Rayane) */
+.lock-wrap{min-height:60vh;display:flex;align-items:center;justify-content:center;padding:2rem var(--pad)}
+.lock-box{max-width:360px;width:100%;text-align:center}
+.lock-title{font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;margin-bottom:8px}
+.lock-sub{font-size:13px;color:var(--mu);margin-bottom:20px;line-height:1.5}
+.lock-input{width:100%;padding:13px 14px;font-size:16px;border:1px solid var(--mu2);margin-bottom:12px;font-family:inherit}
+.lock-input:focus{outline:none;border-color:#0a0a0a}
+.lock-btn{width:100%;padding:13px;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:#0a0a0a;color:var(--g);border:none;cursor:pointer}
+.lock-btn:active{opacity:.85}
+.lock-err{font-size:12px;color:#a32d2d;margin-top:10px;display:none}
+
+/* BÉNÉVOLES — cartes bénévole */
+.bv-grid{display:flex;flex-direction:column;gap:1px;background:rgba(0,0,0,.08);overflow-x:auto}
+.bv-row{background:#fff;padding:14px var(--pad);display:grid;grid-template-columns:28px 1.4fr 1fr 1fr 140px;gap:14px;align-items:center;min-width:640px}
+.bv-row.hdr{background:#0a0a0a}
+.bv-row.hdr .bv-h{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.bv-check{width:16px;height:16px}
+.bv-name{font-size:14px;font-weight:700;color:#0a0a0a}
+.bv-sub{font-size:11px;color:var(--mu);margin-top:2px}
+.bv-days{display:flex;gap:5px;flex-wrap:wrap}
+.bv-day{width:26px;height:26px;border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;background:var(--s);color:rgba(0,0,0,.25)}
+.bv-day.on{background:var(--g);color:#0a0a0a}
+.bv-fonction{font-size:12px;color:#0a0a0a}
+.bv-fonction.empty{color:rgba(0,0,0,.3);font-style:italic}
+.bv-role-select{font-size:12px;padding:7px 8px;border:1px solid var(--mu2);background:#fff;font-family:inherit;width:100%}
+.bv-mlabel{display:none}
+.bv-warn{font-size:9px;font-weight:700;padding:2px 7px;letter-spacing:.05em;text-transform:uppercase;background:#faeeda;color:#854f0b;margin-left:6px;white-space:nowrap}
+
+/* COMMUNICATIONS — envoi de courriel manuel à un groupe filtré */
+.comm-panel{border-top:1px solid var(--mu2);padding:1.5rem 0 2rem;margin-top:1rem}
+.comm-row{display:flex;align-items:center;gap:10px;padding:0 var(--pad);margin:1rem 0;flex-wrap:wrap}
+.comm-count{font-size:12px;color:var(--mu);margin-left:auto}
+.comm-fields{padding:0 var(--pad);display:flex;flex-direction:column;gap:10px;max-width:640px}
+.comm-fields input,.comm-fields textarea{padding:12px 14px;font-size:14px;border:1px solid var(--mu2);font-family:inherit;background:#fff}
+.comm-fields textarea{min-height:120px;resize:vertical}
+.comm-msg{font-size:13px;padding:10px 12px;display:none}
+.comm-msg.ok{display:block;background:rgba(0,204,51,.1);color:#0a5c28}
+.comm-msg.err{display:block;background:#fcebeb;color:#a32d2d}
+
+/* HORAIRE BÉNÉVOLES — postes publics */
+.hb-poste{margin-bottom:1px;background:#fff}
+.hb-heures{padding:10px var(--pad);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--g);background:#0a0a0a}
+.hb-poste-head{padding:12px var(--pad);background:var(--s);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--mu2)}
+.hb-poste-name{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#0a0a0a}
+.hb-poste-count{font-size:11px;color:var(--mu)}
+.hb-vol{padding:10px var(--pad);border-bottom:1px solid var(--mu2);font-size:14px;color:#0a0a0a}
+.hb-empty{padding:14px var(--pad);font-size:12px;color:rgba(0,0,0,.3);font-style:italic}
+
+/* FOOTER */
+footer{border-top:1px solid var(--mu2);padding:1.5rem var(--pad);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-top:1rem;background:#fff}
+.flogo{font-size:13px;font-weight:900;color:#0a0a0a}
+.fnote{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+
+/* ============================
+   MOBILE — iPhone first
+   ============================ */
+@media(min-width:768px) and (max-width:1024px){
+  :root{--pad:1.25rem}
+  .cal-grid{grid-template-columns:repeat(3,1fr)}
+  .htitle{margin-bottom:1.25rem}
 }
 
-/* ── Venue patterns (le code visuel du festival) ── */
-.p-lime{background:var(--lime)}
-.p-black{background:var(--black);color:var(--white)}
-.p-dots{
-  background-image:radial-gradient(rgba(0,0,0,.55) 1px, transparent 1.4px);
-  background-size:8px 8px;
-  background-color:var(--white);
-}
-.p-hatch{
-  background-image:repeating-linear-gradient(45deg, transparent 0 7px, rgba(0,0,0,.16) 7px 9px);
-  background-color:var(--white);
+@media(max-width:767px){
+  :root{--pad:1rem}
+  body{font-size:15px}
+
+  /* nav */
+  nav{top:34px;padding:.875rem var(--pad)}
+  .nav-pages{width:100%;justify-content:stretch}
+  .npbtn{flex:1;text-align:center;padding:10px 8px;font-size:11px}
+  .nav-badge{display:none}
+  .admin-link{width:100%;text-align:center;padding:10px 8px;border-top:1px solid var(--mu2);margin-top:.5rem;opacity:.8}
+
+  /* hero */
+  .hero{padding:2rem var(--pad) 1.5rem}
+  .hmeta{gap:1.25rem}
+  .hmi strong{font-size:18px}
+
+  /* tabs — scroll horizontal */
+  .tab-row{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;border-right:none}
+  .tabx{padding:10px 16px;font-size:11px;flex-shrink:0}
+
+  /* stats — 2 colonnes */
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat{padding:.875rem var(--pad)}
+  .stn{font-size:24px}
+
+  /* fbar scroll */
+  .fbar{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;padding:.75rem var(--pad)}
+  .flabel{display:none}
+
+  /* legend scroll */
+  .legend-bar,.role-legend-bar{flex-wrap:nowrap}
+
+  /* slots — layout simplifié */
+  .slot-main{padding:12px var(--pad);gap:12px;min-height:60px}
+  .stime{font-size:14px;min-width:46px}
+  .sartist{font-size:14px}
+  .swork{font-size:11px}
+  .stag{display:none}
+  .sstatbar{display:block}
+  .slot-detail{padding:14px var(--pad)}
+  .slot-detail.open{grid-template-columns:repeat(2,1fr);gap:12px}
+  .dil{font-size:10px}
+  .div2{font-size:13px}
+
+  /* calendar — mobile : 2-3 colonnes pour 5 jours */
+  .cal-grid{grid-template-columns:repeat(3,1fr)}
+  .cal-day-num{font-size:22px}
+  .cal-event-name{font-size:10px}
+  .cal-event-time{font-size:9px}
+
+  /* staff list — colonnes réduites */
+  .srow{grid-template-columns:1fr 90px 60px;min-width:0}
+  .sc2:nth-child(2),.sc2:nth-child(5){display:none}
+  .sc2{padding:10px 10px;font-size:12px}
+  .sc2.nm{font-size:13px}
+  .tcell{font-size:12px}
+
+  /* bénévoles admin — cartes empilées au lieu de la grille 4 colonnes */
+  .bv-row{grid-template-columns:1fr;gap:10px;padding:14px var(--pad) 14px 40px;position:relative;min-width:0}
+  .bv-row .bv-check{position:absolute;left:var(--pad);top:16px;margin:0}
+  .bv-row.hdr{display:none}
+  .bv-days{gap:6px}
+  .bv-mlabel{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(0,0,0,.35);margin-bottom:4px;font-weight:600}
+
+  footer{flex-direction:column;align-items:flex-start;gap:.5rem}
 }
 
-/* ── Marquee ─────────────────────────────────────── */
-.marquee{
-  position:sticky;top:0;z-index:200;transform:translateZ(0);will-change:transform;
-  background:var(--lime);color:var(--black);
-  border-bottom:1px solid var(--black);
-  overflow:hidden;white-space:nowrap;
-  height:34px;display:flex;align-items:center;
+@media(max-width:400px){
+  .htitle{font-size:42px}
+  .tab-row .tabx{font-size:10px;padding:9px 12px}
+  .cal-grid{grid-template-columns:repeat(2,1fr)}
 }
-.marquee-track{
-  display:inline-flex;gap:0;animation:scroll 28s linear infinite;
-  will-change:transform;
-}
-.marquee-track span{
-  font-family:var(--cond);font-weight:500;font-size:14px;
-  letter-spacing:.04em;padding:0 26px;text-transform:uppercase;
-  display:inline-flex;align-items:center;gap:26px;
-}
-@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media (prefers-reduced-motion: reduce){.marquee-track{animation:none}}
-
-/* ── Nav ─────────────────────────────────────────── */
-nav{
-  position:sticky;top:34px;z-index:190;transform:translateZ(0);will-change:transform;
-  background:var(--black);border-bottom:1px solid #1e1e1e;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 18px;color:var(--white);
-}
-.brand{font-size:19px;font-weight:800;letter-spacing:-0.02em;display:flex;align-items:center;gap:10px}
-.brand span{color:var(--white)}
-.logo{display:block;fill:currentColor}
-.brand .logo{width:30px;height:30px;color:var(--white)}
-.f-mark{width:76px;height:76px;margin:0 auto 6px;color:var(--white)}
-.nav-right{display:flex;gap:8px;align-items:center}
-.nav-link{
-  font-family:var(--mono);font-size:11px;font-weight:700;
-  text-transform:uppercase;letter-spacing:.1em;
-  border:1px solid var(--white);color:var(--white);
-  padding:7px 12px;background:transparent;cursor:pointer;
-  text-decoration:none;transition:.15s;
-}
-.nav-link:hover{background:var(--lime);border-color:var(--lime);color:var(--black)}
-.nav-link.solid{background:var(--white);border-color:var(--white);color:var(--black)}
-.nav-link.solid:hover{background:var(--lime);border-color:var(--lime)}
-
-/* ── Section scaffolding ─────────────────────────── */
-.sec{padding:54px 18px;border-bottom:1px solid var(--black);position:relative}
-.sec-inner{max-width:1180px;margin:0 auto}
-.sec-inner.narrow{max-width:820px}
-.eyebrow{
-  font-family:var(--mono);font-size:11px;font-weight:700;
-  letter-spacing:.24em;text-transform:uppercase;margin-bottom:20px;
-  color:var(--black);
-}
-.eyebrow::before{content:'';display:inline-block;width:10px;height:10px;background:var(--lime);border:1px solid var(--black);margin-right:10px;vertical-align:baseline}
-
-/* ── Hero ────────────────────────────────────────── */
-.hero{
-  padding:56px 18px 0;background:var(--black);color:var(--white);
-  border-bottom:1px solid var(--black);position:relative;overflow:hidden;
-}
-.hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:2}
-.hero h1{
-  font-family:var(--cond);font-weight:500;
-  font-size:clamp(34px,8vw,110px);line-height:.9;
-  text-transform:uppercase;letter-spacing:-0.03em;
-  color:var(--white);white-space:nowrap;
-}
-.hero .sub{
-  font-family:var(--mono);font-size:13px;letter-spacing:.14em;
-  color:var(--grey-light);margin-top:26px;text-transform:uppercase;
-}
-.hero .ed{color:var(--lime);font-weight:700}
-
-.hero-tix{
-  display:inline-flex;align-items:center;gap:10px;
-  font-family:var(--mono);font-weight:700;font-size:13px;
-  letter-spacing:.08em;text-transform:uppercase;
-  background:var(--lime);color:var(--black);
-  border:1px solid var(--lime);
-  padding:13px 22px;margin-top:22px;
-  text-decoration:none;transition:.15s;
-}
-.hero-tix:hover{background:var(--black);color:var(--lime);border-color:var(--lime)}
-.hero-tix .arrow{transition:transform .15s}
-.hero-tix:hover .arrow{transform:translateX(4px)}
-
-/* generative halftone visual */
-.halftone-wrap{position:relative;
-  position:relative;margin-top:38px;height:min(46vh,340px);
-  border-top:1px solid #2a2a2a;
-}
-.halftone-wrap video{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;display:block;transition:opacity .35s;
-}
-#halftone-canvas{
-  position:absolute;inset:0;width:100%;height:100%;
-  display:block;opacity:0;pointer-events:none;transition:opacity .35s;
-}
-#halftone-canvas.on{pointer-events:auto}
-.halftone-wrap .video-scrim{
-  position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(180deg, rgba(0,0,0,.28) 0%, rgba(0,0,0,.18) 45%, rgba(0,0,0,.55) 100%);
-}
-.halftone-toggle{
-  position:absolute;top:12px;right:12px;z-index:4;
-  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.4);color:var(--lime);
-  font-size:15px;line-height:1;cursor:pointer;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
-  transition:.15s;
-}
-.halftone-toggle:hover{background:var(--lime);color:var(--black);border-color:var(--lime)}
-.halftone-toggle[aria-pressed="true"]{background:var(--lime);color:var(--black);border-color:var(--lime)}
-.halftone-cap{
-  position:absolute;left:0;bottom:14px;
-  font-family:var(--mono);font-size:10px;letter-spacing:.2em;
-  color:var(--grey-light);text-transform:uppercase;z-index:3;
-}
-.halftone-cap.r{left:auto;right:0}
-
-/* status: countdown / live */
-#hero-status{margin-top:30px}
-.count-box{display:flex;gap:0;border:1px solid #3a3a3a;width:fit-content;background:transparent}
-.count-cell{
-  padding:14px 18px;border-right:1px solid #3a3a3a;text-align:center;
-}
-.count-cell:last-child{border-right:none}
-.count-cell b{font-family:var(--mono);font-size:26px;font-weight:700;color:var(--lime);display:block;line-height:1}
-.count-cell span{font-family:var(--mono);font-size:9px;color:var(--grey-light);text-transform:uppercase;letter-spacing:.14em;margin-top:6px;display:block}
-.live-badge{
-  display:inline-flex;align-items:center;gap:12px;
-  background:var(--lime);color:var(--black);border:1px solid var(--lime);
-  font-family:var(--cond);font-weight:500;font-size:18px;
-  text-transform:uppercase;letter-spacing:.04em;padding:12px 22px;
-}
-.live-dot{width:10px;height:10px;background:var(--black);border-radius:50%;animation:blink 1.4s infinite}
-@keyframes blink{50%{opacity:.25}}
-
-/* ── Légende des lieux ───────────────────────────── */
-.legend{
-  display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--black);
-  margin-bottom:26px;
-}
-.legend-chip{
-  display:inline-flex;align-items:center;gap:9px;cursor:pointer;
-  font-family:var(--mono);font-size:10.5px;font-weight:500;
-  letter-spacing:.05em;text-transform:uppercase;
-  padding:10px 14px;border-right:1px solid var(--black);
-  flex:1;min-width:150px;justify-content:center;
-  background:var(--white);transition:.12s;
-}
-.legend-chip:last-child{border-right:none}
-.legend-chip:hover{background:#f2f2f2}
-.legend-chip.active{background:var(--lime)!important;font-weight:700;}
-.card{transition:opacity .2s,filter .2s;}
-.card.dim{opacity:0.12;filter:grayscale(0.8);pointer-events:none;transform:none!important;box-shadow:none!important;}
-.gcol.dim .ghead{opacity:0.25;}
-.legend-sw{width:16px;height:16px;border:1px solid var(--black);flex:none}
-
-/* ── Grille programme (6 jours) ──────────────────── */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  border:1px solid var(--black);
-  background:var(--white);
-}
-.gcol{
-  border-right:1px solid var(--black);
-  display:flex;flex-direction:column;min-height:100%;
-}
-.gcol:last-child{border-right:none}
-.ghead{
-  padding:16px 12px 14px;border-bottom:1px solid var(--black);
-  text-align:center;position:relative;background:var(--white);
-}
-.ghead .wd{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey);display:block}
-.ghead .num{font-family:var(--cond);font-weight:500;font-size:clamp(34px,4.4vw,58px);line-height:1;display:block;margin:4px 0 2px;letter-spacing:-0.02em}
-.ghead .mo{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;display:block}
-.gcol.today .ghead{background:var(--lime)}
-.gcol.today .ghead .wd{color:var(--black)}
-.gcol.today .ghead::after{
-  content:'●';position:absolute;top:8px;right:10px;font-size:9px;
-  animation:blink 1.4s infinite;
-}
-.gbody{display:flex;flex-direction:column;gap:10px;padding:12px;flex:1;background:
-  repeating-linear-gradient(0deg, transparent 0 23px, var(--line-soft) 23px 24px);}
-
-/* carte d'événement */
-.card{
-  border:1px solid var(--black);padding:14px 13px 15px;cursor:pointer;
-  position:relative;transition:transform .12s, box-shadow .12s;
-}
-.card:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--black)}
-.card .time{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.03em;display:block}
-.card h3{
-  font-family:var(--cond);font-weight:500;font-size:17.5px;line-height:1.03;
-  text-transform:uppercase;margin:8px 0 8px;letter-spacing:-0.01em;
-}
-.card .venue{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;
-  text-transform:uppercase;display:block;opacity:.75;
-}
-.card .free{
-  position:absolute;top:-1px;right:-1px;
-  font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;background:var(--black);color:var(--lime);
-  padding:3px 7px;
-}
-.card.p-black .free{background:var(--lime);color:var(--black)}
-.card .desc{
-  font-family:var(--font);font-size:12px;line-height:1.5;margin-top:9px;
-  color:rgba(0,0,0,.72);
-}
-.card.p-black .desc{color:rgba(255,255,255,.78)}
-.card.p-black .venue{opacity:.7}
-/* sur les trames : le texte devient des étiquettes blanches « collées » */
-.card.p-dots .time,.card.p-hatch .time,
-.card.p-dots .venue,.card.p-hatch .venue{
-  background:var(--white);width:fit-content;padding:1px 5px;
-}
-.card.p-dots h3,.card.p-hatch h3{
-  background:var(--white);width:fit-content;padding:3px 5px;
-}
-.card.p-dots .desc,.card.p-hatch .desc{
-  background:var(--white);padding:5px 6px;
-}
-.card .tix{
-  display:inline-flex;align-items:center;gap:6px;margin-top:11px;
-  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  background:var(--lime);color:var(--black);border:1px solid var(--black);
-  padding:5px 9px;text-decoration:none;position:relative;z-index:2;
-}
-.card.p-black .tix{border-color:var(--lime)}
-.card .tix:hover{background:var(--black);color:var(--lime);border-color:var(--lime)}
-
-/* responsive : la grille devient un flux vertical */
-@media(max-width:960px){
-  .grid{grid-template-columns:repeat(3,1fr)}
-  .gcol:nth-child(3n){border-right:none}
-  .gcol:nth-child(-n+3){border-bottom:1px solid var(--black)}
-  .gcol:nth-child(3){border-right:none}
-  .gcol:not(:nth-child(3n)){border-right:1px solid var(--black)}
-}
-@media(max-width:640px){
-  .grid{grid-template-columns:1fr}
-  .gcol{border-right:none!important;border-bottom:1px solid var(--black)}
-  .gcol:last-child{border-bottom:none}
-  .ghead{display:flex;align-items:baseline;gap:12px;text-align:left;padding:12px 14px}
-  .ghead .num{font-size:32px;margin:0}
-  .legend-chip{min-width:46%}
-}
-
-/* ── Artistes ────────────────────────────────────── */
-.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
-.acard{border:1px solid var(--black);background:var(--white);cursor:pointer;transition:transform .12s,box-shadow .12s;text-align:left}
-.acard:hover,.acard:focus-visible{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--black);outline:none}
-.acard .ph{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;border-bottom:1px solid var(--black);background:var(--white)}
-.acard .an{font-family:var(--cond);font-weight:500;font-size:16.5px;text-transform:uppercase;padding:10px 11px 3px;letter-spacing:-0.01em;line-height:1.05}
-.acard .ad{font-family:var(--mono);font-size:9.5px;color:var(--grey);text-transform:uppercase;letter-spacing:.08em;padding:0 11px 12px;display:block}
-
-/* fiche artiste : modale desktop / bottom-sheet mobile */
-.ev-back{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:402;opacity:0;pointer-events:none;transition:opacity .22s}
-.ev-back.open{opacity:1;pointer-events:auto}
-.ev-sheet{
-  position:fixed;z-index:403;background:var(--white);border:1px solid var(--black);
-  left:50%;top:50%;transform:translate(-50%,-50%) scale(.97);opacity:0;pointer-events:none;
-  width:min(560px,calc(100vw - 32px));max-height:86vh;overflow:auto;
-  transition:transform .22s,opacity .22s;box-shadow:7px 7px 0 var(--black);
-  overscroll-behavior:contain;
-}
-.ev-sheet.open{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
-.ev-sheet .ev-header{
-  aspect-ratio:21/9;display:flex;align-items:center;justify-content:center;
-  border-bottom:1px solid var(--black);padding:20px;
-}
-.ev-sheet .ev-header span{
-  font-family:var(--cond);font-weight:500;font-size:clamp(22px,4.5vw,40px);
-  text-transform:uppercase;letter-spacing:-0.02em;text-align:center;line-height:1;
-}
-.ev-sheet .ev-time{
-  font-family:var(--mono);font-size:11px;color:var(--grey);
-  letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:10px;
-}
-.ev-sheet .ev-map-link{
-  display:inline-flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
-  border:1px solid var(--black);padding:8px 12px;transition:.12s;background:none;
-  color:var(--black);
-}
-.ev-sheet .ev-map-link:hover{background:var(--lime)}
-.ev-sheet .ev-tix-link{
-  display:inline-flex;align-items:center;gap:8px;margin-top:14px;margin-right:8px;cursor:pointer;
-  font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  border:1px solid var(--black);padding:8px 12px;transition:.12s;
-  background:var(--lime);color:var(--black);text-decoration:none;
-}
-.ev-sheet .ev-tix-link:hover{background:var(--black);color:var(--lime);border-color:var(--lime)}
-.ev-sheet .ev-desc{font-size:14px;line-height:1.7;margin-top:16px;color:rgba(0,0,0,.8)}
-@media(max-width:640px){
-  .ev-sheet{left:0;right:0;top:auto;bottom:0;width:100%;max-height:88vh;
-    transform:translateY(102%);border-left:none;border-right:none;border-bottom:none;box-shadow:none}
-  .ev-sheet.open{transform:translateY(0)}
-}
-.sheet-back{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;opacity:0;pointer-events:none;transition:opacity .22s}
-.sheet-back.open{opacity:1;pointer-events:auto}
-.sheet{
-  position:fixed;z-index:401;background:var(--white);border:1px solid var(--black);
-  left:50%;top:50%;transform:translate(-50%,-50%) scale(.97);opacity:0;pointer-events:none;
-  width:min(560px,calc(100vw - 32px));max-height:86vh;overflow:auto;
-  transition:transform .22s,opacity .22s;box-shadow:7px 7px 0 var(--black);
-  overscroll-behavior:contain;
-}
-.sheet.open{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
-.sheet-head{position:sticky;top:0;z-index:2;background:var(--white);border-bottom:1px solid var(--black);display:flex;justify-content:space-between;align-items:center;padding:12px 16px}
-.sheet-head .t{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
-.sheet-close{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--black);background:var(--white);padding:6px 11px;cursor:pointer;transition:.12s}
-.sheet-close:hover{background:var(--lime)}
-.sheet .ph{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;border-bottom:1px solid var(--black)}
-.sheet-body{padding:20px 18px 26px}
-.sheet-body h2{font-family:var(--cond);font-weight:500;font-size:32px;text-transform:uppercase;line-height:.95;letter-spacing:-0.02em}
-.sheet-body .disc{font-family:var(--mono);font-size:10.5px;color:var(--grey);text-transform:uppercase;letter-spacing:.1em;margin-top:7px}
-.sheet-body .when{
-  display:inline-flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
-  border:1px solid var(--black);padding:8px 12px;transition:.12s;
-}
-.sheet-body .when:hover{background:var(--lime)}
-.sheet-body .bio{font-size:14px;line-height:1.65;margin-top:16px;color:rgba(0,0,0,.8)}
-.sheet-body .links{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
-.sheet-body .links a{
-  font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  border:1px solid var(--black);color:var(--black);text-decoration:none;padding:8px 13px;transition:.12s;
-}
-.sheet-body .links a:hover{background:var(--black);color:var(--lime)}
-.sheet .handle{display:none}
-@media(max-width:640px){
-  .sheet{left:0;right:0;top:auto;bottom:0;width:100%;max-height:88vh;
-    transform:translateY(102%);border-left:none;border-right:none;border-bottom:none;box-shadow:none}
-  .sheet.open{transform:translateY(0)}
-  .sheet .handle{display:block;width:44px;height:4px;background:var(--black);margin:10px auto 0}
-}
-
-/* apparitions au défilement */
-.reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
-.reveal.in{opacity:1;transform:none}
-@media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none}}
-
-/* ── Map ─────────────────────────────────────────── */
-#map{height:400px;border:1px solid var(--black);isolation:isolate;transform:translateZ(0)}
-.leaflet-container{background:#f4f4f4;font-family:var(--font)}
-.leaflet-pane{z-index:4!important}.leaflet-tile-pane{z-index:2!important}
-.leaflet-overlay-pane{z-index:4!important}.leaflet-shadow-pane{z-index:5!important}
-.leaflet-marker-pane{z-index:6!important}.leaflet-tooltip-pane{z-index:7!important}
-.leaflet-popup-pane{z-index:8!important}.leaflet-top,.leaflet-bottom{z-index:9!important}
-.map-legend{display:flex;flex-wrap:wrap;gap:0;margin-top:0;border:1px solid var(--black);border-top:none}
-.map-chip{
-  font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
-  color:var(--black);background:var(--white);border-right:1px solid var(--black);
-  padding:11px 15px;cursor:pointer;transition:.12s;flex:1;text-align:center;min-width:120px;
-}
-.map-chip:last-child{border-right:none}
-.map-chip:hover,.map-chip.hot{background:var(--lime)}
-.leaflet-popup-content-wrapper{background:var(--white);color:var(--black);border-radius:0;border:1px solid var(--black);box-shadow:3px 3px 0 var(--black)}
-.leaflet-popup-tip{background:var(--white);border:1px solid var(--black)}
-.leaflet-popup-content{font-family:var(--font);font-size:13px;margin:12px 15px;line-height:1.5}
-.leaflet-popup-content b{font-family:var(--cond);font-size:16px;text-transform:uppercase}
-.pop-dir{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--black);text-decoration:none;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid var(--lime);padding-bottom:2px}
-
-/* ── Info ────────────────────────────────────────── */
-.info-grid{display:grid;gap:0;border:1px solid var(--black);grid-template-columns:1fr;background:var(--white)}
-.info-card{padding:22px;border-bottom:1px solid var(--black)}
-.info-card:last-child{border-bottom:none}
-.info-card h4{font-family:var(--cond);font-weight:500;font-size:19px;text-transform:uppercase;margin-bottom:8px;letter-spacing:-0.01em}
-.info-card p{font-size:13.5px;line-height:1.6;color:rgba(0,0,0,.75)}
-.info-card a{color:var(--black);font-weight:700;text-decoration:underline;text-decoration-color:var(--lime);text-decoration-thickness:2px}
-@media(min-width:640px){.info-grid{grid-template-columns:1fr 1fr}
-  .info-card:nth-child(odd){border-right:1px solid var(--black)}
-  .info-card:nth-last-child(2){border-bottom:none}
-}
-
-/* ── Footer (noir) ───────────────────────────────── */
-footer{padding:48px 18px 60px;text-align:center;background:var(--black);color:var(--white)}
-footer p{font-family:var(--mono);font-size:11px;color:#9a9a9a;margin-top:12px;letter-spacing:.06em;text-transform:uppercase;line-height:1.8}
-footer a{color:var(--lime);text-decoration:none}
-
-.hide{display:none!important}
 </style>
 </head>
 <body>
 
-<!-- MARQUEE -->
-<div class="marquee">
-  <div class="marquee-track" id="marquee-track"></div>
-</div>
+<div class="ticker"><div class="ti">
+  <span class="titem">MAPP MTL 2026 — Usage interne équipe ↗</span>
+  <span class="titem">29 sept – 4 oct 2026 · Montréal ↗</span>
+  <span class="titem">Skatepark Van Horne · Caserne 26 · Moment Factory ↗</span>
+  <span class="titem">Document interne — Ne pas diffuser ↗</span>
+  <span class="titem">MAPP MTL 2026 — Usage interne équipe ↗</span>
+  <span class="titem">29 sept – 4 oct 2026 · Montréal ↗</span>
+  <span class="titem">Skatepark Van Horne · Caserne 26 · Moment Factory ↗</span>
+  <span class="titem">Document interne — Ne pas diffuser ↗</span>
+</div></div>
 
-<!-- NAV -->
 <nav>
-  <div class="brand" id="brand-logo">
-    <svg class="logo" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
-      <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
-      <path d="M16.511,28.213l-3.718-15.266h-.051v15.266h-3.103V9.639h5.168l3.686,15.139h.051l3.688-15.139h5.168v18.574h-3.105v-15.266h-.051l-3.718,15.266h-4.014Z"/>
-      <path d="M9.639,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM17.964,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
-      <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
-      <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
-    </svg>
-    MAPP<span>_MTL</span>
+  <div class="nav-logo">MAPP</div>
+  <div class="nav-pages">
+    <button class="npbtn active" onclick="setPage('artistes',this)">Programme artistes</button>
+    <button class="npbtn" onclick="setPage('staff',this)">Calendrier équipe</button>
+    <button class="npbtn" onclick="setPage('minutage',this)">Minutage</button>
+    <button class="npbtn" onclick="setPage('horairebenevoles',this)">Horaire bénévoles</button>
   </div>
-  <div class="nav-right">
-    <a class="nav-link" href="https://www.mappmtl.com" target="_blank" rel="noopener" data-fr="Site" data-en="Site">Site</a>
-    <button class="nav-link solid" id="lang-btn" onclick="toggleLang()">EN</button>
-  </div>
+  <button class="admin-link" onclick="openAdmin()" title="Accès Rayane">🔒 Rayane</button>
+  <div class="nav-badge">Usage interne</div>
 </nav>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-inner">
-    <h1>PROGRAMMATION</h1>
-    <div class="sub">29 SEPT — 4 OCT 2026 · MONTRÉAL · <span class="ed" data-fr="10e ÉDITION" data-en="10th EDITION">10e ÉDITION</span></div>
-    <div id="hero-status"></div>
-    <a class="hero-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener"><span data-fr="Réservez votre billet ici" data-en="Reserve your ticket here">Réservez votre billet ici</span> <span class="arrow">→</span></a>
-    <div class="halftone-wrap">
-      <video id="hero-video" src="/media/mapp-hero.mp4"
-             muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
-      <canvas id="halftone-canvas"></canvas>
-      <div class="video-scrim"></div>
-      <button type="button" class="halftone-toggle" id="halftone-toggle" onclick="toggleHalftone()" aria-pressed="false" data-fr-on="Effet trame activé" data-fr-off="Activer l'effet trame" data-en-on="Halftone effect on" data-en-off="Turn on halftone effect" aria-label="Activer l'effet trame">◆</button>
-      <div class="halftone-cap" data-fr="MAPP_MTL · Festival de projection numérique" data-en="MAPP_MTL · Digital projection festival">MAPP_MTL · Festival de projection numérique</div>
-      <div class="halftone-cap r">45.528°N · 73.603°O</div>
-      <audio id="halftone-sound" src="/media/halftone-toggle.webm" preload="auto"></audio>
+<!-- ===== PAGE ARTISTES ===== -->
+<div class="page active" id="page-artistes">
+  <div class="hero">
+    <div class="hlabel">Programme officiel — usage interne</div>
+    <div class="htitle">PROGRAMMATION<br><span class="g">2026</span></div>
+    <div class="hmeta">
+      <div class="hmi"><strong>29 sept – 4 oct</strong>Dates</div>
+      <div class="hmi"><strong>30</strong>Artistes</div>
+      <div class="hmi"><strong>3</strong>Sites</div>
+      <div class="hmi"><strong>6</strong>Soirs</div>
+    </div>
+    <div class="tab-row">
+      <button class="tabx active" onclick="setADay('all',this)">Tous les soirs</button>
+      <button class="tabx" onclick="setADay('29',this)">Mar 29</button>
+      <button class="tabx" onclick="setADay('30',this)">Mer 30</button>
+      <button class="tabx" onclick="setADay('01',this)">Jeu 1</button>
+      <button class="tabx" onclick="setADay('02',this)">Ven 2</button>
+      <button class="tabx" onclick="setADay('03',this)">Sam 3</button>
+      <button class="tabx" onclick="setADay('04',this)">Dim 4</button>
+    </div>
+  </div>
+  <div class="fbar">
+    <span class="flabel">Site ·</span>
+    <button class="fbtn active" onclick="setASite('all',this)" style="background:rgba(255,255,255,.1);color:#fff;border-color:transparent">Tous</button>
+    <button class="fbtn" onclick="setASite('Skate Park',this)"><span class="fdot" style="background:#00ff41"></span>Skatepark Van Horne</button>
+    <button class="fbtn" onclick="setASite('Caserne 26',this)"><span class="fdot" style="background:#cc8800"></span>Caserne 26</button>
+    <button class="fbtn" onclick="setASite('Moment Factory',this)"><span class="fdot" style="background:#9933ff"></span>Moment Factory</button>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stn" id="a-total">30</div><div class="stl">Diffusions</div></div>
+    <div class="stat"><div class="stn" id="a-conf">0</div><div class="stl">Confirmées</div></div>
+    <div class="stat"><div class="stn" id="a-pend">0</div><div class="stl">En attente</div></div>
+    <div class="stat"><div class="stn" id="a-dur">0h</div><div class="stl">Durée totale</div></div>
+  </div>
+  <div class="status-bar-legend">
+    <div class="sli"><div class="sldot" style="background:#00ff41"></div>Confirmé</div>
+    <div class="sli"><div class="sldot" style="background:#ffb400"></div>En attente</div>
+    <div class="sli"><div class="sldot" style="background:rgba(0,255,65,.4)"></div>En révision</div>
+  </div>
+  <div class="body"><div id="a-container"></div></div>
+</div>
+
+<!-- ===== PAGE STAFF ===== -->
+<div class="page" id="page-staff">
+  <div class="hero">
+    <div class="hlabel">Calendrier du personnel — usage interne</div>
+    <div class="htitle">ÉQUIPE<br><span class="g">2026</span></div>
+    <div class="hmeta">
+      <div class="hmi"><strong>20</strong>Membres</div>
+      <div class="hmi"><strong>7</strong>Rôles</div>
+      <div class="hmi"><strong>3</strong>Sites</div>
+      <div class="hmi"><strong>6</strong>Soirs</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.875rem">
+      <div class="tab-row">
+        <button class="tabx active" onclick="setSView('cal',this)">Calendrier</button>
+        <button class="tabx" onclick="setSView('liste',this)">Liste par soir</button>
+      </div>
+      <div class="tab-row" id="s-day-tabs" style="display:none">
+        <button class="tabx active" onclick="setSDay('all',this)">Tous</button>
+        <button class="tabx" onclick="setSDay('29',this)">Mar 29</button>
+        <button class="tabx" onclick="setSDay('30',this)">Mer 30</button>
+        <button class="tabx" onclick="setSDay('01',this)">Jeu 1</button>
+        <button class="tabx" onclick="setSDay('02',this)">Ven 2</button>
+        <button class="tabx" onclick="setSDay('03',this)">Sam 3</button>
+        <button class="tabx" onclick="setSDay('04',this)">Dim 4</button>
+      </div>
+    </div>
+  </div>
+  <div class="fbar" id="s-role-filters">
+    <span class="flabel">Rôle ·</span>
+    <button class="fbtn active" onclick="setSRole('all',this)" style="background:rgba(255,255,255,.1);color:#fff;border-color:transparent"><span class="fdot" style="background:#fff"></span>Tous</button>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stn" id="s-total">42</div><div class="stl">Membres</div></div>
+    <div class="stat"><div class="stn" id="s-active">0</div><div class="stl">Actifs</div></div>
+    <div class="stat"><div class="stn" id="s-shifts">0</div><div class="stl">Quarts</div></div>
+    <div class="stat"><div class="stn">5</div><div class="stl">Sites</div></div>
+  </div>
+  <div id="s-cal-panel"><div class="cal-wrap"><div class="cal-grid" id="cal-grid"></div></div></div>
+  <div id="s-list-panel" style="display:none"><div class="body"><div id="s-list-container"></div></div></div>
+</div>
+
+<!-- ===== PAGE MINUTAGE ===== -->
+<div class="page" id="page-minutage">
+  <div class="hero">
+    <div class="hlabel">Feuille de route — synchronisé depuis le Drive</div>
+    <div class="htitle">MINUTAGE<br><span class="g">2026</span></div>
+    <div class="hmeta">
+      <div class="hmi"><strong id="m-days-count">—</strong>Jours</div>
+      <div class="hmi"><strong id="m-tasks-count">—</strong>Tâches</div>
+      <div class="hmi"><strong id="m-updated">—</strong>Dernière lecture</div>
+    </div>
+    <div class="tab-row" id="m-day-tabs"></div>
+  </div>
+  <div class="fbar">
+    <span class="flabel">Source ·</span>
+    <span style="font-size:12px;color:var(--mu);letter-spacing:.04em">Minutage_Festival_MAPP_2026.xlsx (Google Drive)</span>
+    <button class="fbtn" onclick="loadMinutage(true)" style="margin-left:auto">↻ Actualiser</button>
+  </div>
+  <div class="body"><div id="m-container"><div class="nores">Chargement du minutage…</div></div></div>
+</div>
+
+<!-- ===== PAGE BÉNÉVOLES (admin — Rayane) ===== -->
+<div class="page" id="page-benevoles">
+  <div id="bv-lock" class="lock-wrap">
+    <div class="lock-box">
+      <div class="lock-title">Accès Rayane</div>
+      <div class="lock-sub">Cette section contient des coordonnées et des contraintes de santé — accès protégé.</div>
+      <input id="bv-pw" class="lock-input" type="password" placeholder="Mot de passe" autocomplete="current-password">
+      <button class="lock-btn" onclick="bvUnlock()">Déverrouiller</button>
+      <div class="lock-err" id="bv-err">Mot de passe incorrect.</div>
+    </div>
+  </div>
+
+  <div id="bv-content" style="display:none">
+    <div class="hero">
+      <div class="hlabel">Vue admin — disponibilités &amp; rôles</div>
+      <div class="htitle">BÉNÉVOLES<br><span class="g">2026</span></div>
+      <div class="hmeta">
+        <div class="hmi"><strong id="bv-total">—</strong>Inscrits</div>
+        <div class="hmi"><strong id="bv-dispo">—</strong>Ont rempli leurs dispo</div>
+        <div class="hmi"><strong id="bv-sans">—</strong>Sans rôle</div>
+      </div>
+    </div>
+    <div class="fbar">
+      <span class="flabel">Filtrer ·</span>
+      <button class="fbtn active" onclick="bvSetFilter('tous',this)">Tous</button>
+      <button class="fbtn" onclick="bvSetFilter('sansdispo',this)">Sans dispo remplie</button>
+      <button class="fbtn" onclick="bvSetFilter('sansrole',this)">Sans rôle</button>
+      <button class="fbtn" onclick="bvRefresh()" style="margin-left:auto">↻ Actualiser</button>
+      <button class="fbtn" onclick="bvSyncTally(this)" style="background:#0a0a0a;color:var(--g);border-color:transparent">↻ Synchroniser depuis Tally</button>
+    </div>
+    <div class="body"><div id="bv-container"><div class="nores">Chargement…</div></div></div>
+
+    <div class="comm-panel">
+      <div class="hlabel" style="padding:0 var(--pad)">Communications</div>
+      <div class="comm-row">
+        <button class="fbtn" onclick="bvSelectAll(true)">Sélectionner tout le filtre</button>
+        <button class="fbtn" onclick="bvSelectAll(false)">Désélectionner</button>
+        <button class="fbtn" onclick="bvSendOnboarding()" style="background:var(--g);border-color:transparent">Envoyer le courriel de bienvenue</button>
+        <span class="comm-count" id="comm-count">0 sélectionné(s)</span>
+      </div>
+      <div class="comm-fields">
+        <input id="comm-subject" type="text" placeholder="Sujet du courriel">
+        <textarea id="comm-body" placeholder="Message… (ex. convocation de rencontre, rappel d'appel, invitation visite de terrain)"></textarea>
+        <button class="lock-btn" onclick="bvSendBroadcast()" id="comm-send-btn">Envoyer aux sélectionnés</button>
+        <div class="comm-msg" id="comm-msg"></div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- PROGRAMMATION : grille 6 jours -->
-<section class="sec" id="prog">
-  <div class="sec-inner">
-    <div class="eyebrow" data-fr="Programmation — 6 jours d'un coup d'œil" data-en="Program — 6 days at a glance">Programmation — 6 jours d'un coup d'œil</div>
-    <div class="legend reveal" id="venue-legend"></div>
-    <div class="grid reveal" id="grid"></div>
-  </div>
-</section>
-
-<!-- ARTISTES -->
-<section class="sec" id="artistes">
-  <div class="sec-inner">
-    <div class="eyebrow" data-fr="Artistes" data-en="Artists">Artistes</div>
-    <div class="agrid reveal" id="agrid"></div>
-  </div>
-</section>
-
-<!-- FICHE ARTISTE (overlay) -->
-<div class="ev-back" id="ev-back" onclick="closeEvent()"></div>
-<div class="ev-sheet" id="ev-sheet" role="dialog" aria-modal="true">
-  <div class="handle"></div>
-  <div class="sheet-head">
-    <span class="t">MAPP_MTL 2026</span>
-    <button class="sheet-close" onclick="closeEvent()" data-fr="Fermer ✕" data-en="Close ✕">Fermer ✕</button>
-  </div>
-  <div id="ev-body" class="sheet-body"></div>
-</div>
-<div class="sheet-back" id="sheet-back" onclick="closeArtist()"></div>
-<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-name">
-  <div class="handle"></div>
-  <div class="sheet-head">
-    <span class="t">MAPP_MTL 2026</span>
-    <button class="sheet-close" id="sheet-close" onclick="closeArtist()" data-fr="Fermer ✕" data-en="Close ✕">Fermer ✕</button>
-  </div>
-  <div id="sheet-media"></div>
-  <div class="sheet-body" id="sheet-body"></div>
-</div>
-
-<!-- CARTE -->
-<section class="sec" id="carte" style="position:relative;z-index:0;">
-  <div class="sec-inner narrow">
-    <div class="eyebrow" data-fr="Les lieux" data-en="Venues">Les lieux</div>
-    <div id="map" class="reveal"></div>
-    <div class="map-legend" id="map-legend"></div>
-  </div>
-</section>
-
-<!-- INFOS -->
-<section class="sec" id="infos">
-  <div class="sec-inner narrow">
-    <div class="eyebrow" data-fr="Infos pratiques" data-en="Practical info">Infos pratiques</div>
-    <div class="info-grid reveal">
-      <div class="info-card">
-        <h4 data-fr="Accès gratuit" data-en="Free admission">Accès gratuit</h4>
-        <p data-fr="Les soirées au Skatepark Van Horne et le Jam Tagtool sont gratuites et ouvertes à toutes et tous."
-           data-en="Evenings at Van Horne Skatepark and the Tagtool Jam are free and open to everyone.">Les soirées au Skatepark Van Horne et le Jam Tagtool sont gratuites et ouvertes à toutes et tous.</p>
-      </div>
-      <div class="info-card">
-        <h4 data-fr="Métro & vélo" data-en="Metro & bike">Métro & vélo</h4>
-        <p data-fr="Skatepark Van Horne : métro Rosemont ou De Castelnau, stations BIXI à proximité. Sous le viaduc — beau temps, mauvais temps."
-           data-en="Van Horne Skatepark: Rosemont or De Castelnau metro, BIXI nearby. Under the overpass — rain or shine.">Skatepark Van Horne : métro Rosemont ou De Castelnau, stations BIXI à proximité. Sous le viaduc — beau temps, mauvais temps.</p>
-      </div>
-      <div class="info-card">
-        <h4 data-fr="Dès la tombée du jour" data-en="At nightfall">Dès la tombée du jour</h4>
-        <p data-fr="Les projections débutent au coucher du soleil (vers 18h45 début octobre). Habillez-vous chaudement !"
-           data-en="Projections start at sunset (around 6:45pm in early October). Dress warmly!">Les projections débutent au coucher du soleil (vers 18h45 début octobre). Habillez-vous chaudement !</p>
-      </div>
-      <div class="info-card">
-        <h4 data-fr="Suivez MAPP" data-en="Follow MAPP">Suivez MAPP</h4>
-        <p><a href="https://www.mappmtl.com" target="_blank" rel="noopener">mappmtl.com</a> · <a href="https://www.instagram.com/mapp_mtl" target="_blank" rel="noopener">@mapp_mtl</a><br>
-        <span data-fr="Programmation détaillée et artistes à venir." data-en="Detailed lineup and artists coming soon.">Programmation détaillée et artistes à venir.</span></p>
-      </div>
+<!-- ===== PAGE HORAIRE BÉNÉVOLES (public — sans mot de passe) ===== -->
+<div class="page" id="page-horairebenevoles">
+  <div class="hero">
+    <div class="hlabel">Horaire des postes — vue bénévoles</div>
+    <div class="htitle">HORAIRE<br><span class="g">BÉNÉVOLES</span></div>
+    <div class="hmeta">
+      <div class="hmi"><strong>29 sept – 3 oct</strong>Dates</div>
+      <div class="hmi"><strong id="hb-postes-count">7</strong>Postes</div>
     </div>
+    <div class="tab-row" id="hb-day-tabs"></div>
   </div>
-</section>
+  <div class="body"><div id="hb-container"><div class="nores">Chargement de l'horaire…</div></div></div>
+</div>
 
 <footer>
-  <svg class="logo f-mark" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MAPP_MTL">
-    <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
-    <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
-    <path d="M16.511,28.213l-3.718-15.266h-.051v15.266h-3.103V9.639h5.168l3.686,15.139h.051l3.688-15.139h5.168v18.574h-3.105v-15.266h-.051l-3.718,15.266h-4.014Z"/>
-    <path d="M9.639,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM17.964,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
-    <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
-    <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
-  </svg>
-  <p data-fr="Festival de projection et d'art numérique · Montréal · 2026" data-en="Projection and digital art festival · Montréal · 2026">Festival de projection et d'art numérique · Montréal · 2026</p>
-  <p><a href="https://www.mappmtl.com" target="_blank" rel="noopener">WWW.MAPPMTL.COM</a></p>
+  <div class="flogo">MAPP MTL 2026</div>
+  <div class="fnote">Document interne · Ne pas diffuser</div>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// ============================================================
-// DATA
-// ============================================================
-const VENUES = {
-  vanhorne:{ fr:"Skatepark Van Horne", en:"Van Horne Skatepark", addr:"5855 boul. Saint-Laurent", lat:45.5280967, lng:-73.6032037, main:true,  pat:"p-lime"  },
-  moment:{   fr:"Moment Factory",      en:"Moment Factory",      addr:"6250 av. du Parc",        lat:45.5262469, lng:-73.6119544,             pat:"p-black" },
-  cite:{     fr:"Vieux-Montréal — Cité Mémoire", en:"Old Montreal — Cité Mémoire", addr:"420 rue McGill", lat:45.5001767, lng:-73.5581378,    pat:"p-dots"  },
-  caserne:{  fr:"Caserne 26",          en:"Caserne 26",          addr:"2151 av. du Mont-Royal Est", lat:45.536024, lng:-73.5719294,           pat:"p-hatch" }
-};
-
-const DAYS = [
-  { date:"2026-09-29", d:"29", moFr:"SEPT", moEn:"SEPT", wFr:"MAR", wEn:"TUE", events:[
-    { time:"19h00", venue:"cite",
-      fr:{ t:"Lancement Cité Mémoire × MAPP 2026", d:"Lancement officiel du festival en collaboration avec Cité Mémoire, au cœur du Vieux-Montréal." },
-      en:{ t:"Launch — Cité Mémoire × MAPP 2026", d:"Official festival launch with Cité Mémoire, in the heart of Old Montreal." } }
-  ]},
-  { date:"2026-09-30", d:"30", moFr:"SEPT", moEn:"SEPT", wFr:"MER", wEn:"WED", events:[
-    { time:"17h — 22h", venue:"moment",
-      fr:{ t:"Tournoi de Ping-Pong de la créativité numérique", d:"Soirée levée de fonds pour MAPP chez Moment Factory. DJ à confirmer." },
-      en:{ t:"Digital Creativity Ping-Pong Tournament", d:"MAPP fundraiser night at Moment Factory. DJ to be confirmed." } }
-  ]},
-  { date:"2026-10-01", d:"01", moFr:"OCT", moEn:"OCT", wFr:"JEU", wEn:"THU", events:[
-    { time:"17h — 22h", venue:"vanhorne", free:true,
-      fr:{ t:"Ouverture — Fête de quartier numérique", d:"Ouverture des projections au Skatepark Van Horne + présentation MINUTE_MAPP." },
-      en:{ t:"Opening — Digital Block Party", d:"Projection opening at Van Horne Skatepark + MINUTE_MAPP showcase." } }
-  ]},
-  { date:"2026-10-02", d:"02", moFr:"OCT", moEn:"OCT", wFr:"VEN", wEn:"FRI", events:[
-    { time:"17h — 22h", venue:"vanhorne", free:true,
-      fr:{ t:"Fête de quartier numérique", d:"Projections, mapping et performances sous le viaduc Van Horne." },
-      en:{ t:"Digital Block Party", d:"Projections, mapping and performances under the Van Horne overpass." } },
-    { time:"22h — 03h", venue:"moment",
-      fr:{ t:"Soirée MAPP", d:"L'after officiel du festival chez Moment Factory." },
-      en:{ t:"MAPP Night", d:"The festival's official afterparty at Moment Factory." } }
-  ]},
-  { date:"2026-10-03", d:"03", moFr:"OCT", moEn:"OCT", wFr:"SAM", wEn:"SAT", events:[
-    { time:"12h — 22h", venue:"vanhorne", free:true,
-      fr:{ t:"Fête de quartier numérique", d:"Journée complète : activités familiales, ateliers, puis projections en soirée." },
-      en:{ t:"Digital Block Party", d:"Full day: family activities, workshops, then evening projections." } }
-  ]},
-  { date:"2026-10-04", d:"04", moFr:"OCT", moEn:"OCT", wFr:"DIM", wEn:"SUN", events:[
-    { time:"14h — 20h", venue:"caserne", free:true,
-      fr:{ t:"Jam Tagtool × Kahnawake Survival School", d:"Session de dessin projeté en direct avec les élèves de la Kahnawake Survival School." },
-      en:{ t:"Tagtool Jam × Kahnawake Survival School", d:"Live projected drawing session with students from the Kahnawake Survival School." } }
-  ]}
+const SITES={'Skatepark Van Horne':{c:'#00aa28',bg:'rgba(0,170,40,.08)'},'Caserne 26':{c:'#cc8800',bg:'rgba(200,136,0,.08)'},'Moment Factory':{c:'#9933ff',bg:'rgba(153,51,255,.08)'}};
+const ROLES={'Projectionniste':{c:'#00aa28',bg:'rgba(0,170,40,.1)'},'Son':{c:'#0099cc',bg:'rgba(0,153,204,.1)'},'Coord. site':{c:'#cc1144',bg:'rgba(204,17,68,.1)'},'Accueil':{c:'#cc8800',bg:'rgba(200,136,0,.1)'},'Sécurité':{c:'#cc4400',bg:'rgba(204,68,0,.1)'},'Comm./médias':{c:'#7733cc',bg:'rgba(119,51,204,.1)'},'Renfort':{c:'#555',bg:'rgba(0,0,0,.05)'}};
+const DN={'29':'Mardi 29 septembre','30':'Mercredi 30 septembre','01':'Jeudi 1er octobre','02':'Vendredi 2 octobre','03':'Samedi 3 octobre','04':'Dimanche 4 octobre'};
+const SHOWS=[
+  // Mardi 29 sept — Soirée de lancement Cité mémoire x MAPP
+  {day:'29',time:'19:00',dur:180,artist:'Cité Mémoire x MAPP MTL',title:'Soirée de lancement',site:'Caserne 26',country:'QC',status:'conf',res:'—',proj:0,audio:true,tech:'À confirmer',contact:''},
+  // Mercredi 30 sept — Moment Factory + levée de fonds
+  {day:'30',time:'17:00',dur:300,artist:'Moment Factory',title:'Tournoi de Ping-Pong de la créativité numérique',site:'Moment Factory',country:'QC',status:'conf',res:'—',proj:0,audio:true,tech:'À confirmer',contact:''},
+  {day:'30',time:'17:00',dur:300,artist:'DJ À confirmer',title:'Soirée levée de fonds MAPP',site:'Moment Factory',country:'QC',status:'pend',res:'—',proj:0,audio:true,tech:'À confirmer',contact:''},
+  // Jeudi 1er oct — Soirée d'ouverture Fête de quartier
+  {day:'01',time:'17:00',dur:300,artist:'MINUTE_MAPP',title:'Soirée d\'ouverture — Fête de quartier numérique',site:'Skatepark Van Horne',country:'QC',status:'conf',res:'4K',proj:1,audio:true,tech:'À confirmer',contact:''},
+  // Vendredi 2 oct — Fête de quartier + Soirée MAPP
+  {day:'02',time:'17:00',dur:300,artist:'Artistes MAPP',title:'Fête de quartier numérique',site:'Skatepark Van Horne',country:'QC',status:'conf',res:'4K',proj:1,audio:true,tech:'À confirmer',contact:''},
+  {day:'02',time:'22:00',dur:300,artist:'DJs / Artistes',title:'Soirée MAPP',site:'Moment Factory',country:'QC',status:'conf',res:'—',proj:0,audio:true,tech:'À confirmer',contact:''},
+  // Samedi 3 oct — Fête de quartier
+  {day:'03',time:'12:00',dur:600,artist:'Artistes MAPP',title:'Fête de quartier numérique',site:'Skatepark Van Horne',country:'QC',status:'conf',res:'4K',proj:1,audio:true,tech:'À confirmer',contact:''},
+  // Dimanche 4 oct — Jam Tagtool
+  {day:'04',time:'14:00',dur:360,artist:'Kahnawake Survival School',title:'Jam Tagtool',site:'Caserne 26',country:'QC',status:'conf',res:'—',proj:0,audio:false,tech:'À confirmer',contact:''},
 ];
 
-// ---- ARTISTES (DONNÉES DÉMO — remplacer par la vraie programmation) ----
-// img : mettre le chemin d'une photo (ex. "/img/artistes/nom.jpg").
-// Sans photo, un portrait tramé génératif est dessiné automatiquement.
-const ARTISTS = [
-  { slug:"studio-lumen", name:"Studio Lumen", img:"img/artistes/artiste.png", dayIdx:2, venue:"vanhorne",
-    fr:{ disc:"Mapping architectural", bio:"Collectif montréalais explorant la lumière comme matière première. Leurs projections monumentales transforment l'architecture en surface vivante." },
-    en:{ disc:"Architectural mapping", bio:"Montreal collective exploring light as raw material. Their monumental projections turn architecture into a living surface." },
-    links:{ web:"https://example.com", ig:"https://instagram.com/" } },
-  { slug:"v0lt", name:"V0LT", img:"img/artistes/artiste.png", dayIdx:3, venue:"vanhorne",
-    fr:{ disc:"Art génératif · audioréactif", bio:"Systèmes visuels génératifs pilotés par le son, entre glitch et géométrie. Première présence à MAPP." },
-    en:{ disc:"Generative · audio-reactive", bio:"Sound-driven generative visual systems, between glitch and geometry. First time at MAPP." },
-    links:{ ig:"https://instagram.com/" } },
-  { slug:"maya-tran", name:"Maya Tran", img:"img/artistes/artiste.png", dayIdx:0, venue:"cite",
-    fr:{ disc:"Vidéo · animation", bio:"Animatrice et vidéaste, elle tisse mémoire urbaine et imaginaire dans des fresques projetées." },
-    en:{ disc:"Video · animation", bio:"Animator and video artist weaving urban memory and imagination into projected frescoes." },
-    links:{ web:"https://example.com" } },
-  { slug:"atelier-phare", name:"Atelier Phare", img:"img/artistes/artiste.png", dayIdx:3, venue:"moment",
-    fr:{ disc:"Installation lumineuse", bio:"Duo d'artistes-ingénieurs. Installations lumineuses cinétiques présentées lors de la Soirée MAPP." },
-    en:{ disc:"Light installation", bio:"Artist-engineer duo. Kinetic light installations presented at MAPP Night." },
-    links:{ web:"https://example.com", ig:"https://instagram.com/" } },
-  { slug:"kss-tagtool", name:"Kahnawake Survival School", img:"img/artistes/artiste.png", dayIdx:5, venue:"caserne",
-    fr:{ disc:"Jam Tagtool · dessin en direct", bio:"Les élèves de la Kahnawake Survival School dessinent en direct, projetés sur les murs de la Caserne 26." },
-    en:{ disc:"Tagtool jam · live drawing", bio:"Students from the Kahnawake Survival School draw live, projected on the walls of Caserne 26." },
-    links:{} },
-  { slug:"minute-mapp", name:"MINUTE_MAPP", img:"img/artistes/artiste.png", dayIdx:2, venue:"vanhorne",
-    fr:{ disc:"Programme de la relève", bio:"La cohorte MINUTE_MAPP : de courtes pièces de mapping créées par la relève, présentées en ouverture." },
-    en:{ disc:"Emerging artists program", bio:"The MINUTE_MAPP cohort: short mapping pieces by emerging artists, presented at the opening." },
-    links:{ web:"https://www.mappmtl.com" } }
+const STAFF=[
+  {id:1,name:'Marc Tremblay',role:'Projectionniste',shifts:[{d:'29',in:'17:30',out:'23:30',site:'Skatepark Van Horne'},{d:'30',in:'17:30',out:'23:30',site:'Skatepark Van Horne'},{d:'02',in:'17:00',out:'00:30',site:'Skatepark Van Horne'}]},
+  {id:2,name:'Léa Fontaine',role:'Projectionniste',shifts:[{d:'29',in:'17:30',out:'23:30',site:'Skatepark Van Horne'},{d:'01',in:'17:30',out:'23:30',site:'Skatepark Van Horne'},{d:'02',in:'17:00',out:'00:30',site:'Skatepark Van Horne'}]},
+  {id:3,name:'Samir Aouad',role:'Projectionniste',shifts:[{d:'29',in:'17:30',out:'23:30',site:'Skatepark Van Horne'},{d:'30',in:'17:30',out:'23:30',site:'Skatepark Van Horne'},{d:'01',in:'17:30',out:'23:30',site:'Skatepark Van Horne'}]},
+  {id:4,name:'Élise Morin',role:'Projectionniste',shifts:[{d:'30',in:'17:30',out:'23:30',site:'Skatepark Van Horne'},{d:'01',in:'17:30',out:'23:30',site:'Skatepark Van Horne'},{d:'03',in:'17:00',out:'00:30',site:'Skatepark Van Horne'}]},
+  {id:5,name:'Julie Bédard',role:'Son',shifts:[{d:'29',in:'18:00',out:'23:30',site:'Skatepark Van Horne'},{d:'30',in:'18:00',out:'23:30',site:'Skatepark Van Horne'},{d:'03',in:'17:30',out:'00:30',site:'Skatepark Van Horne'}]},
+  {id:6,name:'Rayan Messaoudi',role:'Son',shifts:[{d:'29',in:'18:00',out:'23:30',site:'Skatepark Van Horne'},{d:'01',in:'18:00',out:'23:30',site:'Skatepark Van Horne'},{d:'02',in:'17:30',out:'00:30',site:'Skatepark Van Horne'}]},
+  {id:7,name:'Camille Roy',role:'Son',shifts:[{d:'30',in:'18:00',out:'23:30',site:'Skatepark Van Horne'},{d:'01',in:'18:00',out:'23:30',site:'Skatepark Van Horne'},{d:'03',in:'17:30',out:'00:30',site:'Skatepark Van Horne'}]},
+  {id:8,name:'Kim Maurice',role:'Coord. site',shifts:[{d:'29',in:'16:00',out:'00:00',site:'Skatepark Van Horne'},{d:'30',in:'16:00',out:'00:00',site:'Skatepark Van Horne'},{d:'01',in:'16:00',out:'00:00',site:'Skatepark Van Horne'},{d:'02',in:'15:30',out:'01:00',site:'Skatepark Van Horne'},{d:'03',in:'15:30',out:'01:00',site:'Skatepark Van Horne'}]},
+  {id:9,name:'Thibaud Guilloteau',role:'Coord. site',shifts:[{d:'29',in:'16:30',out:'23:30',site:'Skatepark Van Horne'},{d:'01',in:'16:30',out:'23:30',site:'Skatepark Van Horne'},{d:'02',in:'16:00',out:'00:30',site:'Skatepark Van Horne'}]},
+  {id:10,name:'Sophie Lavoie',role:'Accueil',shifts:[{d:'29',in:'17:00',out:'22:00',site:'Skatepark Van Horne'},{d:'30',in:'17:00',out:'22:00',site:'Skatepark Van Horne'}]},
+  {id:11,name:'Hugo Pelletier',role:'Accueil',shifts:[{d:'29',in:'17:00',out:'22:00',site:'Skatepark Van Horne'},{d:'01',in:'17:00',out:'22:00',site:'Skatepark Van Horne'}]},
+  {id:12,name:'Fatima Zahra',role:'Accueil',shifts:[{d:'30',in:'17:00',out:'22:00',site:'Skatepark Van Horne'},{d:'02',in:'16:30',out:'22:30',site:'Skatepark Van Horne'}]},
+  {id:13,name:'Diane Simard',role:'Sécurité',shifts:[{d:'29',in:'17:00',out:'23:30',site:'Skatepark Van Horne'},{d:'30',in:'17:00',out:'23:30',site:'Skatepark Van Horne'},{d:'01',in:'17:00',out:'23:30',site:'Skatepark Van Horne'}]},
+  {id:14,name:'Patrick Blais',role:'Sécurité',shifts:[{d:'29',in:'17:00',out:'23:30',site:'Skatepark Van Horne'},{d:'01',in:'17:00',out:'23:30',site:'Skatepark Van Horne'},{d:'02',in:'16:30',out:'00:30',site:'Skatepark Van Horne'}]},
+  {id:15,name:'Sylvain Grenier',role:'Sécurité',shifts:[{d:'30',in:'17:00',out:'23:30',site:'Skatepark Van Horne'},{d:'01',in:'17:00',out:'23:30',site:'Skatepark Van Horne'},{d:'03',in:'16:30',out:'00:30',site:'Skatepark Van Horne'}]},
+  {id:16,name:'Isabelle Viau',role:'Comm./médias',shifts:[{d:'29',in:'16:00',out:'23:00',site:'Skatepark Van Horne'},{d:'30',in:'16:00',out:'23:00',site:'Skatepark Van Horne'},{d:'01',in:'16:00',out:'23:00',site:'Skatepark Van Horne'},{d:'02',in:'15:00',out:'00:00',site:'Skatepark Van Horne'},{d:'03',in:'15:00',out:'00:00',site:'Skatepark Van Horne'}]},
+  {id:17,name:'Nico Arsenault',role:'Comm./médias',shifts:[{d:'30',in:'17:00',out:'23:00',site:'Skatepark Van Horne'},{d:'01',in:'17:00',out:'23:00',site:'Skatepark Van Horne'},{d:'03',in:'16:00',out:'23:30',site:'Skatepark Van Horne'}]},
+  {id:18,name:'Aïcha Diallo',role:'Renfort',shifts:[{d:'29',in:'17:30',out:'22:00',site:'Caserne 26'},{d:'30',in:'17:30',out:'22:00',site:'Caserne 26'}]},
+  {id:19,name:'Félix Charron',role:'Renfort',shifts:[{d:'29',in:'17:30',out:'22:00',site:'Caserne 26'},{d:'01',in:'17:30',out:'22:00',site:'Caserne 26'}]},
+  {id:20,name:'Yasmine Khalil',role:'Renfort',shifts:[{d:'30',in:'17:30',out:'22:00',site:'Caserne 26'},{d:'02',in:'17:00',out:'22:30',site:'Caserne 26'}]},
 ];
 
-const FESTIVAL_START = new Date("2026-09-29T00:00:00-04:00");
-const FESTIVAL_END   = new Date("2026-10-05T03:00:00-04:00");
-
-const MARQUEE = {
-  fr:["10e ÉDITION","29 SEPT — 4 OCT 2026","FÊTE DE QUARTIER NUMÉRIQUE","ENTRÉE GRATUITE AU SKATEPARK VAN HORNE","SOUTENEZ MAPP"],
-  en:["10th EDITION","SEPT 29 — OCT 4 2026","DIGITAL BLOCK PARTY","FREE AT VAN HORNE SKATEPARK","SUPPORT MAPP"]
-};
-
-// ============================================================
-// STATE
-// ============================================================
-let lang = localStorage.getItem('mapp_lang') || 'fr';
-let map, markers = {};
-
-// ============================================================
-// LANG
-// ============================================================
-function toggleLang(){
-  lang = lang === 'fr' ? 'en' : 'fr';
-  localStorage.setItem('mapp_lang', lang);
-  applyLang();
+function setPage(p,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.npbtn').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+p).classList.add('active');if(btn)btn.classList.add('active');
+  if(p==='horairebenevoles') hbLoad();
 }
-function applyLang(){
-  document.documentElement.lang = lang;
-  document.getElementById('lang-btn').textContent = lang === 'fr' ? 'EN' : 'FR';
-  document.querySelectorAll('[data-fr]').forEach(el=>{ el.textContent = el.dataset[lang]; });
-  renderMarquee();
-  renderVenueLegend();
-  renderGrid();
-  renderArtists();
-  renderLegend();
-  renderHeroStatus();
-  setHaltoneBtnLabel();
-  if(currentArtist) openArtist(currentArtist.slug, true);
-}
+function openAdmin(){ setPage('benevoles', null); }
 
 // ============================================================
-// MARQUEE
+// BÉNÉVOLES — onglet admin (Rayane) + Horaire bénévoles (public)
+// Consomme l'API JSON du même Google Apps Script que l'app mobile
+// bénévoles (Code.gs). Aucune donnée n'est dupliquée : c'est la
+// même feuille Google Sheet qui sert de source de vérité partout.
 // ============================================================
-function renderMarquee(){
-  const items = MARQUEE[lang];
-  const one = items.map(t=>`<span>${t} <span style="opacity:.55">↗</span></span>`).join('');
-  document.getElementById('marquee-track').innerHTML = one + one;
+
+// ⚠️ CONFIGURATION REQUISE — colle l'URL de déploiement du Web App
+// Apps Script (Déployer → Gérer les déploiements → URL finissant par /exec)
+const BV_API_URL = 'https://script.google.com/a/macros/mappmtl.com/s/AKfycbzjYpQWAtM5sOT3R_LLY_GJ6XqU7amkQwagDbV7B6Q1mXixzqqDuqgryGZlx2bcMC7zhg/exec';
+const BV_ADMIN_PASSWORD = 'rayane2026'; // doit correspondre à CONFIG.ADMIN_PASSWORD dans Code.gs
+
+const BV_DAYS = [
+  {label:'Dim 28', date:'2026-09-28', heures:'9h-17h'},
+  {label:'Lun 29', date:'2026-09-29', heures:'Midi-23h'},
+  {label:'Mar 30', date:'2026-09-30', heures:'9h-23h'},
+  {label:'Mer 1',  date:'2026-10-01', heures:'11h-23h'},
+  {label:'Jeu 2',  date:'2026-10-02', heures:'Midi-minuit'},
+  {label:'Ven 3',  date:'2026-10-03', heures:'11h-1h'},
+  {label:'Sam 4',  date:'2026-10-04', heures:'9h-18h'},
+];
+
+let bvVols = [], bvDispo = [], bvFilter = 'tous', bvUnlocked = false;
+let bvSelected = new Set();
+
+function bvApi(action, params) {
+  params = params || {};
+  const qs = Object.keys(params).map(k => encodeURIComponent(k)+'='+encodeURIComponent(params[k])).join('&');
+  const url = BV_API_URL + '?action=' + encodeURIComponent(action) + (qs ? '&'+qs : '');
+  return fetch(url).then(r => r.json()).then(res => {
+    if (!res.ok) throw new Error(res.error || 'Erreur inconnue');
+    return res;
+  });
 }
 
-// ============================================================
-// HERO STATUS
-// ============================================================
-function renderHeroStatus(){
-  const el = document.getElementById('hero-status');
-  const now = new Date();
-  if(now >= FESTIVAL_START && now <= FESTIVAL_END){
-    const dayIdx = DAYS.findIndex(d => d.date === localDateStr(now));
-    const n = dayIdx >= 0 ? dayIdx + 1 : Math.min(6, Math.max(1, Math.ceil((now - FESTIVAL_START)/86400000)));
-    el.innerHTML = `<div class="live-badge"><span class="live-dot"></span> ${lang==='fr'?'JOUR':'DAY'} ${n}/6 — ${lang==='fr'?'EN COURS':'LIVE NOW'}</div>`;
+function bvUnlock() {
+  const pw = document.getElementById('bv-pw').value.trim();
+  if (pw === BV_ADMIN_PASSWORD) {
+    bvUnlocked = true;
+    document.getElementById('bv-lock').style.display = 'none';
+    document.getElementById('bv-content').style.display = 'block';
+    bvRefresh();
+  } else {
+    document.getElementById('bv-err').style.display = 'block';
+  }
+}
+document.getElementById('bv-pw') && document.getElementById('bv-pw').addEventListener('keydown', e => {
+  if (e.key === 'Enter') bvUnlock();
+});
+
+function bvSetFilter(f, btn) {
+  bvFilter = f;
+  document.querySelectorAll('#page-benevoles .fbtn').forEach(b => {
+    b.classList.remove('active');
+    b.style.background=''; b.style.color=''; b.style.borderColor='';
+  });
+  btn.classList.add('active');
+  btn.style.background='rgba(255,255,255,.1)'; btn.style.color='#fff'; btn.style.borderColor='transparent';
+  bvRender();
+}
+
+function bvSyncTally(btn) {
+  btn.disabled = true;
+  btn.textContent = 'Synchronisation…';
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'syncFromTally' })
+  }).then(r => r.json()).then(res => {
+    btn.disabled = false;
+    btn.textContent = '↻ Synchroniser depuis Tally';
+    if (res.ok) {
+      bvRefresh();
+    }
+  }).catch(() => {
+    btn.disabled = false;
+    btn.textContent = '↻ Synchroniser depuis Tally';
+  });
+}
+
+function bvRefresh() {
+  if (BV_API_URL.includes('COLLE_ICI')) {
+    document.getElementById('bv-container').innerHTML = '<div class="nores">Configuration manquante — colle l\'URL Apps Script (BV_API_URL) dans index.html.</div>';
     return;
   }
-  if(now > FESTIVAL_END){
-    el.innerHTML = `<div class="live-badge">${lang==='fr'?"MERCI ! À L'AN PROCHAIN":"THANK YOU! SEE YOU NEXT YEAR"}</div>`;
-    return;
-  }
-  const diff = FESTIVAL_START - now;
-  const d = Math.floor(diff/86400000);
-  const h = Math.floor(diff%86400000/3600000);
-  const m = Math.floor(diff%3600000/60000);
-  el.innerHTML = `
-    <div class="count-box">
-      <div class="count-cell"><b>${d}</b><span>${lang==='fr'?'jours':'days'}</span></div>
-      <div class="count-cell"><b>${h}</b><span>${lang==='fr'?'heures':'hrs'}</span></div>
-      <div class="count-cell"><b>${m}</b><span>min</span></div>
-    </div>`;
-}
-function localDateStr(d){ return d.toLocaleDateString('en-CA',{timeZone:'America/Montreal'}); }
+  document.getElementById('bv-container').innerHTML = '<div class="nores">Chargement…</div>';
+  Promise.all([bvApi('getBenevoles'), bvApi('getDispo')])
+    .then(([volsRes, dispoRes]) => {
+      bvVols = volsRes.data || [];
+      bvDispo = dispoRes.data || [];
+      const dispoMap = {};
+      bvDispo.forEach(d => { dispoMap[d.email] = d; });
+      bvVols.forEach(v => { v._dispo = dispoMap[String(v.email||'').trim().toLowerCase()] || null; });
 
-// ============================================================
-// TITRE : s'ajuste exactement à la largeur, quelle que soit la police
-// ============================================================
-function fitTitle(){
-  const h = document.querySelector('.hero h1');
-  if(!h) return;
-  const max = h.parentElement.clientWidth;
-  h.style.fontSize = '100px';                 // taille de mesure
-  const w = h.scrollWidth;
-  if(!w) return;
-  h.style.fontSize = Math.min(110, Math.floor(100 * max / w * 0.995)) + 'px';
-}
-window.addEventListener('resize', fitTitle);
-if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle);
-setInterval(renderHeroStatus, 30000);
-
-// ============================================================
-// PROGRAM — grille 6 jours
-// ============================================================
-function renderVenueLegend(){
-  document.getElementById('venue-legend').innerHTML = Object.entries(VENUES).map(([key,v])=>`
-    <span class="legend-chip" data-venue="${key}" onclick="filterVenue('${key}')">
-      <span class="legend-sw ${v.pat}"></span>${v[lang]}
-    </span>`).join('');
+      document.getElementById('bv-total').textContent = bvVols.length;
+      document.getElementById('bv-dispo').textContent = bvVols.filter(v => v._dispo).length;
+      document.getElementById('bv-sans').textContent = bvVols.filter(v => !v.role).length;
+      bvRender();
+    })
+    .catch(err => {
+      document.getElementById('bv-container').innerHTML = '<div class="nores">Erreur : ' + err.message + '</div>';
+    });
 }
 
-function renderGrid(){
-  const today = localDateStr(new Date());
-  document.getElementById('grid').innerHTML = DAYS.map((day,dayIdx)=>{
-    const cards = day.events.map((ev,evIdx)=>{
-      const v = VENUES[ev.venue]; const c = ev[lang];
-      return `
-      <div class="card ${v.pat}" data-venue="${ev.venue}" onclick="openEvent(${dayIdx},${evIdx})" style="cursor:pointer">
-        ${ev.free?`<span class="free">${lang==='fr'?'Gratuit':'Free'}</span>`:''}
-        <span class="time">${ev.time}</span>
-        <h3>${c.t}</h3>
-        <span class="venue">📍 ${v[lang]}</span>
-        <div class="desc">${c.d}</div>
-        <a class="tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="event.stopPropagation()">🎟 ${lang==='fr'?'Billets':'Tickets'} →</a>
-      </div>`;
+function bvRender() {
+  let list = bvVols;
+  if (bvFilter === 'sansdispo') list = list.filter(v => !v._dispo);
+  if (bvFilter === 'sansrole')  list = list.filter(v => !v.role);
+
+  const header = `<div class="bv-row hdr">
+    <div></div><div class="bv-h">Bénévole</div><div class="bv-h">Disponibilités</div><div class="bv-h">Fonction souhaitée</div><div class="bv-h">Rôle assigné</div>
+  </div>`;
+
+  const rows = list.map(v => {
+    const days = BV_DAYS.map(d => {
+      const on = v._dispo && v._dispo.jours && v._dispo.jours[d.date];
+      return `<div class="bv-day ${on?'on':''}" title="${d.label} · ${d.heures}">${d.label.slice(0,1)}${d.label.slice(4)}</div>`;
     }).join('');
-    return `
-    <div class="gcol ${day.date===today?'today':''}">
-      <div class="ghead">
-        <span class="wd">${lang==='fr'?day.wFr:day.wEn}</span>
-        <span class="num">${day.d}</span>
-        <span class="mo">${lang==='fr'?day.moFr:day.moEn}</span>
+    const fonction = v._dispo && v._dispo.fonction ? v._dispo.fonction : '';
+    const horsTally = String(v.id||'').startsWith('DISPO-');
+    const bienvenueBadge = v.bienvenueEnvoyee ? '<span class="bv-warn" style="background:rgba(0,204,51,.15);color:#0a5c28">Bienvenue envoyée</span>' : '';
+    const checked = bvSelected.has(v.id) ? 'checked' : '';
+    return `<div class="bv-row">
+      <input type="checkbox" class="bv-check" ${checked} ${v.email?'':'disabled'} onchange="bvToggleSelect('${v.id}', this.checked)">
+      <div>
+        <div class="bv-name">${v.prenom} ${v.nom} ${v.contrainte ? '<span class="bv-warn">Santé</span>' : ''} ${horsTally ? '<span class="bv-warn" style="background:var(--s);color:var(--mu)">Pas encore Tally</span>' : ''} ${bienvenueBadge}</div>
+        <div class="bv-sub">${v.email || ''}</div>
       </div>
-      <div class="gbody">${cards}</div>
+      <div class="bv-days"><span class="bv-mlabel">Disponibilités</span>${v._dispo ? days : '<span class="bv-fonction empty">Pas encore rempli</span>'}</div>
+      <div class="bv-fonction ${fonction?'':'empty'}"><span class="bv-mlabel">Fonction souhaitée</span>${fonction || '—'}</div>
+      <div>
+        <span class="bv-mlabel">Rôle assigné</span>
+        <select class="bv-role-select" onchange="bvSaveRole('${v.id}', this.value)">
+          <option value="">— Sans rôle —</option>
+          <option value="accueil" ${v.role==='accueil'?'selected':''}>Accueil</option>
+          <option value="tech" ${v.role==='tech'?'selected':''}>Technique</option>
+          <option value="secu" ${v.role==='secu'?'selected':''}>Sécurité</option>
+          <option value="log" ${v.role==='log'?'selected':''}>Logistique</option>
+          <option value="res" ${v.role==='res'?'selected':''}>Restauration</option>
+        </select>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('bv-container').innerHTML = list.length
+    ? `<div class="bv-grid">${header}${rows}</div>`
+    : '<div class="nores">Aucun bénévole pour ce filtre.</div>';
+}
+
+function bvSaveRole(id, role) {
+  const url = BV_API_URL;
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'saveRole', id: id, role: role })
+  }).then(r => r.json()).then(res => {
+    if (res.ok) {
+      const v = bvVols.find(x => String(x.id) === String(id));
+      if (v) v.role = role;
+      document.getElementById('bv-sans').textContent = bvVols.filter(x => !x.role).length;
+    }
+  });
+}
+
+// ── Communications : sélection de destinataires + envoi manuel ──
+function bvToggleSelect(id, checked) {
+  if (checked) bvSelected.add(id); else bvSelected.delete(id);
+  bvUpdateCommCount();
+}
+
+function bvUpdateCommCount() {
+  document.getElementById('comm-count').textContent = bvSelected.size + ' sélectionné(s)';
+}
+
+function bvSelectAll(select) {
+  let list = bvVols;
+  if (bvFilter === 'sansdispo') list = list.filter(v => !v._dispo);
+  if (bvFilter === 'sansrole')  list = list.filter(v => !v.role);
+  if (select) list.forEach(v => { if (v.email) bvSelected.add(v.id); });
+  else bvSelected.clear();
+  bvRender();
+  bvUpdateCommCount();
+}
+
+function bvSendOnboarding() {
+  if (bvSelected.size === 0) {
+    const msgEl = document.getElementById('comm-msg');
+    msgEl.className = 'comm-msg err';
+    msgEl.textContent = 'Sélectionne au moins un·e bénévole.';
+    return;
+  }
+  const ids = Array.from(bvSelected);
+  const msgEl = document.getElementById('comm-msg');
+  msgEl.className = 'comm-msg';
+
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'sendOnboarding', ids: ids })
+  }).then(r => r.json()).then(res => {
+    if (res.ok) {
+      msgEl.textContent = `Courriel de bienvenue envoyé à ${res.sent} personne(s)${res.failed ? `, ${res.failed} échec(s)` : ''}.`;
+      msgEl.classList.add('ok');
+      bvSelectAll(false);
+      bvRefresh();
+    } else {
+      msgEl.textContent = 'Erreur : ' + res.error;
+      msgEl.classList.add('err');
+    }
+  }).catch(err => {
+    msgEl.textContent = 'Erreur : ' + err.message;
+    msgEl.classList.add('err');
+  });
+}
+
+function bvSendBroadcast() {
+  const subject = document.getElementById('comm-subject').value.trim();
+  const body = document.getElementById('comm-body').value.trim();
+  const msgEl = document.getElementById('comm-msg');
+  msgEl.className = 'comm-msg';
+
+  if (bvSelected.size === 0) {
+    msgEl.textContent = 'Sélectionne au moins un·e bénévole.';
+    msgEl.classList.add('err');
+    return;
+  }
+  if (!subject || !body) {
+    msgEl.textContent = 'Le sujet et le message sont requis.';
+    msgEl.classList.add('err');
+    return;
+  }
+
+  const emails = bvVols.filter(v => bvSelected.has(v.id) && v.email).map(v => v.email);
+  const btn = document.getElementById('comm-send-btn');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours…';
+
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'sendBroadcast', emails: emails, subject: subject, body: body })
+  }).then(r => r.json()).then(res => {
+    btn.disabled = false;
+    btn.textContent = 'Envoyer aux sélectionnés';
+    if (res.ok) {
+      msgEl.textContent = `Envoyé à ${res.sent} personne(s)${res.failed ? `, ${res.failed} échec(s)` : ''}.`;
+      msgEl.classList.add('ok');
+      document.getElementById('comm-subject').value = '';
+      document.getElementById('comm-body').value = '';
+      bvSelectAll(false);
+    } else {
+      msgEl.textContent = 'Erreur : ' + res.error;
+      msgEl.classList.add('err');
+    }
+  }).catch(err => {
+    btn.disabled = false;
+    btn.textContent = 'Envoyer aux sélectionnés';
+    msgEl.textContent = 'Erreur : ' + err.message;
+    msgEl.classList.add('err');
+  });
+}
+
+// ── Horaire bénévoles (public, lecture seule) ──
+let hbData = null, hbActiveDay = 0;
+
+function hbLoad() {
+  if (hbData) { hbRenderDayTabs(); return; }
+  if (BV_API_URL.includes('COLLE_ICI')) {
+    document.getElementById('hb-container').innerHTML = '<div class="nores">Configuration manquante — colle l\'URL Apps Script (BV_API_URL) dans index.html.</div>';
+    return;
+  }
+  bvApi('getHoraire').then(res => {
+    hbData = res;
+    document.getElementById('hb-postes-count').textContent = (res.postes||[]).length;
+    hbRenderDayTabs();
+  }).catch(err => {
+    document.getElementById('hb-container').innerHTML = '<div class="nores">Erreur : ' + err.message + '</div>';
+  });
+}
+
+function hbRenderDayTabs() {
+  document.getElementById('hb-day-tabs').innerHTML = hbData.days.map((d,i) =>
+    `<button class="tabx ${i===hbActiveDay?'active':''}" onclick="hbSelectDay(${i})">${d.label}</button>`
+  ).join('');
+  hbRenderDay();
+}
+
+function hbSelectDay(i) { hbActiveDay = i; hbRenderDayTabs(); }
+
+function hbRenderDay() {
+  const day = hbData.days[hbActiveDay];
+  const dayData = (hbData.data && hbData.data[day.date]) || {};
+  const heuresHtml = day.heures ? `<div class="hb-heures">Heures : ${day.heures}</div>` : '';
+  document.getElementById('hb-container').innerHTML = heuresHtml + hbData.postes.map(poste => {
+    const assigned = dayData[poste] || [];
+    const volRows = assigned.length
+      ? assigned.map(v => `<div class="hb-vol">${v.prenom} ${v.nom}</div>`).join('')
+      : '<div class="hb-empty">Personne assigné pour l\'instant</div>';
+    return `<div class="hb-poste">
+      <div class="hb-poste-head"><span class="hb-poste-name">${poste}</span><span class="hb-poste-count">${assigned.length} bénévole${assigned.length!==1?'s':''}</span></div>
+      ${volRows}
     </div>`;
   }).join('');
 }
 
-// ============================================================
-// ARTISTES
-// ============================================================
-let currentArtist = null;
-
-function seedRand(str){
-  let h = 2166136261;
-  for(const ch of str){ h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); }
-  return function(){ h ^= h<<13; h ^= h>>>17; h ^= h<<5; return ((h>>>0)/4294967296); };
-}
-
-// portrait tramé génératif (utilisé quand img === null)
-function drawPortrait(cv, name, ratio){
-  const dpr = Math.min(window.devicePixelRatio||1, 2);
-  const W = cv.clientWidth || 300, H = W*(ratio||1);
-  cv.width = W*dpr; cv.height = H*dpr;
-  const ctx = cv.getContext('2d');
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
-  const rnd = seedRand(name);
-  const cx = W*(0.3+rnd()*0.4), cy = H*(0.3+rnd()*0.4);
-  const f1 = 3+rnd()*5, f2 = 2+rnd()*4, rot = rnd()*Math.PI;
-  const GAP = Math.max(7, W/34);
-  for(let y=GAP/2; y<H; y+=GAP){
-    for(let x=GAP/2; x<W; x+=GAP){
-      const dx=(x-cx)/W, dy=(y-cy)/H;
-      const d = Math.sqrt(dx*dx+dy*dy);
-      const a = Math.atan2(dy,dx)+rot;
-      const v = Math.sin(d*Math.PI*f1) + Math.cos(a*f2)*0.6;
-      const m = Math.max(0,Math.min(1,(v+1.6)/3.2)) * Math.max(0, 1-d*1.15);
-      const r = m*GAP*0.62;
-      if(r<0.5) continue;
-      ctx.fillStyle = m>0.82 ? '#22ff62' : 'rgba(0,0,0,'+(0.1+m*0.8)+')';
-      ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
-    }
-  }
-  // initiales
-  const ini = name.split(/\s+/).map(w=>w[0]).join('').slice(0,3).toUpperCase();
-  ctx.font = '500 '+(W*0.2)+"px 'OTAlpha','Archivo Narrow',sans-serif";
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillStyle='#fff';
-  const tw = ctx.measureText(ini).width;
-  ctx.fillRect(W/2-tw/2-8, H/2-W*0.115, tw+16, W*0.23);
-  ctx.strokeStyle='#000'; ctx.lineWidth=1;
-  ctx.strokeRect(W/2-tw/2-8, H/2-W*0.115, tw+16, W*0.23);
-  ctx.fillStyle='#000';
-  ctx.fillText(ini, W/2, H/2+W*0.012);
-}
-
-function artistMedia(a, ratio){
-  if(a.img) return `<img class="ph" src="${a.img}" alt="${a.name}" loading="lazy">`;
-  return `<canvas class="ph" data-name="${a.name}" data-ratio="${ratio||1}"></canvas>`;
-}
-function paintPortraits(root){
-  root.querySelectorAll('canvas.ph').forEach(cv=>{
-    requestAnimationFrame(()=>drawPortrait(cv, cv.dataset.name, parseFloat(cv.dataset.ratio)));
-  });
-}
-
-function renderArtists(){
-  const el = document.getElementById('agrid');
-  el.innerHTML = ARTISTS.map(a=>`
-    <button class="acard" onclick="openArtist('${a.slug}')" aria-haspopup="dialog">
-      ${artistMedia(a,1)}
-      <div class="an">${a.name}</div>
-      <span class="ad">${a[lang].disc}</span>
-    </button>`).join('');
-  paintPortraits(el);
-}
-
-function openArtist(slug, fromHash){
-  const a = ARTISTS.find(x=>x.slug===slug);
-  if(!a) return;
-  currentArtist = a;
-  const day = DAYS[a.dayIdx], v = VENUES[a.venue];
-  const when = `${lang==='fr'?day.wFr:day.wEn} ${day.d} ${lang==='fr'?day.moFr:day.moEn}`;
-  document.getElementById('sheet-media').innerHTML = artistMedia(a, 0.625);
-  document.getElementById('sheet-body').innerHTML = `
-    <h2 id="sheet-name">${a.name}</h2>
-    <div class="disc">${a[lang].disc}</div>
-    <span class="when" onclick="closeArtist();focusVenue('${a.venue}')">📍 ${when} · ${v[lang]}</span>
-    <p class="bio">${a[lang].bio}</p>
-    <div class="links">
-      ${a.links.web?`<a href="${a.links.web}" target="_blank" rel="noopener">Site ↗</a>`:''}
-      ${a.links.ig?`<a href="${a.links.ig}" target="_blank" rel="noopener">Instagram ↗</a>`:''}
-    </div>`;
-  paintPortraits(document.getElementById('sheet-media'));
-  document.getElementById('sheet-back').classList.add('open');
-  document.getElementById('sheet').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  document.getElementById('sheet-close').focus({preventScroll:true});
-  if(!fromHash) history.replaceState(null,'','#a/'+slug);
-}
-function closeArtist(){
-  currentArtist = null;
-  document.getElementById('sheet-back').classList.remove('open');
-  document.getElementById('sheet').classList.remove('open');
-  document.body.style.overflow = '';
-  if(location.hash.startsWith('#a/')) history.replaceState(null,'','#');
-}
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeArtist(); });
-window.addEventListener('hashchange', ()=>{
-  if(location.hash.startsWith('#a/')) openArtist(location.hash.slice(3), true);
-  else closeArtist();
-});
-
-// ============================================================
-// APPARITIONS AU DÉFILEMENT
-// ============================================================
-function initReveals(){
-  const els = document.querySelectorAll('.reveal');
-  if(!('IntersectionObserver' in window)){ els.forEach(e=>e.classList.add('in')); return; }
-  const io = new IntersectionObserver(entries=>{
-    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
-  },{threshold:.08});
-  els.forEach(e=>io.observe(e));
-}
-
-// ============================================================
-// MAP
-// ============================================================
-function initMap(){
-  const vh = VENUES.vanhorne;
-  map = L.map('map',{scrollWheelZoom:false}).setView([vh.lat, vh.lng], 13);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
-    attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19
-  }).addTo(map);
-  Object.entries(VENUES).forEach(([key,v])=>{
-    const sz = v.main?24:16;
-    const icon = L.divIcon({
-      className:'',
-      html:`<div style="width:${sz}px;height:${sz}px;background:#22ff62;border:2px solid #000;
-             ${v.main?'box-shadow:0 0 0 3px #000;animation:blink 1.6s infinite;':''}"></div>`,
-      iconSize:[sz,sz], iconAnchor:[sz/2,sz/2]
+let aDay='all',aSite='all';
+function setADay(d,btn){aDay=d;document.querySelectorAll('#page-artistes .tabx').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderA();}
+function setASite(s,btn){aSite=s;document.querySelectorAll('#page-artistes .fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderA();}
+function renderA(){
+  const days=aDay==='all'?['29','30','01','02','03','04']:[aDay];
+  let html='',total=0,conf=0,pend=0,dur=0;
+  days.forEach(d=>{
+    let shows=SHOWS.filter(s=>s.day===d);
+    if(aSite!=='all')shows=shows.filter(s=>s.site===aSite);
+    if(!shows.length)return;
+    total+=shows.length;shows.forEach(s=>{if(s.status==='conf')conf++;if(s.status==='pend')pend++;dur+=s.dur;});
+    html+=`<div class="day-section"><div class="dhead">${DN[d]}</div><div class="timeline">`;
+    shows.forEach((s,i)=>{
+      const id=`a${d}${i}`;const sc=SITES[s.site]||{c:'#888',bg:'rgba(255,255,255,.05)'};
+      const stCls=s.status==='conf'?'sc-conf':s.status==='pend'?'sc-pend':'sc-rev';
+      const stLbl=s.status==='conf'?'Confirmé':s.status==='pend'?'En attente':'En révision';
+      const stCol=s.status==='conf'?'#00ff41':s.status==='pend'?'#ffb400':'rgba(0,255,65,.6)';
+      html+=`<div class="slot" id="${id}"><div class="slot-main" onclick="togA('${id}')"><div class="stime">${s.time}</div><div class="sinfo"><div class="sartist">${s.artist}<span class="scountry">${s.country}</span></div><div class="swork">${s.title}</div></div><div class="sright"><span class="stag" style="background:${sc.bg};color:${sc.c};border:1px solid ${sc.c}20">${s.site}</span><div class="sstatbar ${stCls}"></div><span class="arr" id="aa${id}">▶</span></div></div><div class="slot-detail" id="ad${id}"><div><div class="dil">Durée</div><div class="div2">${s.dur} min</div></div><div><div class="dil">Statut</div><div class="div2" style="color:${stCol}">${stLbl}</div></div><div><div class="dil">Résolution</div><div class="div2">${s.res}</div></div><div><div class="dil">Projecteurs</div><div class="div2">${s.proj}</div></div><div><div class="dil">Audio</div><div class="div2">${s.audio?'Oui':'Non'}</div></div><div><div class="dil">Technicien</div><div class="div2">${s.tech}</div></div><div class="di-full"><div class="dil">Contact</div><div class="div2">${s.contact}</div></div></div></div>`;
     });
-    const mk = L.marker([v.lat,v.lng],{icon}).addTo(map);
-    mk.bindPopup(`<b>${v[lang]}</b><br>${v.addr}<br>
-      <a class="pop-dir" target="_blank" rel="noopener"
-         href="https://www.google.com/maps/dir/?api=1&destination=${v.lat},${v.lng}">
-         ${lang==='fr'?'Itinéraire':'Directions'} →</a>`);
-    markers[key] = mk;
+    html+='</div></div>';
   });
+  if(!total)html='<div class="nores">Aucune diffusion</div>';
+  document.getElementById('a-container').innerHTML=html;
+  document.getElementById('a-total').textContent=total;
+  document.getElementById('a-conf').textContent=conf;
+  document.getElementById('a-pend').textContent=pend;
+  const h=Math.floor(dur/60),m=dur%60;
+  document.getElementById('a-dur').textContent=h+'h'+(m?String(m).padStart(2,'0'):'');
 }
-let activeVenue = null;
-function filterVenue(key) {
-  activeVenue = (activeVenue === key) ? null : key;
-  // Chips — toujours visibles, juste indiquer lequel est actif
-  document.querySelectorAll('.legend-chip[data-venue]').forEach(c => {
-    c.classList.toggle('active', c.dataset.venue === activeVenue);
+function togA(id){const d=document.getElementById('ad'+id),a=document.getElementById('aa'+id),s=document.getElementById(id),o=d.classList.contains('open');d.classList.toggle('open',!o);a.classList.toggle('open',!o);s.classList.toggle('exp',!o);}
+
+let sView='cal',sDay='all',sRole='all';
+const srf=document.getElementById('s-role-filters');
+Object.entries(ROLES).forEach(([r,ro])=>{
+  const b=document.createElement('button');b.className='fbtn';
+  b.innerHTML=`<span class="fdot" style="background:${ro.c}"></span>${r}`;
+  b.onclick=()=>setSRole(r,b);srf.appendChild(b);
+});
+function setSView(v,btn){
+  sView=v;
+  document.querySelectorAll('#page-staff .tab-row:first-of-type .tabx').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.getElementById('s-day-tabs').style.display=v==='liste'?'flex':'none';
+  document.getElementById('s-cal-panel').style.display=v==='cal'?'block':'none';
+  document.getElementById('s-list-panel').style.display=v==='liste'?'block':'none';
+  renderS();
+}
+function setSDay(d,btn){sDay=d;document.querySelectorAll('#s-day-tabs .tabx').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderS();}
+function setSRole(r,btn){sRole=r;document.querySelectorAll('#s-role-filters .fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderS();}
+function renderS(){
+  const filtered=STAFF.filter(p=>sRole==='all'||p.role===sRole);
+  let shifts=0;const seen=new Set();
+  filtered.forEach(p=>p.shifts.forEach(s=>{shifts++;seen.add(p.id);}));
+  document.getElementById('s-total').textContent=filtered.length;
+  document.getElementById('s-active').textContent=seen.size;
+  document.getElementById('s-shifts').textContent=shifts;
+  if(sView==='cal')renderCal(filtered);else renderList(filtered);
+}
+function renderCal(staff){
+  const grid=document.getElementById('cal-grid');
+  const dnames={'29':'Mardi','30':'Mercredi','01':'Jeudi','02':'Vendredi','03':'Samedi','04':'Dimanche'};
+  let html='';
+  ['29','30','01','02','03','04'].forEach(d=>{
+    const monthLabel=d==='29'||d==='30'?'septembre 2026':'octobre 2026';
+    html+=`<div class="cal-day"><div class="cal-day-header"><span class="cal-day-num">${d}</span><span class="cal-day-name">${dnames[d]} · ${monthLabel}</span></div><div class="cal-events">`;
+    const working=staff.filter(p=>p.shifts.some(s=>s.d===d));
+    const offCount=staff.length-working.length;
+    working.forEach(p=>{
+      const sh=p.shifts.find(s=>s.d===d);
+      const ro=ROLES[p.role]||{c:'#888',bg:'rgba(255,255,255,.05)'};
+      html+=`<div class="cal-event" style="background:${ro.bg};border-left-color:${ro.c}"><div class="cal-event-name" style="color:${ro.c}">${p.name}</div><div class="cal-event-time">${sh.in} – ${sh.out}</div><div class="cal-event-site">${sh.site}</div></div>`;
+    });
+    if(offCount>0)html+=`<div class="cal-off-count">${offCount} membre${offCount>1?'s':''} en congé</div>`;
+    html+='</div></div>';
   });
-  // Cards — estomper celles des autres lieux
-  document.querySelectorAll('.card[data-venue]').forEach(card => {
-    card.classList.toggle('dim', !!activeVenue && card.dataset.venue !== activeVenue);
+  grid.innerHTML=html;
+}
+function renderList(staff){
+  const days=sDay==='all'?['29','30','01','02','03','04']:[sDay];
+  let html='';
+  days.forEach(d=>{
+    const rows=[];
+    staff.forEach(p=>p.shifts.filter(s=>s.d===d).forEach(s=>rows.push({...s,name:p.name,role:p.role})));
+    if(!rows.length)return;
+    rows.sort((a,b)=>a.in.localeCompare(b.in));
+    html+=`<div class="day-section"><div class="dhead">${DN[d]} — ${rows.length} quarts</div><div class="staff-grid"><div class="srow hdr"><div class="sc2 hd">Nom</div><div class="sc2 hd">Rôle</div><div class="sc2 hd">Site</div><div class="sc2 hd">Arrivée</div><div class="sc2 hd">Départ</div></div>`;
+    rows.forEach(r=>{
+      const ro=ROLES[r.role]||{c:'#888',bg:'rgba(255,255,255,.05)'};
+      html+=`<div class="srow"><div class="sc2 nm">${r.name}</div><div class="sc2"><span class="rpill" style="background:${ro.bg};color:${ro.c}">${r.role}</span></div><div class="sc2 sitecell">${r.site}</div><div class="sc2 tcell">${r.in}</div><div class="sc2 tcell" style="color:rgba(255,255,255,.35)">${r.out}</div></div>`;
+    });
+    html+='</div></div>';
   });
-  // Colonnes — estomper le header si aucun event visible ce jour
-  document.querySelectorAll('.gcol').forEach(col => {
-    col.classList.toggle('dim', !!activeVenue && !col.querySelector('.card:not(.dim)'));
-  });
+  if(!html)html='<div class="nores">Aucun quart pour cette sélection</div>';
+  document.getElementById('s-list-container').innerHTML=html;
 }
-function focusVenue(key){
-  const v = VENUES[key];
-  document.getElementById('carte').scrollIntoView({behavior:'smooth'});
-  setTimeout(()=>{ map.setView([v.lat,v.lng], 15, {animate:true}); markers[key].openPopup(); }, 450);
-}
-function renderLegend(){
-  document.getElementById('map-legend').innerHTML = Object.entries(VENUES).map(([key,v])=>`
-    <span class="map-chip ${v.main?'hot':''}" onclick="focusVenue('${key}')">${v.main?'★ ':''}${v[lang]}</span>`).join('');
-}
+renderA();renderS();
 
-// ============================================================
-// HERO VIDEO — lecture simple, sans filtre par défaut
-// ============================================================
-function initHeroVideo(){
-  const vid = document.getElementById('hero-video');
-  if(!vid) return;
-  vid.play().catch(()=>{});
-  document.addEventListener('touchstart', ()=>vid.play().catch(()=>{}), {once:true, passive:true});
+// ══════════ MINUTAGE (Excel Google Drive via /api/minutage) ══════════
+let mData=null,mDay=null,mLoading=false;
+const mesc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function mSiteTag(ou){
+  // Mappe le champ "Où" du Excel vers les couleurs de sites du programme
+  if(/van\s*horne|svh/i.test(ou)) return {label:ou,...SITES['Skatepark Van Horne']};
+  if(/moment|(^|[^a-z])mf([^a-z]|$)/i.test(ou)) return {label:ou,...SITES['Moment Factory']};
+  if(/caserne|c26/i.test(ou)) return {label:ou,...SITES['Caserne 26']};
+  return {label:ou,c:'#555',bg:'rgba(0,0,0,.05)'};
 }
 
-// ============================================================
-// HALFTONE — champ tramé génératif (encre sur papier), activé
-// à la demande via l'icône ◆ en haut à droite de la vidéo
-// ============================================================
-let htOn = false, htRAF = null, htReady = false;
-let ht = {}; // ctx, W, H, dpr, cols, rows, lum, off, octx, px, py
-
-function toggleHalftone(){
-  if(htOn) stopHalftone(); else startHalftone();
-}
-
-// son joué à l'activation de l'effet trame (coupé à la désactivation)
-function playToggleSound(){
-  const snd = document.getElementById('halftone-sound');
-  if(!snd) return;
-  try{ snd.currentTime = 0; snd.play().catch(()=>{}); }catch(e){}
-}
-function stopToggleSound(){
-  const snd = document.getElementById('halftone-sound');
-  if(!snd) return;
-  try{ snd.pause(); snd.currentTime = 0; }catch(e){}
-}
-
-function setHaltoneBtnLabel(){
-  const btn = document.getElementById('halftone-toggle');
-  if(!btn) return;
-  btn.setAttribute('aria-pressed', htOn ? 'true' : 'false');
-  const key = htOn ? (lang+'-on') : (lang+'-off');
-  const label = htOn
-    ? (lang==='fr' ? "Effet trame activé — cliquer pour revenir à la vidéo" : "Halftone effect on — click to return to video")
-    : (lang==='fr' ? "Activer l'effet trame" : "Turn on halftone effect");
-  btn.setAttribute('aria-label', label);
-  btn.title = label;
-}
-
-function initHalftoneCanvas(){
-  const cv = document.getElementById('halftone-canvas');
-  if(!cv) return null;
-  ht.ctx = cv.getContext('2d');
-  function resize(){
-    ht.dpr = Math.min(window.devicePixelRatio||1, 2);
-    ht.W = cv.clientWidth; ht.H = cv.clientHeight;
-    cv.width = ht.W*ht.dpr; cv.height = ht.H*ht.dpr;
-    ht.ctx.setTransform(ht.dpr,0,0,ht.dpr,0,0);
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  ht.off = document.createElement('canvas');
-  ht.octx = ht.off.getContext('2d', {willReadFrequently:true});
-  ht.lum = null; ht.cols = 0; ht.rows = 0;
-  ht.px = -1e4; ht.py = -1e4;
-
-  function setPointer(clientX, clientY){
-    const r = cv.getBoundingClientRect();
-    ht.px = clientX - r.left; ht.py = clientY - r.top;
-  }
-  cv.addEventListener('pointermove', e=>setPointer(e.clientX, e.clientY));
-  cv.addEventListener('pointerleave', ()=>{ ht.px = ht.py = -1e4; });
-  cv.addEventListener('touchmove', e=>{ setPointer(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
-  cv.addEventListener('touchend', ()=>{ ht.px = ht.py = -1e4; });
-
-  htReady = true;
-  return cv;
-}
-
-function sampleHeroVideo(){
-  const vid = document.getElementById('hero-video');
-  const GAP = 8;
-  if(!vid || vid.readyState < 2 || !vid.videoWidth){ ht.lum = null; return; }
-  ht.cols = Math.ceil(ht.W/GAP); ht.rows = Math.ceil(ht.H/GAP);
-  if(ht.off.width !== ht.cols || ht.off.height !== ht.rows){ ht.off.width = ht.cols; ht.off.height = ht.rows; }
-  const va = vid.videoWidth/vid.videoHeight, ca = ht.cols/ht.rows;
-  let sw = vid.videoWidth, sh = vid.videoHeight, sx = 0, sy = 0;
-  if(va > ca){ sw = vid.videoHeight*ca; sx = (vid.videoWidth-sw)/2; }
-  else       { sh = vid.videoWidth/ca; sy = (vid.videoHeight-sh)/2; }
+async function loadMinutage(force){
+  if(mLoading)return;
+  mLoading=true;
+  const box=document.getElementById('m-container');
+  if(!mData||force)box.innerHTML='<div class="nores">Chargement du minutage…</div>';
   try{
-    ht.octx.drawImage(vid, sx, sy, sw, sh, 0, 0, ht.cols, ht.rows);
-    ht.lum = ht.octx.getImageData(0, 0, ht.cols, ht.rows).data;
-  }catch(e){ ht.lum = null; }
-}
-
-function startHalftone(){
-  if(htOn) return;
-  if(!htReady && !initHalftoneCanvas()) return;
-  htOn = true;
-  const cv = document.getElementById('halftone-canvas');
-  const vid = document.getElementById('hero-video');
-
-  // recalcule les dimensions au cas où la mise en page ait changé
-  // depuis la première ouverture (ex. rotation d'écran, resize)
-  ht.dpr = Math.min(window.devicePixelRatio||1, 2);
-  ht.W = cv.clientWidth; ht.H = cv.clientHeight;
-  cv.width = ht.W*ht.dpr; cv.height = ht.H*ht.dpr;
-  ht.ctx.setTransform(ht.dpr,0,0,ht.dpr,0,0);
-
-  cv.classList.add('on'); cv.style.opacity = '1';
-  if(vid) vid.style.opacity = '0';
-  setHaltoneBtnLabel();
-  playToggleSound();
-
-  const GAP = 8;
-  // Note : on continue d'animer même si le système demande de réduire
-  // les animations (Windows « Afficher les animations » désactivé, etc.) —
-  // cet effet est déclenché volontairement par un clic, pas une animation
-  // ambiante automatique.
-  const R = 100, R2 = R*R;
-  let t = 0;
-
-  function frame(){
-    if(!htOn) return;
-    sampleHeroVideo();
-    const ctx = ht.ctx, W = ht.W, H = ht.H;
-    ctx.clearRect(0,0,W,H);
-    let cy = 0;
-    for(let y=GAP/2; y<H; y+=GAP, cy++){
-      let cxI = 0;
-      for(let x=GAP/2; x<W; x+=GAP, cxI++){
-        const nx = x/W, ny = y/H;
-        const wave = (Math.sin((nx*7)+t) * Math.cos((ny*5)-t*0.7)
-                    + Math.sin((nx*3 - ny*4)+t*0.5) + 2)/4;   // 0..1
-        let m, vr=0, vg=0, vb=0, useVid=false;
-        if(ht.lum){
-          const i = (Math.min(cy,ht.rows-1)*ht.cols + Math.min(cxI,ht.cols-1))*4;
-          vr=ht.lum[i]; vg=ht.lum[i+1]; vb=ht.lum[i+2]; useVid=true;
-          const l = (vr*0.2126 + vg*0.7152 + vb*0.0722)/255;
-          m = Math.min(1, Math.pow(l,0.75)*1.35 + wave*0.05);
-        } else {
-          m = wave;
-        }
-        const dx = x-ht.px, dy = y-ht.py, d2 = dx*dx+dy*dy;
-        let boost = 0;
-        if(d2 < R2){ boost = 1 - Math.sqrt(d2)/R; m = Math.min(1, m + boost*0.8); }
-        const r = Math.max(0, m*GAP*0.68);
-        if(r < 0.35) continue;
-        if(boost > 0.3 || m > 0.92){
-          ctx.fillStyle = 'rgba(34,255,98,'+ (0.55+m*0.45) +')';
-        } else if(useVid){
-          const cr = Math.min(255, vr*1.25+30), cg = Math.min(255, vg*1.25+30), cb = Math.min(255, vb*1.25+30);
-          ctx.fillStyle = 'rgba('+(cr|0)+','+(cg|0)+','+(cb|0)+','+(0.3+m*0.7)+')';
-        } else {
-          const g = 105 + Math.round(m*150);
-          ctx.fillStyle = 'rgba('+g+','+g+','+g+','+(0.18+m*0.72)+')';
-        }
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI*2);
-        ctx.fill();
-      }
+    if(!mData||force){
+      const r=await fetch('/api/minutage'+(force?'?t='+Date.now():''));
+      const j=await r.json();
+      if(!r.ok||j.error)throw new Error(j.error||('HTTP '+r.status));
+      mData=j;
+      // sélection par défaut : la feuille du jour pendant le festival, sinon la 1re
+      const today=new Date().toISOString().split('T')[0];
+      const hit=mData.days.find(d=>d.date===today);
+      mDay=hit?mData.days.indexOf(hit):0;
     }
-    t += 0.012;
-    htRAF = requestAnimationFrame(frame);
+    renderMTabs();renderM();
+  }catch(e){
+    box.innerHTML=`<div class="nores">⚠️ Minutage indisponible — ${mesc(e.message)}</div>`;
   }
-  frame();
+  mLoading=false;
 }
 
-function stopHalftone(){
-  if(!htOn) return;
-  htOn = false;
-  if(htRAF) cancelAnimationFrame(htRAF);
-  const cv = document.getElementById('halftone-canvas');
-  const vid = document.getElementById('hero-video');
-  if(cv){ cv.classList.remove('on'); cv.style.opacity = '0'; }
-  if(vid) vid.style.opacity = '1';
-  setHaltoneBtnLabel();
-  stopToggleSound();
+function renderMTabs(){
+  const t=document.getElementById('m-day-tabs');
+  let html=mData.days.map((d,i)=>{
+    const short=mesc(d.sheet.split('—')[0].trim());
+    return `<button class="tabx ${mDay===i?'active':''}" onclick="setMDay(${i},this)">${short}</button>`;
+  }).join('');
+  if(mData.rh)html+=`<button class="tabx ${mDay==='rh'?'active':''}" onclick="setMDay('rh',this)">Horaire RH</button>`;
+  t.innerHTML=html;
+  document.getElementById('m-days-count').textContent=mData.days.length;
+  document.getElementById('m-tasks-count').textContent=mData.days.reduce((n,d)=>n+d.rows.length,0);
+  document.getElementById('m-updated').textContent=new Date(mData.updated).toLocaleTimeString('fr-CA',{hour:'2-digit',minute:'2-digit'});
 }
 
-// ============================================================
-// INIT
-// ============================================================
-function boot(){
-  if(typeof L === 'undefined'){ return setTimeout(boot, 60); }
-  initMap();
-  initHeroVideo();
-  applyLang();
-  fitTitle();
-  initReveals();
-  if(location.hash.startsWith('#a/')) openArtist(location.hash.slice(3), true);
-}
-boot();
-
-// ── SW — version auto ──
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js?v=' + Math.floor(Date.now()/86400000))
-    .catch(()=>{});
+function setMDay(i,btn){
+  mDay=i;
+  document.querySelectorAll('#m-day-tabs .tabx').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderM();
 }
 
-// ── HAPTIQUE (iOS bloque vibrate — on détecte) ──
-const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent);
-function vib(ms) {
-  if (isIOS) return;
-  if (!navigator.vibrate) return;
-  try { navigator.vibrate(ms); } catch(e) {}
-}
-// Vibration au premier vrai touch (Android uniquement)
-document.addEventListener('touchstart', function onFirst() {
-  vib(18);
-  document.removeEventListener('touchstart', onFirst);
-}, {once: true, passive: true});
-
-// Haptique sur artistes
-const _oa = window.openArtist;
-if (typeof _oa === 'function') {
-  window.openArtist = function(...a) { vib(8); return _oa.apply(this, a); };
-}
-const _ca = window.closeArtist;
-if (typeof _ca === 'function') {
-  window.closeArtist = function(...a) { vib(6); return _ca.apply(this, a); };
-}
-
-// ── EASTER EGG — 5 taps sur le logo ──
-(function() {
-  let taps = 0, timer = null;
-  function doTap(e) {
-    e.stopPropagation();
-    if (e.type === 'touchend') e.preventDefault();
-    clearTimeout(timer);
-    taps++;
-    timer = setTimeout(() => { taps = 0; }, 2500);
-    const el = document.getElementById('brand-logo');
-    if (el) {
-      el.style.opacity = taps >= 3 ? '0.4' : '1';
-      setTimeout(() => { if(el) el.style.opacity = '1'; }, 100);
-    }
-    if (taps >= 5) {
-      taps = 0;
-      vib([15, 30, 15, 30, 80]);
-      launchLimeRain();
-    }
+function renderM(){
+  const box=document.getElementById('m-container');
+  if(mDay==='rh'&&mData.rh){
+    const rh=mData.rh;
+    const head=rh.days.map(d=>`<th colspan="2">${mesc(d)}</th>`).join('');
+    const sub=rh.days.map(()=>'<th>Arr.</th><th>Fin</th>').join('');
+    const body=rh.people.map(p=>{
+      const cells=p.horaires.map(([a,f])=>`<td class="m-h">${mesc(a)}</td><td class="m-h">${mesc(f)}</td>`).join('');
+      return `<tr><td>${mesc(p.nom)}</td><td>${mesc(p.role)}</td>${cells}</tr>`;
+    }).join('');
+    box.innerHTML=`<div class="day-section"><div class="dhead">${mesc(rh.title)}</div>
+      <div class="m-rh-scroll"><table class="m-rh">
+      <thead><tr><th rowspan="2">Personne</th><th rowspan="2">Rôle</th>${head}</tr><tr>${sub}</tr></thead>
+      <tbody>${body}</tbody></table></div></div>`;
+    return;
   }
-  function initEgg() {
-    const logo = document.getElementById('brand-logo');
-    if (!logo) { setTimeout(initEgg, 200); return; }
-    logo.style.cursor = 'pointer';
-    logo.style.userSelect = 'none';
-    logo.style.webkitUserSelect = 'none';
-    logo.addEventListener('touchend', doTap, {passive: false});
-    logo.addEventListener('click', doTap);
-  }
-  initEgg();
-  function launchLimeRain() {
-    const c = document.createElement('div');
-    c.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;';
-    document.body.appendChild(c);
-    ['●','◆','▲','★','✦','◉'].forEach(() => {
-      for (let i = 0; i < 14; i++) {
-        const el = document.createElement('span');
-        el.textContent = ['●','◆','▲','★','✦','◉'][Math.floor(Math.random()*6)];
-        el.style.cssText = `position:absolute;top:-30px;left:${Math.random()*100}%;color:#22ff62;font-size:${10+Math.random()*20}px;opacity:0;will-change:transform;animation:lime-fall ${1.8+Math.random()*1.6}s ${Math.random()*1.5}s ease-in forwards;`;
-        c.appendChild(el);
-      }
-    });
-    if (!document.getElementById('lime-kf')) {
-      const s = document.createElement('style');
-      s.id = 'lime-kf';
-      s.textContent = '@keyframes lime-fall{0%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}100%{opacity:0;transform:translateY(110vh) rotate(720deg) scale(.5)}}';
-      document.head.appendChild(s);
-    }
-    setTimeout(() => { if(c.parentNode) c.remove(); }, 4500);
-  }
-})();
-
-// ── FICHE ÉVÉNEMENT ──
-function openEvent(dayIdx, evIdx){
-  vib(8);
-  const day = DAYS[dayIdx], ev = day.events[evIdx];
-  const v = VENUES[ev.venue], c = ev[lang];
-  const dateFmt = lang==='fr'
-    ? day.wFr+' '+day.d+' '+day.moFr
-    : day.wEn+' '+day.d+' '+day.moEn;
-
-  const freeTag = ev.free
-    ? `<span style="display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:3px 8px;background:var(--lime);border:1px solid var(--black);margin-bottom:14px;">${lang==='fr'?'Gratuit · Entrée libre':'Free · All welcome'}</span><br>`
-    : '';
-
-  document.getElementById('ev-body').innerHTML = `
-    <div class="ev-header ${v.pat}">
-      <span>${c.t}</span>
-    </div>
-    <div style="padding:20px 18px 28px;">
-      <span class="ev-time">${dateFmt} · ${ev.time}</span>
-      <h2 style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
-      ${freeTag}
-      <p class="ev-desc">${c.d}</p>
-      <a class="ev-tix-link" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener">
-        🎟 ${lang==='fr'?'Réservez votre billet ici':'Reserve your ticket here'} →
-      </a>
-      <button class="ev-map-link" onclick="closeEvent();focusVenue('${ev.venue}')">
-        📍 ${v[lang]} <span style="opacity:.5;margin-left:4px;">→ voir sur la carte</span>
-      </button>
+  const day=mData.days[mDay]||mData.days[0];
+  const today=new Date().toISOString().split('T')[0];
+  const nowHM=new Date().toTimeString().slice(0,5);
+  let nowIdx=-1;
+  if(day.date===today)day.rows.forEach((r,i)=>{if((r.heure||'').slice(0,5)<=nowHM)nowIdx=i;});
+  let html=`<div class="day-section"><div class="dhead">${mesc(day.title)}</div><div class="timeline">`;
+  day.rows.forEach((r,i)=>{
+    const id=`m${mDay}x${i}`;
+    const tag=r.ou?mSiteTag(r.ou):null;
+    const tagHtml=tag?`<span class="stag" style="background:${tag.bg};color:${tag.c};border:1px solid ${tag.c}20">${mesc(tag.label)}</span>`:'';
+    html+=`<div class="slot ${i===nowIdx?'mnow':''}" id="${id}">
+      <div class="slot-main" onclick="togA('${id}')">
+        <div class="stime">${mesc((r.heure||'').slice(0,5))}</div>
+        <div class="sinfo"><div class="sartist">${mesc(r.tache)}</div>${r.qui?`<div class="swork">${mesc(r.qui)}</div>`:''}</div>
+        <div class="sright">${tagHtml}<span class="arr" id="aa${id}">▶</span></div>
+      </div>
+      <div class="slot-detail" id="ad${id}">
+        <div><div class="dil">Qui</div><div class="div2">${mesc(r.qui)||'—'}</div></div>
+        <div><div class="dil">Où</div><div class="div2">${mesc(r.ou)||'—'}</div></div>
+        <div class="di-full"><div class="dil">Matériel</div><div class="div2">${mesc(r.materiel)||'—'}</div></div>
+        <div class="di-full"><div class="dil">Notes</div><div class="div2">${mesc(r.notes)||'—'}</div></div>
+      </div>
     </div>`;
-
-  document.getElementById('ev-back').classList.add('open');
-  document.getElementById('ev-sheet').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  });
+  html+='</div></div>';
+  if(!day.rows.length)html=`<div class="nores">Feuille vide — à compléter dans le Excel</div>`;
+  box.innerHTML=html;
 }
 
-function closeEvent(){
-  vib(6);
-  document.getElementById('ev-back').classList.remove('open');
-  document.getElementById('ev-sheet').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-// Escape ferme aussi ev-sheet
-document.addEventListener('keydown', e=>{
-  if(e.key==='Escape') closeEvent();
-});
-
+// Charger le minutage à la 1re ouverture de la page
+const _setPage=setPage;
+setPage=function(p,btn){_setPage(p,btn);if(p==='minutage'&&!mData)loadMinutage();};
 </script>
 </body>
 </html>
