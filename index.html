@@ -57,6 +57,15 @@
   --mono:'JetBrains Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
+:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+.card:focus-visible{outline-offset:-3px}
+.skip-link{
+  position:absolute;left:12px;top:-60px;z-index:10000;
+  background:var(--lime);color:var(--black);
+  font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:10px 16px;text-decoration:none;transition:top .15s;
+}
+.skip-link:focus{top:12px}
 h1,h3,h4,.f-logo,.ghead .num,.live-badge,.marquee-track span{font-synthesis:none}
 html{scroll-behavior:smooth}
 body{
@@ -139,6 +148,13 @@ nav{
 .eyebrow::before{content:'';display:inline-block;width:10px;height:10px;background:var(--lime);border:1px solid var(--black);margin-right:10px;vertical-align:baseline}
 .hero .eyebrow{color:var(--lime);margin-bottom:16px}
 .hero .eyebrow::before{border-color:var(--lime)}
+
+/* ── 10 ans ── */
+.dixans-txt{font-family:var(--font);font-size:16px;line-height:1.7;color:rgba(255,255,255,.82);max-width:640px;margin-bottom:30px}
+.dixans-stats{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid #2a2a2a}
+.dixans-stat{flex:1 1 140px;padding:20px 16px;border-right:1px solid #2a2a2a;border-bottom:1px solid #2a2a2a}
+.dixans-stat b{font-family:var(--cond);font-weight:500;font-size:clamp(28px,4vw,44px);color:var(--lime);display:block;line-height:1}
+.dixans-stat span{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#999;display:block;margin-top:6px}
 
 /* ── Hero ────────────────────────────────────────── */
 .hero{
@@ -392,7 +408,7 @@ nav{
   letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:10px;
 }
 .ev-sheet .ev-map-link{
-  display:inline-flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;margin-top:14px;margin-right:8px;margin-bottom:4px;cursor:pointer;
   font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
   border:1px solid var(--black);padding:8px 12px;transition:.12s;background:none;
   color:var(--black);
@@ -492,6 +508,54 @@ nav{
 footer{padding:48px 18px 60px;text-align:center;background:var(--black);color:var(--white)}
 footer p{font-family:var(--mono);font-size:11px;color:#9a9a9a;margin-top:12px;letter-spacing:.06em;text-transform:uppercase;line-height:1.8}
 footer a{color:var(--lime);text-decoration:none}
+.f-links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.f-links a{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid transparent;padding-bottom:2px}
+.f-links a:hover{border-color:var(--lime)}
+.f-legal{color:#666!important;font-size:10px!important;margin-top:22px!important}
+
+/* ── Infolettre ── */
+.nl-intro{font-family:var(--font);font-size:15px;line-height:1.6;color:rgba(0,0,0,.72);margin-bottom:18px;max-width:480px}
+.nl-form{display:flex;gap:0;max-width:440px;flex-wrap:wrap}
+.nl-form input{
+  flex:1 1 220px;border:1px solid var(--black);border-right:none;padding:13px 14px;
+  font-family:var(--mono);font-size:13px;background:var(--white);color:var(--black);
+}
+.nl-form input:focus{outline:none;background:#fafff4}
+.nl-form button{
+  flex:0 0 auto;border:1px solid var(--black);background:var(--black);color:var(--white);
+  font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  padding:13px 20px;cursor:pointer;transition:.12s;
+}
+.nl-form button:hover{background:var(--lime);color:var(--black);border-color:var(--lime)}
+.nl-msg{margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--grey);min-height:1.2em}
+.nl-msg.ok{color:#0a8a3a;font-weight:700}
+
+/* ── CTA billets flottant (mobile uniquement) ── */
+.sticky-tix{
+  position:fixed;left:0;right:0;bottom:0;z-index:250;
+  display:none;align-items:center;justify-content:center;gap:10px;
+  background:var(--lime);color:var(--black);border-top:1px solid var(--black);
+  padding:13px 18px;font-family:var(--mono);font-weight:700;font-size:13px;
+  letter-spacing:.06em;text-transform:uppercase;text-decoration:none;
+  transform:translateY(100%);transition:transform .25s ease;
+  padding-bottom:calc(13px + env(safe-area-inset-bottom));
+}
+.sticky-tix.show{transform:translateY(0)}
+@media(max-width:640px){.sticky-tix{display:flex}}
+
+/* ── Partenaires / commanditaires (placeholders, faciles à remplacer) ── */
+.sponsors-grid{display:flex;flex-wrap:wrap;border-top:1px solid var(--black);border-left:1px solid var(--black)}
+.sponsor-box{
+  flex:1 1 160px;min-width:140px;aspect-ratio:2/1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  border-right:1px solid var(--black);border-bottom:1px solid var(--black);
+  padding:14px;background:var(--white);transition:background .12s;
+}
+.sponsor-box:hover{background:#f4f4f4}
+.sponsor-box img{max-width:100%;max-height:52px;object-fit:contain;filter:grayscale(1);opacity:.7;transition:.15s}
+.sponsor-box:hover img{filter:grayscale(0);opacity:1}
+.sponsor-ph{width:24px;height:24px;fill:var(--grey-light)}
+.sponsor-box span{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);text-align:center;line-height:1.4}
 
 .hide{display:none!important}
 
@@ -531,6 +595,7 @@ footer a{color:var(--lime);text-decoration:none}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#prog" data-fr="Aller au contenu" data-en="Skip to content">Aller au contenu</a>
 
 <!-- LOADER -->
 <div id="page-loader">
@@ -623,6 +688,16 @@ footer a{color:var(--lime);text-decoration:none}
   </div>
 </section>
 
+<!-- 10 ANS ── chiffres à ajuster (placeholders raisonnables pour l'instant) -->
+<section class="sec" id="dixans" style="background:var(--black);color:var(--white);border-bottom:1px solid var(--black)">
+  <div class="sec-inner narrow">
+    <div class="eyebrow" data-fr="10 ans de MAPP" data-en="10 years of MAPP" style="color:var(--lime)">10 ans de MAPP</div>
+    <p class="dixans-txt" data-fr="Depuis 2016, MAPP_MTL transforme l'espace public montréalais par la projection et l'art numérique. Dix éditions plus tard, le festival continue de rassembler artistes, quartiers et publics autour de la lumière."
+       data-en="Since 2016, MAPP_MTL has been transforming Montreal's public space through projection and digital art. Ten editions later, the festival keeps bringing together artists, neighbourhoods and audiences around light.">Depuis 2016, MAPP_MTL transforme l'espace public montréalais par la projection et l'art numérique. Dix éditions plus tard, le festival continue de rassembler artistes, quartiers et publics autour de la lumière.</p>
+    <div class="dixans-stats reveal" id="dixans-stats"></div>
+  </div>
+</section>
+
 <!-- FICHE ARTISTE (overlay) -->
 <div class="ev-back" id="ev-back" onclick="closeEvent()"></div>
 <div class="ev-sheet" id="ev-sheet" role="dialog" aria-modal="true">
@@ -682,6 +757,33 @@ footer a{color:var(--lime);text-decoration:none}
   </div>
 </section>
 
+<!-- PARTENAIRES / COMMANDITAIRES ─────────────────────────────
+     Pour remplacer un placeholder par un vrai logo : dans le
+     tableau SPONSORS (JS, section DATA), mettre logo:"/img/partenaires/nom-fichier.png"
+     au lieu de logo:null. La case s'adapte automatiquement. ── -->
+<section class="sec" id="partenaires">
+  <div class="sec-inner">
+    <div class="eyebrow" data-fr="Ils rendent MAPP possible" data-en="They make MAPP possible">Ils rendent MAPP possible</div>
+    <div class="sponsors-grid" id="sponsors-grid"></div>
+  </div>
+</section>
+
+<!-- INFOLETTRE ── formulaire côté client seulement pour l'instant.
+     TODO (Kim) : brancher sur un vrai service (Mailchimp, Zeffy, etc.)
+     en remplaçant handleNewsletter() par un appel à ce service. ── -->
+<section class="sec" id="infolettre">
+  <div class="sec-inner narrow">
+    <div class="eyebrow" data-fr="Restez informés" data-en="Stay in the loop">Restez informés</div>
+    <p class="nl-intro" data-fr="Programmation, artistes et annonces de dernière minute — directement dans votre boîte courriel."
+       data-en="Lineup, artists and last-minute announcements — straight to your inbox.">Programmation, artistes et annonces de dernière minute — directement dans votre boîte courriel.</p>
+    <form class="nl-form" id="nl-form" onsubmit="return handleNewsletter(event)">
+      <input type="email" id="nl-email" required placeholder="courriel@exemple.com" data-fr-ph="courriel@exemple.com" data-en-ph="email@example.com" aria-label="Adresse courriel">
+      <button type="submit" data-fr="S'inscrire →" data-en="Subscribe →">S'inscrire →</button>
+    </form>
+    <p class="nl-msg" id="nl-msg" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
 <footer>
   <svg class="logo f-mark" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MAPP_MTL">
     <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
@@ -692,7 +794,12 @@ footer a{color:var(--lime);text-decoration:none}
     <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
   </svg>
   <p data-fr="Festival de projection et d'art numérique · Montréal · 2026" data-en="Projection and digital art festival · Montréal · 2026">Festival de projection et d'art numérique · Montréal · 2026</p>
-  <p><a href="https://www.mappmtl.com" target="_blank" rel="noopener">WWW.MAPPMTL.COM</a></p>
+  <div class="f-links">
+    <a href="https://www.mappmtl.com" target="_blank" rel="noopener">mappmtl.com</a>
+    <a href="https://www.instagram.com/mapp_mtl" target="_blank" rel="noopener">Instagram</a>
+    <a href="mailto:info@mappmtl.com">info@mappmtl.com</a>
+  </div>
+  <p class="f-legal" data-fr="© 2026 MAPP_MTL · Un projet d'ASIASIE · Tous droits réservés" data-en="© 2026 MAPP_MTL · An ASIASIE project · All rights reserved">© 2026 MAPP_MTL · Un projet d'ASIASIE · Tous droits réservés</p>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -744,6 +851,17 @@ footer a{color:var(--lime);text-decoration:none}
 // ============================================================
 // DATA
 // ============================================================
+// Partenaires/commanditaires — placeholders. Pour afficher un vrai logo,
+// remplacer logo:null par logo:"/img/partenaires/nom-fichier.png".
+const SPONSORS = [
+  { name:"Commanditaire 1", logo:null },
+  { name:"Commanditaire 2", logo:null },
+  { name:"Commanditaire 3", logo:null },
+  { name:"Commanditaire 4", logo:null },
+  { name:"Commanditaire 5", logo:null },
+  { name:"Commanditaire 6", logo:null },
+];
+
 const VENUES = {
   vanhorne:{ fr:"Skatepark Van Horne", en:"Van Horne Skatepark", addr:"5855 boul. Saint-Laurent", lat:45.5280967, lng:-73.6032037, main:true,  pat:"p-lime"  },
   moment:{   fr:"Moment Factory",      en:"Moment Factory",      addr:"6250 av. du Parc",        lat:45.5262469, lng:-73.6119544,             pat:"p-black" },
@@ -843,11 +961,13 @@ function applyLang(){
   document.documentElement.lang = lang;
   document.getElementById('lang-btn').textContent = lang === 'fr' ? 'EN' : 'FR';
   document.querySelectorAll('[data-fr]').forEach(el=>{ el.textContent = el.dataset[lang]; });
+  document.querySelectorAll('[data-fr-ph]').forEach(el=>{ el.setAttribute('placeholder', el.dataset[lang+'Ph']); });
   renderMarquee();
   renderVenueLegend();
   renderGrid();
   renderArtists();
   renderLegend();
+  renderDixansStats();
   renderHeroStatus();
   setHaltoneBtnLabel();
   if(currentArtist) openArtist(currentArtist.slug, true);
@@ -911,10 +1031,15 @@ setInterval(renderHeroStatus, 30000);
 // PROGRAM — grille 6 jours
 // ============================================================
 function renderVenueLegend(){
-  document.getElementById('venue-legend').innerHTML = Object.entries(VENUES).map(([key,v])=>`
+  const chips = Object.entries(VENUES).map(([key,v])=>`
     <span class="legend-chip" data-venue="${key}" onclick="filterVenue('${key}')">
       <span class="legend-sw ${v.pat}"></span>${v[lang]}
     </span>`).join('');
+  const freeChip = `
+    <span class="legend-chip legend-chip-free" id="free-chip" onclick="toggleFreeOnly()">
+      <span class="legend-sw" style="background:var(--lime)"></span>${lang==='fr'?'Gratuit seulement':'Free only'}
+    </span>`;
+  document.getElementById('venue-legend').innerHTML = chips + freeChip;
 }
 
 function renderGrid(){
@@ -923,7 +1048,7 @@ function renderGrid(){
     const cards = day.events.map((ev,evIdx)=>{
       const v = VENUES[ev.venue]; const c = ev[lang];
       return `
-      <div class="card ${v.pat}" data-venue="${ev.venue}" onclick="openEvent(${dayIdx},${evIdx})" style="cursor:pointer">
+      <div class="card ${v.pat}" data-venue="${ev.venue}" data-free="${ev.free?'1':'0'}" onclick="openEvent(${dayIdx},${evIdx})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEvent(${dayIdx},${evIdx})}" style="cursor:pointer" tabindex="0" role="button" aria-haspopup="dialog" aria-label="${c.t}, ${ev.time}, ${v[lang]}">
         ${ev.free?`<span class="free">${lang==='fr'?'Gratuit':'Free'}</span>`:''}
         <span class="time">${ev.time}</span>
         <h3>${c.t}</h3>
@@ -1087,20 +1212,29 @@ function initMap(){
   });
 }
 let activeVenue = null;
-function filterVenue(key) {
-  activeVenue = (activeVenue === key) ? null : key;
-  // Chips — toujours visibles, juste indiquer lequel est actif
+let freeOnly = false;
+function applyFilters(){
   document.querySelectorAll('.legend-chip[data-venue]').forEach(c => {
     c.classList.toggle('active', c.dataset.venue === activeVenue);
   });
-  // Cards — estomper celles des autres lieux
+  const freeChip = document.getElementById('free-chip');
+  if(freeChip) freeChip.classList.toggle('active', freeOnly);
   document.querySelectorAll('.card[data-venue]').forEach(card => {
-    card.classList.toggle('dim', !!activeVenue && card.dataset.venue !== activeVenue);
+    const hideVenue = !!activeVenue && card.dataset.venue !== activeVenue;
+    const hideFree = freeOnly && card.dataset.free !== '1';
+    card.classList.toggle('dim', hideVenue || hideFree);
   });
-  // Colonnes — estomper le header si aucun event visible ce jour
   document.querySelectorAll('.gcol').forEach(col => {
-    col.classList.toggle('dim', !!activeVenue && !col.querySelector('.card:not(.dim)'));
+    col.classList.toggle('dim', !!col.querySelector('.card') && !col.querySelector('.card:not(.dim)'));
   });
+}
+function filterVenue(key) {
+  activeVenue = (activeVenue === key) ? null : key;
+  applyFilters();
+}
+function toggleFreeOnly(){
+  freeOnly = !freeOnly;
+  applyFilters();
 }
 function focusVenue(key){
   const v = VENUES[key];
@@ -1110,6 +1244,57 @@ function focusVenue(key){
 function renderLegend(){
   document.getElementById('map-legend').innerHTML = Object.entries(VENUES).map(([key,v])=>`
     <span class="map-chip ${v.main?'hot':''}" onclick="focusVenue('${key}')">${v.main?'★ ':''}${v[lang]}</span>`).join('');
+}
+
+// Infolettre — TODO (Kim) : brancher sur un vrai service d'envoi
+// (Mailchimp, Brevo, Zeffy...) à la place de ce simple accusé visuel.
+function handleNewsletter(evt){
+  evt.preventDefault();
+  const input = document.getElementById('nl-email');
+  const msg = document.getElementById('nl-msg');
+  const email = input.value.trim();
+  if(!email){ return false; }
+  msg.textContent = lang==='fr' ? 'Merci ! Vous êtes inscrit·e.' : "Thanks! You're subscribed.";
+  msg.classList.add('ok');
+  input.value = '';
+  return false;
+}
+
+// 10 ans — chiffres à ajuster par Kim (placeholders raisonnables pour l'instant)
+const DIXANS_STATS = [
+  { n:"10", fr:"Éditions", en:"Editions" },
+  { n:"120+", fr:"Artistes présentés", en:"Artists featured" },
+  { n:"4", fr:"Lieux cette année", en:"Venues this year" },
+  { n:"50 000+", fr:"Spectateurs cumulés", en:"Cumulative attendees" },
+];
+// CTA billets flottant (mobile) — apparaît une fois le bouton du hero hors champ
+(function initStickyTix(){
+  const bar = document.getElementById('sticky-tix');
+  const anchor = document.querySelector('.hero-tix');
+  if(!bar || !anchor || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ bar.classList.toggle('show', !e.isIntersecting); });
+  }, { rootMargin: '0px 0px -85% 0px' });
+  io.observe(anchor);
+})();
+
+function renderDixansStats(){
+  const el = document.getElementById('dixans-stats');
+  if(!el) return;
+  el.innerHTML = DIXANS_STATS.map(s=>`
+    <div class="dixans-stat"><b>${s.n}</b><span>${lang==='fr'?s.fr:s.en}</span></div>`).join('');
+}
+
+function renderSponsors(){
+  const el = document.getElementById('sponsors-grid');
+  if(!el) return;
+  el.innerHTML = SPONSORS.map(s => s.logo
+    ? `<div class="sponsor-box" title="${s.name}"><img src="${s.logo}" alt="${s.name}"></div>`
+    : `<div class="sponsor-box" title="${s.name}">
+         <svg class="sponsor-ph" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 7.4H22l-6.1 4.4 2.3 7.4L12 16.8l-6.2 4.4 2.3-7.4L2 9.4h7.5z"/></svg>
+         <span>${s.name}</span>
+       </div>`
+  ).join('');
 }
 
 // ============================================================
@@ -1299,6 +1484,7 @@ function boot(){
   applyLang();
   fitTitle();
   initReveals();
+  renderSponsors();
   startHalftone(false); // effet trame activé par défaut ; l'icône permet de revenir à la vidéo
   if(location.hash.startsWith('#a/')) openArtist(location.hash.slice(3), true);
 }
@@ -1413,11 +1599,80 @@ function openEvent(dayIdx, evIdx){
       <button class="ev-map-link" onclick="closeEvent();focusVenue('${ev.venue}')">
         📍 ${v[lang]} <span style="opacity:.5;margin-left:4px;">→ voir sur la carte</span>
       </button>
+      <button class="ev-map-link" onclick="addToCalendar(${dayIdx},${evIdx})">
+        🗓️ ${lang==='fr'?"Ajouter à l'agenda":'Add to calendar'}
+      </button>
+      <button class="ev-map-link" onclick="shareEvent(${dayIdx},${evIdx})">
+        🔗 ${lang==='fr'?'Partager':'Share'}
+      </button>
     </div>`;
 
   document.getElementById('ev-back').classList.add('open');
   document.getElementById('ev-sheet').classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+
+// Convertit "19h00" / "17h — 22h" / "22h — 03h" en plage horaire exploitable
+function parseHM(s){
+  const m = s.trim().match(/(\d{1,2})\s*h\s*(\d{2})?/i);
+  if(!m) return null;
+  return { h: parseInt(m[1],10), m: m[2] ? parseInt(m[2],10) : 0 };
+}
+function eventDateRange(day, ev){
+  const parts = ev.time.split('—').map(s=>s.trim());
+  const start = parseHM(parts[0]) || {h:19,m:0};
+  const endHM = parts[1] ? parseHM(parts[1]) : null;
+  const [Y,M,D] = day.date.split('-').map(Number);
+  const startDate = new Date(Y, M-1, D, start.h, start.m, 0);
+  let endDate;
+  if(endHM){
+    endDate = new Date(Y, M-1, D, endHM.h, endHM.m, 0);
+    if(endDate <= startDate) endDate.setDate(endDate.getDate()+1); // passe minuit
+  } else {
+    endDate = new Date(startDate.getTime() + 3*3600*1000); // durée par défaut : 3h
+  }
+  return { startDate, endDate };
+}
+function icsEscape(s){ return String(s).replace(/([,;])/g,'\\$1').replace(/\n/g,'\\n'); }
+function toICSDate(d){
+  const p = n => String(n).padStart(2,'0');
+  return d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'T'+p(d.getHours())+p(d.getMinutes())+'00';
+}
+function addToCalendar(dayIdx, evIdx){
+  const day = DAYS[dayIdx], ev = day.events[evIdx];
+  const v = VENUES[ev.venue], c = ev[lang];
+  const { startDate, endDate } = eventDateRange(day, ev);
+  const loc = v[lang] + (v.addr ? ', '+v.addr : '');
+  const ics = [
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//MAPP_MTL//Festival 2026//FR','CALSCALE:GREGORIAN',
+    'BEGIN:VEVENT',
+    'UID:mapp2026-'+dayIdx+'-'+evIdx+'@mappmtl.com',
+    'DTSTAMP:'+toICSDate(new Date()),
+    'DTSTART:'+toICSDate(startDate),
+    'DTEND:'+toICSDate(endDate),
+    'SUMMARY:'+icsEscape(c.t),
+    'DESCRIPTION:'+icsEscape(c.d),
+    'LOCATION:'+icsEscape(loc),
+    'END:VEVENT','END:VCALENDAR'
+  ].join('\r\n');
+  const blob = new Blob([ics], {type:'text/calendar;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'mapp-mtl-'+day.date+'.ics';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+}
+function shareEvent(dayIdx, evIdx){
+  const day = DAYS[dayIdx], ev = day.events[evIdx];
+  const c = ev[lang];
+  const dateFmt = lang==='fr' ? (day.wFr+' '+day.d+' '+day.moFr) : (day.wEn+' '+day.d+' '+day.moEn);
+  const shareData = { title: 'MAPP_MTL 2026 — '+c.t, text: c.t+' · '+dateFmt+' · '+ev.time, url: location.href };
+  if(navigator.share){ navigator.share(shareData).catch(()=>{}); }
+  else if(navigator.clipboard){
+    navigator.clipboard.writeText(shareData.url).then(()=>{
+      alert(lang==='fr' ? 'Lien copié !' : 'Link copied!');
+    }).catch(()=>{});
+  }
 }
 
 function closeEvent(){
@@ -1433,5 +1688,7 @@ document.addEventListener('keydown', e=>{
 });
 
 </script>
+<a class="sticky-tix" id="sticky-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" data-fr="🎟 Réservez votre billet →" data-en="🎟 Reserve your ticket →">🎟 Réservez votre billet →</a>
+
 </body>
 </html>
