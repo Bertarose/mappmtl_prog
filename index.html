@@ -25,17 +25,61 @@
     }
     .skip-link:focus{top:12px}
 
+    /* ── LOADER — logo glitché, esprit signal vidéo analogique / mapping ── */
+    #page-loader{
+      position:fixed;inset:0;z-index:9999;background:#000;
+      display:flex;align-items:center;justify-content:center;
+      transition:opacity .5s ease;
+    }
+    #page-loader.loader-hide{opacity:0;pointer-events:none}
+    #page-loader::before{ /* trames scan (CRT) */
+      content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+      background:repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 3px);
+      mix-blend-mode:overlay;
+      animation:loader-scan 5s linear infinite;
+    }
+    #page-loader::after{ /* vignette légère */
+      content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+      background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55) 100%);
+    }
+    @keyframes loader-scan{from{background-position:0 0}to{background-position:0 60px}}
+
+    .loader-logo{position:relative;width:104px;height:104px;z-index:2}
+    .loader-logo .lg{position:absolute;inset:0;width:100%;height:100%;display:block;fill:currentColor;transition:transform .05s linear}
+    .loader-logo .lg-w{color:#fff;z-index:3}
+    .loader-logo .lg-r{color:#ff2b4d;z-index:1;mix-blend-mode:screen;opacity:0}
+    .loader-logo .lg-c{color:#22e0ff;z-index:2;mix-blend-mode:screen;opacity:0}
+
+    .loader-logo.glitch .lg-w{clip-path:inset(var(--gy1,0) 0 var(--gy2,0) 0);transform:translate(var(--gx,0),0) skewX(var(--gskew,0deg))}
+    .loader-logo.glitch .lg-r{opacity:.85;transform:translate(calc(-3px + var(--gx,0)),1px)}
+    .loader-logo.glitch .lg-c{opacity:.85;transform:translate(calc(3px + var(--gx,0)),-1px)}
+
+    @media (prefers-reduced-motion: reduce){
+      #page-loader::before{animation:none}
+    }
+
+    /* ── OTAlpha — auto-hébergée, même fichier que index.html.
+       Dépose /fonts/OTAlpha-Medium.woff2 (+ .woff en secours) à la racine. ── */
+    @font-face{
+      font-family:'OTAlpha';
+      src:url('/fonts/OTAlpha-Medium.woff2') format('woff2'),
+          url('/fonts/OTAlpha-Medium.woff') format('woff');
+      font-weight:500;
+      font-style:normal;
+      font-display:swap;
+    }
+
     :root {
       --black: #000;
       --white: #fff;
       --grey: #5f5f5f;
       --paper: #ffffff;
-      --font: 'Archivo', -apple-system, sans-serif;
-      --cond: 'Archivo Narrow', 'Archivo', sans-serif;
+      --font: 'OTAlpha', Arial, sans-serif;
+      --cond: 'OTAlpha', 'Archivo Narrow', 'Archivo', sans-serif;
       --mono: 'JetBrains Mono', monospace;
     }
 
-    html { background: var(--paper); color: var(--black); font-family: var(--font); }
+    html { background: var(--paper); color: var(--black); font-family: var(--font); font-weight: 400; line-height: 1; }
     body { min-height: 100vh; }
 
     /* ── MARQUEE ── */
@@ -71,21 +115,17 @@
     .brand { display: flex; align-items: center; gap: 10px; }
     .brand svg { width: 28px; height: 28px; color: #fff; display: block; fill: currentColor; }
     .brand span { font-family: var(--cond); font-size: 18px; font-weight: 700; color: #fff; letter-spacing: .08em; text-transform: uppercase; }
-    .nav-links{ display:flex; gap:26px; }
-    .nav-links a{
-      font-family:var(--font);font-size:13px;font-weight:500;color:#ccc;
-      text-decoration:none;letter-spacing:.01em;
-    }
-    .nav-links a:hover{color:#fff}
-    .nav-links a.current{color:#fff;text-decoration:underline;text-underline-offset:4px}
     .nav-right{display:flex;align-items:center;gap:14px}
     .nav-billet{
       font-family:var(--font);font-size:13px;font-weight:500;color:#fff;
       border:1px solid #fff;padding:6px 12px;text-decoration:none;transition:.12s;
     }
     .nav-billet:hover{background:#22ff62;border-color:#22ff62;color:var(--black)}
-    .nav-menu{font-family:var(--font);font-size:13px;font-weight:500;color:#fff;text-decoration:underline;text-underline-offset:4px}
-    @media(max-width:820px){ .nav-links{display:none} }
+    .lang-btn{
+      font-family:var(--mono);font-size:12px;font-weight:700;color:var(--black);
+      background:#fff;border:1px solid #fff;padding:6px 10px;cursor:pointer;transition:.12s;
+    }
+    .lang-btn:hover{background:#22ff62;border-color:#22ff62}
 
     /* ── HERO VIDÉO GÉANT (comme mappmtl.com) ── */
     .video-wrap {
@@ -233,7 +273,7 @@
     }
     .sec-label::before { content: ''; display: inline-block; width: 10px; height: 10px; background: var(--black); border: 1px solid var(--black); }
 
-    .desc { font-size: 14px; color: var(--black); line-height: 1.75; }
+    .desc { font-size: 18px; color: var(--black); line-height: 1.7; }
 
     /* ── DON ── */
     .don-box {
@@ -241,7 +281,7 @@
       display: flex; align-items: flex-start; gap: 14px;
     }
     .don-icon { font-size: 20px; flex-shrink: 0; line-height: 1; margin-top: 2px; }
-    .don-text { font-size: 13px; color: var(--grey); line-height: 1.65; }
+    .don-text { font-size: 15.5px; color: var(--grey); line-height: 1.7; }
     .don-text b { color: var(--black); font-weight: 700; }
     .don-text a { color: var(--black); text-decoration: underline; text-underline-offset: 3px; font-weight: 700; }
     .don-text a:hover { opacity: .6; }
@@ -282,7 +322,38 @@
   </style>
 </head>
 <body>
-<a class="skip-link" href="#main-desc">Aller au contenu</a>
+<a class="skip-link" href="#main-desc" data-fr="Aller au contenu" data-en="Skip to content">Aller au contenu</a>
+
+<!-- LOADER -->
+<div id="page-loader">
+  <div class="loader-logo" id="loader-logo">
+    <svg class="lg lg-r" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
+      <path d="M16.511,28.213l-3.718-15.266h-.051v15.266h-3.103V9.639h5.168l3.686,15.139h.051l3.688-15.139h5.168v18.574h-3.105v-15.266h-.051l-3.718,15.266h-4.014Z"/>
+      <path d="M9.639,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM17.964,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
+      <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
+    </svg>
+    <svg class="lg lg-c" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
+      <path d="M16.511,28.213l-3.718-15.266h-.051v15.266h-3.103V9.639h5.168l3.686,15.139h.051l3.688-15.139h5.168v18.574h-3.105v-15.266h-.051l-3.718,15.266h-4.014Z"/>
+      <path d="M9.639,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM17.964,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
+      <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
+    </svg>
+    <svg class="lg lg-w" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
+      <path d="M16.511,28.213l-3.718-15.266h-.051v15.266h-3.103V9.639h5.168l3.686,15.139h.051l3.688-15.139h5.168v18.574h-3.105v-15.266h-.051l-3.718,15.266h-4.014Z"/>
+      <path d="M9.639,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM17.964,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
+      <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
+    </svg>
+  </div>
+</div>
+
 
   <!-- MARQUEE -->
   <a class="marquee" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)" aria-label="Réserver un billet">
@@ -302,15 +373,9 @@
       </svg>
       <span>MAPP _MTL</span>
     </div>
-    <div class="nav-links">
-      <a href="#programme" class="current">ÉVÉNEMENTS</a>
-      <a href="https://www.mappmtl.com" target="_blank" rel="noopener">COLLABORONS</a>
-      <a href="#main-desc">FESTIVAL</a>
-      <a href="https://www.mappmtl.com" target="_blank" rel="noopener">CASERNE 26</a>
-    </div>
     <div class="nav-right">
-      <a class="nav-billet" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(8)">BILLETTERIE</a>
-      <a class="nav-menu" href="https://www.mappmtl.com" target="_blank" rel="noopener">MENU</a>
+      <a class="nav-billet" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(8)" data-fr="BILLETTERIE" data-en="TICKETS">BILLETTERIE</a>
+      <button type="button" class="lang-btn" id="lang-btn" onclick="toggleLang()">EN</button>
     </div>
   </nav>
 
@@ -332,18 +397,21 @@
   <!-- BANDEAU VERT — dates, compte à rebours, billetterie, réseaux -->
   <section class="intro">
     <div class="intro-inner">
-      <div class="eyebrow">MAPP_X · 10e édition</div>
-      <h1>10ème édition du Festival international de projection mapping</h1>
-      <div class="hero-dates"><b>29 sept — 3 oct 2026</b> · Montréal · Entrée gratuite</div>
-
-      <div class="countdown">
-        <div class="count-cell"><b id="dd">--</b><span>Jours</span></div>
-        <div class="count-cell"><b id="hh">--</b><span>Heures</span></div>
-        <div class="count-cell"><b id="mm">--</b><span>Min</span></div>
-        <div class="count-cell"><b id="ss">--</b><span>Sec</span></div>
+      <div class="eyebrow" data-fr="MAPP_X · 10e édition" data-en="MAPP_X · 10th edition">MAPP_X · 10e édition</div>
+      <h1 data-fr="10ème édition du Festival international de projection mapping" data-en="10th edition of the international projection mapping festival">10ème édition du Festival international de projection mapping</h1>
+      <div class="hero-dates">
+        <b data-fr="29 sept — 3 oct 2026" data-en="Sept 29 — Oct 3, 2026">29 sept — 3 oct 2026</b>
+        <span data-fr="· Montréal · Entrée gratuite" data-en="· Montreal · Free admission">· Montréal · Entrée gratuite</span>
       </div>
 
-      <a class="hero-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)">Réservez votre billet ici <span class="arrow">→</span></a>
+      <div class="countdown">
+        <div class="count-cell"><b id="dd">--</b><span data-fr="Jours" data-en="Days">Jours</span></div>
+        <div class="count-cell"><b id="hh">--</b><span data-fr="Heures" data-en="Hours">Heures</span></div>
+        <div class="count-cell"><b id="mm">--</b><span data-fr="Min" data-en="Min">Min</span></div>
+        <div class="count-cell"><b id="ss">--</b><span data-fr="Sec" data-en="Sec">Sec</span></div>
+      </div>
+
+      <a class="hero-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)"><span data-fr="Réservez votre billet ici" data-en="Reserve your ticket here">Réservez votre billet ici</span> <span class="arrow">→</span></a>
 
       <div class="socials">
         <a class="soc" href="https://www.instagram.com/mapp_mtl" target="_blank" rel="noopener">
@@ -365,11 +433,17 @@
   <!-- DESCRIPTION -->
   <section class="sec" id="main-desc">
     <div class="sec-inner">
-      <div class="sec-label">À propos</div>
-      <p class="desc">Du <strong>29 septembre au 3 octobre 2026</strong>, venez célébrer les <strong>10 ans du festival MAPP</strong> ! Un programme festif, entre projections mapping, performances de musiques électroniques, stands de nourriture, ateliers de création dans une ambiance de fête de quartier !</p>
+      <div class="sec-label" data-fr="À propos" data-en="About">À propos</div>
+      <p class="desc"
+         data-fr-html="Du <strong>29 septembre au 3 octobre 2026</strong>, venez célébrer les <strong>10 ans du festival MAPP</strong> ! Un programme festif, entre projections mapping, performances de musiques électroniques, stands de nourriture, ateliers de création dans une ambiance de fête de quartier !"
+         data-en-html="From <strong>September 29 to October 3, 2026</strong>, come celebrate <strong>10 years of the MAPP festival</strong>! A festive program mixing projection mapping, electronic music performances, food stands and creative workshops, all in a neighbourhood block-party atmosphere!"
+      >Du <strong>29 septembre au 3 octobre 2026</strong>, venez célébrer les <strong>10 ans du festival MAPP</strong> ! Un programme festif, entre projections mapping, performances de musiques électroniques, stands de nourriture, ateliers de création dans une ambiance de fête de quartier !</p>
       <div class="don-box">
         <div class="don-icon">💚</div>
-        <div class="don-text">
+        <div class="don-text"
+             data-fr-html="<b>Vous aimez le festival MAPP ? Soutenez-le pour qu'il continue d'exister.</b><br>Faites un don de 5 $ ou plus sur Zeffy pour contribuer à la suite.<br><br><a href=&quot;https://urls.fr/oh2IyQ&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>Faire un don →</a>"
+             data-en-html="<b>Do you love the MAPP festival? Support it so it can keep going.</b><br>Make a $5+ donation on Zeffy to help fund what's next.<br><br><a href=&quot;https://urls.fr/oh2IyQ&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;>Donate →</a>"
+        >
           <b>Vous aimez le festival MAPP ? Soutenez-le pour qu'il continue d'exister.</b><br>
           Faites un don de 5 $ ou plus sur Zeffy pour contribuer à la suite.<br><br>
           <a href="https://urls.fr/oh2IyQ" target="_blank" rel="noopener">Faire un don →</a>
@@ -381,17 +455,18 @@
   <!-- PROGRAMME -->
   <section class="sec" id="programme">
     <div class="sec-inner">
-      <div class="sec-label">Au programme</div>
+      <div class="sec-label" data-fr="Au programme" data-en="Program">Au programme</div>
       <div class="ev-grid">
         <div class="ev">
           <div class="ev-head"><div class="ev-dot"></div><div class="ev-name">Fête de quartier numérique</div></div>
-          <div class="ev-meta">📍 Du 1 au 3 octobre 2026 · Skatepark Van Horne</div>
-          <div class="ev-meta">🎟 Billets gratuits</div>
-          <a class="ev-cta" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)">Réserver ici →</a>
+          <div class="ev-meta" data-fr="📍 Du 1 au 3 octobre 2026 · Skatepark Van Horne" data-en="📍 Oct 1–3, 2026 · Skatepark Van Horne">📍 Du 1 au 3 octobre 2026 · Skatepark Van Horne</div>
+          <div class="ev-meta" data-fr="🎟 Billets gratuits" data-en="🎟 Free admission">🎟 Billets gratuits</div>
+          <a class="ev-cta" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)" data-fr="Réserver ici →" data-en="Reserve here →">Réserver ici →</a>
         </div>
         <div class="ev">
           <div class="ev-head"><div class="ev-dot"></div><div class="ev-name">MINUTE_MAPP</div></div>
-          <div class="ev-meta">📍 1 octobre 2026 · Skatepark Van Horne</div>
+          <div class="ev-meta" data-fr="📍 1 octobre 2026 · Skatepark Van Horne" data-en="📍 October 1, 2026 · Skatepark Van Horne">📍 1 octobre 2026 · Skatepark Van Horne</div>
+          <a class="ev-cta" href="https://www.mappmtl.com/evenement/mapp-x-i-minute-mapp-2026-i-1-oct-2026" target="_blank" rel="noopener" onclick="vib(10)" data-fr="Inscrivez-vous →" data-en="Sign up →">Inscrivez-vous →</a>
         </div>
       </div>
     </div>
@@ -407,24 +482,83 @@
       <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
       <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
     </svg>
-    <p data-fr="Festival de projection et d'art numérique · Montréal · 2026">Festival de projection et d'art numérique · Montréal · 2026</p>
+    <p data-fr="Festival de projection et d'art numérique · Montréal · 2026" data-en="Digital art and projection festival · Montréal · 2026">Festival de projection et d'art numérique · Montréal · 2026</p>
     <p><a href="https://www.mappmtl.com" target="_blank" rel="noopener">WWW.MAPPMTL.COM</a></p>
   </footer>
 
   <script>
+    // ============================================================
+    // LOADER — écran de chargement avec logo glitché (signal analogique)
+    // ============================================================
+    (function(){
+      const loader = document.getElementById('page-loader');
+      const logo = document.getElementById('loader-logo');
+      if(!loader || !logo) return;
+
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function burst(){
+        logo.style.setProperty('--gx', (Math.random()*8-4).toFixed(1)+'px');
+        logo.style.setProperty('--gskew', (Math.random()*3-1.5).toFixed(2)+'deg');
+        const y1 = Math.random()*40, y2 = Math.random()*40;
+        logo.style.setProperty('--gy1', y1.toFixed(0)+'%');
+        logo.style.setProperty('--gy2', y2.toFixed(0)+'%');
+        logo.classList.add('glitch');
+        setTimeout(()=>logo.classList.remove('glitch'), 70 + Math.random()*160);
+      }
+
+      let timer = null;
+      function loop(){
+        burst();
+        timer = setTimeout(loop, 500 + Math.random()*1400);
+      }
+      if(!reduceMotion) loop();
+
+      function hide(){
+        if(timer) clearTimeout(timer);
+        loader.classList.add('loader-hide');
+        setTimeout(()=>{ loader.style.display='none'; }, 550);
+      }
+      const MIN_DISPLAY = 700;
+      const start = Date.now();
+      function ready(){
+        const wait = Math.max(0, MIN_DISPLAY - (Date.now()-start));
+        setTimeout(hide, wait);
+      }
+      if(document.readyState === 'complete') ready();
+      else window.addEventListener('load', ready);
+      setTimeout(hide, 5000);
+    })();
+
+    // ── LANGUE ──
+    let lang = localStorage.getItem('mapp_lang') || 'fr';
+    function toggleLang(){
+      vib(6);
+      lang = lang === 'fr' ? 'en' : 'fr';
+      localStorage.setItem('mapp_lang', lang);
+      applyLang();
+    }
+    function applyLang(){
+      document.documentElement.lang = lang;
+      const btn = document.getElementById('lang-btn');
+      if(btn) btn.textContent = lang === 'fr' ? 'EN' : 'FR';
+      document.querySelectorAll('[data-fr]').forEach(el=>{ el.textContent = el.dataset[lang]; });
+      document.querySelectorAll('[data-fr-html]').forEach(el=>{ el.innerHTML = el.dataset[lang+'Html']; });
+      renderMarquee();
+      setHaltoneBtnLabel();
+    }
+
     // ── MARQUEE — bandeau animé, identique au site ──
-    (function renderMarquee(){
-      const items = [
-        "10ème ÉDITION",
-        "29 SEPT — 3 OCT 2026",
-        "FÊTE DE QUARTIER NUMÉRIQUE",
-        "ENTRÉE GRATUITE AU SKATEPARK VAN HORNE",
-        "🎟 RÉSERVEZ VOS BILLETS"
-      ];
+    const MARQUEE = {
+      fr: ["10ème ÉDITION","29 SEPT — 3 OCT 2026","FÊTE DE QUARTIER NUMÉRIQUE","ENTRÉE GRATUITE AU SKATEPARK VAN HORNE","🎟 RÉSERVEZ VOS BILLETS"],
+      en: ["10TH EDITION","SEPT 29 — OCT 3, 2026","DIGITAL NEIGHBOURHOOD BLOCK PARTY","FREE ADMISSION AT SKATEPARK VAN HORNE","🎟 RESERVE YOUR TICKETS"]
+    };
+    function renderMarquee(){
+      const items = MARQUEE[lang];
       const one = items.map(t=>`<span>${t} <span style="opacity:.55">↗</span></span>`).join('');
       const track = document.getElementById('marquee-track');
       if(track) track.innerHTML = one + one;
-    })();
+    }
 
     // ── VIDÉO HERO — lecture simple, sans filtre ──
     (function initHeroVideo(){
@@ -477,8 +611,8 @@
       if(!btn) return;
       btn.setAttribute('aria-pressed', htOn ? 'true' : 'false');
       const label = htOn
-        ? "Effet trame activé — cliquer pour revenir à la vidéo"
-        : "Activer l'effet trame";
+        ? (lang==='fr' ? "Effet trame activé — cliquer pour revenir à la vidéo" : "Halftone effect on — click to return to video")
+        : (lang==='fr' ? "Activer l'effet trame" : "Turn on halftone effect");
       btn.setAttribute('aria-label', label);
       btn.title = label;
     }
@@ -625,6 +759,9 @@
       document.getElementById('ss').textContent = pad(Math.floor(diff%60));
     }
     tick(); setInterval(tick, 1000);
+
+    // Applique la langue sauvegardée (ou FR par défaut) — peuple aussi la marquee
+    applyLang();
 
     // Effet trame activé par défaut ; l'icône permet de revenir à la vidéo
     startHalftone(false);
