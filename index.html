@@ -170,11 +170,11 @@
       background: linear-gradient(180deg, rgba(34,255,98,0) 0%, rgba(34,255,98,.7) 72%, #22ff62 100%);
     }
 
-    /* ── INTRO (bandeau vert continu après le hero) ── */
+    /* ── INTRO (fond noir, après le hero vidéo en dégradé vert) ── */
     .intro {
       position: relative;
-      background: #22ff62;
-      border-bottom: 1px solid var(--black);
+      background: var(--black);
+      border-bottom: 1px solid #2a2a2a;
       overflow: hidden;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: 44px 20px 40px;
@@ -184,61 +184,61 @@
 
     .eyebrow {
       display: flex; align-items: center; gap: 8px;
-      font-family: var(--mono); font-size: 10px; color: var(--black);
+      font-family: var(--mono); font-size: 10px; color: #22ff62;
       letter-spacing: .2em; text-transform: uppercase; margin-bottom: 14px; font-weight: 700;
     }
-    .eyebrow::before { content: ''; display: inline-block; width: 10px; height: 10px; background: var(--black); }
+    .eyebrow::before { content: ''; display: inline-block; width: 10px; height: 10px; background: #22ff62; }
 
     h1 {
       font-family: var(--cond); font-size: clamp(19px, 3.2vw, 32px); font-weight: 700;
-      color: var(--black); letter-spacing: -.01em; line-height: 1.15;
+      color: var(--white); letter-spacing: -.01em; line-height: 1.15;
       text-align: center; text-transform: uppercase; margin-bottom: 10px; max-width: 560px;
     }
 
     .hero-dates {
-      font-family: var(--mono); font-size: 16px; color: var(--black);
+      font-family: var(--mono); font-size: 16px; color: var(--white);
       letter-spacing: .1em; text-transform: uppercase;
       margin-bottom: 28px; text-align: center; font-weight: 700;
     }
 
     /* ── COMPTE À REBOURS ── */
-    .countdown { display: flex; gap: 0; margin-bottom: 28px; border: 1px solid var(--black); }
+    .countdown { display: flex; gap: 0; margin-bottom: 28px; border: 1px solid #3a3a3a; }
     .count-cell {
       display: flex; flex-direction: column; align-items: center;
       min-width: 74px; padding: 14px 10px 10px;
-      border-right: 1px solid var(--black);
+      border-right: 1px solid #3a3a3a;
     }
     .count-cell:last-child { border-right: none; }
-    .count-cell b { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--black); line-height: 1; display: block; }
-    .count-cell span { font-family: var(--mono); font-size: 9px; color: rgba(0,0,0,.65); letter-spacing: .18em; text-transform: uppercase; margin-top: 5px; }
+    .count-cell b { font-family: var(--mono); font-size: 32px; font-weight: 700; color: #22ff62; line-height: 1; display: block; }
+    .count-cell span { font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,.6); letter-spacing: .18em; text-transform: uppercase; margin-top: 5px; }
 
     /* ── CTA BILLETTERIE ── */
     .hero-tix {
       display: inline-flex; align-items: center; gap: 10px;
       font-family: var(--mono); font-weight: 700; font-size: 13px;
       letter-spacing: .08em; text-transform: uppercase;
-      background: transparent; color: var(--black);
-      border: 1px solid var(--black);
+      background: transparent; color: var(--white);
+      border: 1px solid var(--white);
       padding: 13px 22px; margin-bottom: 28px;
       text-decoration: none; transition: .15s;
     }
-    .hero-tix:hover { background: var(--black); color: #22ff62; border-color: var(--black); }
+    .hero-tix:hover { background: #22ff62; color: var(--black); border-color: #22ff62; }
     .hero-tix .arrow { transition: transform .15s; }
     .hero-tix:hover .arrow { transform: translateX(4px); }
 
     /* ── RÉSEAUX SOCIAUX ── */
-    .socials { display: flex; gap: 0; flex-wrap: wrap; justify-content: center; border: 1px solid var(--black); }
+    .socials { display: flex; gap: 0; flex-wrap: wrap; justify-content: center; border: 1px solid #3a3a3a; }
     .soc {
       display: flex; align-items: center; gap: 7px;
-      font-family: var(--mono); font-size: 10px; color: var(--black);
+      font-family: var(--mono); font-size: 10px; color: var(--white);
       letter-spacing: .1em; text-transform: uppercase;
-      border-right: 1px solid var(--black);
+      border-right: 1px solid #3a3a3a;
       padding: 10px 16px;
       transition: background .12s, color .12s;
       text-decoration: none;
     }
     .soc:last-child { border-right: none; }
-    .soc:hover { background: var(--black); color: #22ff62; }
+    .soc:hover { background: #22ff62; color: var(--black); }
     .soc svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 
     #halftone-canvas {
@@ -369,7 +369,7 @@
 
   <!-- NAV -->
   <nav>
-    <div class="brand">
+    <div class="brand" id="brand-logo">
       <svg viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg">
         <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
         <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
@@ -879,6 +879,66 @@ function startHalftone(playSound){
 
     // Effet trame activé par défaut ; l'icône permet de revenir à la vidéo
     startHalftone(false);
+
+    // ── EASTER EGG — 5 taps sur le logo ──
+    (function() {
+      let taps = 0, timer = null;
+      function doTap(e) {
+        e.stopPropagation();
+        if (e.type === 'touchend') e.preventDefault();
+        clearTimeout(timer);
+        taps++;
+        timer = setTimeout(() => { taps = 0; }, 2500);
+        const el = document.getElementById('brand-logo');
+        if (el) {
+          el.style.opacity = taps >= 3 ? '0.4' : '1';
+          setTimeout(() => { if(el) el.style.opacity = '1'; }, 100);
+        }
+        if (taps >= 5) {
+          taps = 0;
+          vib([30, 40, 30, 40, 30, 80, 30, 40, 30, 120]);
+          launchPageGlitch();
+        }
+      }
+      function initEgg() {
+        const logo = document.getElementById('brand-logo');
+        if (!logo) { setTimeout(initEgg, 200); return; }
+        logo.style.cursor = 'pointer';
+        logo.style.userSelect = 'none';
+        logo.style.webkitUserSelect = 'none';
+        logo.addEventListener('touchend', doTap, {passive: false});
+        logo.addEventListener('click', doTap);
+      }
+      initEgg();
+
+      function launchPageGlitch(){
+        const scan = document.createElement('div');
+        scan.style.cssText = 'position:fixed;inset:0;z-index:9998;pointer-events:none;'
+          +'background:repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0 1px, transparent 1px 3px);'
+          +'mix-blend-mode:overlay;';
+        document.body.appendChild(scan);
+        document.body.style.willChange = 'transform, filter';
+        const start = Date.now();
+        (function tick(){
+          const elapsed = Date.now() - start;
+          if (elapsed > 2000) {
+            document.body.style.transform = '';
+            document.body.style.filter = '';
+            document.body.style.willChange = '';
+            if (scan.parentNode) scan.remove();
+            return;
+          }
+          const gx = (Math.random()*16-8).toFixed(1);
+          const gy = (Math.random()*8-4).toFixed(1);
+          const skew = (Math.random()*3-1.5).toFixed(2);
+          const rShift = (Math.random()*7-3.5).toFixed(1);
+          const cShift = (Math.random()*7-3.5).toFixed(1);
+          document.body.style.transform = `translate(${gx}px,${gy}px) skew(${skew}deg)`;
+          document.body.style.filter = `contrast(${(1.1+Math.random()*0.5).toFixed(2)}) saturate(${(1.1+Math.random()*0.6).toFixed(2)}) drop-shadow(${rShift}px 0 #ff2b4d) drop-shadow(${cShift}px 0 #22e0ff)`;
+          setTimeout(tick, 55 + Math.random()*95);
+        })();
+      }
+    })();
 
     // ── SW ──
     if('serviceWorker' in navigator){

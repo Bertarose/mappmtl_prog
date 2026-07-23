@@ -124,7 +124,7 @@ nav{
 .brand{font-size:19px;font-weight:800;letter-spacing:-0.02em;display:flex;align-items:center;gap:10px}
 .brand span{color:var(--white)}
 .logo{display:block;fill:currentColor}
-.brand .logo{width:30px;height:30px;color:var(--white)}
+.brand .logo{width:46px;height:46px;color:var(--white)}
 .f-mark{width:76px;height:76px;margin:0 auto 6px;color:var(--white)}
 .nav-right{display:flex;gap:8px;align-items:center}
 .nav-link{
@@ -205,6 +205,12 @@ nav{
   display:block;opacity:0;pointer-events:none;transition:opacity .35s;
 }
 #halftone-canvas.on{pointer-events:auto}
+#ikeda-canvas{
+  position:absolute;inset:0;width:100%;height:100%;z-index:1;
+  display:block;opacity:0;pointer-events:none;transition:opacity .35s;
+  mix-blend-mode:screen;
+}
+#ikeda-canvas.on{opacity:1}
 .halftone-wrap .video-scrim{
   position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(180deg, rgba(0,0,0,.28) 0%, rgba(0,0,0,.18) 45%, rgba(0,0,0,.55) 100%);
@@ -215,13 +221,20 @@ nav{
 }
 .halftone-toggle{
   position:absolute;top:12px;right:12px;z-index:4;
-  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.4);color:var(--lime);
-  font-size:15px;line-height:1;cursor:pointer;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
+  width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.45);border:2px solid #faff00;color:#faff00;
+  font-size:16px;line-height:1;cursor:pointer;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
   transition:.15s;
+  animation:halftone-blink 1.1s steps(1,end) infinite;
 }
-.halftone-toggle:hover{background:var(--lime);color:var(--black);border-color:var(--lime)}
+.halftone-toggle:hover{background:#faff00;color:var(--black);border-color:#faff00}
 .halftone-toggle[aria-pressed="true"]{background:var(--lime);color:var(--black);border-color:var(--lime)}
+.halftone-toggle.interacted{animation:none}
+@keyframes halftone-blink{
+  0%,49%{background:#faff00;color:var(--black);border-color:#faff00;box-shadow:0 0 18px 4px rgba(250,255,0,.85)}
+  50%,100%{background:rgba(0,0,0,.45);color:#faff00;border-color:#faff00;box-shadow:0 0 0 0 rgba(250,255,0,0)}
+}
+@media(prefers-reduced-motion:reduce){.halftone-toggle{animation:none}}
 
 /* status: countdown / live */
 #hero-status{margin-top:30px}
@@ -659,7 +672,6 @@ footer a{color:var(--lime);text-decoration:none}
       <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
       <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
     </svg>
-    MAPP<span>_MTL</span>
   </div>
   <div class="nav-right">
     <a class="nav-link" href="https://www.mappmtl.com" target="_blank" rel="noopener" data-fr="Site" data-en="Site">Site</a>
@@ -679,6 +691,7 @@ footer a{color:var(--lime);text-decoration:none}
       <video id="hero-video" src="/media/mapp-hero.mp4"
              muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
       <canvas id="halftone-canvas"></canvas>
+      <canvas id="ikeda-canvas"></canvas>
       <div class="video-scrim"></div>
       <div class="green-fade"></div>
       <button type="button" class="halftone-toggle" id="halftone-toggle" onclick="toggleHalftone()" aria-pressed="true" data-fr-on="Effet trame activé" data-fr-off="Activer l'effet trame" data-en-on="Halftone effect on" data-en-off="Turn on halftone effect" aria-label="Effet trame activé — cliquer pour revenir à la vidéo">◆</button>
@@ -1347,6 +1360,8 @@ let ht = {}; // ctx, W, H, dpr, cols, rows, lum, off, octx, px, py
 
 function toggleHalftone(){
   vib(10);
+  const btn = document.getElementById('halftone-toggle');
+  if(btn) btn.classList.add('interacted');
   if(htOn) stopHalftone(true); else startHalftone(true);
 }
 
@@ -1421,6 +1436,98 @@ function sampleHeroVideo(){
   }catch(e){ ht.lum = null; }
 }
 
+// ============================================================
+// IKEDA — scan de données + code-barres, superposés à l'effet trame,
+// démarrés/arrêtés en même temps que celui-ci. Version pâle (mix-blend
+// screen), pensée pour rester discrète derrière la vidéo/le halftone.
+// ============================================================
+let ikOn = false, ikRAF = null, ik = {};
+const IK_BARS_N = 26;
+
+function initIkedaCanvas(){
+  const cv = document.getElementById('ikeda-canvas');
+  if(!cv) return null;
+  ik.ctx = cv.getContext('2d');
+  function resize(){
+    ik.dpr = Math.min(window.devicePixelRatio||1, 2);
+    ik.W = cv.clientWidth; ik.H = cv.clientHeight;
+    cv.width = ik.W*ik.dpr; cv.height = ik.H*ik.dpr;
+    ik.ctx.setTransform(ik.dpr,0,0,ik.dpr,0,0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  ik.bars = [];
+  for(let i=0;i<IK_BARS_N;i++){
+    ik.bars.push({ x: Math.random(), w: 1+Math.random()*4, life: Math.random()*60 });
+  }
+  ik.ready = true;
+  return cv;
+}
+
+function ikFmtNum(n){ return String(n).padStart(6,'0'); }
+
+function startIkeda(){
+  if(ikOn) return;
+  if(!ik.ready && !initIkedaCanvas()) return;
+  ikOn = true;
+  const cv = document.getElementById('ikeda-canvas');
+  ik.dpr = Math.min(window.devicePixelRatio||1, 2);
+  ik.W = cv.clientWidth; ik.H = cv.clientHeight;
+  cv.width = ik.W*ik.dpr; cv.height = ik.H*ik.dpr;
+  ik.ctx.setTransform(ik.dpr,0,0,ik.dpr,0,0);
+  cv.classList.add('on');
+  let t = 0;
+
+  function frame(){
+    if(!ikOn) return;
+    const ctx = ik.ctx, W = ik.W, H = ik.H;
+    ctx.clearRect(0,0,W,H);
+
+    const scanY = (Math.floor(t*1.6) % (H+40)) - 20;
+    ctx.strokeStyle = 'rgba(34,255,98,.28)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0,scanY); ctx.lineTo(W,scanY); ctx.stroke();
+    ctx.fillStyle = 'rgba(34,255,98,.05)';
+    ctx.fillRect(0, scanY-14, W, 14);
+    for(let gy=0; gy<H; gy+=32){
+      ctx.strokeStyle = 'rgba(255,255,255,.022)';
+      ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke();
+    }
+    ctx.font = '9px monospace';
+    ctx.fillStyle = 'rgba(34,255,98,.22)';
+    for(let i=0;i<4;i++){
+      const yy = (i*110 + (t*22)%110) % H;
+      ctx.fillText(ikFmtNum(Math.floor((t*97+i*777)%999999)), 10, yy);
+    }
+
+    ik.bars.forEach(b=>{
+      b.life -= 1;
+      if(b.life <= 0){
+        b.x = Math.random();
+        b.w = 1 + Math.random()*4;
+        b.life = 40 + Math.random()*90;
+      }
+      const x = b.x * W;
+      const on = (Math.floor(t*2 + x*0.04) % 5) !== 0;
+      if(!on) return;
+      ctx.fillStyle = Math.random() < 0.05 ? 'rgba(34,255,98,.3)' : 'rgba(255,255,255,.14)';
+      ctx.fillRect(x, 0, b.w, H);
+    });
+
+    t += 1;
+    ikRAF = requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+function stopIkeda(){
+  if(!ikOn) return;
+  ikOn = false;
+  if(ikRAF) cancelAnimationFrame(ikRAF);
+  const cv = document.getElementById('ikeda-canvas');
+  if(cv) cv.classList.remove('on');
+}
+
 function startHalftone(playSound){
   if(htOn) return;
   if(!htReady && !initHalftoneCanvas()) return;
@@ -1439,6 +1546,7 @@ function startHalftone(playSound){
   if(vid) vid.style.opacity = '0';
   setHaltoneBtnLabel();
   if(playSound) playToggleSound();
+  startIkeda();
 
   const GAP = 8;
   // Note : on continue d'animer même si le système demande de réduire
@@ -1504,6 +1612,7 @@ function stopHalftone(playSound){
   if(vid) vid.style.opacity = '1';
   setHaltoneBtnLabel();
   if(playSound) stopToggleSound();
+  stopIkeda();
 }
 
 // ============================================================
@@ -1567,8 +1676,8 @@ if (typeof _ca === 'function') {
     }
     if (taps >= 5) {
       taps = 0;
-      vib([15, 30, 15, 30, 80]);
-      launchLimeRain();
+      vib([30, 40, 30, 40, 30, 80, 30, 40, 30, 120]);
+      launchPageGlitch();
     }
   }
   function initEgg() {
@@ -1581,25 +1690,33 @@ if (typeof _ca === 'function') {
     logo.addEventListener('click', doTap);
   }
   initEgg();
-  function launchLimeRain() {
-    const c = document.createElement('div');
-    c.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;';
-    document.body.appendChild(c);
-    ['●','◆','▲','★','✦','◉'].forEach(() => {
-      for (let i = 0; i < 14; i++) {
-        const el = document.createElement('span');
-        el.textContent = ['●','◆','▲','★','✦','◉'][Math.floor(Math.random()*6)];
-        el.style.cssText = `position:absolute;top:-30px;left:${Math.random()*100}%;color:#22ff62;font-size:${10+Math.random()*20}px;opacity:0;will-change:transform;animation:lime-fall ${1.8+Math.random()*1.6}s ${Math.random()*1.5}s ease-in forwards;`;
-        c.appendChild(el);
+
+  function launchPageGlitch(){
+    const scan = document.createElement('div');
+    scan.style.cssText = 'position:fixed;inset:0;z-index:9998;pointer-events:none;'
+      +'background:repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0 1px, transparent 1px 3px);'
+      +'mix-blend-mode:overlay;';
+    document.body.appendChild(scan);
+    document.body.style.willChange = 'transform, filter';
+    const start = Date.now();
+    (function tick(){
+      const elapsed = Date.now() - start;
+      if (elapsed > 2000) {
+        document.body.style.transform = '';
+        document.body.style.filter = '';
+        document.body.style.willChange = '';
+        if (scan.parentNode) scan.remove();
+        return;
       }
-    });
-    if (!document.getElementById('lime-kf')) {
-      const s = document.createElement('style');
-      s.id = 'lime-kf';
-      s.textContent = '@keyframes lime-fall{0%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}100%{opacity:0;transform:translateY(110vh) rotate(720deg) scale(.5)}}';
-      document.head.appendChild(s);
-    }
-    setTimeout(() => { if(c.parentNode) c.remove(); }, 4500);
+      const gx = (Math.random()*16-8).toFixed(1);
+      const gy = (Math.random()*8-4).toFixed(1);
+      const skew = (Math.random()*3-1.5).toFixed(2);
+      const rShift = (Math.random()*7-3.5).toFixed(1);
+      const cShift = (Math.random()*7-3.5).toFixed(1);
+      document.body.style.transform = `translate(${gx}px,${gy}px) skew(${skew}deg)`;
+      document.body.style.filter = `contrast(${(1.1+Math.random()*0.5).toFixed(2)}) saturate(${(1.1+Math.random()*0.6).toFixed(2)}) drop-shadow(${rShift}px 0 #ff2b4d) drop-shadow(${cShift}px 0 #22e0ff)`;
+      setTimeout(tick, 55 + Math.random()*95);
+    })();
   }
 })();
 
