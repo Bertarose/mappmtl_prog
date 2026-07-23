@@ -132,7 +132,7 @@
       position: relative;
       border-bottom: 1px solid var(--black);
       background: var(--black);
-      min-height: min(78vh, 640px);
+      min-height: min(88vh, 720px);
       overflow: hidden;
     }
     .video-wrap video {
@@ -147,9 +147,23 @@
     .video-title{
       position:absolute;left:0;bottom:0;z-index:1;
       width:100%;padding:0 4vw 1vh;
-      font-family:var(--cond);font-weight:700;text-transform:uppercase;
-      font-size:clamp(70px,17vw,220px);line-height:.82;letter-spacing:-.02em;
-      color:var(--white);pointer-events:none;user-select:none;
+      display:flex;flex-direction:column;align-items:flex-start;gap:.03em;
+      pointer-events:none;user-select:none;
+    }
+    .vt-letter{
+      display:block;height:clamp(80px,18vw,210px);width:auto;
+    }
+    .vt-row{display:flex!important;gap:1.5%;align-items:flex-end}
+    .vt-line{
+      display:block;opacity:0;transform:translateY(48px);
+      transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1);
+    }
+    .video-title.in .vt-line{opacity:1;transform:translateY(0)}
+    .video-title.in .vt-line:nth-child(1){transition-delay:.05s}
+    .video-title.in .vt-line:nth-child(2){transition-delay:.18s}
+    .video-title.in .vt-line:nth-child(3){transition-delay:.31s}
+    @media (prefers-reduced-motion: reduce){
+      .vt-line{transition:none;opacity:1;transform:none}
     }
     .video-wrap .green-fade {
       position: absolute; left: 0; right: 0; bottom: 0; height: 48%; z-index: 2; pointer-events: none;
@@ -182,8 +196,8 @@
     }
 
     .hero-dates {
-      font-family: var(--mono); font-size: 12px; color: var(--black);
-      letter-spacing: .16em; text-transform: uppercase;
+      font-family: var(--mono); font-size: 16px; color: var(--black);
+      letter-spacing: .1em; text-transform: uppercase;
       margin-bottom: 28px; text-align: center; font-weight: 700;
     }
 
@@ -227,26 +241,6 @@
     .soc:hover { background: var(--black); color: #22ff62; }
     .soc svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 
-    /* ── VIDÉO ── */
-    .video-wrap {
-      position: relative;
-      border-bottom: 1px solid var(--black);
-      background: var(--black);
-    }
-    .video-wrap video {
-      display: block; width: 100%; max-height: 56vh;
-      object-fit: cover;
-      transition: opacity .35s;
-    }
-    .video-wrap .video-scrim {
-      position: absolute; inset: 0; z-index: 1; pointer-events: none;
-      background: linear-gradient(180deg, rgba(0,0,0,.28) 0%, rgba(0,0,0,.18) 45%, rgba(0,0,0,.55) 100%);
-    }
-    .video-wrap .green-fade {
-      position: absolute; left: 0; right: 0; bottom: 0; height: 55%; z-index: 2; pointer-events: none;
-      background: linear-gradient(180deg, rgba(34,255,98,0) 0%, rgba(34,255,98,.65) 68%, #22ff62 100%);
-    }
-
     #halftone-canvas {
       position: absolute; inset: 0; width: 100%; height: 100%;
       display: block; opacity: 0; pointer-events: none; transition: opacity .35s;
@@ -259,9 +253,16 @@
       font-size: 15px; line-height: 1; cursor: pointer;
       -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
       transition: .15s;
+      animation: halftone-pulse 1.8s ease-out infinite;
     }
     .halftone-toggle:hover { background: #22ff62; color: var(--black); border-color: #22ff62; }
     .halftone-toggle[aria-pressed="true"] { background: #22ff62; color: var(--black); border-color: #22ff62; }
+    .halftone-toggle.interacted { animation: none; }
+    @keyframes halftone-pulse{
+      0%,60%,100%{box-shadow:0 0 0 0 rgba(34,255,98,.55)}
+      30%{box-shadow:0 0 0 9px rgba(34,255,98,0)}
+    }
+    @media (prefers-reduced-motion: reduce){ .halftone-toggle{animation:none} }
 
     /* ── SECTIONS ── */
     .sec { padding: 36px 18px; border-bottom: 1px solid var(--black); }
@@ -293,7 +294,7 @@
     .ev-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
     .ev-dot { width: 8px; height: 8px; background: var(--black); flex-shrink: 0; }
     .ev-name { font-family: var(--cond); font-size: 20px; font-weight: 700; color: var(--black); text-transform: uppercase; letter-spacing: .02em; }
-    .ev-meta { font-family: var(--mono); font-size: 10px; color: var(--grey); letter-spacing: .1em; margin-bottom: 2px; }
+    .ev-meta { font-family: var(--mono); font-size: 12.5px; color: var(--grey); letter-spacing: .08em; margin-bottom: 4px; }
     .ev-cta {
       display: inline-flex; align-items: center; gap: 6px; margin-top: 12px;
       font-family: var(--mono); font-size: 10px; color: var(--black);
@@ -316,8 +317,8 @@
       .count-cell b { font-size: 24px; }
       .soc { padding: 10px 12px; font-size: 9px; }
       h1 { font-size: clamp(17px, 5.6vw, 24px); }
-      .video-title { font-size: clamp(52px, 22vw, 110px); }
-      .video-wrap { min-height: min(58vh, 460px); }
+      .vt-letter { height: clamp(48px, 19vw, 92px); }
+      .video-wrap { min-height: min(70vh, 560px); }
     }
   </style>
 </head>
@@ -371,7 +372,6 @@
         <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
         <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
       </svg>
-      <span>MAPP _MTL</span>
     </div>
     <div class="nav-right">
       <a class="nav-billet" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(8)" data-fr="BILLETTERIE" data-en="TICKETS">BILLETTERIE</a>
@@ -385,7 +385,14 @@
            muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
     <canvas id="halftone-canvas"></canvas>
     <div class="video-scrim"></div>
-    <div class="video-title" aria-hidden="true">MAPP</div>
+    <div class="video-title" id="video-title" aria-hidden="true">
+      <span class="vt-line"><svg class="vt-letter" viewBox="0 0 329.838 343"><path d="M126.926,343L58.265,61.082h-.941v281.918H0V0h95.432l68.089,279.564h.933L232.543,0h95.432v343h-57.324V61.082h-.941l-68.662,281.918h-74.122,0Z" fill="#fff"/></svg></span>
+      <span class="vt-line vt-row">
+        <svg class="vt-letter" viewBox="0 0 329.838 343"><path d="M134.381.151h62.488l132.969,343h-62.488l-31.95-87.865H93.033l-32.424,87.865H0L134.381.151ZM217.551,206.892l-53.563-146.131-53.563,146.131h107.126Z" fill="#fff"/></svg>
+        <svg class="vt-letter" viewBox="0 0 329.838 343"><path d="M173.518,0H.09v343h57.796v-115.247h116.126c84.963,0,135.253-44.754,135.253-116.165S258.975,0,173.51,0h.008ZM164.739,178.892H57.886V49.371h106.853c56.258,0,84.422,20.705,84.422,64.219s-28.164,65.302-84.422,65.302Z" fill="#fff"/></svg>
+        <svg class="vt-letter" viewBox="0 0 329.838 343"><path d="M173.518,0H.09v343h57.796v-115.247h116.126c84.963,0,135.253-44.754,135.253-116.165S258.975,0,173.51,0h.008ZM164.739,178.892H57.886V49.371h106.853c56.258,0,84.422,20.705,84.422,64.219s-28.164,65.302-84.422,65.302Z" fill="#fff"/></svg>
+      </span>
+    </div>
     <div class="green-fade"></div>
     <button type="button" class="halftone-toggle" id="halftone-toggle" onclick="toggleHalftone()" aria-pressed="true" aria-label="Effet trame activé — cliquer pour revenir à la vidéo" title="Effet trame activé — cliquer pour revenir à la vidéo">◆</button>
     <audio id="halftone-sound" preload="auto">
@@ -518,6 +525,8 @@
         if(timer) clearTimeout(timer);
         loader.classList.add('loader-hide');
         setTimeout(()=>{ loader.style.display='none'; }, 550);
+        const title = document.getElementById('video-title');
+        if(title) title.classList.add('in');
       }
       const MIN_DISPLAY = 700;
       const start = Date.now();
@@ -591,6 +600,8 @@
 
     function toggleHalftone(){
       vib(10);
+      const btn = document.getElementById('halftone-toggle');
+      if(btn) btn.classList.add('interacted');
       if(htOn) stopHalftone(true); else startHalftone(true);
     }
 
