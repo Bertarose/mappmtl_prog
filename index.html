@@ -246,6 +246,12 @@
       display: block; opacity: 0; pointer-events: none; transition: opacity .35s;
     }
     #halftone-canvas.on { pointer-events: auto; }
+    #ikeda-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;
+      display: block; opacity: 0; pointer-events: none; transition: opacity .35s;
+      mix-blend-mode: screen;
+    }
+    #ikeda-canvas.on { opacity: 1; }
     .halftone-toggle {
       position: absolute; top: 12px; right: 12px; z-index: 4;
       width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
@@ -384,6 +390,7 @@
     <video id="hero-video" src="/media/mapp-hero.mp4"
            muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
     <canvas id="halftone-canvas"></canvas>
+    <canvas id="ikeda-canvas"></canvas>
     <div class="video-scrim"></div>
     <div class="video-title" id="video-title" aria-hidden="true">
       <span class="vt-line"><svg class="vt-letter" viewBox="0 0 329.838 343"><path d="M126.926,343L58.265,61.082h-.941v281.918H0V0h95.432l68.089,279.564h.933L232.543,0h95.432v343h-57.324V61.082h-.941l-68.662,281.918h-74.122,0Z" fill="#fff"/></svg></span>
@@ -675,7 +682,101 @@
       }catch(e){ ht.lum = null; }
     }
 
-    function startHalftone(playSound){
+    // ============================================================
+// IKEDA — scan de données + code-barres, superposés à l'effet trame,
+// démarrés/arrêtés en même temps que celui-ci. Version pâle (mix-blend
+// screen), pensée pour rester discrète derrière la vidéo/le halftone.
+// ============================================================
+let ikOn = false, ikRAF = null, ik = {};
+const IK_BARS_N = 26;
+
+function initIkedaCanvas(){
+  const cv = document.getElementById('ikeda-canvas');
+  if(!cv) return null;
+  ik.ctx = cv.getContext('2d');
+  function resize(){
+    ik.dpr = Math.min(window.devicePixelRatio||1, 2);
+    ik.W = cv.clientWidth; ik.H = cv.clientHeight;
+    cv.width = ik.W*ik.dpr; cv.height = ik.H*ik.dpr;
+    ik.ctx.setTransform(ik.dpr,0,0,ik.dpr,0,0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  ik.bars = [];
+  for(let i=0;i<IK_BARS_N;i++){
+    ik.bars.push({ x: Math.random(), w: 1+Math.random()*4, life: Math.random()*60 });
+  }
+  ik.ready = true;
+  return cv;
+}
+
+function ikFmtNum(n){ return String(n).padStart(6,'0'); }
+
+function startIkeda(){
+  if(ikOn) return;
+  if(!ik.ready && !initIkedaCanvas()) return;
+  ikOn = true;
+  const cv = document.getElementById('ikeda-canvas');
+  ik.dpr = Math.min(window.devicePixelRatio||1, 2);
+  ik.W = cv.clientWidth; ik.H = cv.clientHeight;
+  cv.width = ik.W*ik.dpr; cv.height = ik.H*ik.dpr;
+  ik.ctx.setTransform(ik.dpr,0,0,ik.dpr,0,0);
+  cv.classList.add('on');
+  let t = 0;
+
+  function frame(){
+    if(!ikOn) return;
+    const ctx = ik.ctx, W = ik.W, H = ik.H;
+    ctx.clearRect(0,0,W,H);
+
+    // scan — ligne de balayage + grille + faux chiffres, très pâle
+    const scanY = (Math.floor(t*1.6) % (H+40)) - 20;
+    ctx.strokeStyle = 'rgba(34,255,98,.28)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0,scanY); ctx.lineTo(W,scanY); ctx.stroke();
+    ctx.fillStyle = 'rgba(34,255,98,.05)';
+    ctx.fillRect(0, scanY-14, W, 14);
+    for(let gy=0; gy<H; gy+=32){
+      ctx.strokeStyle = 'rgba(255,255,255,.022)';
+      ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke();
+    }
+    ctx.font = '9px monospace';
+    ctx.fillStyle = 'rgba(34,255,98,.22)';
+    for(let i=0;i<4;i++){
+      const yy = (i*110 + (t*22)%110) % H;
+      ctx.fillText(ikFmtNum(Math.floor((t*97+i*777)%999999)), 10, yy);
+    }
+
+    // code-barres — barres verticales pâles, clignotement irrégulier
+    ik.bars.forEach(b=>{
+      b.life -= 1;
+      if(b.life <= 0){
+        b.x = Math.random();
+        b.w = 1 + Math.random()*4;
+        b.life = 40 + Math.random()*90;
+      }
+      const x = b.x * W;
+      const on = (Math.floor(t*2 + x*0.04) % 5) !== 0;
+      if(!on) return;
+      ctx.fillStyle = Math.random() < 0.05 ? 'rgba(34,255,98,.3)' : 'rgba(255,255,255,.14)';
+      ctx.fillRect(x, 0, b.w, H);
+    });
+
+    t += 1;
+    ikRAF = requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+function stopIkeda(){
+  if(!ikOn) return;
+  ikOn = false;
+  if(ikRAF) cancelAnimationFrame(ikRAF);
+  const cv = document.getElementById('ikeda-canvas');
+  if(cv) cv.classList.remove('on');
+}
+
+function startHalftone(playSound){
       if(htOn) return;
       if(!htReady && !initHalftoneCanvas()) return;
       htOn = true;
@@ -693,6 +794,7 @@
       if(vid) vid.style.opacity = '0';
       setHaltoneBtnLabel();
       if(playSound) playToggleSound();
+      startIkeda();
 
       const GAP = 8;
       // Note : on continue d'animer même si le système demande de réduire
@@ -758,6 +860,7 @@
       if(vid) vid.style.opacity = '1';
       setHaltoneBtnLabel();
       if(playSound) stopToggleSound();
+      stopIkeda();
     }
 
     // ── COMPTE À REBOURS ──
