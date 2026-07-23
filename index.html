@@ -310,6 +310,10 @@
       transition: .12s;
     }
     .ev-cta:hover { background: #22ff62; border-color: #22ff62; }
+    .prog-soon {
+      margin-top: 18px; font-family: var(--mono); font-size: 12px; color: var(--grey);
+      letter-spacing: .04em; text-align: center;
+    }
 
     /* ── FOOTER ── */
     footer { background: var(--black); padding: 36px 18px 48px; text-align: center; }
@@ -483,6 +487,7 @@
           <a class="ev-cta" href="https://www.mappmtl.com/evenement/mapp-x-i-minute-mapp-2026-i-1-oct-2026" target="_blank" rel="noopener" onclick="vib(10)" data-fr="Inscrivez-vous →" data-en="Sign up →">Inscrivez-vous →</a>
         </div>
       </div>
+      <p class="prog-soon" data-fr="📅 Programmation officielle complète — bientôt en ligne." data-en="📅 Full official lineup — coming online soon.">📅 Programmation officielle complète — bientôt en ligne.</p>
     </div>
   </section>
 
@@ -938,7 +943,43 @@ function startHalftone(playSound){
           setTimeout(tick, 55 + Math.random()*95);
         })();
       }
+
+      // ── CODE KONAMI — ↑↑↓↓←→←→ B A ──
+      const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+      let konamiPos = 0;
+      function showKonamiToast(){
+        const t = document.createElement('div');
+        t.textContent = '🎮 Code activé';
+        t.style.cssText = 'position:fixed;left:50%;top:18px;transform:translateX(-50%);z-index:10001;'
+          +'background:#faff00;color:#000;font-family:JetBrains Mono,monospace;font-weight:700;font-size:12px;'
+          +'letter-spacing:.08em;text-transform:uppercase;padding:10px 18px;pointer-events:none;'
+          +'opacity:0;transition:opacity .25s;';
+        document.body.appendChild(t);
+        requestAnimationFrame(()=>{ t.style.opacity = '1'; });
+        setTimeout(()=>{
+          t.style.opacity = '0';
+          setTimeout(()=>{ if(t.parentNode) t.remove(); }, 300);
+        }, 1700);
+      }
+      document.addEventListener('keydown', (e) => {
+        const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+        konamiPos = (key === KONAMI[konamiPos]) ? konamiPos + 1 : (key === KONAMI[0] ? 1 : 0);
+        if (konamiPos === KONAMI.length) {
+          konamiPos = 0;
+          vib([30, 40, 30, 40, 30, 80, 30, 40, 30, 120]);
+          launchPageGlitch();
+          showKonamiToast();
+        }
+      });
     })();
+
+    // ── EASTER EGG — message caché dans la console ──
+    console.log(
+      '%c MAPP_MTL %c 2026 \n%c10ᵉ édition · 29 sept — 3 oct · Montréal\nSi tu lis ceci, tu es exactement le genre de curieux·se qu\'on aime au festival.\nRessources ouvertes ? mappmtl.com\n',
+      'background:#000;color:#22ff62;font-weight:bold;font-size:14px;padding:4px 8px;',
+      'background:#22ff62;color:#000;font-weight:bold;font-size:14px;padding:4px 8px;',
+      'color:#888;font-family:monospace;font-size:11px;'
+    );
 
     // ── SW ──
     if('serviceWorker' in navigator){
