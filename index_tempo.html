@@ -497,6 +497,33 @@ nav{
 .reveal.in{opacity:1;transform:none}
 @media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none;transition:none}}
 
+/* ── FLOAT OBJECTS — apparition + flottement au défilement ──
+   Formes géométriques (triangle/mire/losange/point) inspirées du
+   mapping vidéo. Observées par le même initReveals() que .reveal
+   (voir script APPARITIONS AU DÉFILEMENT), avec en plus un
+   flottement continu une fois révélées. ── */
+.float-obj{
+  position:absolute;z-index:1;pointer-events:none;color:var(--lime);
+  opacity:0;transform:translateY(46px) scale(.6) rotate(-6deg);
+  transition:opacity .9s cubic-bezier(.16,.8,.3,1),transform .9s cubic-bezier(.16,.8,.3,1);
+  will-change:transform,opacity;
+}
+.float-obj svg{display:block;width:100%;height:100%}
+.float-obj.in{
+  opacity:var(--fo-op,.8);
+  transform:translateY(0) scale(1) rotate(0deg);
+  animation:fo-bob 7s ease-in-out .9s infinite;
+}
+.float-obj:nth-of-type(2n){animation-duration:8.4s}
+.float-obj:nth-of-type(3n){animation-duration:5.6s;animation-delay:1.2s}
+@keyframes fo-bob{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-14px) rotate(4deg)}
+}
+.float-obj-txt{font-family:var(--mono);font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+@media (prefers-reduced-motion: reduce){.float-obj{transition:opacity .4s}.float-obj.in{animation:none}}
+@media (max-width:640px){.float-obj{display:none}} /* pas assez de marge autour du contenu sur mobile */
+
 /* ── Map ─────────────────────────────────────────── */
 #map{height:400px;border:1px solid var(--black);isolation:isolate;transform:translateZ(0)}
 .leaflet-container{background:#f4f4f4;font-family:var(--font)}
@@ -626,6 +653,24 @@ footer a{color:var(--lime);text-decoration:none}
 <body>
 <a class="skip-link" href="#prog" data-fr="Aller au contenu" data-en="Skip to content">Aller au contenu</a>
 
+<!-- Sprite des formes utilisées par .float-obj (voir CSS + initReveals() dans le script) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="fo-triangle" viewBox="0 0 40 40"><path d="M20 5 L36 33 L4 33 Z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="fo-cross" viewBox="0 0 40 40"><circle cx="20" cy="20" r="13" fill="none" stroke="currentColor" stroke-width="2"/><line x1="20" y1="2" x2="20" y2="9" stroke="currentColor" stroke-width="2"/><line x1="20" y1="31" x2="20" y2="38" stroke="currentColor" stroke-width="2"/><line x1="2" y1="20" x2="9" y2="20" stroke="currentColor" stroke-width="2"/><line x1="31" y1="20" x2="38" y2="20" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="fo-diamond" viewBox="0 0 40 40"><rect x="9" y="9" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" transform="rotate(45 20 20)"/></symbol>
+    <symbol id="fo-dot" viewBox="0 0 40 40"><circle cx="20" cy="20" r="5" fill="currentColor"/></symbol>
+    <symbol id="fo-projector" viewBox="0 0 40 40"><rect x="4" y="14" width="20" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="20" r="3" fill="none" stroke="currentColor" stroke-width="2"/><line x1="27" y1="20" x2="38" y2="9" stroke="currentColor" stroke-width="2"/><line x1="27" y1="20" x2="38" y2="31" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="fo-dancer" viewBox="0 0 40 40"><circle cx="20" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><line x1="20" y1="12" x2="20" y2="24" stroke="currentColor" stroke-width="2"/><line x1="20" y1="16" x2="10" y2="10" stroke="currentColor" stroke-width="2"/><line x1="20" y1="16" x2="32" y2="20" stroke="currentColor" stroke-width="2"/><line x1="20" y1="24" x2="12" y2="36" stroke="currentColor" stroke-width="2"/><line x1="20" y1="24" x2="30" y2="34" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="fo-hotdog" viewBox="0 0 40 40"><path d="M6 24 Q6 16 14 16 H26 Q34 16 34 24 Q34 30 26 30 H14 Q6 30 6 24 Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 23 Q15 18 20 23 Q25 28 30 23" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="fo-disco" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6 20 H34 M20 6 V34 M10 10 L30 30 M30 10 L10 30" stroke="currentColor" stroke-width="1.2"/></symbol>
+    <symbol id="fo-note" viewBox="0 0 40 40"><circle cx="10" cy="30" r="4" fill="currentColor"/><line x1="14" y1="30" x2="14" y2="8" stroke="currentColor" stroke-width="2"/><path d="M14 8 L28 12 V18 L14 14 Z" fill="currentColor"/></symbol>
+    <symbol id="fo-skate" viewBox="0 0 40 40"><path d="M4 20 Q4 14 10 14 H30 Q36 14 36 20 Q36 26 30 26 H10 Q4 26 4 20 Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="28" r="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="28" cy="28" r="3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="fo-star" viewBox="0 0 40 40"><path d="M20 4 L23 17 L36 20 L23 23 L20 36 L17 23 L4 20 L17 17 Z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="fo-eye" viewBox="0 0 40 40"><path d="M4 20 Q20 6 36 20 Q20 34 4 20 Z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="20" r="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="20" r="1.5" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
 <!-- LOADER -->
 <div id="page-loader">
   <div class="loader-logo" id="loader-logo">
@@ -705,6 +750,7 @@ footer a{color:var(--lime);text-decoration:none}
 
 <!-- PROGRAMMATION : grille 6 jours -->
 <section class="sec" id="prog">
+  <div class="float-obj" style="width:26px;height:26px;left:92%;top:8%;--fo-op:.5"><svg><use href="#fo-note"/></svg></div>
   <div class="sec-inner">
     <div class="eyebrow" data-fr="Programmation — 6 jours d'un coup d'œil" data-en="Program — 6 days at a glance">Programmation — 6 jours d'un coup d'œil</div>
     <div class="legend reveal" id="venue-legend"></div>
@@ -714,6 +760,9 @@ footer a{color:var(--lime);text-decoration:none}
 
 <!-- ARTISTES -->
 <section class="sec" id="artistes">
+  <div class="float-obj" style="width:34px;height:34px;left:4%;top:10%;--fo-op:.6"><svg><use href="#fo-triangle"/></svg></div>
+  <div class="float-obj" style="width:32px;height:32px;left:92%;top:70%;--fo-op:.55"><svg><use href="#fo-dancer"/></svg></div>
+  <div class="float-obj" style="width:24px;height:24px;left:88%;top:12%;--fo-op:.5"><svg><use href="#fo-disco"/></svg></div>
   <div class="sec-inner">
     <div class="eyebrow" data-fr="Artistes" data-en="Artists">Artistes</div>
     <div class="agrid reveal" id="agrid"></div>
@@ -722,6 +771,9 @@ footer a{color:var(--lime);text-decoration:none}
 
 <!-- 10 ANS ── chiffres à ajuster (placeholders raisonnables pour l'instant) -->
 <section class="sec" id="dixans" style="background:var(--black);color:var(--white);border-bottom:1px solid var(--black)">
+  <div class="float-obj" style="width:40px;height:40px;left:6%;top:16%;--fo-op:.7;color:var(--lime)"><svg><use href="#fo-eye"/></svg></div>
+  <div class="float-obj" style="width:24px;height:24px;left:90%;top:22%;--fo-op:.6;color:var(--white)"><svg><use href="#fo-dot"/></svg></div>
+  <div class="float-obj float-obj-txt" style="left:86%;top:65%;font-size:12px;--fo-op:.5;color:var(--lime)">10</div>
   <div class="sec-inner narrow">
     <div class="eyebrow" data-fr="10 ans de MAPP" data-en="10 years of MAPP" style="color:var(--lime)">10 ans de MAPP</div>
     <p class="dixans-txt" data-fr="Depuis 2016, MAPP_MTL transforme l'espace public montréalais par la projection et l'art numérique. Dix éditions plus tard, le festival continue de rassembler artistes, quartiers et publics autour de la lumière."
@@ -762,6 +814,7 @@ footer a{color:var(--lime);text-decoration:none}
 
 <!-- INFOS -->
 <section class="sec" id="infos">
+  <div class="float-obj" style="width:32px;height:32px;left:92%;top:10%;--fo-op:.5;color:#22ff62"><svg><use href="#fo-skate"/></svg></div>
   <div class="sec-inner narrow">
     <div class="eyebrow" data-fr="Infos pratiques" data-en="Practical info">Infos pratiques</div>
     <div class="info-grid reveal">
@@ -1213,7 +1266,7 @@ window.addEventListener('hashchange', ()=>{
 // APPARITIONS AU DÉFILEMENT
 // ============================================================
 function initReveals(){
-  const els = document.querySelectorAll('.reveal');
+  const els = document.querySelectorAll('.reveal, .float-obj');
   if(!('IntersectionObserver' in window)){ els.forEach(e=>e.classList.add('in')); return; }
   const io = new IntersectionObserver(entries=>{
     entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
