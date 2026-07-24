@@ -522,7 +522,15 @@ nav{
 }
 .float-obj-txt{font-family:var(--mono);font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
 @media (prefers-reduced-motion: reduce){.float-obj{transition:opacity .4s}.float-obj.in{animation:none}}
-@media (max-width:640px){.float-obj{display:none}} /* pas assez de marge autour du contenu sur mobile */
+/* le texte passe toujours au-dessus des floats, jamais l'inverse */
+.sec-inner{position:relative;z-index:2}
+@media (max-width:640px){
+  /* pas de marge autour du contenu sur mobile: on garde les floats
+     mais en petit + très discret, pour pas gêner la lecture */
+  .float-obj{width:20px !important;height:20px !important}
+  .float-obj.in{opacity:.3 !important}
+  .float-obj-txt{font-size:10px !important}
+}
 
 /* ── Map ─────────────────────────────────────────── */
 #map{height:400px;border:1px solid var(--black);isolation:isolate;transform:translateZ(0)}

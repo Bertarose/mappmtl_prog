@@ -364,9 +364,14 @@
       .float-obj { transition: opacity .4s; }
       .float-obj.in { animation: none; }
     }
+    /* le texte passe toujours au-dessus des floats, jamais l'inverse */
+    .sec-inner { position: relative; z-index: 2; }
     @media (max-width: 640px) {
-      /* pas assez de marge autour de .sec-inner sur mobile — on cache */
-      .float-obj { display: none; }
+      /* pas de marge autour de .sec-inner sur mobile: on garde les floats
+         mais en petit + très discret, pour pas gêner la lecture */
+      .float-obj { width: 20px !important; height: 20px !important; }
+      .float-obj.in { opacity: .3 !important; }
+      .float-obj-txt { font-size: 10px !important; }
     }
   </style>
 </head>
