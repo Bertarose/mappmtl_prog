@@ -465,17 +465,15 @@
 
       const res = await fetch(SCRIPT_URL, {
         method: 'POST',
-        headers: {'Content-Type':'text/plain;charset=utf-8'}, // évite le preflight CORS avec Apps Script
+        mode: 'no-cors', // requis : évite qu'Apps Script transforme le POST en GET via sa redirection interne
+        headers: {'Content-Type':'text/plain;charset=utf-8'},
         body: JSON.stringify(payload)
       });
 
-      progressBar.style.width = '90%';
-      const result = await res.json();
-
-      if(!result.ok){
-        throw new Error(result.error || I18N[lang].serverError);
-      }
-
+      // En mode no-cors, la réponse est "opaque" : on ne peut pas lire son contenu.
+      // On considère l'envoi réussi si fetch n'a pas levé d'exception réseau —
+      // les erreurs de validation précises (ex: fichier trop lourd) restent visibles
+      // uniquement dans les Exécutions de l'éditeur Apps Script, pas ici.
       progressBar.style.width = '100%';
       form.style.display = 'none';
       document.getElementById('confirmView').classList.add('show');
