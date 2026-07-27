@@ -44,8 +44,8 @@
     padding:14px 20px;
     display:flex; align-items:center; justify-content:space-between;
   }
-  .brand{display:flex; align-items:center; gap:8px;}
-  .brand .dot{width:8px;height:8px;background:var(--green);}
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand svg{width:32px; height:32px; color:#fff; fill:currentColor; display:block;}
   .brand span{
     font-family:var(--cond); font-size:16px; font-weight:700;
     letter-spacing:.1em; text-transform:uppercase; color:#fff;
@@ -56,10 +56,10 @@
   }
   .nav-crumb b{color:var(--green);}
 
-  /* ── HERO — fond gris, comme la capture du site ── */
+  /* ── HERO — fond gris, ajusté pour un bon contraste de lecture ── */
   .hero{
     position:relative;
-    background:#8a8a8a;
+    background:#707070;
     padding:48px 20px 40px;
     display:flex; flex-direction:column; align-items:center; text-align:center;
     border-bottom:1px solid #000;
@@ -68,7 +68,7 @@
 
   .eyebrow{
     display:flex; align-items:center; gap:8px;
-    font-family:var(--mono); font-size:10px; font-weight:700; color:var(--green);
+    font-family:var(--mono); font-size:10px; font-weight:700; color:#fff;
     letter-spacing:.2em; text-transform:uppercase; margin:0 0 14px;
   }
   .eyebrow::before{content:''; width:8px; height:8px; background:var(--green);}
@@ -113,6 +113,9 @@
     border-color:var(--green);
   }
   textarea{resize:vertical; min-height:70px; font-family:var(--font); font-size:14px;}
+  input[type=text]::placeholder, input[type=email]::placeholder, textarea::placeholder{
+    color:rgba(255,255,255,.4);
+  }
 
   .consent{
     display:flex; align-items:flex-start; gap:10px;
@@ -148,9 +151,10 @@
   .progress-bar{height:100%; width:0%; background:var(--green); transition:width .2s ease;}
 
   .limit-note{
-    font-family:var(--mono); font-size:11px; color:rgba(255,255,255,.45);
+    font-family:var(--mono); font-size:11px; color:rgba(255,255,255,.65);
     margin-top:8px;
   }
+  .limit-note b{color:var(--green); font-weight:700;}
 
   button[type=submit]{
     width:100%; margin-top:6px;
@@ -182,10 +186,11 @@
     font-family:var(--mono); font-size:13px; color:rgba(255,255,255,.6); margin:0;
   }
 
-  footer{
-    margin-top:36px; font-family:var(--mono); font-size:10.5px;
-    color:rgba(255,255,255,.35); text-align:center; letter-spacing:.04em;
-  }
+  footer { background: var(--black); padding: 36px 18px 48px; text-align: center; }
+  footer svg { width: 56px; height: 56px; color: #fff; fill: currentColor; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
+  footer p { font-family: var(--mono); font-size: 13px; color: rgba(255,255,255,.78); margin-top: 8px; letter-spacing: .06em; text-transform: uppercase; line-height: 1.8; }
+  footer a { color: #22ff62; text-decoration: none; font-weight: 700; }
+  footer a:hover { text-decoration: underline; }
 
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important;}
@@ -195,7 +200,17 @@
 <body>
 
   <nav>
-    <div class="brand"><span class="dot"></span><span>MAPP_MTL</span></div>
+    <div class="brand">
+      <svg viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg">
+        <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+        <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
+        <path d="M16.511,28.213l-3.718-15.266h-.051v15.266h-3.103V9.639h5.168l3.686,15.139h.051l3.688-15.139h5.168v18.574h-3.105v-15.266h-.051l-3.718,15.266h-4.014Z"/>
+        <path d="M9.639,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM17.964,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+        <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
+        <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
+      </svg>
+      <span>MAPP_MTL</span>
+    </div>
     <div class="nav-crumb">Festival <b>/ Dépôt vidéo</b></div>
   </nav>
 
@@ -260,11 +275,22 @@
     </div>
   </div>
 
-  <footer>MAPP_MTL — dépôt confidentiel · une soumission par artiste</footer>
+  <footer>
+    <svg viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg">
+      <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
+      <path d="M16.511,28.213l-3.718-15.266h-.051v15.266h-3.103V9.639h5.168l3.686,15.139h.051l3.688-15.139h5.168v18.574h-3.105v-15.266h-.051l-3.718,15.266h-4.014Z"/>
+      <path d="M9.639,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM17.964,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
+      <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
+    </svg>
+    <p>MAPP_MTL — dépôt confidentiel · une soumission par artiste</p>
+    <p><a href="https://www.mappmtl.com" target="_blank" rel="noopener">WWW.MAPPMTL.COM</a></p>
+  </footer>
 
 <script>
   // ⚠️ CONFIGURATION — à ajuster avant mise en ligne
-  const SCRIPT_URL = "COLLE_ICI_L_URL_DU_WEB_APP_APPS_SCRIPT"; // voir Code.gs
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0YMOmybhDLgQYWJApWBB1qmY179_USdXUPSXDlINV8nQ2VyW-29j9qSDgmMGV1h0zqw/exec";
   const MAX_SIZE_MB = 300; // confirmé : 300 Mo max par vidéo
   document.getElementById('maxSizeLabel').textContent = MAX_SIZE_MB >= 1024
     ? (MAX_SIZE_MB/1024) + ' Go'
