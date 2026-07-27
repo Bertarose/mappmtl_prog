@@ -422,12 +422,31 @@
     }
   });
 
-  function fileToBase64(file){
+  function initUpload(meta){
+    return fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'text/plain;charset=utf-8'}, // évite le preflight CORS avec Apps Script
+      body: JSON.stringify(meta)
+    }).then(res => res.json());
+  }
+
+  function uploadFileToSession(uploadUrl, file, onProgress){
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result.split(',')[1]);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', uploadUrl, true);
+      xhr.setRequestHeader('Content-Type', file.type || 'video/mp4');
+      xhr.upload.onprogress = (evt) => {
+        if(evt.lengthComputable && onProgress) onProgress(evt.loaded / evt.total);
+      };
+      xhr.onload = () => {
+        if(xhr.status === 200 || xhr.status === 201){
+          resolve();
+        } else {
+          reject(new Error('HTTP ' + xhr.status));
+        }
+      };
+      xhr.onerror = () => reject(new Error('network error'));
+      xhr.send(file);
     });
   }
 
@@ -447,33 +466,31 @@
     submitBtn.disabled = true;
     submitBtn.textContent = I18N[lang].sending;
     progressWrap.classList.add('show');
-    progressBar.style.width = '15%';
+    progressBar.style.width = '5%';
 
     try{
-      const base64 = await fileToBase64(selectedFile);
-      progressBar.style.width = '55%';
-
-      const payload = {
+      const meta = {
         artist: document.getElementById('artist').value.trim(),
         title: document.getElementById('title').value.trim(),
         email: document.getElementById('email').value.trim(),
         desc: document.getElementById('desc').value.trim(),
         fileName: selectedFile.name,
         mimeType: selectedFile.type,
-        fileData: base64
+        fileSize: selectedFile.size
       };
 
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors', // requis : évite qu'Apps Script transforme le POST en GET via sa redirection interne
-        headers: {'Content-Type':'text/plain;charset=utf-8'},
-        body: JSON.stringify(payload)
+      // 1) petit appel à Apps Script : prépare la session d'envoi avec Drive
+      const initResult = await initUpload(meta);
+      if(!initResult.ok){
+        throw new Error(initResult.error || I18N[lang].serverError);
+      }
+      progressBar.style.width = '10%';
+
+      // 2) la vidéo part directement vers Google (pas via Apps Script)
+      await uploadFileToSession(initResult.uploadUrl, selectedFile, (fraction) => {
+        progressBar.style.width = (10 + fraction * 88) + '%';
       });
 
-      // En mode no-cors, la réponse est "opaque" : on ne peut pas lire son contenu.
-      // On considère l'envoi réussi si fetch n'a pas levé d'exception réseau —
-      // les erreurs de validation précises (ex: fichier trop lourd) restent visibles
-      // uniquement dans les Exécutions de l'éditeur Apps Script, pas ici.
       progressBar.style.width = '100%';
       form.style.display = 'none';
       document.getElementById('confirmView').classList.add('show');
