@@ -228,8 +228,8 @@
       <p class="eyebrow" data-fr="Appel de vidéos — édition 2026" data-en="Call for videos — 2026 edition">Appel de vidéos — édition 2026</p>
       <h1 data-fr="Dépose ta MINUTE_MAPP" data-en="Submit your MINUTE_MAPP">Dépose ta MINUTE_MAPP</h1>
       <p class="lede"
-         data-fr-html="Un seul envoi par artiste, <b>300 Mo maximum</b>. Ton fichier reste privé — tu ne vois pas et personne ne verra les soumissions des autres artistes."
-         data-en-html="One submission per artist, <b>300 MB maximum</b>. Your file stays private — you won't see, and no one will see, other artists' submissions.">Un seul envoi par artiste, <b>300 Mo maximum</b>. Ton fichier reste privé — tu ne vois pas et personne ne verra les soumissions des autres artistes.</p>
+         data-fr-html="<b>300 Mo maximum</b>"
+         data-en-html="<b>300 MB maximum</b>"><b>300 Mo maximum</b></p>
     </div>
   </div>
 
@@ -251,11 +251,6 @@
       </div>
 
       <div class="field">
-        <label for="desc" data-fr="Description courte" data-en="Short description">Description courte</label>
-        <textarea id="desc" name="desc" placeholder="Durée, contexte, notes techniques..." data-fr-placeholder="Durée, contexte, notes techniques..." data-en-placeholder="Duration, context, technical notes..."></textarea>
-      </div>
-
-      <div class="field">
         <label data-fr-html="Vidéo<span class='req'>*</span>" data-en-html="Video<span class='req'>*</span>">Vidéo<span class="req">*</span></label>
         <div class="drop" id="dropZone">
           <div class="drop-icon">▲</div>
@@ -265,8 +260,7 @@
           </div>
           <div class="drop-file" id="fileName"></div>
         </div>
-        <input type="file" id="fileInput" name="video" accept="video/*" required>
-        <div class="limit-note" data-fr-html="Format accepté : MP4 / MOV — poids maximum : <b id='maxSizeLabel'></b>" data-en-html="Accepted format: MP4 / MOV — maximum size: <b id='maxSizeLabel'></b>">Format accepté : MP4 / MOV — poids maximum : <b id="maxSizeLabel"></b></div>
+        <input type="file" id="fileInput" name="video" accept="video/mp4,.mp4" required>
         <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
       </div>
 
@@ -274,7 +268,7 @@
         <label class="consent">
           <input type="checkbox" id="rights" required>
           <span>
-            <span data-fr="Je confirme détenir les droits sur cette vidéo et j'autorise MAPP_MTL à la visionner dans le cadre de la sélection/diffusion du festival." data-en="I confirm I hold the rights to this video and I authorize MAPP_MTL to view it as part of the festival's selection/programming process.">Je confirme détenir les droits sur cette vidéo et j'autorise MAPP_MTL à la visionner dans le cadre de la sélection/diffusion du festival.</span><span class="req">*</span>
+            <span data-fr="Je confirme détenir les droits sur cette vidéo et j'autorise MAPP_MTL à la projeter dans le cadre du festival MAPP2026." data-en="I confirm I hold the rights to this video and I authorize MAPP_MTL to project it as part of the MAPP2026 festival.">Je confirme détenir les droits sur cette vidéo et j'autorise MAPP_MTL à la projeter dans le cadre du festival MAPP2026.</span><span class="req">*</span>
           </span>
         </label>
       </div>
@@ -287,7 +281,7 @@
     <div class="confirm" id="confirmView">
       <div class="mark">✓</div>
       <h2 data-fr="Soumission reçue" data-en="Submission received">Soumission reçue</h2>
-      <p data-fr="Merci ! On te contacte par courriel si on a besoin de plus d'infos." data-en="Thanks! We'll email you if we need more info.">Merci ! On te contacte par courriel si on a besoin de plus d'infos.</p>
+      <p data-fr="Merci !" data-en="Thank you!">Merci !</p>
     </div>
   </div>
 
@@ -313,8 +307,8 @@
   const I18N = {
     fr: {
       sizeUnit: MAX_SIZE_MB >= 1024 ? (MAX_SIZE_MB/1024) + ' Go' : MAX_SIZE_MB + ' Mo',
-      notVideo: 'Ce fichier n\'est pas une vidéo. Formats acceptés : MP4, MOV.',
-      tooLarge: (sizeMB, limit) => `Ce fichier fait ${sizeMB} Mo — la limite est de ${limit}. Compresse la vidéo et réessaie.`,
+      notVideo: 'Ce fichier n\'est pas une vidéo. Format accepté : MP4.',
+      tooLarge: (sizeMB, limit) => `Ce fichier fait ${sizeMB} Mo — la limite est de ${limit}. Compresse la vidéo et réessaie. Voir le guide de compression.`,
       noFile: 'Ajoute une vidéo avant d\'envoyer.',
       noScript: 'Configuration manquante : SCRIPT_URL n\'est pas défini (voir Code.gs).',
       serverError: 'Erreur inconnue côté serveur.',
@@ -325,8 +319,8 @@
     },
     en: {
       sizeUnit: MAX_SIZE_MB >= 1024 ? (MAX_SIZE_MB/1024) + ' GB' : MAX_SIZE_MB + ' MB',
-      notVideo: 'This file isn\'t a video. Accepted formats: MP4, MOV.',
-      tooLarge: (sizeMB, limit) => `This file is ${sizeMB} MB — the limit is ${limit}. Compress the video and try again.`,
+      notVideo: 'This file isn\'t a video. Accepted format: MP4.',
+      tooLarge: (sizeMB, limit) => `This file is ${sizeMB} MB — the limit is ${limit}. Compress the video and try again. See the compression guide.`,
       noFile: 'Add a video before sending.',
       noScript: 'Missing configuration: SCRIPT_URL isn\'t set (see Code.gs).',
       serverError: 'Unknown server error.',
@@ -388,7 +382,7 @@
   function handleFile(file){
     clearError();
     if(!file) return;
-    if(!file.type.startsWith('video/')){
+    if(file.type !== 'video/mp4'){
       showError(I18N[lang].notVideo);
       return;
     }
@@ -473,7 +467,6 @@
         artist: document.getElementById('artist').value.trim(),
         title: document.getElementById('title').value.trim(),
         email: document.getElementById('email').value.trim(),
-        desc: document.getElementById('desc').value.trim(),
         fileName: selectedFile.name,
         mimeType: selectedFile.type,
         fileSize: selectedFile.size
