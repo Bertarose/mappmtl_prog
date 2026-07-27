@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAPP_MTL — Dépôt vidéo artiste</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=Archivo+Narrow:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* ── OTAlpha — même police auto-hébergée que le site principal.
+     Dépose /fonts/OTAlpha-Medium.woff2 (+ .woff) à la racine du même domaine. ── */
+  @font-face{
+    font-family:'OTAlpha';
+    src:url('/fonts/OTAlpha-Medium.woff2') format('woff2'),
+        url('/fonts/OTAlpha-Medium.woff') format('woff');
+    font-weight:500; font-style:normal; font-display:swap;
+  }
+
+  :root{
+    --black:#000;
+    --paper:#ffffff;
+    --grey:#5f5f5f;
+    --panel:#1e1e1e;
+    --panel-2:#2a2a2a;
+    --line:#3a3a3a;
+    --green:#22ff62;
+    --yellow:#faff00;
+    --red:#ff2b4d;
+    --cyan:#22e0ff;
+    --font:'OTAlpha', 'Archivo', Arial, sans-serif;
+    --cond:'OTAlpha', 'Archivo Narrow', 'Archivo', sans-serif;
+    --mono:'JetBrains Mono', monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--black);color:var(--paper);font-family:var(--font);font-weight:400;line-height:1.4;}
+
+  body{min-height:100vh;}
+
+  /* ── NAV (identique au site principal) ── */
+  nav{
+    background:var(--black); border-bottom:1px solid #1e1e1e;
+    padding:14px 20px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{display:flex; align-items:center; gap:8px;}
+  .brand .dot{width:8px;height:8px;background:var(--green);}
+  .brand span{
+    font-family:var(--cond); font-size:16px; font-weight:700;
+    letter-spacing:.1em; text-transform:uppercase; color:#fff;
+  }
+  .nav-crumb{
+    font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:.1em;
+    text-transform:uppercase; color:rgba(255,255,255,.5);
+  }
+  .nav-crumb b{color:var(--green);}
+
+  /* ── HERO — fond gris, comme la capture du site ── */
+  .hero{
+    position:relative;
+    background:#8a8a8a;
+    padding:48px 20px 40px;
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    border-bottom:1px solid #000;
+  }
+  .hero-inner{max-width:640px; display:flex; flex-direction:column; align-items:center;}
+
+  .eyebrow{
+    display:flex; align-items:center; gap:8px;
+    font-family:var(--mono); font-size:10px; font-weight:700; color:var(--green);
+    letter-spacing:.2em; text-transform:uppercase; margin:0 0 14px;
+  }
+  .eyebrow::before{content:''; width:8px; height:8px; background:var(--green);}
+
+  h1{
+    font-family:var(--cond); font-weight:700; text-transform:uppercase;
+    font-size:clamp(24px,4.4vw,36px); line-height:1.1; letter-spacing:-.01em;
+    margin:0 0 16px; color:#fff;
+  }
+  .lede{
+    font-family:var(--font); font-size:15px; color:#fff;
+    margin:0; max-width:48ch; line-height:1.5;
+  }
+  .lede b{font-weight:700; background:#000; color:var(--green); padding:1px 6px;}
+
+  /* ── PANEL FORMULAIRE (fond noir, style "intro" du site) ── */
+  .wrap{
+    width:100%; max-width:560px; margin:0 auto;
+    padding:36px 16px 64px;
+  }
+
+  form{
+    background:var(--panel);
+    border:1px solid var(--line);
+    padding:24px;
+  }
+
+  .field{margin-bottom:20px;}
+  .field label{
+    display:block; font-family:var(--mono); font-size:11px; font-weight:700;
+    letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.75);
+    margin-bottom:8px;
+  }
+  .field label .req{color:var(--red); margin-left:3px;}
+
+  input[type=text], input[type=email], textarea{
+    width:100%; background:var(--black); border:1px solid var(--line);
+    color:#fff; font-family:var(--font); font-size:15px;
+    padding:12px 13px; outline:none; transition:border-color .15s ease;
+  }
+  input[type=text]:focus, input[type=email]:focus, textarea:focus{
+    border-color:var(--green);
+  }
+  textarea{resize:vertical; min-height:70px; font-family:var(--font); font-size:14px;}
+
+  .consent{
+    display:flex; align-items:flex-start; gap:10px;
+    font-family:var(--mono); font-size:12px; color:rgba(255,255,255,.7);
+  }
+  .consent input{margin-top:3px; accent-color:var(--green); width:16px; height:16px; flex:none;}
+
+  .drop{
+    border:1px dashed var(--line);
+    background:var(--panel-2);
+    padding:28px 16px;
+    text-align:center;
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .drop.drag{border-color:var(--green); background:#0f1f13;}
+  .drop.has-file{border-style:solid; border-color:var(--green);}
+  .drop-icon{
+    font-family:var(--mono); font-size:22px; color:var(--green); margin-bottom:8px;
+  }
+  .drop-txt{font-family:var(--mono); font-size:12.5px; color:rgba(255,255,255,.65);}
+  .drop-txt b{color:#fff;}
+  .drop-file{
+    margin-top:10px; font-family:var(--mono); font-size:12px; color:var(--green);
+    word-break:break-all;
+  }
+  input[type=file]{display:none;}
+
+  .progress-wrap{
+    display:none; margin-top:12px; height:6px; background:var(--line); overflow:hidden;
+  }
+  .progress-wrap.show{display:block;}
+  .progress-bar{height:100%; width:0%; background:var(--green); transition:width .2s ease;}
+
+  .limit-note{
+    font-family:var(--mono); font-size:11px; color:rgba(255,255,255,.45);
+    margin-top:8px;
+  }
+
+  button[type=submit]{
+    width:100%; margin-top:6px;
+    background:transparent; color:#fff; border:1px solid #fff;
+    font-family:var(--mono); font-weight:700; font-size:13px;
+    letter-spacing:.08em; text-transform:uppercase;
+    padding:15px; cursor:pointer; transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  button[type=submit]:hover{background:var(--green); border-color:var(--green); color:#000;}
+  button[type=submit]:active{transform:scale(.99);}
+  button[type=submit]:disabled{border-color:var(--line); color:var(--grey); cursor:not-allowed; background:transparent;}
+
+  .error-msg{
+    display:none; font-family:var(--mono); font-size:12px; color:var(--red);
+    margin-top:10px; padding:10px 12px; border:1px solid var(--red); background:rgba(255,43,77,.08);
+  }
+  .error-msg.show{display:block;}
+
+  /* état de confirmation */
+  .confirm{display:none; text-align:center; padding:48px 24px;}
+  .confirm.show{display:block;}
+  .confirm .mark{
+    font-family:var(--mono); font-size:38px; color:var(--green); margin-bottom:14px;
+  }
+  .confirm h2{
+    font-family:var(--cond); font-weight:700; font-size:24px; color:#fff; margin:0 0 10px;
+  }
+  .confirm p{
+    font-family:var(--mono); font-size:13px; color:rgba(255,255,255,.6); margin:0;
+  }
+
+  footer{
+    margin-top:36px; font-family:var(--mono); font-size:10.5px;
+    color:rgba(255,255,255,.35); text-align:center; letter-spacing:.04em;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <div class="brand"><span class="dot"></span><span>MAPP_MTL</span></div>
+    <div class="nav-crumb">Festival <b>/ Dépôt vidéo</b></div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Appel de vidéos — édition 2026</p>
+      <h1>Dépose ta MINUTE_MAPP</h1>
+      <p class="lede">Un seul envoi par artiste, <b>300 Mo maximum</b>. Ton fichier reste privé — tu ne vois pas et personne ne verra les soumissions des autres artistes.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <form id="dropForm">
+      <div class="field">
+        <label for="artist">Nom de l'artiste / collectif<span class="req">*</span></label>
+        <input type="text" id="artist" name="artist" required autocomplete="name">
+      </div>
+
+      <div class="field">
+        <label for="title">Titre de l'œuvre<span class="req">*</span></label>
+        <input type="text" id="title" name="title" required>
+      </div>
+
+      <div class="field">
+        <label for="email">Courriel de contact<span class="req">*</span></label>
+        <input type="email" id="email" name="email" required autocomplete="email">
+      </div>
+
+      <div class="field">
+        <label for="desc">Description courte</label>
+        <textarea id="desc" name="desc" placeholder="Durée, contexte, notes techniques..."></textarea>
+      </div>
+
+      <div class="field">
+        <label>Vidéo<span class="req">*</span></label>
+        <div class="drop" id="dropZone">
+          <div class="drop-icon">▲</div>
+          <div class="drop-txt"><b>Glisse ta vidéo ici</b><br>ou clique pour parcourir</div>
+          <div class="drop-file" id="fileName"></div>
+        </div>
+        <input type="file" id="fileInput" name="video" accept="video/*" required>
+        <div class="limit-note">Format accepté : MP4 / MOV — poids maximum : <b id="maxSizeLabel">[À CONFIRMER AVEC THIEN]</b></div>
+        <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
+      </div>
+
+      <div class="field">
+        <label class="consent">
+          <input type="checkbox" id="rights" required>
+          <span>Je confirme détenir les droits sur cette vidéo et j'autorise MAPP_MTL à la visionner dans le cadre de la sélection/diffusion du festival.<span class="req">*</span></span>
+        </label>
+      </div>
+
+      <div class="error-msg" id="errorMsg"></div>
+
+      <button type="submit" id="submitBtn">Envoyer ma vidéo</button>
+    </form>
+
+    <div class="confirm" id="confirmView">
+      <div class="mark">✓</div>
+      <h2>Soumission reçue</h2>
+      <p>Merci ! On te contacte par courriel si on a besoin de plus d'infos.</p>
+    </div>
+  </div>
+
+  <footer>MAPP_MTL — dépôt confidentiel · une soumission par artiste</footer>
+
+<script>
+  // ⚠️ CONFIGURATION — à ajuster avant mise en ligne
+  const SCRIPT_URL = "COLLE_ICI_L_URL_DU_WEB_APP_APPS_SCRIPT"; // voir Code.gs
+  const MAX_SIZE_MB = 300; // confirmé : 300 Mo max par vidéo
+  document.getElementById('maxSizeLabel').textContent = MAX_SIZE_MB >= 1024
+    ? (MAX_SIZE_MB/1024) + ' Go'
+    : MAX_SIZE_MB + ' Mo';
+
+  const form = document.getElementById('dropForm');
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const fileNameEl = document.getElementById('fileName');
+  const errorMsg = document.getElementById('errorMsg');
+  const submitBtn = document.getElementById('submitBtn');
+  const progressWrap = document.getElementById('progressWrap');
+  const progressBar = document.getElementById('progressBar');
+
+  let selectedFile = null;
+
+  function showError(msg){
+    errorMsg.textContent = msg;
+    errorMsg.classList.add('show');
+  }
+  function clearError(){
+    errorMsg.classList.remove('show');
+    errorMsg.textContent = '';
+  }
+
+  function handleFile(file){
+    clearError();
+    if(!file) return;
+    if(!file.type.startsWith('video/')){
+      showError('Ce fichier n\'est pas une vidéo. Formats acceptés : MP4, MOV.');
+      return;
+    }
+    const sizeMB = file.size / (1024*1024);
+    if(sizeMB > MAX_SIZE_MB){
+      showError(`Ce fichier fait ${sizeMB.toFixed(0)} Mo — la limite est de ${MAX_SIZE_MB >= 1024 ? (MAX_SIZE_MB/1024)+' Go' : MAX_SIZE_MB+' Mo'}. Compresse la vidéo et réessaie.`);
+      return;
+    }
+    selectedFile = file;
+    dropZone.classList.add('has-file');
+    fileNameEl.textContent = `${file.name} (${sizeMB.toFixed(1)} Mo)`;
+  }
+
+  dropZone.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+
+  ['dragenter','dragover'].forEach(evt => dropZone.addEventListener(evt, e => {
+    e.preventDefault(); dropZone.classList.add('drag');
+  }));
+  ['dragleave','drop'].forEach(evt => dropZone.addEventListener(evt, e => {
+    e.preventDefault(); dropZone.classList.remove('drag');
+  }));
+  dropZone.addEventListener('drop', e => {
+    const file = e.dataTransfer.files[0];
+    if(file){
+      // synchronise avec l'input pour la soumission du formulaire
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      fileInput.files = dt.files;
+      handleFile(file);
+    }
+  });
+
+  function fileToBase64(file){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearError();
+
+    if(!selectedFile){
+      showError('Ajoute une vidéo avant d\'envoyer.');
+      return;
+    }
+    if(SCRIPT_URL.includes('COLLE_ICI')){
+      showError('Configuration manquante : SCRIPT_URL n\'est pas défini (voir Code.gs).');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Envoi en cours...';
+    progressWrap.classList.add('show');
+    progressBar.style.width = '15%';
+
+    try{
+      const base64 = await fileToBase64(selectedFile);
+      progressBar.style.width = '55%';
+
+      const payload = {
+        artist: document.getElementById('artist').value.trim(),
+        title: document.getElementById('title').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        desc: document.getElementById('desc').value.trim(),
+        fileName: selectedFile.name,
+        mimeType: selectedFile.type,
+        fileData: base64
+      };
+
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: {'Content-Type':'text/plain;charset=utf-8'}, // évite le preflight CORS avec Apps Script
+        body: JSON.stringify(payload)
+      });
+
+      progressBar.style.width = '90%';
+      const result = await res.json();
+
+      if(!result.ok){
+        throw new Error(result.error || 'Erreur inconnue côté serveur.');
+      }
+
+      progressBar.style.width = '100%';
+      form.style.display = 'none';
+      document.getElementById('confirmView').classList.add('show');
+
+    }catch(err){
+      showError('L\'envoi a échoué : ' + err.message + '. Réessaie ou écris-nous.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Envoyer ma vidéo';
+      progressWrap.classList.remove('show');
+      progressBar.style.width = '0%';
+    }
+  });
+</script>
+</body>
+</html>
