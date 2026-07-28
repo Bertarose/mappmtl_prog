@@ -959,7 +959,10 @@ const VENUES = {
   vanhorne:{ fr:"Skatepark Van Horne", en:"Van Horne Skatepark", addr:"5855 boul. Saint-Laurent", lat:45.5280967, lng:-73.6032037, main:true,  pat:"p-lime"  },
   moment:{   fr:"Moment Factory",      en:"Moment Factory",      addr:"6250 av. du Parc",        lat:45.5262469, lng:-73.6119544,             pat:"p-black" },
   cite:{     fr:"Vieux-Montréal — Cité Mémoire", en:"Old Montreal — Cité Mémoire", addr:"420 rue McGill", lat:45.5001767, lng:-73.5581378,    pat:"p-dots"  },
-  caserne:{  fr:"Caserne 26",          en:"Caserne 26",          addr:"2151 av. du Mont-Royal Est", lat:45.536024, lng:-73.5719294,           pat:"p-hatch" }
+  caserne:{  fr:"Caserne 26",          en:"Caserne 26",          addr:"2151 av. du Mont-Royal Est", lat:45.536024, lng:-73.5719294,           pat:"p-hatch" },
+  // ⚠️ Adresse et coordonnées GPS à confirmer par Kim — tant que lat/lng
+  // sont null, ce lieu n'affiche pas de pin sur la carte (voir initMap).
+  entrepot:{ fr:"L'Entrepôt St. Lawrence Warehousing", en:"L'Entrepôt St. Lawrence Warehousing", addr:"Adresse à confirmer", lat:null, lng:null, pat:"p-dots" }
 };
 
 const DAYS = [
@@ -1002,14 +1005,17 @@ const DAYS = [
 // img : mettre le chemin d'une photo (ex. "/img/artistes/nom.jpg").
 // Sans photo, un portrait tramé génératif est dessiné automatiquement.
 const ARTISTS = [
-  { slug:"studio-lumen", name:"Studio Lumen", img:"img/artistes/artiste.png", dayIdx:2, venue:"vanhorne",
-    fr:{ disc:"Mapping architectural", bio:"Collectif montréalais explorant la lumière comme matière première. Leurs projections monumentales transforment l'architecture en surface vivante." },
-    en:{ disc:"Architectural mapping", bio:"Montreal collective exploring light as raw material. Their monumental projections turn architecture into a living surface." },
-    links:{ web:"https://example.com", ig:"https://instagram.com/" } },
-  { slug:"v0lt", name:"V0LT", img:"img/artistes/artiste.png", dayIdx:3, venue:"vanhorne",
-    fr:{ disc:"Art génératif · audioréactif", bio:"Systèmes visuels génératifs pilotés par le son, entre glitch et géométrie. Première présence à MAPP." },
-    en:{ disc:"Generative · audio-reactive", bio:"Sound-driven generative visual systems, between glitch and geometry. First time at MAPP." },
-    links:{ ig:"https://instagram.com/" } },
+  // ⚠️ Titre de l'œuvre et date exacte à confirmer par Thien — pour l'instant,
+  // date affichée comme "à confirmer" (voir openArtist). Mettre à jour dayIdx
+  // dès que la soirée de projection est fixée.
+  { slug:"sabrina-ratte", name:"Sabrina Ratté", img:"img/artistes/artiste.png", dayIdx:null, venue:"entrepot",
+    fr:{ disc:"Œuvre à confirmer", bio:"Artiste québécoise en arts visuels et médiatiques. Œuvre présentée à L'Entrepôt St. Lawrence Warehousing — titre à venir." },
+    en:{ disc:"Work to be confirmed", bio:"Quebec visual and media artist. Work presented at L'Entrepôt St. Lawrence Warehousing — title to come." },
+    links:{} },
+  { slug:"studio-baillat", name:"Studio Baillat", img:"img/artistes/artiste.png", dayIdx:null, venue:"entrepot",
+    fr:{ disc:"Œuvre à confirmer", bio:"Studio québécois. Œuvre présentée à L'Entrepôt St. Lawrence Warehousing — titre à venir." },
+    en:{ disc:"Work to be confirmed", bio:"Quebec-based studio. Work presented at L'Entrepôt St. Lawrence Warehousing — title to come." },
+    links:{} },
   { slug:"maya-tran", name:"Maya Tran", img:"img/artistes/artiste.png", dayIdx:0, venue:"cite",
     fr:{ disc:"Vidéo · animation", bio:"Animatrice et vidéaste, elle tisse mémoire urbaine et imaginaire dans des fresques projetées." },
     en:{ disc:"Video · animation", bio:"Animator and video artist weaving urban memory and imagination into projected frescoes." },
@@ -1238,8 +1244,10 @@ function openArtist(slug, fromHash){
   const a = ARTISTS.find(x=>x.slug===slug);
   if(!a) return;
   currentArtist = a;
-  const day = DAYS[a.dayIdx], v = VENUES[a.venue];
-  const when = `${lang==='fr'?day.wFr:day.wEn} ${day.d} ${lang==='fr'?day.moFr:day.moEn}`;
+  const day = a.dayIdx != null ? DAYS[a.dayIdx] : null, v = VENUES[a.venue];
+  const when = day
+    ? `${lang==='fr'?day.wFr:day.wEn} ${day.d} ${lang==='fr'?day.moFr:day.moEn}`
+    : (lang==='fr' ? 'Date à confirmer' : 'Date to be confirmed');
   document.getElementById('sheet-media').innerHTML = artistMedia(a, 0.625);
   document.getElementById('sheet-body').innerHTML = `
     <h2 id="sheet-name">${a.name}</h2>
@@ -1292,6 +1300,7 @@ function initMap(){
     attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19
   }).addTo(map);
   Object.entries(VENUES).forEach(([key,v])=>{
+    if (v.lat == null || v.lng == null) return; // lieu pas encore géolocalisé (adresse à confirmer) — pas de pin tant qu'on n'a pas la vraie adresse
     const sz = v.main?24:16;
     const icon = L.divIcon({
       className:'',
@@ -1337,11 +1346,12 @@ function toggleFreeOnly(){
 let mapActiveVenue = null;
 function focusVenue(key){
   vib(6);
+  const v = VENUES[key];
+  if (v.lat == null || v.lng == null) return; // pas de pin encore, rien à centrer
   mapActiveVenue = key;
   document.querySelectorAll('.map-chip[data-venue]').forEach(c=>{
     c.classList.toggle('active', c.dataset.venue === key);
   });
-  const v = VENUES[key];
   document.getElementById('carte').scrollIntoView({behavior:'smooth'});
   setTimeout(()=>{ map.setView([v.lat,v.lng], 15, {animate:true}); markers[key].openPopup(); }, 450);
 }
