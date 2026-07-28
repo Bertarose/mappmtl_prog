@@ -6,17 +6,8 @@
 <title>MAPP_MTL — Dépôt vidéo artiste</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;900&family=Archivo+Narrow:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  /* ── OTAlpha — même police auto-hébergée que le site principal.
-     Dépose /fonts/OTAlpha-Medium.woff2 (+ .woff) à la racine du même domaine. ── */
-  @font-face{
-    font-family:'OTAlpha';
-    src:url('/fonts/OTAlpha-Medium.woff2') format('woff2'),
-        url('/fonts/OTAlpha-Medium.woff') format('woff');
-    font-weight:500; font-style:normal; font-display:swap;
-  }
-
   :root{
     --black:#000;
     --paper:#ffffff;
@@ -28,18 +19,25 @@
     --yellow:#faff00;
     --red:#ff2b4d;
     --cyan:#22e0ff;
-    --font:'OTAlpha', 'Archivo', Arial, sans-serif;
-    --cond:'OTAlpha', 'Archivo Narrow', 'Archivo', sans-serif;
+    --font:'Inter', Arial, sans-serif;
+    --display:'Anton', sans-serif;
     --mono:'JetBrains Mono', monospace;
   }
 
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;background:var(--black);color:var(--paper);font-family:var(--font);font-weight:400;line-height:1.4;}
 
-  body{min-height:100vh;}
+  body{min-height:100vh; position:relative;}
+
+  /* ── FOND GÉNÉRATIF — grain/scanlines animés en arrière-plan, façon signal analogique ── */
+  #bgSignal{
+    position:fixed; inset:0; width:100%; height:100%;
+    z-index:0; pointer-events:none; background:var(--black);
+  }
 
   /* ── NAV (identique au site principal) ── */
   nav{
+    position:relative; z-index:2;
     background:var(--black); border-bottom:1px solid #1e1e1e;
     padding:14px 20px;
     display:flex; align-items:center; justify-content:space-between;
@@ -47,8 +45,22 @@
   .brand{display:flex; align-items:center; gap:10px;}
   .brand svg{width:32px; height:32px; color:#fff; fill:currentColor; display:block;}
   .brand span{
-    font-family:var(--cond); font-size:16px; font-weight:700;
+    font-family:var(--mono); font-size:14px; font-weight:700;
     letter-spacing:.1em; text-transform:uppercase; color:#fff;
+  }
+  .live{display:flex; align-items:center; gap:7px; margin-left:6px;}
+  .live-dot{
+    width:7px; height:7px; border-radius:50%; background:var(--green);
+    box-shadow:0 0 8px 2px rgba(34,255,98,.6);
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1; transform:scale(1);}
+    50%{opacity:.4; transform:scale(.75);}
+  }
+  .live span{
+    font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--green);
   }
   .nav-crumb{
     font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:.1em;
@@ -64,7 +76,7 @@
 
   /* ── HERO — fond gris, ajusté pour un bon contraste de lecture ── */
   .hero{
-    position:relative;
+    position:relative; z-index:2;
     background:#707070;
     padding:48px 20px 40px;
     display:flex; flex-direction:column; align-items:center; text-align:center;
@@ -77,11 +89,11 @@
     font-family:var(--mono); font-size:10px; font-weight:700; color:#fff;
     letter-spacing:.2em; text-transform:uppercase; margin:0 0 14px;
   }
-  .eyebrow::before{content:''; width:8px; height:8px; background:var(--green);}
+  .eyebrow .live-dot{margin-top:1px;}
 
   h1{
-    font-family:var(--cond); font-weight:700; text-transform:uppercase;
-    font-size:clamp(24px,4.4vw,36px); line-height:1.1; letter-spacing:-.01em;
+    font-family:var(--display); font-weight:400; text-transform:uppercase;
+    font-size:clamp(38px,7vw,64px); line-height:.92; letter-spacing:-.01em;
     margin:0 0 16px; color:#fff;
   }
   .lede{
@@ -90,8 +102,21 @@
   }
   .lede b{font-weight:700; background:#000; color:var(--green); padding:1px 6px;}
 
+  /* ── BANDE SIGNAL — entre le hero et le formulaire ── */
+  .signal-strip{
+    position:relative; z-index:2;
+    background:var(--green); color:#000;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 20px; flex-wrap:wrap; gap:8px;
+  }
+  .signal-strip p{
+    font-family:var(--mono); font-size:11px; font-weight:700;
+    letter-spacing:.08em; text-transform:uppercase;
+  }
+
   /* ── PANEL FORMULAIRE (fond noir, style "intro" du site) ── */
   .wrap{
+    position:relative; z-index:2;
     width:100%; max-width:560px; margin:0 auto;
     padding:36px 16px 64px;
   }
@@ -179,8 +204,8 @@
     margin-bottom:18px;
   }
   .modal-head h3{
-    font-family:var(--cond); font-weight:700; text-transform:uppercase;
-    font-size:19px; color:#fff; margin:0;
+    font-family:var(--display); font-weight:400; text-transform:uppercase;
+    font-size:24px; color:#fff; margin:0;
   }
   .modal-close{
     background:none; border:1px solid var(--line); color:#fff;
@@ -236,13 +261,14 @@
     font-family:var(--mono); font-size:38px; color:var(--green); margin-bottom:14px;
   }
   .confirm h2{
-    font-family:var(--cond); font-weight:700; font-size:24px; color:#fff; margin:0 0 10px;
+    font-family:var(--display); font-weight:400; text-transform:uppercase;
+    font-size:32px; color:#fff; margin:0 0 10px;
   }
   .confirm p{
     font-family:var(--mono); font-size:13px; color:rgba(255,255,255,.6); margin:0;
   }
 
-  footer { background: var(--black); padding: 36px 18px 48px; text-align: center; }
+  footer { position:relative; z-index:2; background: var(--black); padding: 36px 18px 48px; text-align: center; }
   footer svg { width: 56px; height: 56px; color: #fff; fill: currentColor; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
   footer p { font-family: var(--mono); font-size: 13px; color: rgba(255,255,255,.78); margin-top: 8px; letter-spacing: .06em; text-transform: uppercase; line-height: 1.8; }
   footer a { color: #22ff62; text-decoration: none; font-weight: 700; }
@@ -255,6 +281,8 @@
 </head>
 <body>
 
+  <canvas id="bgSignal"></canvas>
+
   <nav>
     <div class="brand">
       <svg viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg">
@@ -266,6 +294,7 @@
         <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
       </svg>
       <span>MAPP_MTL</span>
+      <div class="live"><span class="live-dot"></span><span data-fr="OUVERT" data-en="OPEN">OUVERT</span></div>
     </div>
     <div class="nav-right">
       <div class="nav-crumb" data-fr="Festival / Dépôt vidéo" data-en="Festival / Video drop">Festival / Dépôt vidéo</div>
@@ -275,12 +304,17 @@
 
   <div class="hero">
     <div class="hero-inner">
-      <p class="eyebrow" data-fr="Appel de vidéos — édition 2026" data-en="Call for videos — 2026 edition">Appel de vidéos — édition 2026</p>
+      <p class="eyebrow"><span class="live-dot"></span><span data-fr="Appel de vidéos — édition 2026" data-en="Call for videos — 2026 edition">Appel de vidéos — édition 2026</span></p>
       <h1 data-fr="Dépose ta MINUTE_MAPP" data-en="Submit your MINUTE_MAPP">Dépose ta MINUTE_MAPP</h1>
       <p class="lede"
          data-fr-html="<b>150 Mo maximum</b>"
          data-en-html="<b>150 MB maximum</b>"><b>150 Mo maximum</b></p>
     </div>
+  </div>
+
+  <div class="signal-strip">
+    <p data-fr="MINUTE_MAPP / 1 ENVOI PAR ARTISTE" data-en="MINUTE_MAPP / 1 SUBMISSION PER ARTIST">MINUTE_MAPP / 1 ENVOI PAR ARTISTE</p>
+    <p data-fr="MP4 SEULEMENT — 150 MO MAX" data-en="MP4 ONLY — 150 MB MAX">MP4 SEULEMENT — 150 MO MAX</p>
   </div>
 
   <div class="wrap">
@@ -610,6 +644,71 @@
       progressBar.style.width = '0%';
     }
   });
+  // ── FOND GÉNÉRATIF — texture analogique en arrière-plan (grain, scanlines, anneaux) ──
+  (function(){
+    const canvas = document.getElementById('bgSignal');
+    const ctx = canvas.getContext('2d');
+    let w, h;
+
+    function resize(){
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    let t = 0;
+    const mappGreen = [34, 255, 98]; // #22ff62
+
+    function drawScanBands(){
+      for(let y = 0; y < h; y += 6){
+        const wobble = Math.sin((y * 0.02) + t * 0.03) * 14;
+        const bandAlpha = 0.015 + 0.015 * Math.abs(Math.sin(y * 0.01 + t * 0.02));
+        ctx.fillStyle = `rgba(${mappGreen[0]},${mappGreen[1]},${mappGreen[2]},${bandAlpha})`;
+        ctx.fillRect(wobble, y, w, 2);
+      }
+    }
+
+    function drawGrain(){
+      const grainCount = Math.floor((w*h) / 1400);
+      for(let i = 0; i < grainCount; i++){
+        const x = Math.random() * w;
+        const y = Math.random() * h;
+        const b = Math.random() * 60;
+        ctx.fillStyle = `rgba(${180+b},${180+b},${170+b},${Math.random()*0.06})`;
+        ctx.fillRect(x, y, 1, 1);
+      }
+    }
+
+    function drawFeedbackRings(){
+      const cx = w/2 + Math.sin(t*0.012)*w*0.2;
+      const cy = h/2 + Math.cos(t*0.009)*h*0.2;
+      const rings = 5;
+      for(let i=0;i<rings;i++){
+        const r = (i/rings) * Math.max(w,h) * 0.55 + (t*1.1 % (Math.max(w,h)*0.1));
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(${mappGreen[0]},${mappGreen[1]},${mappGreen[2]},${0.05 - i*0.008})`;
+        ctx.lineWidth = 1;
+        ctx.ellipse(cx, cy, r, r*0.7, t*0.005, 0, Math.PI*2);
+        ctx.stroke();
+      }
+    }
+
+    function frame(){
+      ctx.fillStyle = 'rgba(0,0,0,0.16)';
+      ctx.fillRect(0,0,w,h);
+
+      drawFeedbackRings();
+      drawScanBands();
+      drawGrain();
+
+      t += 1;
+      requestAnimationFrame(frame);
+    }
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0,0,w,h);
+    frame();
+  })();
 </script>
 </body>
 </html>
