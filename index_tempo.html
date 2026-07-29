@@ -959,11 +959,7 @@ const VENUES = {
   vanhorne:{ fr:"Skatepark Van Horne", en:"Van Horne Skatepark", addr:"5855 boul. Saint-Laurent", lat:45.5280967, lng:-73.6032037, main:true,  pat:"p-lime"  },
   moment:{   fr:"Moment Factory",      en:"Moment Factory",      addr:"6250 av. du Parc",        lat:45.5262469, lng:-73.6119544,             pat:"p-black" },
   cite:{     fr:"Vieux-Montréal — Cité Mémoire", en:"Old Montreal — Cité Mémoire", addr:"420 rue McGill", lat:45.5001767, lng:-73.5581378,    pat:"p-dots"  },
-  caserne:{  fr:"Caserne 26",          en:"Caserne 26",          addr:"2151 av. du Mont-Royal Est", lat:45.536024, lng:-73.5719294,           pat:"p-hatch" },
-  // L'Entrepôt St. Lawrence Warehousing = le bâtiment sur le site du
-  // Skatepark Van Horne où se font les projections — même adresse, pas un
-  // lieu séparé.
-  entrepot:{ fr:"L'Entrepôt St. Lawrence Warehousing", en:"L'Entrepôt St. Lawrence Warehousing", addr:"5855 boul. Saint-Laurent", lat:45.5280967, lng:-73.6032037, pat:"p-dots" }
+  caserne:{  fr:"Caserne 26",          en:"Caserne 26",          addr:"2151 av. du Mont-Royal Est", lat:45.536024, lng:-73.5719294,           pat:"p-hatch" }
 };
 
 const DAYS = [
@@ -1009,11 +1005,11 @@ const ARTISTS = [
   // ⚠️ Titre de l'œuvre et date exacte à confirmer par Thien — pour l'instant,
   // date affichée comme "à confirmer" (voir openArtist). Mettre à jour dayIdx
   // dès que la soirée de projection est fixée.
-  { slug:"sabrina-ratte", name:"Sabrina Ratté", img:"img/artistes/artiste.png", dayIdx:null, venue:"entrepot",
+  { slug:"sabrina-ratte", name:"Sabrina Ratté", img:"img/artistes/artiste.png", dayIdx:null, venue:"vanhorne",
     fr:{ disc:"Œuvre à confirmer", bio:"Artiste québécoise en arts visuels et médiatiques. Œuvre présentée à L'Entrepôt St. Lawrence Warehousing — titre à venir." },
     en:{ disc:"Work to be confirmed", bio:"Quebec visual and media artist. Work presented at L'Entrepôt St. Lawrence Warehousing — title to come." },
     links:{} },
-  { slug:"studio-baillat", name:"Studio Baillat", img:"img/artistes/artiste.png", dayIdx:null, venue:"entrepot",
+  { slug:"studio-baillat", name:"Studio Baillat", img:"img/artistes/artiste.png", dayIdx:null, venue:"vanhorne",
     fr:{ disc:"Œuvre à confirmer", bio:"Studio québécois. Œuvre présentée à L'Entrepôt St. Lawrence Warehousing — titre à venir." },
     en:{ disc:"Work to be confirmed", bio:"Quebec-based studio. Work presented at L'Entrepôt St. Lawrence Warehousing — title to come." },
     links:{} },
