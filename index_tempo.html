@@ -479,6 +479,10 @@ nav{
 .sheet-body .when:hover{background:var(--lime)}
 .sheet-body .bio{font-size:18px;line-height:1.65;margin-top:16px;color:rgba(0,0,0,.8)}
 .sheet-body .links{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.mm-artist-list{margin-top:24px;padding-top:18px;border-top:1px solid rgba(0,0,0,.1)}
+.mm-artist-list-label{font-family:var(--mono);font-size:10.5px;color:var(--grey);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.mm-artist-grid{display:flex;flex-wrap:wrap;gap:6px}
+.mm-artist-chip{font-size:12px;padding:5px 10px;background:rgba(0,0,0,.05);border-radius:20px;color:rgba(0,0,0,.75);white-space:nowrap}
 .sheet-body .links a{
   font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
   border:1px solid var(--black);color:var(--black);text-decoration:none;padding:8px 13px;transition:.12s;
@@ -1237,6 +1241,69 @@ function renderArtists(){
   paintPortraits(el);
 }
 
+const MINUTE_MAPP_NAMES = [
+  "Adam Beaulieu",
+  "Adam Haddad",
+  "Alice Petrov",
+  "Alice Simard",
+  "Alice St-Pierre",
+  "Amina Aziz",
+  "Amina Dubé",
+  "Antoine Simard",
+  "Aïcha Boucher",
+  "Benjamin Champagne",
+  "Benjamin Rahimi",
+  "Camille Racine",
+  "Chloé Gauthier",
+  "Coralie Bergeron",
+  "Coralie Ferland",
+  "Coralie Fortin",
+  "David Blais",
+  "Emma Boucher",
+  "Emma Gauthier",
+  "Emma Morin",
+  "Fatima Aziz",
+  "Fatima Bélanger",
+  "Gabriel Haddad",
+  "Hugo Morin",
+  "Jules Boucher",
+  "Julien Beauregard",
+  "Julien Nguyen",
+  "Juliette Gauthier",
+  "Karim Bouchard",
+  "Livia Lefebvre",
+  "Louis Bergeron",
+  "Léa Kader",
+  "Léonie Haddad",
+  "Léonie Lapointe",
+  "Marc-André Ferland",
+  "Mathieu Morin",
+  "Mathieu Nguyen",
+  "Meriem Turcotte",
+  "Nadia Alaoui",
+  "Nadia Lavoie",
+  "Nadia Paquette",
+  "Naomi Girard",
+  "Noah Grenier",
+  "Olivier Roy",
+  "Rosalie Costa",
+  "Rose St-Pierre",
+  "Samuel Charron",
+  "Samuel Gauthier",
+  "Samuel Rahimi",
+  "Sofia Nguyen",
+  "Théo Lefebvre",
+  "Victor Okafor",
+  "William Beauregard",
+  "William Blais",
+  "William Diallo",
+  "Xavier Boucher",
+  "Zoé St-Pierre",
+  "Émile Ahmadi",
+  "Émile Bergeron",
+  "Étienne Ouellet"
+];
+
 function openArtist(slug, fromHash){
   const a = ARTISTS.find(x=>x.slug===slug);
   if(!a) return;
@@ -1254,7 +1321,12 @@ function openArtist(slug, fromHash){
     <div class="links">
       ${a.links.web?`<a href="${a.links.web}" target="_blank" rel="noopener">Site ↗</a>`:''}
       ${a.links.ig?`<a href="${a.links.ig}" target="_blank" rel="noopener">Instagram ↗</a>`:''}
-    </div>`;
+    </div>
+    ${a.slug === 'minute-mapp' ? `
+    <div class="mm-artist-list">
+      <div class="mm-artist-list-label">${lang==='fr' ? MINUTE_MAPP_NAMES.length + ' artistes ont soumis une œuvre' : MINUTE_MAPP_NAMES.length + ' artists submitted a piece'}</div>
+      <div class="mm-artist-grid">${MINUTE_MAPP_NAMES.map(n => `<span class="mm-artist-chip">${n}</span>`).join('')}</div>
+    </div>` : ''}`;
   paintPortraits(document.getElementById('sheet-media'));
   document.getElementById('sheet-back').classList.add('open');
   document.getElementById('sheet').classList.add('open');
