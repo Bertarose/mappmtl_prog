@@ -112,7 +112,7 @@
       display: flex; align-items: center; justify-content: space-between;
       transform: translateZ(0); will-change: transform;
     }
-    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; cursor: pointer; }
     .brand svg { width: 46px; height: 46px; color: #fff; display: block; fill: currentColor; }
     .brand span { font-family: var(--cond); font-size: 18px; font-weight: 700; color: #fff; letter-spacing: .08em; text-transform: uppercase; }
     .nav-right{display:flex;align-items:center;gap:14px}
@@ -442,7 +442,7 @@
 
   <!-- NAV -->
   <nav>
-    <div class="brand" id="brand-logo">
+    <a class="brand" id="brand-logo" href="https://www.mappmtl.com" target="_blank" rel="noopener" aria-label="MAPP_MTL — voir le site principal">
       <svg viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg">
         <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
         <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
@@ -451,7 +451,7 @@
         <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
         <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
       </svg>
-    </div>
+    </a>
     <div class="nav-right">
       <a class="nav-billet" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(8)" data-fr="BILLETTERIE" data-en="TICKETS">BILLETTERIE</a>
       <button type="button" class="lang-btn" id="lang-btn" onclick="toggleLang()">EN</button>
@@ -993,37 +993,7 @@ function startHalftone(playSound){
     // Effet trame activé par défaut ; l'icône permet de revenir à la vidéo
     startHalftone(false);
 
-    // ── EASTER EGG — 5 taps sur le logo ──
     (function() {
-      let taps = 0, timer = null;
-      function doTap(e) {
-        e.stopPropagation();
-        if (e.type === 'touchend') e.preventDefault();
-        clearTimeout(timer);
-        taps++;
-        timer = setTimeout(() => { taps = 0; }, 2500);
-        const el = document.getElementById('brand-logo');
-        if (el) {
-          el.style.opacity = taps >= 3 ? '0.4' : '1';
-          setTimeout(() => { if(el) el.style.opacity = '1'; }, 100);
-        }
-        if (taps >= 5) {
-          taps = 0;
-          vib([30, 40, 30, 40, 30, 80, 30, 40, 30, 120]);
-          launchPageGlitch();
-        }
-      }
-      function initEgg() {
-        const logo = document.getElementById('brand-logo');
-        if (!logo) { setTimeout(initEgg, 200); return; }
-        logo.style.cursor = 'pointer';
-        logo.style.userSelect = 'none';
-        logo.style.webkitUserSelect = 'none';
-        logo.addEventListener('touchend', doTap, {passive: false});
-        logo.addEventListener('click', doTap);
-      }
-      initEgg();
-
       function launchPageGlitch(){
         const scan = document.createElement('div');
         scan.style.cssText = 'position:fixed;inset:0;z-index:9998;pointer-events:none;'
