@@ -280,6 +280,25 @@
   }
   .limit-note b{color:var(--green); font-weight:700;}
 
+  /* ── ENCADRÉ LIGNES DIRECTRICES ── */
+  .guidelines{
+    background:var(--panel-2);
+    border:1px solid var(--yellow);
+    padding:16px 18px;
+    margin-bottom:20px;
+  }
+  .guidelines-title{
+    font-family:var(--mono); font-size:12px; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--yellow);
+    margin:0 0 10px; display:flex; align-items:center; gap:6px;
+  }
+  .guidelines p{
+    font-family:var(--font); font-size:13.5px; line-height:1.55;
+    color:rgba(255,255,255,.85); margin:0 0 10px;
+  }
+  .guidelines p:last-child{margin-bottom:0;}
+  .guidelines b{color:#fff;}
+
   button[type=submit]{
     width:100%; margin-top:6px;
     background:transparent; color:#fff; border:1px solid #fff;
@@ -395,6 +414,18 @@
         </div>
         <input type="file" id="fileInput" name="video" accept="video/mp4,.mp4" required>
         <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
+      </div>
+
+      <div class="guidelines">
+        <p class="guidelines-title"><span aria-hidden="true">📌</span><span data-fr="Rappel important — Lignes directrices" data-en="Important reminder — Guidelines">Rappel important — Lignes directrices</span></p>
+        <p data-fr-html="MAPP_MTL est un festival de mapping vidéo en espace public, ouvert à tous âges. Les vidéos envoyées ne doivent contenir : <b>aucun contenu sexuel, haineux/discriminatoire, violent ou choquant</b> (torture, mutilation, mort, images macabres), <b>lié à l'automutilation/suicide</b>, ni <b>faisant l'apologie de la drogue ou de l'alcool</b>."
+           data-en-html="MAPP_MTL is a public-space video mapping festival, open to all ages. Submitted videos must not contain: <b>any sexual, hateful/discriminatory, violent or shocking content</b> (torture, mutilation, death, graphic imagery), <b>content related to self-harm/suicide</b>, nor <b>content promoting drug or alcohol use</b>.">
+          MAPP_MTL est un festival de mapping vidéo en espace public, ouvert à tous âges. Les vidéos envoyées ne doivent contenir : <b>aucun contenu sexuel, haineux/discriminatoire, violent ou choquant</b> (torture, mutilation, mort, images macabres), <b>lié à l'automutilation/suicide</b>, ni <b>faisant l'apologie de la drogue ou de l'alcool</b>.
+        </p>
+        <p data-fr-html="MAPP_MTL peut refuser ou retirer toute vidéo non conforme, même après acceptation."
+           data-en-html="MAPP_MTL may refuse or remove any non-compliant video, even after acceptance.">
+          MAPP_MTL peut refuser ou retirer toute vidéo non conforme, même après acceptation.
+        </p>
       </div>
 
       <div class="field">
