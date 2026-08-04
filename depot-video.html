@@ -216,6 +216,21 @@
   }
   .spec-link:hover{color:#fff;}
 
+  .template-link{
+    display:inline-block; background:none; border:none; padding:0; margin-bottom:10px; margin-left:16px;
+    font-family:var(--mono); font-size:11.5px; font-weight:700; color:var(--cyan);
+    text-decoration:underline; text-underline-offset:2px; cursor:pointer;
+  }
+  .template-link:hover{color:#fff;}
+
+  .template-cta{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--green); color:#000; text-decoration:none;
+    font-family:var(--mono); font-size:12px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+    padding:10px 16px; margin-bottom:18px; border:1px solid var(--green);
+  }
+  .template-cta:hover{background:#000; color:var(--green);}
+
   /* ── MODAL — guide de compression ── */
   .modal-overlay{
     display:none; position:fixed; inset:0; background:rgba(0,0,0,.75);
@@ -369,6 +384,7 @@
       <div class="field">
         <label data-fr-html="Vidéo<span class='req'>*</span>" data-en-html="Video<span class='req'>*</span>">Vidéo<span class="req">*</span></label>
         <button type="button" class="spec-link" onclick="openSpecModal()" data-fr="Voir le guide de compression" data-en="See the compression guide">Voir le guide de compression</button>
+        <a class="template-link" href="https://drive.google.com/drive/folders/1dQNCXA_Y_LfrNXeKoF8D7N9T4oHUo2-0?usp=drive_link" target="_blank" rel="noopener" data-fr="Télécharger le gabarit de scène" data-en="Download the scene template">Télécharger le gabarit de scène</a>
         <div class="drop" id="dropZone">
           <div class="drop-icon">▲</div>
           <div class="drop-txt">
@@ -408,6 +424,8 @@
         <h3 data-fr="Guide de compression" data-en="Compression guide">Guide de compression</h3>
         <button type="button" class="modal-close" onclick="closeSpecModal()">✕</button>
       </div>
+
+      <a class="template-cta" href="https://drive.google.com/drive/folders/1dQNCXA_Y_LfrNXeKoF8D7N9T4oHUo2-0?usp=drive_link" target="_blank" rel="noopener" data-fr="↓ Télécharger le gabarit de la scène" data-en="↓ Download the scene template">↓ Télécharger le gabarit de la scène</a>
 
       <p class="modal-sub" data-fr="Spécifications techniques" data-en="Technical specifications">Spécifications techniques</p>
       <table class="spec-table">
