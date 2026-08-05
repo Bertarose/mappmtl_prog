@@ -161,7 +161,7 @@ nav{
 
 /* ── Hero ────────────────────────────────────────── */
 .hero{
-  padding:0 18px 0;background:var(--black);color:var(--white);
+  padding:0 18px 40px;background:var(--black);color:var(--white);
   border-bottom:1px solid var(--black);position:relative;overflow:hidden;
 }
 .hero .ed-eyebrow{margin-top:32px}
@@ -261,24 +261,24 @@ nav{
 
 /* ── Légende des lieux ───────────────────────────── */
 .legend{
-  display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--black);
+  display:flex;flex-wrap:wrap;gap:8px;
   margin-bottom:26px;
 }
 .legend-chip{
-  display:inline-flex;align-items:center;gap:9px;cursor:pointer;
+  display:inline-flex;align-items:flex-start;gap:8px;cursor:pointer;
   font-family:var(--mono);font-size:10.5px;font-weight:500;
-  letter-spacing:.05em;text-transform:uppercase;
-  padding:10px 14px;border-right:1px solid var(--black);
-  flex:1;min-width:150px;justify-content:center;
+  letter-spacing:.05em;text-transform:uppercase;text-align:left;
+  padding:9px 12px;border:1px solid var(--black);
   background:var(--white);transition:.12s;
+  max-width:100%;
 }
-.legend-chip:last-child{border-right:none}
+.legend-chip .legend-sw{margin-top:1px}
 .legend-chip:hover{background:#f2f2f2}
 .legend-chip.active{background:var(--lime)!important;font-weight:700;}
 .card{transition:opacity .2s,filter .2s;}
 .card.dim{opacity:0.12;filter:grayscale(0.8);pointer-events:none;transform:none!important;box-shadow:none!important;}
 .gcol.dim .ghead{opacity:0.25;}
-.legend-sw{width:16px;height:16px;border:1px solid var(--black);flex:none}
+.legend-sw{width:14px;height:14px;border:1px solid var(--black);flex:none}
 
 /* ── Installations permanentes (toute la durée du festival) ── */
 .installs{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
@@ -417,7 +417,6 @@ nav{
   .gcol:last-child{border-bottom:none}
   .ghead{display:flex;align-items:baseline;gap:12px;text-align:left;padding:12px 14px}
   .ghead .num{font-size:32px;margin:0}
-  .legend-chip{min-width:46%}
 }
 
 /* ── Lisibilité mobile : les petits libellés en mono grossissent un peu
@@ -797,7 +796,6 @@ footer a{color:var(--violet);text-decoration:none}
 <section class="sec" id="prog">
   <div class="float-obj" style="width:26px;height:26px;left:92%;top:8%;--fo-op:.5"><svg><use href="#fo-note"/></svg></div>
   <div class="sec-inner">
-    <div class="eyebrow" data-fr="Programmation — 6 jours d'un coup d'œil" data-en="Program — 6 days at a glance">Programmation — 6 jours d'un coup d'œil</div>
     <div class="legend reveal" id="venue-legend"></div>
     <div class="installs reveal" id="installs"></div>
     <div class="grid reveal" id="grid"></div>
@@ -1034,6 +1032,10 @@ const INSTALLATIONS = [
 // img : mettre le chemin d'une photo (ex. "/img/artistes/nom.jpg").
 // Sans photo, un portrait tramé génératif est dessiné automatiquement.
 const ARTISTS = [
+  { slug:"theo-leroux", name:"Théo Leroux", dayIdx:null, venue:"caserne",
+    fr:{ disc:"Œuvre à confirmer", bio:"Titre et présentation à venir." },
+    en:{ disc:"Work to be confirmed", bio:"Title and presentation to come." },
+    links:{} },
   // ⚠️ Titre de l'œuvre et date exacte à confirmer par Thien — pour l'instant,
   // date affichée comme "à confirmer" (voir openArtist). Mettre à jour dayIdx
   // dès que la soirée de projection est fixée.
