@@ -217,8 +217,8 @@ nav{
 }
 #ikeda-canvas.on{opacity:1}
 #cursor-glow{
-  position:absolute;inset:0;z-index:3;pointer-events:none;
-  background:radial-gradient(240px circle at var(--gx,50%) var(--gy,50%), rgba(118,0,255,.6), rgba(118,0,255,0) 70%);
+  position:fixed;inset:0;width:100vw;height:100vh;z-index:450;pointer-events:none;
+  background:radial-gradient(260px circle at var(--gx,50%) var(--gy,50%), rgba(70,0,140,.75), rgba(70,0,140,0) 70%);
   mix-blend-mode:screen;opacity:0;transition:opacity .3s;
 }
 #cursor-glow.active{opacity:1}
@@ -389,6 +389,11 @@ nav{
   color:rgba(0,0,0,.72);
 }
 .card.p-black .desc{color:rgba(255,255,255,.78)}
+.card .card-more{
+  display:block;font-family:var(--mono);font-size:10.5px;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;margin-top:10px;color:var(--black);
+}
+.card.p-black .card-more{color:var(--white)}
 .card.p-black .venue{opacity:.7}
 /* sur les trames : le texte devient des étiquettes blanches « collées » */
 .card.p-dots .time,.card.p-hatch .time,
@@ -400,6 +405,9 @@ nav{
 }
 .card.p-dots .desc,.card.p-hatch .desc{
   background:var(--white);padding:5px 6px;
+}
+.card.p-dots .card-more,.card.p-hatch .card-more{
+  background:var(--white);width:fit-content;padding:2px 5px;
 }
 .card .tix{
   display:inline-flex;align-items:center;gap:6px;margin-top:11px;
@@ -702,6 +710,7 @@ footer a{color:var(--violet);text-decoration:none}
 </style>
 </head>
 <body>
+<div id="cursor-glow" aria-hidden="true"></div>
 <a class="skip-link" href="#prog" data-fr="Aller au contenu" data-en="Skip to content">Aller au contenu</a>
 
 <!-- Sprite des formes utilisées par .float-obj (voir CSS + initReveals() dans le script) -->
@@ -783,7 +792,6 @@ footer a{color:var(--violet);text-decoration:none}
              muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
       <canvas id="halftone-canvas"></canvas>
       <canvas id="ikeda-canvas"></canvas>
-      <div id="cursor-glow"></div>
       <div class="video-scrim"></div>
       <div class="green-fade"></div>
       <button type="button" class="halftone-toggle" id="halftone-toggle" onclick="toggleHalftone()" aria-pressed="false" data-fr-on="Visuel MAPP DIX activé" data-fr-off="Afficher le visuel MAPP DIX" data-en-on="MAPP DIX visual on" data-en-off="Show the MAPP DIX visual" aria-label="Afficher le visuel MAPP DIX">◆</button>
@@ -811,12 +819,12 @@ footer a{color:var(--violet);text-decoration:none}
 </section>
 
 <!-- ARTISTES -->
-<section class="sec" id="artistes">
+<section class="sec" id="artistes" style="background:var(--black);color:var(--white);border-bottom:1px solid var(--black)">
   <div class="float-obj" style="width:34px;height:34px;left:4%;top:10%;--fo-op:.6"><svg><use href="#fo-triangle"/></svg></div>
   <div class="float-obj" style="width:32px;height:32px;left:92%;top:70%;--fo-op:.55"><svg><use href="#fo-dancer"/></svg></div>
   <div class="float-obj" style="width:24px;height:24px;left:88%;top:12%;--fo-op:.5"><svg><use href="#fo-disco"/></svg></div>
   <div class="sec-inner">
-    <div class="eyebrow" data-fr="Artistes" data-en="Artists">Artistes</div>
+    <div class="eyebrow" data-fr="Artistes" data-en="Artists" style="color:var(--violet)">Artistes</div>
     <div class="agrid reveal" id="agrid"></div>
   </div>
 </section>
@@ -1180,6 +1188,12 @@ function renderVenueLegend(){
   document.getElementById('venue-legend').innerHTML = chips + freeChip;
 }
 
+function truncate(str, max){
+  if(!str || str.length <= max) return str;
+  const cut = str.slice(0, max).replace(/\s+\S*$/, '');
+  return cut + '…';
+}
+
 function renderInstalls(){
   const el = document.getElementById('installs');
   if(!el) return;
@@ -1193,7 +1207,7 @@ function renderInstalls(){
       <div class="itxt">
         <h3>${c.t}</h3>
         <span class="venue">📍 ${v[lang]}</span>
-        <div class="desc">${c.d}</div>
+        <div class="desc">${truncate(c.d, 90)}</div>
       </div>
     </div>`;
   }).join('');
@@ -1210,7 +1224,8 @@ function renderGrid(){
         <span class="time">${ev.time}</span>
         <h3>${c.t}</h3>
         <span class="venue">📍 ${v[lang]}</span>
-        <div class="desc">${c.d}</div>
+        <div class="desc">${truncate(c.d, 90)}</div>
+        <span class="card-more">${lang==='fr'?'En savoir plus →':'Learn more →'}</span>
       </div>`;
     }).join('');
     return `
@@ -1696,19 +1711,14 @@ function boot(){
   renderSponsors();
   startHalftone(false); // effet trame activé par défaut ; l'icône permet de revenir à la vidéo
 
-  // ── LUEUR VIOLETTE — suit la souris (desktop) et le doigt (mobile) sur la bannière ──
+  // ── LUEUR VIOLETTE — suit la souris (desktop) et le doigt (mobile) sur toute la page ──
   (function(){
-    const wrap = document.getElementById('video-hero');
     const glow = document.getElementById('cursor-glow');
-    if(!wrap || !glow) return;
+    if(!glow) return;
     let raf = null, pending = null;
 
     function setPos(clientX, clientY){
-      const r = wrap.getBoundingClientRect();
-      pending = {
-        x: ((clientX - r.left) / r.width * 100).toFixed(2) + '%',
-        y: ((clientY - r.top) / r.height * 100).toFixed(2) + '%'
-      };
+      pending = { x: clientX + 'px', y: clientY + 'px' };
       if(!raf){
         raf = requestAnimationFrame(()=>{
           if(pending){ glow.style.setProperty('--gx', pending.x); glow.style.setProperty('--gy', pending.y); }
@@ -1716,15 +1726,15 @@ function boot(){
         });
       }
     }
-    wrap.addEventListener('pointermove', e=>{
+    window.addEventListener('pointermove', e=>{
       setPos(e.clientX, e.clientY);
       glow.classList.add('active');
     });
-    wrap.addEventListener('pointerleave', ()=> glow.classList.remove('active'));
-    wrap.addEventListener('touchmove', e=>{
+    window.addEventListener('pointerleave', ()=> glow.classList.remove('active'));
+    window.addEventListener('touchmove', e=>{
       if(e.touches[0]){ setPos(e.touches[0].clientX, e.touches[0].clientY); glow.classList.add('active'); }
     }, {passive:true});
-    wrap.addEventListener('touchend', ()=> glow.classList.remove('active'));
+    window.addEventListener('touchend', ()=> glow.classList.remove('active'));
   })();
   if(location.hash.startsWith('#a/')) openArtist(location.hash.slice(3), true);
 }
