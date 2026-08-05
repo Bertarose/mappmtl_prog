@@ -503,11 +503,6 @@ nav{
 .ev-sheet .ev-header.has-img{
   padding:0;background-size:cover;background-position:center;position:relative;
 }
-.ev-sheet .ev-header.has-img span{
-  position:absolute;left:0;right:0;bottom:0;padding:16px 20px;
-  background:linear-gradient(0deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,0) 100%);
-  color:var(--white);text-align:left;
-}
 .ev-sheet .ev-header span{
   font-family:var(--cond);font-weight:500;font-size:clamp(22px,4.5vw,40px);
   text-transform:uppercase;letter-spacing:-0.02em;text-align:center;line-height:1;
@@ -931,8 +926,7 @@ footer a{color:var(--violet);text-decoration:none}
       </div>
       <div class="info-card">
         <h4 data-fr="Suivez MAPP" data-en="Follow MAPP">Suivez MAPP</h4>
-        <p><a href="https://www.mappmtl.com" target="_blank" rel="noopener">mappmtl.com</a> · <a href="https://www.instagram.com/mapp_mtl" target="_blank" rel="noopener">@mapp_mtl</a><br>
-        <span data-fr="Programmation détaillée et artistes à venir." data-en="Detailed lineup and artists coming soon.">Programmation détaillée et artistes à venir.</span></p>
+        <p><a href="https://www.mappmtl.com" target="_blank" rel="noopener">mappmtl.com</a> · <a href="https://www.instagram.com/mapp_mtl" target="_blank" rel="noopener">@mapp_mtl</a></p>
       </div>
     </div>
   </div>
@@ -1849,7 +1843,7 @@ function openEvent(dayIdx, evIdx){
 
   document.getElementById('ev-body').innerHTML = `
     <div class="ev-header ${ev.img ? 'has-img' : v.pat}" ${ev.img ? `style="background-image:url('${ev.img}')"` : ''}>
-      <span>${c.t}</span>
+      ${ev.img ? '' : `<span>${c.t}</span>`}
     </div>
     <div style="padding:20px 18px 28px;">
       <span class="ev-time">${dateFmt} · ${ev.time}</span>
