@@ -963,24 +963,34 @@ const VENUES = {
   vanhorne:{ fr:"Skatepark Van Horne", en:"Van Horne Skatepark", addr:"5855 boul. Saint-Laurent", lat:45.5280967, lng:-73.6032037, main:true,  pat:"p-lime"  },
   moment:{   fr:"Moment Factory",      en:"Moment Factory",      addr:"6250 av. du Parc",        lat:45.5262469, lng:-73.6119544,             pat:"p-black" },
   cite:{     fr:"Vieux-Montréal — Cité Mémoire", en:"Old Montreal — Cité Mémoire", addr:"420 rue McGill", lat:45.5001767, lng:-73.5581378,    pat:"p-dots"  },
-  caserne:{  fr:"Caserne 26",          en:"Caserne 26",          addr:"2151 av. du Mont-Royal Est", lat:45.536024, lng:-73.5719294,           pat:"p-hatch" }
+  caserne:{  fr:"Caserne 26",          en:"Caserne 26",          addr:"2151 av. du Mont-Royal Est", lat:45.536024, lng:-73.5719294,           pat:"p-hatch" },
+  stlaurent:{fr:"Métro St-Laurent — Quartier des spectacles", en:"St-Laurent Metro — Quartier des spectacles", addr:"1600 rue Saint-Laurent", lat:45.5083, lng:-73.5613, pat:"p-dots" }
 };
 
 const DAYS = [
   { date:"2026-09-29", d:"29", moFr:"SEPT", moEn:"SEPT", wFr:"MAR", wEn:"TUE", events:[
     { time:"19h00", venue:"cite",
       fr:{ t:"Lancement Cité Mémoire × MAPP 2026", d:"Lancement officiel du festival en collaboration avec Cité Mémoire, au cœur du Vieux-Montréal." },
-      en:{ t:"Launch — Cité Mémoire × MAPP 2026", d:"Official festival launch with Cité Mémoire, in the heart of Old Montreal." } }
+      en:{ t:"Launch — Cité Mémoire × MAPP 2026", d:"Official festival launch with Cité Mémoire, in the heart of Old Montreal." } },
+    { time:"En continu", venue:"stlaurent", free:true,
+      fr:{ t:"MAPP × Quartier des spectacles — Création du Studio Baillat", d:"Installation présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
+      en:{ t:"MAPP × Quartier des spectacles — Creation by Studio Baillat", d:"Installation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." } }
   ]},
   { date:"2026-09-30", d:"30", moFr:"SEPT", moEn:"SEPT", wFr:"MER", wEn:"WED", events:[
     { time:"17h — 22h", venue:"moment",
       fr:{ t:"Tournoi de Ping-Pong de la créativité numérique", d:"Soirée levée de fonds pour MAPP chez Moment Factory. DJ à confirmer." },
-      en:{ t:"Digital Creativity Ping-Pong Tournament", d:"MAPP fundraiser night at Moment Factory. DJ to be confirmed." } }
+      en:{ t:"Digital Creativity Ping-Pong Tournament", d:"MAPP fundraiser night at Moment Factory. DJ to be confirmed." } },
+    { time:"En continu", venue:"stlaurent", free:true,
+      fr:{ t:"MAPP × Quartier des spectacles — Création du Studio Baillat", d:"Installation présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
+      en:{ t:"MAPP × Quartier des spectacles — Creation by Studio Baillat", d:"Installation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." } }
   ]},
   { date:"2026-10-01", d:"01", moFr:"OCT", moEn:"OCT", wFr:"JEU", wEn:"THU", events:[
     { time:"17h — 22h", venue:"vanhorne", free:true,
       fr:{ t:"Ouverture — Fête de quartier numérique", d:"Ouverture des projections au Skatepark Van Horne + présentation MINUTE_MAPP." },
-      en:{ t:"Opening — Digital Block Party", d:"Projection opening at Van Horne Skatepark + MINUTE_MAPP showcase." } }
+      en:{ t:"Opening — Digital Block Party", d:"Projection opening at Van Horne Skatepark + MINUTE_MAPP showcase." } },
+    { time:"En continu", venue:"stlaurent", free:true,
+      fr:{ t:"MAPP × Quartier des spectacles — Création du Studio Baillat", d:"Installation présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
+      en:{ t:"MAPP × Quartier des spectacles — Creation by Studio Baillat", d:"Installation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." } }
   ]},
   { date:"2026-10-02", d:"02", moFr:"OCT", moEn:"OCT", wFr:"VEN", wEn:"FRI", events:[
     { time:"17h — 22h", venue:"vanhorne", free:true,
@@ -988,17 +998,26 @@ const DAYS = [
       en:{ t:"Digital Block Party", d:"Projections, mapping and performances under the Van Horne overpass." } },
     { time:"22h — 03h", venue:"moment",
       fr:{ t:"Soirée MAPP", d:"L'after officiel du festival chez Moment Factory." },
-      en:{ t:"MAPP Night", d:"The festival's official afterparty at Moment Factory." } }
+      en:{ t:"MAPP Night", d:"The festival's official afterparty at Moment Factory." } },
+    { time:"En continu", venue:"stlaurent", free:true,
+      fr:{ t:"MAPP × Quartier des spectacles — Création du Studio Baillat", d:"Installation présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
+      en:{ t:"MAPP × Quartier des spectacles — Creation by Studio Baillat", d:"Installation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." } }
   ]},
   { date:"2026-10-03", d:"03", moFr:"OCT", moEn:"OCT", wFr:"SAM", wEn:"SAT", events:[
     { time:"12h — 22h", venue:"vanhorne", free:true,
       fr:{ t:"Fête de quartier numérique", d:"Journée complète : activités familiales, ateliers, puis projections en soirée." },
-      en:{ t:"Digital Block Party", d:"Full day: family activities, workshops, then evening projections." } }
+      en:{ t:"Digital Block Party", d:"Full day: family activities, workshops, then evening projections." } },
+    { time:"En continu", venue:"stlaurent", free:true,
+      fr:{ t:"MAPP × Quartier des spectacles — Création du Studio Baillat", d:"Installation présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
+      en:{ t:"MAPP × Quartier des spectacles — Creation by Studio Baillat", d:"Installation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." } }
   ]},
   { date:"2026-10-04", d:"04", moFr:"OCT", moEn:"OCT", wFr:"DIM", wEn:"SUN", events:[
     { time:"14h — 20h", venue:"caserne", free:true,
       fr:{ t:"Jam Tagtool × Kahnawake Survival School", d:"Session de dessin projeté en direct avec les élèves de la Kahnawake Survival School." },
-      en:{ t:"Tagtool Jam × Kahnawake Survival School", d:"Live projected drawing session with students from the Kahnawake Survival School." } }
+      en:{ t:"Tagtool Jam × Kahnawake Survival School", d:"Live projected drawing session with students from the Kahnawake Survival School." } },
+    { time:"En continu", venue:"stlaurent", free:true,
+      fr:{ t:"MAPP × Quartier des spectacles — Création du Studio Baillat", d:"Installation présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
+      en:{ t:"MAPP × Quartier des spectacles — Creation by Studio Baillat", d:"Installation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." } }
   ]}
 ];
 
@@ -1013,9 +1032,9 @@ const ARTISTS = [
     fr:{ disc:"Œuvre à confirmer", bio:"Artiste québécoise en arts visuels et médiatiques. Œuvre présentée à L'Entrepôt St. Lawrence Warehousing — titre à venir." },
     en:{ disc:"Work to be confirmed", bio:"Quebec visual and media artist. Work presented at L'Entrepôt St. Lawrence Warehousing — title to come." },
     links:{} },
-  { slug:"studio-baillat", name:"Studio Baillat", img:"img/artistes/artiste.png", dayIdx:null, venue:"vanhorne",
-    fr:{ disc:"Œuvre à confirmer", bio:"Studio québécois. Œuvre présentée à L'Entrepôt St. Lawrence Warehousing — titre à venir." },
-    en:{ disc:"Work to be confirmed", bio:"Quebec-based studio. Work presented at L'Entrepôt St. Lawrence Warehousing — title to come." },
+  { slug:"studio-baillat", name:"Studio Baillat", img:"img/artistes/studio-baillat.jpg", dayIdx:null, venue:"stlaurent",
+    fr:{ disc:"MAPP × Quartier des spectacles", bio:"Studio québécois. Création présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
+    en:{ disc:"MAPP × Quartier des spectacles", bio:"Quebec-based studio. Creation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." },
     links:{} },
   { slug:"maya-tran", name:"Maya Tran", img:"img/artistes/artiste.png", dayIdx:0, venue:"cite",
     fr:{ disc:"Vidéo · animation", bio:"Animatrice et vidéaste, elle tisse mémoire urbaine et imaginaire dans des fresques projetées." },
