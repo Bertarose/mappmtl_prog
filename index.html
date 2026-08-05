@@ -16,10 +16,10 @@
 
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    :focus-visible { outline: 3px solid #22ff62; outline-offset: 2px; }
+    :focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
     .skip-link{
       position:absolute;left:12px;top:-60px;z-index:10000;
-      background:#22ff62;color:var(--black);
+      background:var(--cyan);color:var(--black);
       font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
       padding:10px 16px;text-decoration:none;transition:top .15s;
     }
@@ -74,6 +74,8 @@
       --white: #fff;
       --grey: #5f5f5f;
       --paper: #ffffff;
+      --cyan: #00b6ff;
+      --violet: #7600ff;
       --font: 'OTAlpha', Arial, sans-serif;
       --cond: 'OTAlpha', 'Archivo Narrow', 'Archivo', sans-serif;
       --mono: 'JetBrains Mono', monospace;
@@ -85,7 +87,7 @@
     /* ── MARQUEE ── */
     .marquee {
       position: sticky; top: 0; z-index: 210;
-      background: #22ff62; color: var(--black);
+      background: var(--cyan); color: var(--violet);
       border-bottom: 1px solid var(--black);
       overflow: hidden; white-space: nowrap;
       height: 34px; display: flex; align-items: center;
@@ -120,12 +122,12 @@
       font-family:var(--font);font-size:13px;font-weight:500;color:#fff;
       border:1px solid #fff;padding:6px 12px;text-decoration:none;transition:.12s;
     }
-    .nav-billet:hover{background:#22ff62;border-color:#22ff62;color:var(--black)}
+    .nav-billet:hover{background:var(--cyan);border-color:var(--cyan);color:var(--black)}
     .lang-btn{
       font-family:var(--mono);font-size:12px;font-weight:700;color:var(--black);
       background:#fff;border:1px solid #fff;padding:6px 10px;cursor:pointer;transition:.12s;
     }
-    .lang-btn:hover{background:#22ff62;border-color:#22ff62}
+    .lang-btn:hover{background:var(--cyan);border-color:var(--cyan)}
 
     /* ── HERO VIDÉO GÉANT (comme mappmtl.com) ── */
     .video-wrap {
@@ -167,7 +169,7 @@
     }
     .video-wrap .green-fade {
       position: absolute; left: 0; right: 0; bottom: 0; height: 48%; z-index: 2; pointer-events: none;
-      background: linear-gradient(180deg, rgba(34,255,98,0) 0%, rgba(34,255,98,.7) 72%, #22ff62 100%);
+      background: linear-gradient(180deg, rgba(0,182,255,0) 0%, rgba(0,182,255,.7) 72%, var(--cyan) 100%);
     }
 
     /* ── INTRO (fond noir, après le hero vidéo en dégradé vert) ── */
@@ -184,10 +186,10 @@
 
     .eyebrow {
       display: flex; align-items: center; gap: 8px;
-      font-family: var(--mono); font-size: 10px; color: #22ff62;
+      font-family: var(--mono); font-size: 10px; color: var(--violet);
       letter-spacing: .2em; text-transform: uppercase; margin-bottom: 14px; font-weight: 700;
     }
-    .eyebrow::before { content: ''; display: inline-block; width: 10px; height: 10px; background: #22ff62; }
+    .eyebrow::before { content: ''; display: inline-block; width: 10px; height: 10px; background: var(--violet); }
 
     h1 {
       font-family: var(--cond); font-size: clamp(19px, 3.2vw, 32px); font-weight: 700;
@@ -210,7 +212,7 @@
       border-right: 1px solid #3a3a3a;
     }
     .count-cell:last-child { border-right: none; }
-    .count-cell b { font-family: var(--mono); font-size: 32px; font-weight: 700; color: #22ff62; line-height: 1; display: block; }
+    .count-cell b { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--violet); line-height: 1; display: block; }
     .count-cell span { font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,.6); letter-spacing: .18em; text-transform: uppercase; margin-top: 5px; }
 
     /* ── CTA BILLETTERIE ── */
@@ -223,7 +225,7 @@
       padding: 13px 22px; margin-bottom: 28px;
       text-decoration: none; transition: .15s;
     }
-    .hero-tix:hover { background: #22ff62; color: var(--black); border-color: #22ff62; }
+    .hero-tix:hover { background: var(--cyan); color: var(--black); border-color: var(--cyan); }
     .hero-tix .arrow { transition: transform .15s; }
     .hero-tix:hover .arrow { transform: translateX(4px); }
 
@@ -239,7 +241,7 @@
       text-decoration: none;
     }
     .soc:last-child { border-right: none; }
-    .soc:hover { background: #22ff62; color: var(--black); }
+    .soc:hover { background: var(--cyan); color: var(--black); }
     .soc svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 
     #grain-canvas {
@@ -270,7 +272,7 @@
       animation: halftone-blink 1.1s steps(1,end) infinite;
     }
     .halftone-toggle:hover { background: #faff00; color: var(--black); border-color: #faff00; }
-    .halftone-toggle[aria-pressed="true"] { background: #22ff62; color: var(--black); border-color: #22ff62; }
+    .halftone-toggle[aria-pressed="true"] { background: var(--cyan); color: var(--black); border-color: var(--cyan); }
     .halftone-toggle.interacted { animation: none; }
     @keyframes halftone-blink{
       0%,49%{background:#faff00;color:var(--black);border-color:#faff00;box-shadow:0 0 18px 4px rgba(250,255,0,.85)}
@@ -317,7 +319,7 @@
       letter-spacing: .1em; text-transform: uppercase; font-weight: 700;
       transition: .12s;
     }
-    .ev-cta:hover { background: #22ff62; border-color: #22ff62; }
+    .ev-cta:hover { background: var(--cyan); border-color: var(--cyan); }
     .prog-soon {
       margin-top: 18px; font-family: var(--mono); font-size: 12px; color: var(--grey);
       letter-spacing: .04em; text-align: center;
@@ -327,7 +329,7 @@
     footer { background: var(--black); padding: 36px 18px 48px; text-align: center; }
     footer svg { width: 56px; height: 56px; color: #fff; fill: currentColor; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
     footer p { font-family: var(--mono); font-size: 13px; color: rgba(255,255,255,.78); margin-top: 8px; letter-spacing: .06em; text-transform: uppercase; line-height: 1.8; }
-    footer a { color: #22ff62; text-decoration: none; font-weight: 700; }
+    footer a { color: var(--violet); text-decoration: none; font-weight: 700; }
     footer a:hover { text-decoration: underline; }
 
     @media (max-width: 540px) {
@@ -520,9 +522,9 @@
   <!-- DESCRIPTION -->
   <section class="sec" id="main-desc">
     <!-- objets flottants (voir CSS .float-obj + script FLOAT OBJECTS en bas de page) -->
-    <div class="float-obj" style="width:34px;height:34px;left:4%;top:14%;--fo-op:.7;color:#22ff62"><svg><use href="#fo-triangle"/></svg></div>
+    <div class="float-obj" style="width:34px;height:34px;left:4%;top:14%;--fo-op:.7;color:var(--violet)"><svg><use href="#fo-triangle"/></svg></div>
     <div class="float-obj" style="width:30px;height:30px;left:90%;top:58%;--fo-op:.6"><svg><use href="#fo-hotdog"/></svg></div>
-    <div class="float-obj" style="width:36px;height:36px;left:88%;top:10%;--fo-op:.55;color:#22ff62"><svg><use href="#fo-projector"/></svg></div>
+    <div class="float-obj" style="width:36px;height:36px;left:88%;top:10%;--fo-op:.55;color:var(--cyan)"><svg><use href="#fo-projector"/></svg></div>
     <div class="sec-inner">
       <div class="sec-label" data-fr="À propos" data-en="About">À propos</div>
       <p class="desc"
@@ -545,9 +547,9 @@
 
   <!-- PROGRAMME -->
   <section class="sec" id="programme">
-    <div class="float-obj" style="width:30px;height:30px;left:6%;top:65%;--fo-op:.6;color:#22ff62"><svg><use href="#fo-diamond"/></svg></div>
+    <div class="float-obj" style="width:30px;height:30px;left:6%;top:65%;--fo-op:.6;color:var(--cyan)"><svg><use href="#fo-diamond"/></svg></div>
     <div class="float-obj" style="width:34px;height:34px;left:88%;top:18%;--fo-op:.6"><svg><use href="#fo-dancer"/></svg></div>
-    <div class="float-obj" style="width:28px;height:28px;left:4%;top:14%;--fo-op:.5;color:#22ff62"><svg><use href="#fo-skate"/></svg></div>
+    <div class="float-obj" style="width:28px;height:28px;left:4%;top:14%;--fo-op:.5;color:var(--violet)"><svg><use href="#fo-skate"/></svg></div>
     <div class="sec-inner">
       <div class="sec-label" data-fr="Au programme" data-en="Program">Au programme</div>
       <div class="ev-grid">
@@ -812,17 +814,17 @@ function startIkeda(){
 
     // scan — ligne de balayage + grille + faux chiffres, très pâle
     const scanY = (Math.floor(t*1.6) % (H+40)) - 20;
-    ctx.strokeStyle = 'rgba(34,255,98,.28)';
+    ctx.strokeStyle = 'rgba(0,182,255,.28)';
     ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(0,scanY); ctx.lineTo(W,scanY); ctx.stroke();
-    ctx.fillStyle = 'rgba(34,255,98,.05)';
+    ctx.fillStyle = 'rgba(0,182,255,.05)';
     ctx.fillRect(0, scanY-14, W, 14);
     for(let gy=0; gy<H; gy+=32){
       ctx.strokeStyle = 'rgba(255,255,255,.022)';
       ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(W,gy); ctx.stroke();
     }
     ctx.font = '9px monospace';
-    ctx.fillStyle = 'rgba(34,255,98,.22)';
+    ctx.fillStyle = 'rgba(0,182,255,.22)';
     for(let i=0;i<4;i++){
       const yy = (i*110 + (t*22)%110) % H;
       ctx.fillText(ikFmtNum(Math.floor((t*97+i*777)%999999)), 10, yy);
@@ -839,7 +841,7 @@ function startIkeda(){
       const x = b.x * W;
       const on = (Math.floor(t*2 + x*0.04) % 5) !== 0;
       if(!on) return;
-      ctx.fillStyle = Math.random() < 0.05 ? 'rgba(34,255,98,.3)' : 'rgba(255,255,255,.14)';
+      ctx.fillStyle = Math.random() < 0.05 ? 'rgba(0,182,255,.3)' : 'rgba(255,255,255,.14)';
       ctx.fillRect(x, 0, b.w, H);
     });
 
@@ -912,7 +914,7 @@ function startHalftone(playSound){
             const r = Math.max(0, m*GAP*0.68);
             if(r < 0.35) continue;
             if(boost > 0.3 || m > 0.92){
-              ctx.fillStyle = 'rgba(34,255,98,'+ (0.55+m*0.45) +')';
+              ctx.fillStyle = 'rgba(0,182,255,'+ (0.55+m*0.45) +')';
             } else if(useVid){
               const cr = Math.min(255, vr*1.25+30), cg = Math.min(255, vg*1.25+30), cb = Math.min(255, vb*1.25+30);
               ctx.fillStyle = 'rgba('+(cr|0)+','+(cg|0)+','+(cb|0)+','+(0.3+m*0.7)+')';
@@ -1054,8 +1056,8 @@ function startHalftone(playSound){
     // ── EASTER EGG — message caché dans la console ──
     console.log(
       '%c MAPP_MTL %c 2026 \n%c10ᵉ édition · 29 sept — 3 oct · Montréal\nSi tu lis ceci, tu es exactement le genre de curieux·se qu\'on aime au festival.\nRessources ouvertes ? mappmtl.com\n',
-      'background:#000;color:#22ff62;font-weight:bold;font-size:14px;padding:4px 8px;',
-      'background:#22ff62;color:#000;font-weight:bold;font-size:14px;padding:4px 8px;',
+      'background:#000;color:#00b6ff;font-weight:bold;font-size:14px;padding:4px 8px;',
+      'background:#7600ff;color:#fff;font-weight:bold;font-size:14px;padding:4px 8px;',
       'color:#888;font-family:monospace;font-size:11px;'
     );
 
