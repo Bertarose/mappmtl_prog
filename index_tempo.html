@@ -158,13 +158,6 @@ nav{
 .hero .eyebrow{color:var(--violet);margin-bottom:16px}
 .hero .eyebrow::before{background:var(--violet);border-color:var(--violet)}
 
-/* ── 10 ans ── */
-.dixans-txt{font-family:var(--font);font-size:18px;line-height:1.7;color:rgba(255,255,255,.82);max-width:640px;margin-bottom:30px}
-.dixans-stats{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid #2a2a2a}
-.dixans-stat{flex:1 1 140px;padding:20px 16px;border-right:1px solid #2a2a2a;border-bottom:1px solid #2a2a2a}
-.dixans-stat b{font-family:var(--cond);font-weight:500;font-size:clamp(28px,4vw,44px);color:var(--violet);display:block;line-height:1}
-.dixans-stat span{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.65);display:block;margin-top:6px}
-
 /* ── Hero ────────────────────────────────────────── */
 .hero{
   padding:0 18px 40px;background:var(--black);color:var(--white);
@@ -472,9 +465,6 @@ nav{
   footer p{font-size:14px}
   .f-links a{font-size:14px}
   .f-legal{font-size:12px!important}
-  .dixans-txt{font-size:16.5px}
-  .dixans-stat b{font-size:30px}
-  .dixans-stat span{font-size:11px}
 }
 
 /* ── Artistes ────────────────────────────────────── */
@@ -501,7 +491,8 @@ nav{
   border-bottom:1px solid var(--black);padding:20px;
 }
 .ev-sheet .ev-header.has-img{
-  padding:0;background-size:cover;background-position:center;position:relative;
+  aspect-ratio:16/9;padding:0;background-size:contain;background-repeat:no-repeat;
+  background-position:center;background-color:var(--black);position:relative;
 }
 .ev-sheet .ev-header span{
   font-family:var(--cond);font-weight:500;font-size:clamp(22px,4.5vw,40px);
@@ -860,19 +851,6 @@ footer a{color:var(--violet);text-decoration:none}
   </div>
 </section>
 
-<!-- 10 ANS ── chiffres à ajuster (placeholders raisonnables pour l'instant) -->
-<section class="sec" id="dixans" style="background:var(--black);color:var(--white);border-bottom:1px solid var(--black)">
-  <div class="float-obj" style="width:40px;height:40px;left:6%;top:16%;--fo-op:.7;color:var(--lime)"><svg><use href="#fo-eye"/></svg></div>
-  <div class="float-obj" style="width:24px;height:24px;left:90%;top:22%;--fo-op:.6;color:var(--white)"><svg><use href="#fo-dot"/></svg></div>
-  <div class="float-obj float-obj-txt" style="left:86%;top:65%;font-size:12px;--fo-op:.5;color:var(--violet)">10</div>
-  <div class="sec-inner narrow">
-    <div class="eyebrow" data-fr="10 ans de MAPP" data-en="10 years of MAPP" style="color:var(--violet)">10 ans de MAPP</div>
-    <p class="dixans-txt" data-fr="Depuis 2016, MAPP_MTL transforme l'espace public montréalais par la projection et l'art numérique. Dix éditions plus tard, le festival continue de rassembler artistes, quartiers et publics autour de la lumière."
-       data-en="Since 2016, MAPP_MTL has been transforming Montreal's public space through projection and digital art. Ten editions later, the festival keeps bringing together artists, neighbourhoods and audiences around light.">Depuis 2016, MAPP_MTL transforme l'espace public montréalais par la projection et l'art numérique. Dix éditions plus tard, le festival continue de rassembler artistes, quartiers et publics autour de la lumière.</p>
-    <div class="dixans-stats reveal" id="dixans-stats"></div>
-  </div>
-</section>
-
 <!-- FICHE ARTISTE (overlay) -->
 <div class="ev-back" id="ev-back" onclick="closeEvent()"></div>
 <div class="ev-sheet" id="ev-sheet" role="dialog" aria-modal="true">
@@ -1119,7 +1097,6 @@ function applyLang(){
   renderGrid();
   renderArtists();
   renderLegend();
-  renderDixansStats();
   renderHeroStatus();
   setHaltoneBtnLabel();
   if(currentArtist) openArtist(currentArtist.slug, true);
@@ -1506,13 +1483,6 @@ function renderLegend(){
     <span class="map-chip ${mapActiveVenue===key?'active':''}" data-venue="${key}" onclick="focusVenue('${key}')">${v.main?'<span class="star">★ </span>':''}${v[lang]}</span>`).join('');
 }
 
-// 10 ans — chiffres à ajuster par Kim (placeholders raisonnables pour l'instant)
-const DIXANS_STATS = [
-  { n:"10", fr:"Éditions", en:"Editions" },
-  { n:"120+", fr:"Artistes présentés", en:"Artists featured" },
-  { n:"4", fr:"Lieux cette année", en:"Venues this year" },
-  { n:"50 000+", fr:"Spectateurs cumulés", en:"Cumulative attendees" },
-];
 // CTA billets flottant (mobile) — apparaît une fois le bouton du hero hors champ
 (function initStickyTix(){
   const bar = document.getElementById('sticky-tix');
@@ -1523,13 +1493,6 @@ const DIXANS_STATS = [
   }, { rootMargin: '0px 0px -85% 0px' });
   io.observe(anchor);
 })();
-
-function renderDixansStats(){
-  const el = document.getElementById('dixans-stats');
-  if(!el) return;
-  el.innerHTML = DIXANS_STATS.map(s=>`
-    <div class="dixans-stat"><b>${s.n}</b><span>${lang==='fr'?s.fr:s.en}</span></div>`).join('');
-}
 
 // ============================================================
 // HERO VIDEO — lecture simple, sans filtre par défaut
