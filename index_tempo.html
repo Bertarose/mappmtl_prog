@@ -3,15 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>MAPP MTL 2026 — Festival de projection numérique · 29 sept – 4 oct</title>
+<title>Programmation — MAPP Festival Montréal 2026 | 29 sept – 4 oct</title>
 
-<meta name="description" content="MAPP_MTL 2026 — Festival de projection et d'art numérique à Montréal. 29 septembre au 4 octobre 2026. 10e édition.">
-<meta property="og:title" content="MAPP_MTL 2026 — Festival de projection numérique">
-<meta property="og:description" content="6 soirées de projections, mapping vidéo et art numérique. 29 sept – 4 oct 2026, Montréal. 10e édition.">
+<meta name="description" content="Programmation complète du MAPP Festival Montréal 2026 : 6 jours de projections mapping, performances et installations, du 29 septembre au 4 octobre. Consultez les horaires, lieux et artistes.">
+<link rel="canonical" href="https://festival.mappmtl.com/programmation">
+<meta property="og:site_name" content="MAPP Festival Montréal">
+<meta property="og:title" content="Programmation — MAPP Festival Montréal 2026">
+<meta property="og:description" content="6 jours de projections mapping, performances et installations. 29 sept – 4 oct 2026, Montréal. 10e édition.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://festival.mappmtl.com">
-<meta property="og:image" content="/img/og-mapp2026.jpg">
+<meta property="og:url" content="https://festival.mappmtl.com/programmation">
+<meta property="og:image" content="https://festival.mappmtl.com/media/mappdix-tunnel.jpg">
+<meta property="og:locale" content="fr_CA">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Programmation — MAPP Festival Montréal 2026">
+<meta name="twitter:description" content="6 jours de projections mapping, performances et installations. 29 sept – 4 oct 2026, Montréal.">
+<meta name="twitter:image" content="https://festival.mappmtl.com/media/mappdix-tunnel.jpg">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -171,6 +177,12 @@ nav{
   font-size:clamp(30px,7vw,96px);line-height:.9;
   text-transform:uppercase;letter-spacing:-0.03em;
   color:var(--white);white-space:nowrap;
+}
+.hero .hero-kicker{
+  font-family:var(--cond);font-weight:500;
+  font-size:clamp(16px,2.6vw,32px);line-height:1;
+  text-transform:uppercase;letter-spacing:-0.02em;
+  color:var(--cyan);margin-top:6px;
 }
 .hero .sub{
   font-family:var(--cond);font-weight:500;
@@ -460,7 +472,6 @@ nav{
   footer p{font-size:14px}
   .f-links a{font-size:14px}
   .f-legal{font-size:12px!important}
-  .sponsor-box span{font-size:11px}
   .dixans-txt{font-size:16.5px}
   .dixans-stat b{font-size:30px}
   .dixans-stat span{font-size:11px}
@@ -488,6 +499,14 @@ nav{
 .ev-sheet .ev-header{
   aspect-ratio:21/9;display:flex;align-items:center;justify-content:center;
   border-bottom:1px solid var(--black);padding:20px;
+}
+.ev-sheet .ev-header.has-img{
+  padding:0;background-size:cover;background-position:center;position:relative;
+}
+.ev-sheet .ev-header.has-img span{
+  position:absolute;left:0;right:0;bottom:0;padding:16px 20px;
+  background:linear-gradient(0deg, rgba(0,0,0,.72) 0%, rgba(0,0,0,0) 100%);
+  color:var(--white);text-align:left;
 }
 .ev-sheet .ev-header span{
   font-family:var(--cond);font-weight:500;font-size:clamp(22px,4.5vw,40px);
@@ -658,20 +677,6 @@ footer a{color:var(--violet);text-decoration:none}
 .sticky-tix.show{transform:translateY(0)}
 @media(max-width:640px){.sticky-tix{display:flex}}
 
-/* ── Partenaires / commanditaires (placeholders, faciles à remplacer) ── */
-.sponsors-grid{display:flex;flex-wrap:wrap;border-top:1px solid var(--black);border-left:1px solid var(--black)}
-.sponsor-box{
-  flex:1 1 160px;min-width:140px;aspect-ratio:2/1;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-  border-right:1px solid var(--black);border-bottom:1px solid var(--black);
-  padding:14px;background:var(--white);transition:background .12s;
-}
-.sponsor-box:hover{background:#f4f4f4}
-.sponsor-box img{max-width:100%;max-height:52px;object-fit:contain;filter:grayscale(1);opacity:.7;transition:.15s}
-.sponsor-box:hover img{filter:grayscale(0);opacity:1}
-.sponsor-ph{width:24px;height:24px;fill:var(--grey-light)}
-.sponsor-box span{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);text-align:center;line-height:1.4}
-
 .hide{display:none!important}
 
 /* ── LOADER — logo glitché, esprit signal vidéo analogique / mapping ── */
@@ -708,6 +713,36 @@ footer a{color:var(--violet);text-decoration:none}
 }
 
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Festival",
+  "name": "MAPP Festival Montréal 2026",
+  "alternateName": "MAPP_MTL",
+  "description": "10e édition du MAPP Festival : festival international de projection mapping et d'art numérique à Montréal, du 29 septembre au 4 octobre 2026.",
+  "startDate": "2026-09-29",
+  "endDate": "2026-10-04",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "location": {
+    "@type": "Place",
+    "name": "Montréal",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Montréal",
+      "addressRegion": "QC",
+      "addressCountry": "CA"
+    }
+  },
+  "image": "https://festival.mappmtl.com/media/mappdix-tunnel.jpg",
+  "url": "https://festival.mappmtl.com/programmation",
+  "organizer": {
+    "@type": "Organization",
+    "name": "MAPP_MTL",
+    "url": "https://www.mappmtl.com"
+  }
+}
+</script>
 </head>
 <body>
 <div id="cursor-glow" aria-hidden="true"></div>
@@ -801,7 +836,8 @@ footer a{color:var(--violet);text-decoration:none}
       </audio>
     </div>
     <div class="eyebrow ed-eyebrow" data-fr="10e ÉDITION" data-en="10th EDITION">10e ÉDITION</div>
-    <h1>PROGRAMMATION</h1>
+    <h1>MAPP Festival Montréal 2026</h1>
+    <div class="hero-kicker" data-fr="Programmation" data-en="Program">Programmation</div>
     <div class="sub">29 SEPT — 4 OCT 2026 · MONTRÉAL</div>
     <div id="hero-status"></div>
     <a class="hero-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)"><span data-fr="Réservez votre billet ici" data-en="Reserve your ticket here">Réservez votre billet ici</span> <span class="arrow">→</span></a>
@@ -902,17 +938,6 @@ footer a{color:var(--violet);text-decoration:none}
   </div>
 </section>
 
-<!-- PARTENAIRES / COMMANDITAIRES ─────────────────────────────
-     Pour remplacer un placeholder par un vrai logo : dans le
-     tableau SPONSORS (JS, section DATA), mettre logo:"/img/partenaires/nom-fichier.png"
-     au lieu de logo:null. La case s'adapte automatiquement. ── -->
-<section class="sec" id="partenaires">
-  <div class="sec-inner">
-    <div class="eyebrow" data-fr="Ils rendent MAPP possible" data-en="They make MAPP possible">Ils rendent MAPP possible</div>
-    <div class="sponsors-grid" id="sponsors-grid"></div>
-  </div>
-</section>
-
 <footer>
   <svg class="logo f-mark" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MAPP_MTL">
     <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
@@ -980,17 +1005,6 @@ footer a{color:var(--violet);text-decoration:none}
 // ============================================================
 // DATA
 // ============================================================
-// Partenaires/commanditaires — placeholders. Pour afficher un vrai logo,
-// remplacer logo:null par logo:"/img/partenaires/nom-fichier.png".
-const SPONSORS = [
-  { name:"Commanditaire 1", logo:null },
-  { name:"Commanditaire 2", logo:null },
-  { name:"Commanditaire 3", logo:null },
-  { name:"Commanditaire 4", logo:null },
-  { name:"Commanditaire 5", logo:null },
-  { name:"Commanditaire 6", logo:null },
-];
-
 const VENUES = {
   vanhorne:{ fr:"Skatepark Van Horne", en:"Van Horne Skatepark", addr:"5855 boul. Saint-Laurent", lat:45.5280967, lng:-73.6032037, main:true,  pat:"p-lime"  },
   moment:{   fr:"Moment Factory",      en:"Moment Factory",      addr:"6250 av. du Parc",        lat:45.5262469, lng:-73.6119544,             pat:"p-black" },
@@ -1006,7 +1020,7 @@ const DAYS = [
       en:{ t:"Launch — Cité Mémoire × MAPP 2026", d:"Official festival launch with Cité Mémoire, in the heart of Old Montreal." } }
   ]},
   { date:"2026-09-30", d:"30", moFr:"SEPT", moEn:"SEPT", wFr:"MER", wEn:"WED", events:[
-    { time:"17h — 22h", venue:"moment", tixUrl:"https://www.zeffy.com/fr-CA/ticketing/tournoi-de-ping-pong-interactif-de-la-creativite-numerique-de-montreal",
+    { time:"17h — 22h", venue:"moment", tixUrl:"https://www.zeffy.com/fr-CA/ticketing/tournoi-de-ping-pong-interactif-de-la-creativite-numerique-de-montreal", img:"/media/soiree-tournoi-ping-pong.jpg",
       fr:{ t:"Soirée bénéfice / réseautage MAPP × Tournoi de ping-pong interactif", d:"4ᵉ édition du tournoi inter-studios de ping-pong sur table augmentée avec projection interactive, dans le cadre de la campagne de levée de fonds de MAPP_MTL. Un événement convivial réunissant les studios de création numérique de Montréal, offrant une belle occasion de rencontrer les professionnels du milieu, réseauter et soutenir votre studio préféré. Tous les fonds récoltés seront reversés à MAPP_MTL pour soutenir ses activités. Le billet donateur (100$) inclut boisson, nourriture, siège réservé et une rencontre avec le directeur et le conseil d'administration de MAPP.", price:"10$ étudiant/artiste · 20$ général · 100$ donateur" },
       en:{ t:"MAPP Benefit / Networking Night × Interactive Ping-Pong Tournament", d:"4th edition of the inter-studio augmented ping-pong tournament with interactive projection, part of MAPP_MTL's fundraising campaign. A friendly event bringing together Montreal's digital creation studios — a great chance to meet industry professionals, network and support your favourite studio. All proceeds go to MAPP_MTL to support its activities. The donor ticket ($100) includes a drink, food, a reserved seat, and a meet-and-greet with MAPP's director and board.", price:"$10 student/artist · $20 general · $100 donor" } }
   ]},
@@ -1019,7 +1033,7 @@ const DAYS = [
     { time:"17h — 22h", venue:"vanhorne", free:true,
       fr:{ t:"Fête de quartier numérique", d:"Projections, mapping et performances sous le viaduc Van Horne." },
       en:{ t:"Digital Block Party", d:"Projections, mapping and performances under the Van Horne overpass." } },
-    { time:"22h — 03h", venue:"moment", tixUrl:"https://www.zeffy.com/fr-CA/ticketing/soiree-mapp--2026",
+    { time:"22h — 03h", venue:"moment", tixUrl:"https://www.zeffy.com/fr-CA/ticketing/soiree-mapp--2026", img:"/media/soiree-mapp-2026.jpg",
       fr:{ t:"Soirée MAPP 2026", d:"MAPP revient avec sa soirée incontournable chez Moment Factory : programme dansant et festif, scénographie immersive et projections mapping captivantes. Célébrez cette 10e édition avec artistes, créateurs, partenaires et public fidèle.", price:"20$ en prévente jusqu'au 21 sept. · 25$ sur place" },
       en:{ t:"MAPP Night 2026", d:"MAPP is back with its unmissable party at Moment Factory: a dance-floor program, immersive scenography and captivating mapping projections. Celebrate this 10th edition with artists, creators, partners and loyal audiences.", price:"$20 presale until Sept 21 · $25 at the door" } }
   ]},
@@ -1029,7 +1043,7 @@ const DAYS = [
       en:{ t:"Digital Block Party", d:"Full day: family activities, workshops, then evening projections." } }
   ]},
   { date:"2026-10-04", d:"04", moFr:"OCT", moEn:"OCT", wFr:"DIM", wEn:"SUN", events:[
-    { time:"14h — 18h", venue:"caserne", free:true,
+    { time:"14h — 18h", venue:"caserne", free:true, img:"/media/jam-tagtool.jpg",
       fr:{ t:"Jam Tagtool", d:"L'Espace culturel de la Caserne 26 invite VJs, débutant·e·s comme expérimenté·e·s, artistes, créateur·rice·s, illustrateur·rice·s et public curieux d'explorer la projection mapping immersive. Les artistes présenteront simultanément leurs créations sur quatre murs, grâce à quatre projecteurs. Apportez votre propre deck et participez à cette création collective — une occasion de découvrir la créativité visuelle à l'œuvre et de rencontrer les artistes qui façonnent le mapping à Montréal." },
       en:{ t:"Tagtool Jam", d:"Caserne 26's cultural space invites VJs, beginners and experienced alike, artists, creators, illustrators and curious audiences to explore immersive projection mapping. Artists will simultaneously present their creations across four walls, using four projectors. Bring your own deck and take part in this collective creation — a chance to discover the visual creativity at work and meet the artists shaping mapping in Montreal." } }
   ]}
@@ -1523,18 +1537,6 @@ function renderDixansStats(){
     <div class="dixans-stat"><b>${s.n}</b><span>${lang==='fr'?s.fr:s.en}</span></div>`).join('');
 }
 
-function renderSponsors(){
-  const el = document.getElementById('sponsors-grid');
-  if(!el) return;
-  el.innerHTML = SPONSORS.map(s => s.logo
-    ? `<div class="sponsor-box" title="${s.name}"><img src="${s.logo}" alt="${s.name}"></div>`
-    : `<div class="sponsor-box" title="${s.name}">
-         <svg class="sponsor-ph" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.5 7.4H22l-6.1 4.4 2.3 7.4L12 16.8l-6.2 4.4 2.3-7.4L2 9.4h7.5z"/></svg>
-         <span>${s.name}</span>
-       </div>`
-  ).join('');
-}
-
 // ============================================================
 // HERO VIDEO — lecture simple, sans filtre par défaut
 // ============================================================
@@ -1708,7 +1710,6 @@ function boot(){
   applyLang();
   fitTitle();
   initReveals();
-  renderSponsors();
   startHalftone(false); // effet trame activé par défaut ; l'icône permet de revenir à la vidéo
 
   // ── LUEUR VIOLETTE — suit la souris (desktop) et le doigt (mobile) sur toute la page ──
@@ -1847,7 +1848,7 @@ function openEvent(dayIdx, evIdx){
   const tixUrl = ev.tixUrl || "https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026";
 
   document.getElementById('ev-body').innerHTML = `
-    <div class="ev-header ${v.pat}">
+    <div class="ev-header ${ev.img ? 'has-img' : v.pat}" ${ev.img ? `style="background-image:url('${ev.img}')"` : ''}>
       <span>${c.t}</span>
     </div>
     <div style="padding:20px 18px 28px;">
