@@ -271,26 +271,9 @@ nav{
 .live-dot{width:10px;height:10px;background:var(--black);border-radius:50%;animation:blink 1.4s infinite}
 @keyframes blink{50%{opacity:.25}}
 
-/* ── Légende des lieux ───────────────────────────── */
-.legend{
-  display:flex;flex-wrap:wrap;gap:8px;
-  margin-bottom:26px;
-}
-.legend-chip{
-  display:inline-flex;align-items:flex-start;gap:8px;cursor:pointer;
-  font-family:var(--mono);font-size:10.5px;font-weight:500;
-  letter-spacing:.05em;text-transform:uppercase;text-align:left;
-  padding:9px 12px;border:1px solid var(--black);
-  background:var(--white);transition:.12s;
-  max-width:100%;
-}
-.legend-chip .legend-sw{margin-top:1px}
-.legend-chip:hover{background:#f2f2f2}
-.legend-chip.active{background:var(--lime)!important;font-weight:700;}
 .card{transition:opacity .2s,filter .2s;}
 .card.dim{opacity:0.12;filter:grayscale(0.8);pointer-events:none;transform:none!important;box-shadow:none!important;}
 .gcol.dim .ghead{opacity:0.25;}
-.legend-sw{width:14px;height:14px;border:1px solid var(--black);flex:none}
 
 /* ── Installations permanentes (toute la durée du festival) ── */
 .installs{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
@@ -664,6 +647,7 @@ footer a{color:var(--violet);text-decoration:none}
 @media(max-width:640px){.sticky-tix{display:flex}}
 
 .hide{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ── LOADER — logo glitché, esprit signal vidéo analogique / mapping ── */
 #page-loader{
@@ -834,7 +818,6 @@ footer a{color:var(--violet);text-decoration:none}
 <section class="sec" id="prog">
   <div class="float-obj" style="width:26px;height:26px;left:92%;top:8%;--fo-op:.5"><svg><use href="#fo-note"/></svg></div>
   <div class="sec-inner">
-    <div class="legend reveal" id="venue-legend"></div>
     <div class="installs reveal" id="installs"></div>
     <div class="grid reveal" id="grid"></div>
   </div>
@@ -1092,7 +1075,6 @@ function applyLang(){
   document.querySelectorAll('[data-fr]').forEach(el=>{ el.textContent = el.dataset[lang]; });
   document.querySelectorAll('[data-fr-ph]').forEach(el=>{ el.setAttribute('placeholder', el.dataset[lang+'Ph']); });
   renderMarquee();
-  renderVenueLegend();
   renderInstalls();
   renderGrid();
   renderArtists();
@@ -1161,18 +1143,6 @@ setInterval(renderHeroStatus, 30000);
 // ============================================================
 // PROGRAM — grille 6 jours
 // ============================================================
-function renderVenueLegend(){
-  const chips = Object.entries(VENUES).map(([key,v])=>`
-    <span class="legend-chip" data-venue="${key}" onclick="filterVenue('${key}')">
-      <span class="legend-sw ${v.pat}"></span>${v[lang]}
-    </span>`).join('');
-  const freeChip = `
-    <span class="legend-chip legend-chip-free" id="free-chip" onclick="toggleFreeOnly()">
-      <span class="legend-sw" style="background:var(--lime)"></span>${lang==='fr'?'Gratuit seulement':'Free only'}
-    </span>`;
-  document.getElementById('venue-legend').innerHTML = chips + freeChip;
-}
-
 function truncate(str, max){
   if(!str || str.length <= max) return str;
   const cut = str.slice(0, max).replace(/\s+\S*$/, '');
@@ -1438,33 +1408,6 @@ function initMap(){
          ${lang==='fr'?'Itinéraire':'Directions'} →</a>`);
     markers[key] = mk;
   });
-}
-let activeVenue = null;
-let freeOnly = false;
-function applyFilters(){
-  document.querySelectorAll('.legend-chip[data-venue]').forEach(c => {
-    c.classList.toggle('active', c.dataset.venue === activeVenue);
-  });
-  const freeChip = document.getElementById('free-chip');
-  if(freeChip) freeChip.classList.toggle('active', freeOnly);
-  document.querySelectorAll('.card[data-venue], .install-card[data-venue]').forEach(card => {
-    const hideVenue = !!activeVenue && card.dataset.venue !== activeVenue;
-    const hideFree = freeOnly && card.dataset.free !== '1';
-    card.classList.toggle('dim', hideVenue || hideFree);
-  });
-  document.querySelectorAll('.gcol').forEach(col => {
-    col.classList.toggle('dim', !!col.querySelector('.card') && !col.querySelector('.card:not(.dim)'));
-  });
-}
-function filterVenue(key) {
-  vib(6);
-  activeVenue = (activeVenue === key) ? null : key;
-  applyFilters();
-}
-function toggleFreeOnly(){
-  vib(6);
-  freeOnly = !freeOnly;
-  applyFilters();
 }
 let mapActiveVenue = null;
 function focusVenue(key){
@@ -1810,8 +1753,7 @@ function openEvent(dayIdx, evIdx){
     </div>
     <div style="padding:20px 18px 28px;">
       <span class="ev-time">${dateFmt} · ${ev.time}</span>
-      <h2 style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
-      ${freeTag}${priceTag}
+      <h2 ${ev.img ? 'class="sr-only"' : ''} style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
       <p class="ev-desc">${c.d}</p>
       <a class="ev-tix-link" href="${tixUrl}" target="_blank" rel="noopener" onclick="vib(10)">
         🎟 ${lang==='fr'?'Réservez votre billet ici':'Reserve your ticket here'} →
