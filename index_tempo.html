@@ -161,9 +161,10 @@ nav{
 
 /* ── Hero ────────────────────────────────────────── */
 .hero{
-  padding:56px 18px 0;background:var(--black);color:var(--white);
+  padding:0 18px 0;background:var(--black);color:var(--white);
   border-bottom:1px solid var(--black);position:relative;overflow:hidden;
 }
+.hero .ed-eyebrow{margin-top:32px}
 .hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:2}
 .hero h1{
   font-family:var(--cond);font-weight:500;
@@ -193,8 +194,8 @@ nav{
 
 /* generative halftone visual */
 .halftone-wrap{position:relative;
-  margin-top:38px;height:min(46vh,340px);
-  border-top:1px solid #2a2a2a;
+  margin-top:0;margin-bottom:32px;height:min(46vh,340px);
+  border-bottom:1px solid #2a2a2a;
   margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);
 }
 .halftone-wrap video{
@@ -770,11 +771,6 @@ footer a{color:var(--violet);text-decoration:none}
 <!-- HERO -->
 <div class="hero">
   <div class="hero-inner">
-    <div class="eyebrow ed-eyebrow" data-fr="10e ÉDITION" data-en="10th EDITION">10e ÉDITION</div>
-    <h1>PROGRAMMATION</h1>
-    <div class="sub">29 SEPT — 4 OCT 2026 · MONTRÉAL</div>
-    <div id="hero-status"></div>
-    <a class="hero-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)"><span data-fr="Réservez votre billet ici" data-en="Reserve your ticket here">Réservez votre billet ici</span> <span class="arrow">→</span></a>
     <div class="halftone-wrap">
       <video id="hero-video" src="/media/mapp-hero.mp4"
              muted loop playsinline autoplay preload="metadata" crossorigin="anonymous"></video>
@@ -788,6 +784,11 @@ footer a{color:var(--violet);text-decoration:none}
         <source src="/media/halftone-toggle.mp3" type="audio/mpeg">
       </audio>
     </div>
+    <div class="eyebrow ed-eyebrow" data-fr="10e ÉDITION" data-en="10th EDITION">10e ÉDITION</div>
+    <h1>PROGRAMMATION</h1>
+    <div class="sub">29 SEPT — 4 OCT 2026 · MONTRÉAL</div>
+    <div id="hero-status"></div>
+    <a class="hero-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)"><span data-fr="Réservez votre billet ici" data-en="Reserve your ticket here">Réservez votre billet ici</span> <span class="arrow">→</span></a>
   </div>
 </div>
 
