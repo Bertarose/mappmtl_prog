@@ -146,27 +146,6 @@
       position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background: linear-gradient(180deg, rgba(0,0,0,.28) 0%, rgba(0,0,0,.1) 45%, rgba(0,0,0,.5) 100%);
     }
-    .video-title{
-      position:absolute;left:0;bottom:0;z-index:1;
-      width:100%;padding:0 4vw 1vh;
-      display:flex;flex-direction:column;align-items:flex-start;gap:.03em;
-      pointer-events:none;user-select:none;
-    }
-    .vt-letter{
-      display:block;height:clamp(90px,20vw,190px);width:auto;
-    }
-    .vt-row{display:flex!important;gap:1.5%;align-items:flex-end}
-    .vt-line{
-      display:block;opacity:0;transform:translateY(48px);
-      transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1);
-    }
-    .video-title.in .vt-line{opacity:1;transform:translateY(0)}
-    .video-title.in .vt-line:nth-child(1){transition-delay:.05s}
-    .video-title.in .vt-line:nth-child(2){transition-delay:.18s}
-    .video-title.in .vt-line:nth-child(3){transition-delay:.31s}
-    @media (prefers-reduced-motion: reduce){
-      .vt-line{transition:none;opacity:1;transform:none}
-    }
     .video-wrap .green-fade {
       position: absolute; left: 0; right: 0; bottom: 0; height: 48%; z-index: 2; pointer-events: none;
       background: linear-gradient(180deg, rgba(0,182,255,0) 0%, rgba(0,182,255,.7) 72%, var(--cyan) 100%);
@@ -254,8 +233,10 @@
     #halftone-canvas {
       position: absolute; inset: 0; width: 100%; height: 100%;
       display: block; opacity: 0; pointer-events: none; transition: opacity .35s;
+      background-image: url('media/mappdix-tunnel.jpg');
+      background-size: cover; background-position: center;
     }
-    #halftone-canvas.on { pointer-events: auto; }
+    #halftone-canvas.on { pointer-events: auto; opacity: .85; }
     #ikeda-canvas {
       position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;
       display: block; opacity: 0; pointer-events: none; transition: opacity .35s;
@@ -337,7 +318,6 @@
       .count-cell b { font-size: 24px; }
       .soc { padding: 10px 12px; font-size: 9px; }
       h1 { font-size: clamp(17px, 5.6vw, 24px); }
-      .vt-letter { height: clamp(50px, 21vw, 95px); }
       .video-wrap { min-height: min(48vh, 380px); }
     }
 
@@ -467,16 +447,8 @@
     <canvas id="halftone-canvas"></canvas>
     <canvas id="ikeda-canvas"></canvas>
     <div class="video-scrim"></div>
-    <div class="video-title" id="video-title" aria-hidden="true">
-      <span class="vt-line"><svg class="vt-letter" viewBox="0 0 329.838 343"><path d="M126.926,343L58.265,61.082h-.941v281.918H0V0h95.432l68.089,279.564h.933L232.543,0h95.432v343h-57.324V61.082h-.941l-68.662,281.918h-74.122,0Z" fill="#fff"/></svg></span>
-      <span class="vt-line vt-row">
-        <svg class="vt-letter" viewBox="0 0 329.838 343"><path d="M134.381.151h62.488l132.969,343h-62.488l-31.95-87.865H93.033l-32.424,87.865H0L134.381.151ZM217.551,206.892l-53.563-146.131-53.563,146.131h107.126Z" fill="#fff"/></svg>
-        <svg class="vt-letter" viewBox="0 0 329.838 343"><path d="M173.518,0H.09v343h57.796v-115.247h116.126c84.963,0,135.253-44.754,135.253-116.165S258.975,0,173.51,0h.008ZM164.739,178.892H57.886V49.371h106.853c56.258,0,84.422,20.705,84.422,64.219s-28.164,65.302-84.422,65.302Z" fill="#fff"/></svg>
-        <svg class="vt-letter" viewBox="0 0 329.838 343"><path d="M173.518,0H.09v343h57.796v-115.247h116.126c84.963,0,135.253-44.754,135.253-116.165S258.975,0,173.51,0h.008ZM164.739,178.892H57.886V49.371h106.853c56.258,0,84.422,20.705,84.422,64.219s-28.164,65.302-84.422,65.302Z" fill="#fff"/></svg>
-      </span>
-    </div>
     <div class="green-fade"></div>
-    <button type="button" class="halftone-toggle" id="halftone-toggle" onclick="toggleHalftone()" aria-pressed="true" aria-label="Effet trame activé — cliquer pour revenir à la vidéo" title="Effet trame activé — cliquer pour revenir à la vidéo">◆</button>
+    <button type="button" class="halftone-toggle" id="halftone-toggle" onclick="toggleHalftone()" aria-pressed="false" aria-label="Afficher le visuel MAPP DIX" title="Afficher le visuel MAPP DIX">◆</button>
     <audio id="halftone-sound" preload="auto">
       <source src="/media/halftone-toggle.webm" type="audio/webm">
       <source src="/media/halftone-toggle.mp3" type="audio/mpeg">
@@ -615,8 +587,6 @@
         if(timer) clearTimeout(timer);
         loader.classList.add('loader-hide');
         setTimeout(()=>{ loader.style.display='none'; }, 550);
-        const title = document.getElementById('video-title');
-        if(title) title.classList.add('in');
       }
       const MIN_DISPLAY = 700;
       const start = Date.now();
@@ -685,8 +655,7 @@
     // sous Windows, et un try/catch autour de getImageData pour ne
     // jamais laisser une exception interrompre la boucle d'animation.
     // ============================================================
-    let htOn = false, htRAF = null, htReady = false;
-    let ht = {}; // ctx, W, H, dpr, cols, rows, lum, off, octx, px, py
+    let htOn = false;
 
     function toggleHalftone(){
       vib(10);
@@ -712,57 +681,10 @@
       if(!btn) return;
       btn.setAttribute('aria-pressed', htOn ? 'true' : 'false');
       const label = htOn
-        ? (lang==='fr' ? "Effet trame activé — cliquer pour revenir à la vidéo" : "Halftone effect on — click to return to video")
-        : (lang==='fr' ? "Activer l'effet trame" : "Turn on halftone effect");
+        ? (lang==='fr' ? "Visuel MAPP DIX activé — cliquer pour revenir à la vidéo" : "MAPP DIX visual on — click to return to video")
+        : (lang==='fr' ? "Afficher le visuel MAPP DIX" : "Show the MAPP DIX visual");
       btn.setAttribute('aria-label', label);
       btn.title = label;
-    }
-
-    function initHalftoneCanvas(){
-      const cv = document.getElementById('halftone-canvas');
-      if(!cv) return null;
-      ht.ctx = cv.getContext('2d');
-      function resize(){
-        ht.dpr = Math.min(window.devicePixelRatio||1, 2);
-        ht.W = cv.clientWidth; ht.H = cv.clientHeight;
-        cv.width = ht.W*ht.dpr; cv.height = ht.H*ht.dpr;
-        ht.ctx.setTransform(ht.dpr,0,0,ht.dpr,0,0);
-      }
-      resize();
-      window.addEventListener('resize', resize);
-
-      ht.off = document.createElement('canvas');
-      ht.octx = ht.off.getContext('2d', {willReadFrequently:true});
-      ht.lum = null; ht.cols = 0; ht.rows = 0;
-      ht.px = -1e4; ht.py = -1e4;
-
-      function setPointer(clientX, clientY){
-        const r = cv.getBoundingClientRect();
-        ht.px = clientX - r.left; ht.py = clientY - r.top;
-      }
-      cv.addEventListener('pointermove', e=>setPointer(e.clientX, e.clientY));
-      cv.addEventListener('pointerleave', ()=>{ ht.px = ht.py = -1e4; });
-      cv.addEventListener('touchmove', e=>{ setPointer(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
-      cv.addEventListener('touchend', ()=>{ ht.px = ht.py = -1e4; });
-
-      htReady = true;
-      return cv;
-    }
-
-    function sampleHeroVideo(){
-      const vid = document.getElementById('hero-video');
-      const GAP = 8;
-      if(!vid || vid.readyState < 2 || !vid.videoWidth){ ht.lum = null; return; }
-      ht.cols = Math.ceil(ht.W/GAP); ht.rows = Math.ceil(ht.H/GAP);
-      if(ht.off.width !== ht.cols || ht.off.height !== ht.rows){ ht.off.width = ht.cols; ht.off.height = ht.rows; }
-      const va = vid.videoWidth/vid.videoHeight, ca = ht.cols/ht.rows;
-      let sw = vid.videoWidth, sh = vid.videoHeight, sx = 0, sy = 0;
-      if(va > ca){ sw = vid.videoHeight*ca; sx = (vid.videoWidth-sw)/2; }
-      else       { sh = vid.videoWidth/ca; sy = (vid.videoHeight-sh)/2; }
-      try{
-        ht.octx.drawImage(vid, sx, sy, sw, sh, 0, 0, ht.cols, ht.rows);
-        ht.lum = ht.octx.getImageData(0, 0, ht.cols, ht.rows).data;
-      }catch(e){ ht.lum = null; }
     }
 
     // ============================================================
@@ -861,68 +783,23 @@ function stopIkeda(){
 
 function startHalftone(playSound){
       if(htOn) return;
-      if(!htReady && !initHalftoneCanvas()) return;
       htOn = true;
       const cv = document.getElementById('halftone-canvas');
       const vid = document.getElementById('hero-video');
 
-      // recalcule les dimensions au cas où la mise en page ait changé
-      // depuis la première ouverture (ex. rotation d'écran, resize)
-      ht.dpr = Math.min(window.devicePixelRatio||1, 2);
-      ht.W = cv.clientWidth; ht.H = cv.clientHeight;
-      cv.width = ht.W*ht.dpr; cv.height = ht.H*ht.dpr;
-      ht.ctx.setTransform(ht.dpr,0,0,ht.dpr,0,0);
-
-      cv.classList.add('on'); cv.style.opacity = '1';
-      if(vid) vid.style.opacity = '0';
+      if(cv) cv.classList.add('on');
+      if(vid) vid.style.opacity = '.55';
       setHaltoneBtnLabel();
       if(playSound) playToggleSound();
       startIkeda();
-
-      const GAP = 8;
-      // Note : on continue d'animer même si le système demande de réduire
-      // les animations (Windows « Afficher les animations » désactivé, etc.) —
-      // cet effet est déclenché volontairement par un clic, pas une animation
-      // ambiante automatique.
-      const R = 100, R2 = R*R;
-      const ratio = 0.86;      // resserrement géométrique des « cadres » du tunnel
-      const logRatio = Math.log(ratio);
-      const speed = 0.35;      // vitesse de défilement (sensation de vol dans le tunnel)
-      let t = 0;
-
-      function frame(){
-        if(!htOn) return;
-        const ctx = ht.ctx, W = ht.W, H = ht.H;
-        ctx.clearRect(0,0,W,H);
-        const vx = W/2, vy = H/2;
-        const R0 = Math.max(vx, W-vx, vy, H-vy) * 1.05;
-        for(let y=GAP/2; y<H; y+=GAP){
-          for(let x=GAP/2; x<W; x+=GAP){
-            const dx = x-ht.px, dy = y-ht.py, d2 = dx*dx+dy*dy;
-            const boost = d2 < R2 ? 1 - Math.sqrt(d2)/R : 0;
-            if(boost > 0.3){
-              ctx.fillStyle = 'rgba(118,0,255,'+(0.55+boost*0.45)+')'; // pointeur : lueur violette
-            } else {
-              const d = Math.max(Math.abs(x-vx), Math.abs(y-vy));
-              const ring = Math.floor(Math.log(Math.max(d,1)/R0)/logRatio - t*speed);
-              ctx.fillStyle = (ring % 2 === 0) ? 'rgba(0,182,255,.92)' : 'rgba(255,255,255,.92)';
-            }
-            ctx.fillRect(x-GAP/2, y-GAP/2, GAP-1, GAP-1);
-          }
-        }
-        t += 0.012;
-        htRAF = requestAnimationFrame(frame);
-      }
-      frame();
     }
 
     function stopHalftone(playSound){
       if(!htOn) return;
       htOn = false;
-      if(htRAF) cancelAnimationFrame(htRAF);
       const cv = document.getElementById('halftone-canvas');
       const vid = document.getElementById('hero-video');
-      if(cv){ cv.classList.remove('on'); cv.style.opacity = '0'; }
+      if(cv) cv.classList.remove('on');
       if(vid) vid.style.opacity = '1';
       setHaltoneBtnLabel();
       if(playSound) stopToggleSound();
