@@ -1753,7 +1753,7 @@ function openEvent(dayIdx, evIdx){
     </div>
     <div style="padding:20px 18px 28px;">
       <span class="ev-time">${dateFmt} · ${ev.time}</span>
-      <h2 ${ev.img ? 'class="sr-only"' : ''} style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
+      <h2 class="sr-only" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
       <p class="ev-desc">${c.d}</p>
       <a class="ev-tix-link" href="${tixUrl}" target="_blank" rel="noopener" onclick="vib(10)">
         🎟 ${lang==='fr'?'Réservez votre billet ici':'Reserve your ticket here'} →
@@ -1791,7 +1791,7 @@ function openInstallation(idx){
     </div>
     <div style="padding:20px 18px 28px;">
       <span class="ev-time">${dateLabel}</span>
-      <h2 style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
+      <h2 class="sr-only" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
       ${freeTag}
       <p class="ev-desc">${c.d}</p>
       <button class="ev-map-link" onclick="closeEvent();focusVenue('${ins.venue}')">
