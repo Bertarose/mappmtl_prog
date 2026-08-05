@@ -307,6 +307,16 @@ nav{
   padding:3px 7px;
 }
 .install-card.p-black .free{background:var(--lime);color:var(--black)}
+/* sur les trames (dots/hatch) : le texte devient des étiquettes blanches « collées » pour rester lisible */
+.install-card.p-dots .venue,.install-card.p-hatch .venue{
+  background:var(--white);color:var(--black);width:fit-content;padding:1px 5px;
+}
+.install-card.p-dots h3,.install-card.p-hatch h3{
+  background:var(--white);width:fit-content;padding:3px 5px;
+}
+.install-card.p-dots .desc,.install-card.p-hatch .desc{
+  background:var(--white);padding:5px 6px;display:inline-block;
+}
 @media(max-width:600px){
   .install-card{padding:14px 15px}
   .install-card .idate{font-size:10.5px}
