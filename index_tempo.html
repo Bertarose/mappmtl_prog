@@ -275,6 +275,43 @@ nav{
 .gcol.dim .ghead{opacity:0.25;}
 .legend-sw{width:16px;height:16px;border:1px solid var(--black);flex:none}
 
+/* ── Installations permanentes (toute la durée du festival) ── */
+.installs{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.install-card{
+  border:1px solid var(--black);padding:16px 18px;cursor:pointer;
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  position:relative;transition:transform .12s, box-shadow .12s, opacity .2s, filter .2s;
+}
+.install-card.dim{opacity:0.12;filter:grayscale(0.8);pointer-events:none;transform:none!important;box-shadow:none!important;}
+.install-card:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--black)}
+.install-card .idate{
+  font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.06em;
+  white-space:nowrap;background:var(--black);color:var(--white);padding:6px 10px;
+}
+.install-card.p-black .idate{background:var(--lime);color:var(--black)}
+.install-card .itxt{flex:1;min-width:220px}
+.install-card h3{
+  font-family:var(--cond);font-weight:500;font-size:17.5px;line-height:1.05;
+  text-transform:uppercase;letter-spacing:-0.01em;margin-bottom:4px;
+}
+.install-card .venue{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;
+  text-transform:uppercase;opacity:.75;display:block;margin-bottom:4px;
+}
+.install-card .desc{font-family:var(--font);font-size:12.5px;line-height:1.5;color:rgba(0,0,0,.72)}
+.install-card.p-black .desc{color:rgba(255,255,255,.78)}
+.install-card .free{
+  position:absolute;top:-1px;right:-1px;
+  font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;background:var(--black);color:var(--lime);
+  padding:3px 7px;
+}
+.install-card.p-black .free{background:var(--lime);color:var(--black)}
+@media(max-width:600px){
+  .install-card{padding:14px 15px}
+  .install-card .idate{font-size:10.5px}
+}
+
 /* ── Grille programme (6 jours) ──────────────────── */
 .grid{
   display:grid;
@@ -766,6 +803,7 @@ footer a{color:var(--lime);text-decoration:none}
   <div class="sec-inner">
     <div class="eyebrow" data-fr="Programmation — 6 jours d'un coup d'œil" data-en="Program — 6 days at a glance">Programmation — 6 jours d'un coup d'œil</div>
     <div class="legend reveal" id="venue-legend"></div>
+    <div class="installs reveal" id="installs"></div>
     <div class="grid reveal" id="grid"></div>
   </div>
 </section>
@@ -971,26 +1009,17 @@ const DAYS = [
   { date:"2026-09-29", d:"29", moFr:"SEPT", moEn:"SEPT", wFr:"MAR", wEn:"TUE", events:[
     { time:"19h00", venue:"cite",
       fr:{ t:"Lancement Cité Mémoire × MAPP 2026", d:"Lancement officiel du festival en collaboration avec Cité Mémoire, au cœur du Vieux-Montréal." },
-      en:{ t:"Launch — Cité Mémoire × MAPP 2026", d:"Official festival launch with Cité Mémoire, in the heart of Old Montreal." } },
-    { time:"En continu", venue:"stlaurent", free:true,
-      fr:{ t:"MAPP × Quartier des spectacles — Création du Studio Baillat", d:"Installation présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
-      en:{ t:"MAPP × Quartier des spectacles — Creation by Studio Baillat", d:"Installation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." } }
+      en:{ t:"Launch — Cité Mémoire × MAPP 2026", d:"Official festival launch with Cité Mémoire, in the heart of Old Montreal." } }
   ]},
   { date:"2026-09-30", d:"30", moFr:"SEPT", moEn:"SEPT", wFr:"MER", wEn:"WED", events:[
     { time:"17h — 22h", venue:"moment",
       fr:{ t:"Tournoi de Ping-Pong de la créativité numérique", d:"Soirée levée de fonds pour MAPP chez Moment Factory. DJ à confirmer." },
-      en:{ t:"Digital Creativity Ping-Pong Tournament", d:"MAPP fundraiser night at Moment Factory. DJ to be confirmed." } },
-    { time:"En continu", venue:"stlaurent", free:true,
-      fr:{ t:"MAPP × Quartier des spectacles — Création du Studio Baillat", d:"Installation présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
-      en:{ t:"MAPP × Quartier des spectacles — Creation by Studio Baillat", d:"Installation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." } }
+      en:{ t:"Digital Creativity Ping-Pong Tournament", d:"MAPP fundraiser night at Moment Factory. DJ to be confirmed." } }
   ]},
   { date:"2026-10-01", d:"01", moFr:"OCT", moEn:"OCT", wFr:"JEU", wEn:"THU", events:[
     { time:"17h — 22h", venue:"vanhorne", free:true,
       fr:{ t:"Ouverture — Fête de quartier numérique", d:"Ouverture des projections au Skatepark Van Horne + présentation MINUTE_MAPP." },
-      en:{ t:"Opening — Digital Block Party", d:"Projection opening at Van Horne Skatepark + MINUTE_MAPP showcase." } },
-    { time:"En continu", venue:"stlaurent", free:true,
-      fr:{ t:"MAPP × Quartier des spectacles — Création du Studio Baillat", d:"Installation présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
-      en:{ t:"MAPP × Quartier des spectacles — Creation by Studio Baillat", d:"Installation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." } }
+      en:{ t:"Opening — Digital Block Party", d:"Projection opening at Van Horne Skatepark + MINUTE_MAPP showcase." } }
   ]},
   { date:"2026-10-02", d:"02", moFr:"OCT", moEn:"OCT", wFr:"VEN", wEn:"FRI", events:[
     { time:"17h — 22h", venue:"vanhorne", free:true,
@@ -998,27 +1027,27 @@ const DAYS = [
       en:{ t:"Digital Block Party", d:"Projections, mapping and performances under the Van Horne overpass." } },
     { time:"22h — 03h", venue:"moment",
       fr:{ t:"Soirée MAPP", d:"L'after officiel du festival chez Moment Factory." },
-      en:{ t:"MAPP Night", d:"The festival's official afterparty at Moment Factory." } },
-    { time:"En continu", venue:"stlaurent", free:true,
-      fr:{ t:"MAPP × Quartier des spectacles — Création du Studio Baillat", d:"Installation présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
-      en:{ t:"MAPP × Quartier des spectacles — Creation by Studio Baillat", d:"Installation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." } }
+      en:{ t:"MAPP Night", d:"The festival's official afterparty at Moment Factory." } }
   ]},
   { date:"2026-10-03", d:"03", moFr:"OCT", moEn:"OCT", wFr:"SAM", wEn:"SAT", events:[
     { time:"12h — 22h", venue:"vanhorne", free:true,
       fr:{ t:"Fête de quartier numérique", d:"Journée complète : activités familiales, ateliers, puis projections en soirée." },
-      en:{ t:"Digital Block Party", d:"Full day: family activities, workshops, then evening projections." } },
-    { time:"En continu", venue:"stlaurent", free:true,
-      fr:{ t:"MAPP × Quartier des spectacles — Création du Studio Baillat", d:"Installation présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
-      en:{ t:"MAPP × Quartier des spectacles — Creation by Studio Baillat", d:"Installation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." } }
+      en:{ t:"Digital Block Party", d:"Full day: family activities, workshops, then evening projections." } }
   ]},
   { date:"2026-10-04", d:"04", moFr:"OCT", moEn:"OCT", wFr:"DIM", wEn:"SUN", events:[
     { time:"14h — 20h", venue:"caserne", free:true,
       fr:{ t:"Jam Tagtool × Kahnawake Survival School", d:"Session de dessin projeté en direct avec les élèves de la Kahnawake Survival School." },
-      en:{ t:"Tagtool Jam × Kahnawake Survival School", d:"Live projected drawing session with students from the Kahnawake Survival School." } },
-    { time:"En continu", venue:"stlaurent", free:true,
-      fr:{ t:"MAPP × Quartier des spectacles — Création du Studio Baillat", d:"Installation présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
-      en:{ t:"MAPP × Quartier des spectacles — Creation by Studio Baillat", d:"Installation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." } }
+      en:{ t:"Tagtool Jam × Kahnawake Survival School", d:"Live projected drawing session with students from the Kahnawake Survival School." } }
   ]}
+];
+
+// Installations présentes sur toute la durée du festival — affichées une seule fois,
+// hors de la grille des 6 jours, avec une plage de dates plutôt qu'un horaire quotidien.
+const INSTALLATIONS = [
+  { venue:"stlaurent", free:true,
+    dateFr:"29 SEPT — 4 OCT", dateEn:"SEPT 29 — OCT 4",
+    fr:{ t:"MAPP × Quartier des spectacles — Création du Studio Baillat", d:"Installation présentée du 29 septembre au 4 octobre au métro St-Laurent, dans le cadre du partenariat avec le Quartier des spectacles." },
+    en:{ t:"MAPP × Quartier des spectacles — Creation by Studio Baillat", d:"Installation on view September 29 to October 4 at St-Laurent metro, as part of the Quartier des spectacles partnership." } }
 ];
 
 // ---- ARTISTES (DONNÉES DÉMO — remplacer par la vraie programmation) ----
@@ -1084,6 +1113,7 @@ function applyLang(){
   document.querySelectorAll('[data-fr-ph]').forEach(el=>{ el.setAttribute('placeholder', el.dataset[lang+'Ph']); });
   renderMarquee();
   renderVenueLegend();
+  renderInstalls();
   renderGrid();
   renderArtists();
   renderLegend();
@@ -1162,6 +1192,25 @@ function renderVenueLegend(){
       <span class="legend-sw" style="background:var(--lime)"></span>${lang==='fr'?'Gratuit seulement':'Free only'}
     </span>`;
   document.getElementById('venue-legend').innerHTML = chips + freeChip;
+}
+
+function renderInstalls(){
+  const el = document.getElementById('installs');
+  if(!el) return;
+  el.innerHTML = INSTALLATIONS.map((ins,idx)=>{
+    const v = VENUES[ins.venue]; const c = ins[lang];
+    const dateLabel = lang==='fr' ? ins.dateFr : ins.dateEn;
+    return `
+    <div class="install-card ${v.pat}" data-venue="${ins.venue}" data-free="${ins.free?'1':'0'}" onclick="openInstallation(${idx})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openInstallation(${idx})}" tabindex="0" role="button" aria-haspopup="dialog" aria-label="${c.t}, ${dateLabel}, ${v[lang]}">
+      ${ins.free?`<span class="free">${lang==='fr'?'Gratuit':'Free'}</span>`:''}
+      <span class="idate">${dateLabel}</span>
+      <div class="itxt">
+        <h3>${c.t}</h3>
+        <span class="venue">📍 ${v[lang]}</span>
+        <div class="desc">${c.d}</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function renderGrid(){
@@ -1412,7 +1461,7 @@ function applyFilters(){
   });
   const freeChip = document.getElementById('free-chip');
   if(freeChip) freeChip.classList.toggle('active', freeOnly);
-  document.querySelectorAll('.card[data-venue]').forEach(card => {
+  document.querySelectorAll('.card[data-venue], .install-card[data-venue]').forEach(card => {
     const hideVenue = !!activeVenue && card.dataset.venue !== activeVenue;
     const hideFree = freeOnly && card.dataset.free !== '1';
     card.classList.toggle('dim', hideVenue || hideFree);
@@ -1912,6 +1961,36 @@ function openEvent(dayIdx, evIdx){
       </button>
       <button class="ev-map-link" onclick="shareEvent(${dayIdx},${evIdx})">
         🔗 ${lang==='fr'?'Partager':'Share'}
+      </button>
+    </div>`;
+
+  document.getElementById('ev-back').classList.add('open');
+  document.getElementById('ev-sheet').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// ── FICHE INSTALLATION (toute la durée du festival) ──
+function openInstallation(idx){
+  vib(8);
+  const ins = INSTALLATIONS[idx];
+  const v = VENUES[ins.venue], c = ins[lang];
+  const dateLabel = lang==='fr' ? ins.dateFr : ins.dateEn;
+
+  const freeTag = ins.free
+    ? `<span style="display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:3px 8px;background:var(--lime);border:1px solid var(--black);margin-bottom:14px;">${lang==='fr'?'Gratuit · Entrée libre':'Free · All welcome'}</span><br>`
+    : '';
+
+  document.getElementById('ev-body').innerHTML = `
+    <div class="ev-header ${v.pat}">
+      <span>${c.t}</span>
+    </div>
+    <div style="padding:20px 18px 28px;">
+      <span class="ev-time">${dateLabel}</span>
+      <h2 style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
+      ${freeTag}
+      <p class="ev-desc">${c.d}</p>
+      <button class="ev-map-link" onclick="closeEvent();focusVenue('${ins.venue}')">
+        📍 ${v[lang]} <span style="opacity:.5;margin-left:4px;">→ voir sur la carte</span>
       </button>
     </div>`;
 
