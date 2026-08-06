@@ -105,13 +105,9 @@
   /* ── HERO — visuel MINUTE_MAPP en fond, assombri pour la lisibilité ── */
   .hero{
     position:relative; z-index:2;
-    background:
-      linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.8) 100%),
-      url('/media/ouverture-minute-mapp.jpg') center/cover no-repeat,
-      var(--black);
-    min-height:min(52vh, 440px);
+    background:var(--black);
     padding:48px 20px 40px;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+    display:flex; flex-direction:column; align-items:center; text-align:center;
     border-bottom:1px solid #1e1e1e;
   }
   .hero-inner{max-width:640px; display:flex; flex-direction:column; align-items:center;}
