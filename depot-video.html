@@ -665,32 +665,58 @@
     }
   });
 
-  function initUpload(meta){
-    return fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: {'Content-Type':'text/plain;charset=utf-8'}, // évite le preflight CORS avec Apps Script
-      body: JSON.stringify(meta)
-    }).then(res => res.json());
+  // ── UPLOAD PAR MORCEAUX — chaque morceau transite par Apps Script,
+  // qui le relaie lui-même vers Drive (serveur à serveur, jamais de CORS) ──
+  const CHUNK_SIZE = 24 * 1024 * 1024; // 24 Mo (multiple de 256 Ko requis par l'API Drive)
+
+  function readChunkAsBase64(blob){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
   }
 
-  function uploadFileToSession(uploadUrl, file, onProgress){
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open('PUT', uploadUrl, true);
-      xhr.setRequestHeader('Content-Type', file.type || 'video/mp4');
-      xhr.upload.onprogress = (evt) => {
-        if(evt.lengthComputable && onProgress) onProgress(evt.loaded / evt.total);
+  function makeSessionId(){
+    return 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+  }
+
+  async function uploadInChunks(file, meta, onProgress){
+    const sessionId = makeSessionId();
+    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+
+    for(let i = 0; i < totalChunks; i++){
+      const start = i * CHUNK_SIZE;
+      const end = Math.min(start + CHUNK_SIZE, file.size);
+      const blob = file.slice(start, end);
+      const base64 = await readChunkAsBase64(blob);
+
+      const payload = {
+        sessionId,
+        chunkIndex: i,
+        totalChunks,
+        chunkStart: start,
+        chunkEnd: end - 1,
+        fileSize: file.size,
+        chunkData: base64
       };
-      xhr.onload = () => {
-        if(xhr.status === 200 || xhr.status === 201){
-          resolve();
-        } else {
-          reject(new Error('HTTP ' + xhr.status));
-        }
-      };
-      xhr.onerror = () => reject(new Error('network error'));
-      xhr.send(file);
-    });
+      if(i === 0){
+        Object.assign(payload, meta);
+      }
+
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: {'Content-Type':'text/plain;charset=utf-8'}, // évite le preflight CORS avec Apps Script
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json();
+      if(!result.ok){
+        throw new Error(result.error || I18N[lang].serverError);
+      }
+
+      onProgress((i + 1) / totalChunks);
+    }
   }
 
   form.addEventListener('submit', async (e) => {
@@ -709,7 +735,7 @@
     submitBtn.disabled = true;
     submitBtn.textContent = I18N[lang].sending;
     progressWrap.classList.add('show');
-    progressBar.style.width = '5%';
+    progressBar.style.width = '2%';
 
     try{
       const meta = {
@@ -717,20 +743,11 @@
         title: document.getElementById('title').value.trim(),
         email: document.getElementById('email').value.trim(),
         fileName: selectedFile.name,
-        mimeType: selectedFile.type,
-        fileSize: selectedFile.size
+        mimeType: selectedFile.type
       };
 
-      // 1) petit appel à Apps Script : prépare la session d'envoi avec Drive
-      const initResult = await initUpload(meta);
-      if(!initResult.ok){
-        throw new Error(initResult.error || I18N[lang].serverError);
-      }
-      progressBar.style.width = '10%';
-
-      // 2) la vidéo part directement vers Google (pas via Apps Script)
-      await uploadFileToSession(initResult.uploadUrl, selectedFile, (fraction) => {
-        progressBar.style.width = (10 + fraction * 88) + '%';
+      await uploadInChunks(selectedFile, meta, (fraction) => {
+        progressBar.style.width = (fraction * 100) + '%';
       });
 
       progressBar.style.width = '100%';
