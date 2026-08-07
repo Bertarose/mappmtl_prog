@@ -320,6 +320,25 @@
   button[type=submit]:active{transform:scale(.99);}
   button[type=submit]:disabled{border-color:var(--line); color:var(--grey); cursor:not-allowed; background:transparent;}
 
+  .step-label{
+    display:flex; align-items:center; gap:10px;
+    margin:0 0 18px;
+  }
+  .step-label .num{
+    width:26px; height:26px; flex:none;
+    background:var(--cyan); color:#000;
+    font-family:var(--mono); font-weight:700; font-size:13px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .step-label .txt{
+    font-family:var(--mono); font-size:12px; font-weight:700;
+    letter-spacing:.1em; text-transform:uppercase; color:#fff;
+  }
+  .step-label .txt small{
+    display:block; font-weight:400; color:rgba(255,255,255,.55);
+    text-transform:none; letter-spacing:0; margin-top:2px; font-size:11px;
+  }
+
   .error-msg{
     display:none; font-family:var(--mono); font-size:12px; color:var(--red);
     margin-top:10px; padding:10px 12px; border:1px solid var(--red); background:rgba(255,43,77,.08);
@@ -401,6 +420,11 @@
   </div>
 
   <div class="wrap">
+    <div class="step-label">
+      <span class="num">1</span>
+      <span class="txt" data-fr-html="Tes informations<small>Nom, titre, courriel</small>" data-en-html="Your information<small>Name, title, email</small>">Tes informations<small>Nom, titre, courriel</small></span>
+    </div>
+
     <form id="infoForm">
       <div class="field">
         <label for="artist" data-fr-html="Nom de l'artiste / collectif<span class='req'>*</span>" data-en-html="Artist name / collective<span class='req'>*</span>">Nom de l'artiste / collectif<span class="req">*</span></label>
@@ -437,8 +461,11 @@
       <p data-fr="Dépose maintenant ta vidéo ci-dessous, avec le même nom de fichier que ton titre." data-en="Now drop your video below, using the same filename as your title.">Dépose maintenant ta vidéo ci-dessous, avec le même nom de fichier que ton titre.</p>
     </div>
 
-    <div class="field" style="margin-top:28px;">
-      <label data-fr-html="Vidéo<span class='req'>*</span>" data-en-html="Video<span class='req'>*</span>">Vidéo<span class="req">*</span></label>
+    <div class="step-label" style="margin-top:28px;">
+      <span class="num">2</span>
+      <span class="txt" data-fr-html="Ta vidéo<small>300 Mo max, format MP4</small>" data-en-html="Your video<small>300 MB max, MP4 format</small>">Ta vidéo<small>300 Mo max, format MP4</small></span>
+    </div>
+    <div class="field">
       <button type="button" class="spec-link" onclick="openSpecModal()" data-fr="Voir le guide de compression" data-en="See the compression guide">Voir le guide de compression</button>
       <a class="template-link" href="https://drive.google.com/drive/folders/1yDnLtuFfcExFTk2lk25w5r6twCrAufOq?usp=sharing" target="_blank" rel="noopener" data-fr="Télécharger le gabarit de scène" data-en="Download the scene template">Télécharger le gabarit de scène</a>
     </div>
