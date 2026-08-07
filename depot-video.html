@@ -52,13 +52,13 @@
     background:var(--cyan); color:var(--violet);
     border-bottom:1px solid #000;
     overflow:hidden; white-space:nowrap;
-    height:34px; display:flex; align-items:center;
+    height:20px; display:flex; align-items:center;
   }
   .marquee-track{ display:inline-flex; gap:0; animation:marquee-scroll 28s linear infinite; }
   .marquee-track span{
-    font-family:var(--cond); font-weight:700; font-size:14px;
-    letter-spacing:.04em; padding:0 26px; text-transform:uppercase;
-    display:inline-flex; align-items:center; gap:26px;
+    font-family:var(--cond); font-weight:700; font-size:10px;
+    letter-spacing:.04em; padding:0 18px; text-transform:uppercase;
+    display:inline-flex; align-items:center; gap:18px;
   }
   @keyframes marquee-scroll{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
   @media (prefers-reduced-motion: reduce){ .marquee-track{ animation:none; } }
@@ -135,11 +135,11 @@
     position:relative; z-index:2;
     background:var(--cyan); color:var(--violet);
     display:flex; justify-content:space-between; align-items:center;
-    padding:12px 20px; flex-wrap:wrap; gap:8px;
+    padding:6px 20px; flex-wrap:wrap; gap:8px;
   }
   .signal-strip p{
-    font-family:var(--mono); font-size:11px; font-weight:700;
-    letter-spacing:.08em; text-transform:uppercase;
+    font-family:var(--mono); font-size:9px; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase;
   }
 
   /* ── PANEL FORMULAIRE (fond noir, style "intro" du site) ── */
@@ -521,7 +521,7 @@
             <td>H264</td>
             <td>.mp4</td>
             <td>MPEG audio</td>
-            <td><b data-fr="< 150 Mo" data-en="< 150 MB">&lt; 150 Mo</b></td>
+            <td><b data-fr="< 300 Mo" data-en="< 300 MB">&lt; 300 Mo</b></td>
           </tr>
         </tbody>
       </table>
