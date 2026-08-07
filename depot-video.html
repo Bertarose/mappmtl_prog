@@ -204,10 +204,15 @@
   input[type=file]{display:none;}
 
   .progress-wrap{
-    display:none; margin-top:12px; height:6px; background:var(--line); overflow:hidden;
+    display:none; margin-top:12px;
   }
   .progress-wrap.show{display:block;}
+  .progress-track{height:6px; background:var(--line); overflow:hidden;}
   .progress-bar{height:100%; width:0%; background:var(--cyan); transition:width .2s ease;}
+  .progress-pct{
+    font-family:var(--mono); font-size:11px; font-weight:700; color:var(--cyan);
+    margin-top:6px; text-align:right;
+  }
 
   .spec-link{
     display:inline-block; background:none; border:none; padding:0; margin-bottom:10px;
@@ -420,7 +425,10 @@
           <div class="drop-file" id="fileName"></div>
         </div>
         <input type="file" id="fileInput" name="video" accept="video/mp4,.mp4" required>
-        <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="progress-wrap" id="progressWrap">
+          <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+          <div class="progress-pct" id="progressPct">0%</div>
+        </div>
       </div>
 
       <div class="guidelines">
@@ -614,6 +622,7 @@
   const submitBtn = document.getElementById('submitBtn');
   const progressWrap = document.getElementById('progressWrap');
   const progressBar = document.getElementById('progressBar');
+  const progressPct = document.getElementById('progressPct');
 
   applyLang();
 
@@ -719,6 +728,11 @@
     }
   }
 
+  function setProgress(pct){
+    progressBar.style.width = pct + '%';
+    progressPct.textContent = Math.round(pct) + '%';
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     clearError();
@@ -735,7 +749,7 @@
     submitBtn.disabled = true;
     submitBtn.textContent = I18N[lang].sending;
     progressWrap.classList.add('show');
-    progressBar.style.width = '2%';
+    setProgress(2);
 
     try{
       const meta = {
@@ -747,10 +761,10 @@
       };
 
       await uploadInChunks(selectedFile, meta, (fraction) => {
-        progressBar.style.width = (fraction * 100) + '%';
+        setProgress(fraction * 100);
       });
 
-      progressBar.style.width = '100%';
+      setProgress(100);
       form.style.display = 'none';
       document.getElementById('confirmView').classList.add('show');
 
@@ -759,7 +773,7 @@
       submitBtn.disabled = false;
       submitBtn.textContent = I18N[lang].submit;
       progressWrap.classList.remove('show');
-      progressBar.style.width = '0%';
+      setProgress(0);
     }
   });
   // ── FOND GÉNÉRATIF — texture analogique en arrière-plan (grain, scanlines, anneaux) ──
