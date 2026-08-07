@@ -213,6 +213,11 @@
     font-family:var(--mono); font-size:11px; font-weight:700; color:var(--cyan);
     margin-top:6px; text-align:right;
   }
+  .progress-status{
+    display:none; font-family:var(--mono); font-size:11px; font-weight:700;
+    color:var(--yellow); margin-top:4px; text-align:right;
+  }
+  .progress-status.show{display:block;}
 
   .spec-link{
     display:inline-block; background:none; border:none; padding:0; margin-bottom:10px;
@@ -385,18 +390,18 @@
       <p class="eyebrow"><span class="live-dot"></span><span data-fr="Appel de vidéos — édition 2026" data-en="Call for videos — 2026 edition">Appel de vidéos — édition 2026</span></p>
       <h1 data-fr="Dépose ta MINUTE_MAPP" data-en="Submit your MINUTE_MAPP">Dépose ta MINUTE_MAPP</h1>
       <p class="lede"
-         data-fr-html="<b>150 Mo maximum</b>"
-         data-en-html="<b>150 MB maximum</b>"><b>150 Mo maximum</b></p>
+         data-fr-html="<b>300 Mo maximum</b>"
+         data-en-html="<b>300 MB maximum</b>"><b>300 Mo maximum</b></p>
     </div>
   </div>
 
   <div class="signal-strip">
     <p data-fr="MINUTE_MAPP / 1 ENVOI PAR ARTISTE" data-en="MINUTE_MAPP / 1 SUBMISSION PER ARTIST">MINUTE_MAPP / 1 ENVOI PAR ARTISTE</p>
-    <p data-fr="MP4 SEULEMENT — 150 MO MAX" data-en="MP4 ONLY — 150 MB MAX">MP4 SEULEMENT — 150 MO MAX</p>
+    <p data-fr="MP4 SEULEMENT — 300 MO MAX" data-en="MP4 ONLY — 300 MB MAX">MP4 SEULEMENT — 300 MO MAX</p>
   </div>
 
   <div class="wrap">
-    <form id="dropForm">
+    <form id="infoForm">
       <div class="field">
         <label for="artist" data-fr-html="Nom de l'artiste / collectif<span class='req'>*</span>" data-en-html="Artist name / collective<span class='req'>*</span>">Nom de l'artiste / collectif<span class="req">*</span></label>
         <input type="text" id="artist" name="artist" required autocomplete="name">
@@ -413,37 +418,6 @@
       </div>
 
       <div class="field">
-        <label data-fr-html="Vidéo<span class='req'>*</span>" data-en-html="Video<span class='req'>*</span>">Vidéo<span class="req">*</span></label>
-        <button type="button" class="spec-link" onclick="openSpecModal()" data-fr="Voir le guide de compression" data-en="See the compression guide">Voir le guide de compression</button>
-        <a class="template-link" href="https://drive.google.com/drive/folders/1yDnLtuFfcExFTk2lk25w5r6twCrAufOq?usp=sharing" target="_blank" rel="noopener" data-fr="Télécharger le gabarit de scène" data-en="Download the scene template">Télécharger le gabarit de scène</a>
-        <div class="drop" id="dropZone">
-          <div class="drop-icon">▲</div>
-          <div class="drop-txt">
-            <b data-fr="Glisse ta vidéo ici" data-en="Drag your video here">Glisse ta vidéo ici</b><br>
-            <span data-fr="ou clique pour parcourir" data-en="or click to browse">ou clique pour parcourir</span>
-          </div>
-          <div class="drop-file" id="fileName"></div>
-        </div>
-        <input type="file" id="fileInput" name="video" accept="video/mp4,.mp4" required>
-        <div class="progress-wrap" id="progressWrap">
-          <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
-          <div class="progress-pct" id="progressPct">0%</div>
-        </div>
-      </div>
-
-      <div class="guidelines">
-        <p class="guidelines-title"><span aria-hidden="true">📌</span><span data-fr="Rappel important — Lignes directrices" data-en="Important reminder — Guidelines">Rappel important — Lignes directrices</span></p>
-        <p data-fr-html="MAPP_MTL est un festival de mapping vidéo en espace public, ouvert à tous âges. Les vidéos envoyées ne doivent contenir : <b>aucun contenu sexuel, haineux/discriminatoire, violent ou choquant</b> (torture, mutilation, mort, images macabres), <b>lié à l'automutilation/suicide</b>, ni <b>faisant l'apologie de la drogue ou de l'alcool</b>."
-           data-en-html="MAPP_MTL is a public-space video mapping festival, open to all ages. Submitted videos must not contain: <b>any sexual, hateful/discriminatory, violent or shocking content</b> (torture, mutilation, death, graphic imagery), <b>content related to self-harm/suicide</b>, nor <b>content promoting drug or alcohol use</b>.">
-          MAPP_MTL est un festival de mapping vidéo en espace public, ouvert à tous âges. Les vidéos envoyées ne doivent contenir : <b>aucun contenu sexuel, haineux/discriminatoire, violent ou choquant</b> (torture, mutilation, mort, images macabres), <b>lié à l'automutilation/suicide</b>, ni <b>faisant l'apologie de la drogue ou de l'alcool</b>.
-        </p>
-        <p data-fr-html="MAPP_MTL peut refuser ou retirer toute vidéo non conforme, même après acceptation."
-           data-en-html="MAPP_MTL may refuse or remove any non-compliant video, even after acceptance.">
-          MAPP_MTL peut refuser ou retirer toute vidéo non conforme, même après acceptation.
-        </p>
-      </div>
-
-      <div class="field">
         <label class="consent">
           <input type="checkbox" id="rights" required>
           <span>
@@ -454,14 +428,42 @@
 
       <div class="error-msg" id="errorMsg"></div>
 
-      <button type="submit" id="submitBtn" data-fr="Envoyer ma vidéo" data-en="Send my video">Envoyer ma vidéo</button>
+      <button type="submit" id="submitBtn" data-fr="Envoyer mes informations" data-en="Send my info">Envoyer mes informations</button>
     </form>
 
     <div class="confirm" id="confirmView">
       <div class="mark">✓</div>
-      <h2 data-fr="Soumission reçue" data-en="Submission received">Soumission reçue</h2>
-      <p data-fr="Merci !" data-en="Thank you!">Merci !</p>
+      <h2 data-fr="Informations reçues" data-en="Info received">Informations reçues</h2>
+      <p data-fr="Dépose maintenant ta vidéo ci-dessous, avec le même nom de fichier que ton titre." data-en="Now drop your video below, using the same filename as your title.">Dépose maintenant ta vidéo ci-dessous, avec le même nom de fichier que ton titre.</p>
     </div>
+
+    <div class="field" style="margin-top:28px;">
+      <label data-fr-html="Vidéo<span class='req'>*</span>" data-en-html="Video<span class='req'>*</span>">Vidéo<span class="req">*</span></label>
+      <button type="button" class="spec-link" onclick="openSpecModal()" data-fr="Voir le guide de compression" data-en="See the compression guide">Voir le guide de compression</button>
+      <a class="template-link" href="https://drive.google.com/drive/folders/1yDnLtuFfcExFTk2lk25w5r6twCrAufOq?usp=sharing" target="_blank" rel="noopener" data-fr="Télécharger le gabarit de scène" data-en="Download the scene template">Télécharger le gabarit de scène</a>
+    </div>
+
+    <div class="guidelines">
+      <p class="guidelines-title"><span aria-hidden="true">📌</span><span data-fr="Rappel important — Lignes directrices" data-en="Important reminder — Guidelines">Rappel important — Lignes directrices</span></p>
+      <p data-fr-html="MAPP_MTL est un festival de mapping vidéo en espace public, ouvert à tous âges. Les vidéos envoyées ne doivent contenir : <b>aucun contenu sexuel, haineux/discriminatoire, violent ou choquant</b> (torture, mutilation, mort, images macabres), <b>lié à l'automutilation/suicide</b>, ni <b>faisant l'apologie de la drogue ou de l'alcool</b>."
+         data-en-html="MAPP_MTL is a public-space video mapping festival, open to all ages. Submitted videos must not contain: <b>any sexual, hateful/discriminatory, violent or shocking content</b> (torture, mutilation, death, graphic imagery), <b>content related to self-harm/suicide</b>, nor <b>content promoting drug or alcohol use</b>.">
+        MAPP_MTL est un festival de mapping vidéo en espace public, ouvert à tous âges. Les vidéos envoyées ne doivent contenir : <b>aucun contenu sexuel, haineux/discriminatoire, violent ou choquant</b> (torture, mutilation, mort, images macabres), <b>lié à l'automutilation/suicide</b>, ni <b>faisant l'apologie de la drogue ou de l'alcool</b>.
+      </p>
+      <p data-fr-html="MAPP_MTL peut refuser ou retirer toute vidéo non conforme, même après acceptation."
+         data-en-html="MAPP_MTL may refuse or remove any non-compliant video, even after acceptance.">
+        MAPP_MTL peut refuser ou retirer toute vidéo non conforme, même après acceptation.
+      </p>
+    </div>
+
+    <div class="tally-embed">
+      <iframe data-tally-src="https://tally.so/embed/Xx7dBd?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+              loading="lazy" width="100%" height="300" frameborder="0" marginheight="0" marginwidth="0"
+              title="MINUTE_MAPP — Dépôt vidéo"></iframe>
+    </div>
+    <script>
+      var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};
+      if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s)}else v();
+    </script>
   </div>
 
   <div class="modal-overlay" id="specModal" onclick="if(event.target===this)closeSpecModal()">
@@ -533,37 +535,6 @@
   </footer>
 
 <script>
-  // ⚠️ CONFIGURATION — à ajuster avant mise en ligne
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0YMOmybhDLgQYWJApWBB1qmY179_USdXUPSXDlINV8nQ2VyW-29j9qSDgmMGV1h0zqw/exec";
-  const MAX_SIZE_MB = 150; // confirmé : 150 Mo max par vidéo
-
-  // ── TEXTES BILINGUES (messages générés dynamiquement en JS) ──
-  const I18N = {
-    fr: {
-      sizeUnit: MAX_SIZE_MB >= 1024 ? (MAX_SIZE_MB/1024) + ' Go' : MAX_SIZE_MB + ' Mo',
-      notVideo: 'Ce fichier n\'est pas une vidéo. Format accepté : MP4.',
-      tooLarge: (sizeMB, limit) => `Ce fichier fait ${sizeMB} Mo — la limite est de ${limit}. Compresse la vidéo et réessaie. Voir le guide de compression.`,
-      noFile: 'Ajoute une vidéo avant d\'envoyer.',
-      noScript: 'Configuration manquante : SCRIPT_URL n\'est pas défini (voir Code.gs).',
-      serverError: 'Erreur inconnue côté serveur.',
-      sendFailed: (msg) => `L'envoi a échoué : ${msg}. Réessaie ou écris-nous.`,
-      sending: 'Envoi en cours...',
-      submit: 'Envoyer ma vidéo',
-      sizeSuffix: 'Mo'
-    },
-    en: {
-      sizeUnit: MAX_SIZE_MB >= 1024 ? (MAX_SIZE_MB/1024) + ' GB' : MAX_SIZE_MB + ' MB',
-      notVideo: 'This file isn\'t a video. Accepted format: MP4.',
-      tooLarge: (sizeMB, limit) => `This file is ${sizeMB} MB — the limit is ${limit}. Compress the video and try again. See the compression guide.`,
-      noFile: 'Add a video before sending.',
-      noScript: 'Missing configuration: SCRIPT_URL isn\'t set (see Code.gs).',
-      serverError: 'Unknown server error.',
-      sendFailed: (msg) => `Sending failed: ${msg}. Try again or contact us.`,
-      sending: 'Sending...',
-      submit: 'Send my video',
-      sizeSuffix: 'MB'
-    }
-  };
 
   function openSpecModal(){
     document.getElementById('specModal').classList.add('show');
@@ -574,11 +545,6 @@
   document.addEventListener('keydown', (e) => {
     if(e.key === 'Escape') closeSpecModal();
   });
-
-  function updateMaxSizeLabel(){
-    const el = document.getElementById('maxSizeLabel');
-    if(el) el.textContent = I18N[lang].sizeUnit;
-  }
 
   // ── MARQUEE — bandeau animé, identique au site principal ──
   const MARQUEE = {
@@ -606,209 +572,61 @@
     document.querySelectorAll('[data-fr]').forEach(el=>{ el.textContent = el.dataset[lang]; });
     document.querySelectorAll('[data-fr-html]').forEach(el=>{ el.innerHTML = el.dataset[lang+'Html']; });
     document.querySelectorAll('[data-fr-placeholder]').forEach(el=>{ el.setAttribute('placeholder', el.dataset[lang+'Placeholder']); });
-    updateMaxSizeLabel();
-    if(!submitBtn.disabled) submitBtn.textContent = I18N[lang].submit;
-    clearError();
     renderMarquee();
   }
 
-  updateMaxSizeLabel();
-
-  const form = document.getElementById('dropForm');
-  const dropZone = document.getElementById('dropZone');
-  const fileInput = document.getElementById('fileInput');
-  const fileNameEl = document.getElementById('fileName');
-  const errorMsg = document.getElementById('errorMsg');
-  const submitBtn = document.getElementById('submitBtn');
-  const progressWrap = document.getElementById('progressWrap');
-  const progressBar = document.getElementById('progressBar');
-  const progressPct = document.getElementById('progressPct');
 
   applyLang();
 
-  let selectedFile = null;
+  // ── FORMULAIRE D'INFOS (nom/titre/courriel) — texte seulement, envoyé à Apps Script ──
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0YMOmybhDLgQYWJApWBB1qmY179_USdXUPSXDlINV8nQ2VyW-29j9qSDgmMGV1h0zqw/exec";
 
-  function showError(msg){
-    errorMsg.textContent = msg;
-    errorMsg.classList.add('show');
-  }
-  function clearError(){
-    errorMsg.classList.remove('show');
-    errorMsg.textContent = '';
-  }
+  const infoForm = document.getElementById('infoForm');
+  const infoErrorMsg = document.getElementById('errorMsg');
+  const infoSubmitBtn = document.getElementById('submitBtn');
 
-  function handleFile(file){
-    clearError();
-    if(!file) return;
-    if(file.type !== 'video/mp4'){
-      showError(I18N[lang].notVideo);
-      return;
-    }
-    const sizeMB = file.size / (1024*1024);
-    if(sizeMB > MAX_SIZE_MB){
-      showError(I18N[lang].tooLarge(sizeMB.toFixed(0), I18N[lang].sizeUnit));
-      return;
-    }
-    selectedFile = file;
-    dropZone.classList.add('has-file');
-    fileNameEl.textContent = `${file.name} (${sizeMB.toFixed(1)} ${I18N[lang].sizeSuffix})`;
-  }
+  const INFO_MSGS = {
+    fr: { sending: 'Envoi en cours...', submit: 'Envoyer mes informations', fail: (m) => `L'envoi a échoué : ${m}. Réessaie ou écris-nous.`, generic: 'Erreur inconnue côté serveur.' },
+    en: { sending: 'Sending...', submit: 'Send my info', fail: (m) => `Sending failed: ${m}. Try again or contact us.`, generic: 'Unknown server error.' }
+  };
 
-  dropZone.addEventListener('click', () => fileInput.click());
-  fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
-
-  ['dragenter','dragover'].forEach(evt => dropZone.addEventListener(evt, e => {
-    e.preventDefault(); dropZone.classList.add('drag');
-  }));
-  ['dragleave','drop'].forEach(evt => dropZone.addEventListener(evt, e => {
-    e.preventDefault(); dropZone.classList.remove('drag');
-  }));
-  dropZone.addEventListener('drop', e => {
-    const file = e.dataTransfer.files[0];
-    if(file){
-      // synchronise avec l'input pour la soumission du formulaire
-      const dt = new DataTransfer();
-      dt.items.add(file);
-      fileInput.files = dt.files;
-      handleFile(file);
-    }
-  });
-
-  // ── UPLOAD PAR MORCEAUX — chaque morceau transite par Apps Script,
-  // qui le relaie lui-même vers Drive (serveur à serveur, jamais de CORS) ──
-  const CHUNK_SIZE = 24 * 1024 * 1024; // 24 Mo (multiple de 256 Ko requis par l'API Drive)
-
-  function readChunkAsBase64(blob){
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result.split(',')[1]);
-      reader.onerror = reject;
-      reader.readAsDataURL(blob);
-    });
-  }
-
-  function makeSessionId(){
-    return 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
-  }
-
-  function postChunkXHR(url, payload, onProgress){
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', url, true);
-      xhr.setRequestHeader('Content-Type', 'text/plain;charset=utf-8');
-      xhr.timeout = 300000; // 5 min max par morceau — évite un blocage silencieux
-      xhr.upload.onprogress = (evt) => {
-        if(evt.lengthComputable && onProgress) onProgress(evt.loaded / evt.total);
-      };
-      xhr.onload = () => {
-        try{
-          const result = JSON.parse(xhr.responseText);
-          resolve(result);
-        }catch(err){
-          reject(new Error('Réponse invalide du serveur (HTTP ' + xhr.status + ')'));
-        }
-      };
-      xhr.onerror = () => reject(new Error('erreur réseau'));
-      xhr.ontimeout = () => reject(new Error('délai dépassé — le morceau a pris trop de temps'));
-      xhr.send(JSON.stringify(payload));
-    });
-  }
-
-  async function uploadInChunks(file, meta, onProgress){
-    const sessionId = makeSessionId();
-    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
-
-    for(let i = 0; i < totalChunks; i++){
-      const start = i * CHUNK_SIZE;
-      const end = Math.min(start + CHUNK_SIZE, file.size);
-      const blob = file.slice(start, end);
-      const base64 = await readChunkAsBase64(blob);
-
-      const payload = {
-        sessionId,
-        chunkIndex: i,
-        totalChunks,
-        chunkStart: start,
-        chunkEnd: end - 1,
-        fileSize: file.size,
-        chunkData: base64
-      };
-      if(i === 0){
-        Object.assign(payload, meta);
-      }
-
-      let result;
-      let lastErr;
-      for(let attempt = 0; attempt < 3; attempt++){
-        try{
-          result = await postChunkXHR(SCRIPT_URL, payload, (chunkFraction) => {
-            // progression continue : morceaux déjà finis + avancement du morceau en cours
-            onProgress((i + chunkFraction) / totalChunks);
-          });
-          if(result.ok) break;
-          lastErr = new Error(result.error || I18N[lang].serverError);
-        }catch(err){
-          lastErr = err;
-        }
-        if(attempt < 2) await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
-      }
-
-      if(!result || !result.ok){
-        throw lastErr;
-      }
-
-      onProgress((i + 1) / totalChunks);
-    }
-  }
-
-  function setProgress(pct){
-    progressBar.style.width = pct + '%';
-    progressPct.textContent = Math.round(pct) + '%';
-  }
-
-  form.addEventListener('submit', async (e) => {
+  infoForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    clearError();
+    infoErrorMsg.classList.remove('show');
+    infoErrorMsg.textContent = '';
 
-    if(!selectedFile){
-      showError(I18N[lang].noFile);
-      return;
-    }
-    if(SCRIPT_URL.includes('COLLE_ICI')){
-      showError(I18N[lang].noScript);
-      return;
-    }
+    infoSubmitBtn.disabled = true;
+    infoSubmitBtn.textContent = INFO_MSGS[lang].sending;
 
-    submitBtn.disabled = true;
-    submitBtn.textContent = I18N[lang].sending;
-    progressWrap.classList.add('show');
-    setProgress(2);
-
-    try{
-      const meta = {
+    try {
+      const payload = {
         artist: document.getElementById('artist').value.trim(),
         title: document.getElementById('title').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        fileName: selectedFile.name,
-        mimeType: selectedFile.type
+        email: document.getElementById('email').value.trim()
       };
 
-      await uploadInChunks(selectedFile, meta, (fraction) => {
-        setProgress(fraction * 100);
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: {'Content-Type':'text/plain;charset=utf-8'},
+        body: JSON.stringify(payload)
       });
+      const result = await res.json();
 
-      setProgress(100);
-      form.style.display = 'none';
+      if(!result.ok){
+        throw new Error(result.error || INFO_MSGS[lang].generic);
+      }
+
+      infoForm.style.display = 'none';
       document.getElementById('confirmView').classList.add('show');
 
-    }catch(err){
-      showError(I18N[lang].sendFailed(err.message));
-      submitBtn.disabled = false;
-      submitBtn.textContent = I18N[lang].submit;
-      progressWrap.classList.remove('show');
-      setProgress(0);
+    } catch(err){
+      infoErrorMsg.textContent = INFO_MSGS[lang].fail(err.message);
+      infoErrorMsg.classList.add('show');
+      infoSubmitBtn.disabled = false;
+      infoSubmitBtn.textContent = INFO_MSGS[lang].submit;
     }
   });
+
   // ── FOND GÉNÉRATIF — texture analogique en arrière-plan (grain, scanlines, anneaux) ──
   (function(){
     const canvas = document.getElementById('bgSignal');
