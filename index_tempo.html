@@ -62,6 +62,7 @@
   --font:'OTAlpha',Arial,sans-serif;
   --cond:'OTAlpha','Archivo Narrow','Archivo',sans-serif;
   --mono:'JetBrains Mono',monospace;
+  --tabbar-h:58px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 :focus-visible{outline:3px solid var(--lime);outline-offset:2px}
@@ -614,6 +615,13 @@ nav{
 .leaflet-popup-content{font-family:var(--font);font-size:13px;margin:12px 15px;line-height:1.5}
 .leaflet-popup-content b{font-family:var(--cond);font-size:16px;text-transform:uppercase}
 .pop-dir{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--black);text-decoration:none;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid var(--lime);padding-bottom:2px}
+.venue-caption{border:1px solid var(--black);border-top:none;padding:18px;background:var(--white);display:none}
+.venue-caption.show{display:block;animation:vc-in .18s ease}
+@keyframes vc-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.venue-caption .vc-name{font-family:var(--cond);font-weight:500;font-size:21px;text-transform:uppercase;letter-spacing:-0.01em;display:flex;align-items:center;gap:8px}
+.venue-caption .vc-name .dot{width:12px;height:12px;background:var(--lime);border:2px solid var(--black);flex:none}
+.venue-caption .vc-addr{font-family:var(--mono);font-size:13px;color:var(--grey);margin-top:6px;letter-spacing:.03em}
+.venue-caption .vc-dir{display:inline-block;margin-top:12px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--black);text-decoration:none;border-bottom:2px solid var(--lime);padding-bottom:2px}
 
 /* ── Info ────────────────────────────────────────── */
 .info-grid{display:grid;gap:0;border:1px solid var(--black);grid-template-columns:1fr;background:var(--white)}
@@ -646,16 +654,33 @@ footer a{color:var(--violet);text-decoration:none}
 
 /* ── CTA billets flottant (mobile uniquement) ── */
 .sticky-tix{
-  position:fixed;left:0;right:0;bottom:0;z-index:250;
+  position:fixed;left:0;right:0;bottom:var(--tabbar-h);z-index:250;
   display:none;align-items:center;justify-content:center;gap:10px;
   background:var(--lime);color:var(--black);border-top:1px solid var(--black);
   padding:13px 18px;font-family:var(--mono);font-weight:700;font-size:13px;
   letter-spacing:.06em;text-transform:uppercase;text-decoration:none;
   transform:translateY(100%);transition:transform .25s ease;
-  padding-bottom:calc(13px + env(safe-area-inset-bottom));
 }
 .sticky-tix.show{transform:translateY(0)}
 @media(max-width:640px){.sticky-tix{display:flex}}
+
+/* ── Barre d'onglets fixe (bas d'écran, style app) ── */
+body{padding-bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom))}
+.tabbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:270;height:var(--tabbar-h);
+  display:flex;background:var(--black);border-top:1px solid var(--black);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.tabbar-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  background:none;border:none;border-right:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.55);font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  padding:8px 4px 7px;cursor:pointer;transition:color .12s;-webkit-tap-highlight-color:transparent;
+}
+.tabbar-btn:last-child{border-right:none}
+.tabbar-btn .ti{font-size:19px;line-height:1;filter:grayscale(1) brightness(1.8)}
+.tabbar-btn.active{color:var(--lime)}
+.tabbar-btn.active .ti{filter:none}
 
 .hide{display:none!important}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
@@ -826,7 +851,7 @@ footer a{color:var(--violet);text-decoration:none}
 </div>
 
 <!-- PROGRAMMATION : grille 6 jours -->
-<section class="sec" id="prog">
+<section class="sec tab-panel" id="prog" data-tab="prog">
   <div class="float-obj" style="width:26px;height:26px;left:92%;top:8%;--fo-op:.5"><svg><use href="#fo-note"/></svg></div>
   <div class="sec-inner">
     <div class="installs reveal" id="installs"></div>
@@ -835,7 +860,7 @@ footer a{color:var(--violet);text-decoration:none}
 </section>
 
 <!-- ARTISTES -->
-<section class="sec" id="artistes" style="background:var(--black);color:var(--white);border-bottom:1px solid var(--black)">
+<section class="sec tab-panel" id="artistes" data-tab="artistes" style="background:var(--black);color:var(--white);border-bottom:1px solid var(--black)">
   <div class="float-obj" style="width:34px;height:34px;left:4%;top:10%;--fo-op:.6"><svg><use href="#fo-triangle"/></svg></div>
   <div class="float-obj" style="width:32px;height:32px;left:92%;top:70%;--fo-op:.55"><svg><use href="#fo-dancer"/></svg></div>
   <div class="float-obj" style="width:24px;height:24px;left:88%;top:12%;--fo-op:.5"><svg><use href="#fo-disco"/></svg></div>
@@ -867,16 +892,17 @@ footer a{color:var(--violet);text-decoration:none}
 </div>
 
 <!-- CARTE -->
-<section class="sec" id="carte" style="position:relative;z-index:0;">
+<section class="sec tab-panel" id="carte" data-tab="carte" style="position:relative;z-index:0;">
   <div class="sec-inner narrow">
     <div class="eyebrow" data-fr="Les lieux" data-en="Venues">Les lieux</div>
     <div id="map" class="reveal"></div>
     <div class="map-legend" id="map-legend"></div>
+    <div class="venue-caption" id="venue-caption"></div>
   </div>
 </section>
 
 <!-- INFOS -->
-<section class="sec" id="infos" style="background:var(--black);color:var(--white)">
+<section class="sec tab-panel" id="infos" data-tab="prog" style="background:var(--black);color:var(--white)">
   <div class="float-obj" style="width:32px;height:32px;left:92%;top:10%;--fo-op:.5;color:#00b6ff"><svg><use href="#fo-skate"/></svg></div>
   <div class="sec-inner narrow">
     <div class="eyebrow" data-fr="Infos pratiques" data-en="Practical info">Infos pratiques</div>
@@ -1423,16 +1449,16 @@ function initMap(){
              ${v.main?'box-shadow:0 0 0 3px #000;animation:blink 1.6s infinite;':''}"></div>`,
       iconSize:[sz,sz], iconAnchor:[sz/2,sz/2]
     });
-    const mk = L.marker([v.lat,v.lng],{icon}).addTo(map);
-    mk.bindPopup(`<b>${v[lang]}</b><br>${v.addr}<br>
-      <a class="pop-dir" target="_blank" rel="noopener"
-         href="https://www.google.com/maps/dir/?api=1&destination=${v.lat},${v.lng}">
-         ${lang==='fr'?'Itinéraire':'Directions'} →</a>`);
+    const mk = L.marker([v.lat,v.lng],{icon, keyboard:true, alt:v[lang]}).addTo(map);
+    // Pas de popup Leaflet ici (le lien "Itinéraire" à l'intérieur pouvait être
+    // accidentellement touché sur mobile). On affiche plutôt un encart fixe,
+    // clair, sous la carte — voir focusVenue() / #venue-caption.
+    mk.on('click', ()=> focusVenue(key, {fromMarker:true}));
     markers[key] = mk;
   });
 }
 let mapActiveVenue = null;
-function focusVenue(key){
+function focusVenue(key, opts){
   vib(6);
   const v = VENUES[key];
   if (v.lat == null || v.lng == null) return; // pas de pin encore, rien à centrer
@@ -1440,12 +1466,43 @@ function focusVenue(key){
   document.querySelectorAll('.map-chip[data-venue]').forEach(c=>{
     c.classList.toggle('active', c.dataset.venue === key);
   });
-  document.getElementById('carte').scrollIntoView({behavior:'smooth'});
-  setTimeout(()=>{ map.setView([v.lat,v.lng], 15, {animate:true}); }, 450);
+  if(currentTab !== 'carte') showTab('carte');
+  else document.getElementById('carte').scrollIntoView({behavior:'smooth', block:'start'});
+  const cap = document.getElementById('venue-caption');
+  if(cap){
+    cap.innerHTML = `
+      <div class="vc-name"><span class="dot"></span>${v[lang]}</div>
+      <div class="vc-addr">📍 ${v.addr}</div>
+      <a class="vc-dir" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${v.lat},${v.lng}" onclick="event.stopPropagation();vib(10)">${lang==='fr'?'Itinéraire':'Directions'} →</a>`;
+    cap.classList.add('show');
+  }
+  setTimeout(()=>{ if(map){ map.invalidateSize(); map.setView([v.lat,v.lng], 15, {animate:true}); } }, (opts&&opts.fromMarker) ? 0 : 460);
 }
 function renderLegend(){
   document.getElementById('map-legend').innerHTML = Object.entries(VENUES).map(([key,v])=>`
     <span class="map-chip ${mapActiveVenue===key?'active':''}" data-venue="${key}" onclick="focusVenue('${key}')">${v.main?'<span class="star">★ </span>':''}${v[lang]}</span>`).join('');
+}
+
+// ============================================================
+// ONGLETS (barre fixe en bas — Programme / Carte / Artistes)
+// ============================================================
+let currentTab = 'prog';
+function showTab(tab){
+  vib(6);
+  currentTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(sec=>{
+    const on = sec.dataset.tab === tab;
+    sec.classList.toggle('hide', !on);
+    if(on) sec.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+  });
+  document.querySelectorAll('.tabbar-btn').forEach(btn=>{
+    const on = btn.dataset.tab === tab;
+    btn.classList.toggle('active', on);
+    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  const first = document.querySelector(`.tab-panel[data-tab="${tab}"]`);
+  if(first) first.scrollIntoView({behavior:'smooth', block:'start'});
+  if(tab === 'carte' && map) setTimeout(()=>map.invalidateSize(), 260);
 }
 
 // CTA billets flottant (mobile) — apparaît une fois le bouton du hero hors champ
@@ -1632,6 +1689,7 @@ function boot(){
   applyLang();
   fitTitle();
   initReveals();
+  showTab('prog');
   startHalftone(false); // effet trame activé par défaut ; l'icône permet de revenir à la vidéo
 
   // ── LUEUR VIOLETTE — suit la souris (desktop) et le doigt (mobile) sur toute la page ──
@@ -1905,6 +1963,19 @@ document.addEventListener('keydown', e=>{
 
 </script>
 <a class="sticky-tix" id="sticky-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)" data-fr="🎟 Réservez votre billet →" data-en="🎟 Reserve your ticket →">🎟 Réservez votre billet →</a>
+
+<!-- BARRE D'ONGLETS (style app mobile) -->
+<nav class="tabbar" id="tabbar" role="tablist" aria-label="Navigation">
+  <button type="button" class="tabbar-btn" data-tab="prog" onclick="showTab('prog')" role="tab" aria-selected="true">
+    <span class="ti">📅</span><span data-fr="Programme" data-en="Program">Programme</span>
+  </button>
+  <button type="button" class="tabbar-btn" data-tab="carte" onclick="showTab('carte')" role="tab" aria-selected="false">
+    <span class="ti">📍</span><span data-fr="Carte" data-en="Map">Carte</span>
+  </button>
+  <button type="button" class="tabbar-btn" data-tab="artistes" onclick="showTab('artistes')" role="tab" aria-selected="false">
+    <span class="ti">🎨</span><span data-fr="Artistes" data-en="Artists">Artistes</span>
+  </button>
+</nav>
 
 </body>
 </html>
