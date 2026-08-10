@@ -309,6 +309,32 @@
   .guidelines p:last-child{margin-bottom:0;}
   .guidelines b{color:#fff;}
 
+  .reminders{
+    background:var(--panel-2);
+    border:1px solid var(--cyan);
+    padding:16px 18px;
+    margin-bottom:20px;
+  }
+  .reminders-title{
+    font-family:var(--mono); font-size:12px; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--cyan);
+    margin:0 0 10px; display:flex; align-items:center; gap:6px;
+  }
+  .reminders p{
+    font-family:var(--font); font-size:13.5px; line-height:1.55;
+    color:rgba(255,255,255,.85); margin:0 0 10px;
+  }
+  .reminders p:last-child{margin-bottom:0;}
+  .reminders b{color:#fff;}
+  .reminders a{color:var(--cyan); font-weight:700; text-decoration:underline;}
+  .reminders a:hover{color:#fff;}
+
+  .export-warning{
+    font-family:var(--font); font-size:17px; line-height:1.4;
+    color:#fff; margin:0 0 20px;
+  }
+  .export-warning b{color:var(--yellow);}
+
   button[type=submit]{
     width:100%; margin-top:6px;
     background:transparent; color:#fff; border:1px solid #fff;
@@ -481,6 +507,16 @@
         MAPP_MTL peut refuser ou retirer toute vidéo non conforme, même après acceptation.
       </p>
     </div>
+
+    <div class="reminders">
+      <p class="reminders-title"><span aria-hidden="true">🔔</span><span data-fr="Rappels" data-en="Reminders">Rappels</span></p>
+      <p data-fr-html="<b>Formulaire de communication (réseaux sociaux)</b> — pour nous aider à préparer la promotion et créer les publications pour les réseaux de MAPP_MTL, remplis notre <a href='https://tally.so/r/lbj4Lo' target='_blank' rel='noopener'>formulaire de communication</a>. À compléter seulement si tu es certain·e de soumettre une vidéo pour MINUTE_MAPP 2026."
+         data-en-html="<b>Communication form (social media)</b> — to help us prepare event promotion and create posts for MAPP_MTL's social media, fill out our <a href='https://tally.so/r/lbj4Lo' target='_blank' rel='noopener'>communication form</a>. Only complete this if you're certain you're submitting a video for MINUTE_MAPP 2026.">
+        <b>Formulaire de communication (réseaux sociaux)</b> — pour nous aider à préparer la promotion et créer les publications pour les réseaux de MAPP_MTL, remplis notre <a href="https://tally.so/r/lbj4Lo" target="_blank" rel="noopener">formulaire de communication</a>. À compléter seulement si tu es certain·e de soumettre une vidéo pour MINUTE_MAPP 2026.
+      </p>
+    </div>
+
+    <p class="export-warning" data-fr-html="<b>Export vidéo</b> — n'exporte pas ta vidéo avec le masque." data-en-html="<b>Video export</b> — do not export your video with the mask."><b>Export vidéo</b> — n'exporte pas ta vidéo avec le masque.</p>
 
     <div class="tally-embed">
       <iframe data-tally-src="https://tally.so/embed/Xx7dBd?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
