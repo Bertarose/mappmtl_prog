@@ -157,6 +157,7 @@ nav{
 .eyebrow::before{content:'';display:inline-block;width:10px;height:10px;background:var(--lime);border:1px solid var(--black);margin-right:10px;vertical-align:baseline}
 .hero .eyebrow{color:var(--violet);margin-bottom:16px}
 .hero .eyebrow::before{background:var(--violet);border-color:var(--violet)}
+#infos .eyebrow{color:var(--white)}
 
 /* ── Hero ────────────────────────────────────────── */
 .hero{
@@ -622,6 +623,14 @@ nav{
 @media(min-width:640px){.info-grid{grid-template-columns:1fr 1fr}
   .info-card:nth-child(odd){border-right:1px solid var(--black)}
   .info-card:nth-last-child(2){border-bottom:none}
+}
+#infos .info-grid{background:var(--black);border-color:var(--white)}
+#infos .info-card{border-color:var(--white)}
+#infos .info-card h4{color:var(--white)}
+#infos .info-card p{color:rgba(255,255,255,.75)}
+#infos .info-card a{color:var(--white)}
+@media(min-width:640px){
+  #infos .info-card:nth-child(odd){border-right-color:var(--white)}
 }
 
 /* ── Footer (noir) ───────────────────────────────── */
