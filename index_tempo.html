@@ -1164,8 +1164,10 @@ setInterval(renderHeroStatus, 30000);
 // PROGRAM — grille 6 jours
 // ============================================================
 function truncate(str, max){
-  if(!str || str.length <= max) return str;
-  const cut = str.slice(0, max).replace(/\s+\S*$/, '');
+  if(!str) return str;
+  const plain = str.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  if(plain.length <= max) return plain;
+  const cut = plain.slice(0, max).replace(/\s+\S*$/, '');
   return cut + '…';
 }
 
@@ -1439,7 +1441,7 @@ function focusVenue(key){
     c.classList.toggle('active', c.dataset.venue === key);
   });
   document.getElementById('carte').scrollIntoView({behavior:'smooth'});
-  setTimeout(()=>{ map.setView([v.lat,v.lng], 15, {animate:true}); markers[key].openPopup(); }, 450);
+  setTimeout(()=>{ map.setView([v.lat,v.lng], 15, {animate:true}); }, 450);
 }
 function renderLegend(){
   document.getElementById('map-legend').innerHTML = Object.entries(VENUES).map(([key,v])=>`
