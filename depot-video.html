@@ -220,18 +220,18 @@
   .progress-status.show{display:block;}
 
   .spec-link{
-    display:inline-block; background:none; border:none; padding:0; margin-bottom:10px;
-    font-family:var(--mono); font-size:11.5px; font-weight:700; color:var(--violet);
-    text-decoration:underline; text-underline-offset:2px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--yellow); border:1px solid var(--yellow); padding:12px 16px; margin-bottom:10px;
+    font-family:var(--mono); font-size:12.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+    color:#000; cursor:pointer; width:100%; justify-content:center;
   }
-  .spec-link:hover{color:#fff;}
+  .spec-link:hover{background:#000; color:var(--yellow);}
 
-  .template-link{
-    display:inline-block; background:none; border:none; padding:0; margin-bottom:10px; margin-left:16px;
-    font-family:var(--mono); font-size:11.5px; font-weight:700; color:var(--cyan);
-    text-decoration:underline; text-underline-offset:2px; cursor:pointer;
+  .spec-note{
+    font-family:var(--mono); font-size:11.5px; font-weight:700;
+    letter-spacing:.02em; color:var(--yellow); text-align:center;
+    margin:8px 0 10px;
   }
-  .template-link:hover{color:#fff;}
 
   .template-cta{
     display:inline-flex; align-items:center; gap:8px;
@@ -266,6 +266,13 @@
     display:flex; align-items:center; justify-content:center; flex:none;
   }
   .modal-close:hover{border-color:var(--cyan); color:var(--cyan);}
+  .modal-warning{
+    font-family:var(--font); font-size:15px; line-height:1.45;
+    color:rgba(255,255,255,.85); margin:0 0 10px;
+    padding:10px 12px; background:var(--panel-2); border-left:3px solid var(--yellow);
+  }
+  .modal-warning:last-of-type{margin-bottom:20px;}
+  .modal-warning b{color:var(--yellow);}
   .modal p.modal-sub{
     font-family:var(--mono); font-size:11px; color:rgba(255,255,255,.55);
     text-transform:uppercase; letter-spacing:.06em; margin:0 0 8px;
@@ -421,8 +428,8 @@
   }
 
   @media (max-width:480px){
-    .spec-link, .template-link{
-      display:block; width:100%; text-align:center;
+    .spec-link{
+      display:flex; width:100%; text-align:center;
       margin-left:0; margin-bottom:12px;
     }
   }
@@ -488,8 +495,8 @@
       <span class="txt" data-fr-html="Ta vidéo<small>300 Mo max, format MP4</small>" data-en-html="Your video<small>300 MB max, MP4 format</small>">Ta vidéo<small>300 Mo max, format MP4</small></span>
     </div>
     <div class="field">
-      <button type="button" class="spec-link" onclick="openSpecModal()" data-fr="Voir le guide de compression" data-en="See the compression guide">Voir le guide de compression</button>
-      <a class="template-link" href="https://drive.google.com/drive/folders/1yDnLtuFfcExFTk2lk25w5r6twCrAufOq?usp=sharing" target="_blank" rel="noopener" data-fr="Télécharger le gabarit de scène" data-en="Download the scene template">Télécharger le gabarit de scène</a>
+      <button type="button" class="spec-link" onclick="openSpecModal()" data-fr="📌 Voir le guide technique" data-en="📌 See the technical guide">📌 Voir le guide technique</button>
+      <p class="spec-note" data-fr="Important : lis bien le guide technique avant de déposer ta vidéo." data-en="Important: please read the technical guide carefully before submitting your video.">Important : lis bien le guide technique avant de déposer ta vidéo.</p>
     </div>
 
     <div class="guidelines">
@@ -511,8 +518,6 @@
         <b>Formulaire de communication (réseaux sociaux)</b> — pour nous aider à préparer la promotion et créer les publications pour les réseaux de MAPP_MTL, remplis notre <a href="https://tally.so/r/lbj4Lo" target="_blank" rel="noopener">formulaire de communication</a>. À compléter seulement si tu es certain·e de soumettre une vidéo pour MINUTE_MAPP 2026.
       </p>
     </div>
-
-    <p class="export-warning" data-fr-html="<b>Export vidéo</b> — n'exporte pas ta vidéo avec le masque." data-en-html="<b>Video export</b> — do not export your video with the mask."><b>Export vidéo</b> — n'exporte pas ta vidéo avec le masque.</p>
 
     <div class="step-label" style="margin-top:28px;">
       <span class="num">1</span>
@@ -576,11 +581,14 @@
   <div class="modal-overlay" id="specModal" onclick="if(event.target===this)closeSpecModal()">
     <div class="modal">
       <div class="modal-head">
-        <h3 data-fr="Guide de compression" data-en="Compression guide">Guide de compression</h3>
+        <h3 data-fr="Guide technique" data-en="Technical guide">Guide technique</h3>
         <button type="button" class="modal-close" onclick="closeSpecModal()">✕</button>
       </div>
 
       <a class="template-cta" href="https://drive.google.com/drive/folders/1yDnLtuFfcExFTk2lk25w5r6twCrAufOq" target="_blank" rel="noopener" data-fr="↓ Télécharger le gabarit de la scène" data-en="↓ Download the scene template">↓ Télécharger le gabarit de la scène</a>
+
+      <p class="modal-warning" data-fr-html="<b>Export vidéo</b> — n'exporte pas ta vidéo avec le masque." data-en-html="<b>Video export</b> — do not export your video with the mask."><b>Export vidéo</b> — n'exporte pas ta vidéo avec le masque.</p>
+      <p class="modal-warning" data-fr-html="<b>Piste audio</b> — toutes les vidéos soumises doivent obligatoirement inclure une piste audio afin d'être admissibles à la soumission. Tout contenu audio utilisé dans votre vidéo doit également être utilisé légalement, avec les droits ou autorisations nécessaires à son utilisation." data-en-html="<b>Audio track</b> — all submitted videos must include an audio track to be eligible for submission. Any audio content used in your video must also be used legally, with the necessary rights or permissions for its use."><b>Piste audio</b> — toutes les vidéos soumises doivent obligatoirement inclure une piste audio afin d'être admissibles à la soumission. Tout contenu audio utilisé dans votre vidéo doit également être utilisé légalement, avec les droits ou autorisations nécessaires à son utilisation.</p>
 
       <p class="modal-sub" data-fr="Spécifications techniques" data-en="Technical specifications">Spécifications techniques</p>
       <table class="spec-table">
