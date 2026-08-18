@@ -470,6 +470,10 @@ nav{
 .acard{border:1px solid var(--grey);background:var(--gris-fonce);cursor:pointer;transition:transform .12s,box-shadow .12s;text-align:left}
 .acard:hover,.acard:focus-visible{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--white);outline:none}
 .acard .ph{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;border-bottom:1px solid var(--grey);background:var(--white)}
+.ph-placeholder{display:flex;align-items:center;justify-content:center;width:100%;background:var(--gris-fonce);border-bottom:1px solid var(--grey);
+  font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--grey-light)}
+.acard .ph-placeholder{aspect-ratio:1/1}
+.sheet .ph-placeholder{aspect-ratio:16/10;border-bottom:1px solid var(--black)}
 .acard .an{font-family:var(--cond);font-weight:500;font-size:16.5px;text-transform:uppercase;padding:10px 11px 3px;letter-spacing:-0.01em;line-height:1.05;color:var(--white)}
 .acard .ad{font-family:var(--mono);font-size:9.5px;color:var(--gris-999);text-transform:uppercase;letter-spacing:.08em;padding:0 11px 12px;display:block}
 
@@ -971,7 +975,7 @@ footer a{color:var(--violet);text-decoration:none}
     <a href="https://www.instagram.com/mapp_mtl" target="_blank" rel="noopener">Instagram</a>
     <a href="mailto:info@mappmtl.com">info@mappmtl.com</a>
   </div>
-  <p class="f-legal" data-fr="© 2026 MAPP_MTL · Un projet d'ASIASIE · Tous droits réservés" data-en="© 2026 MAPP_MTL · An ASIASIE project · All rights reserved">© 2026 MAPP_MTL · Un projet d'ASIASIE · Tous droits réservés</p>
+  <p class="f-legal" data-fr="© 2026 MAPP_MTL · Tous droits réservés" data-en="© 2026 MAPP_MTL · All rights reserved">© 2026 MAPP_MTL · Tous droits réservés</p>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1116,11 +1120,11 @@ const ARTISTS = [
     fr:{ disc:"Œuvre à confirmer", bio:"Collectif DJ montréalais — présentation et titre de la performance à venir." },
     en:{ disc:"Work to be confirmed", bio:"Montreal-based DJ collective — bio and performance details to come." },
     links:{} },
-  { slug:"dj-a-venir", name:"Artiste à venir", dayIdx:null, venue:"vanhorne", cat:"dj",
+  { slug:"dj-a-venir", name:"Artiste à venir", dayIdx:null, venue:"vanhorne", cat:"dj", placeholder:true,
     fr:{ disc:"Programmation à venir", bio:"La programmation DJ sera annoncée prochainement." },
     en:{ disc:"Lineup coming soon", bio:"The DJ lineup will be announced soon." },
     links:{} },
-  { slug:"minute-a-venir", name:"Artiste à venir", dayIdx:2, venue:"vanhorne", cat:"minute",
+  { slug:"minute-a-venir", name:"Artiste à venir", dayIdx:2, venue:"vanhorne", cat:"minute", placeholder:true,
     fr:{ disc:"Programmation à venir", bio:"La cohorte MINUTE_MAPP sera annoncée prochainement." },
     en:{ disc:"Lineup coming soon", bio:"The MINUTE_MAPP cohort will be announced soon." },
     links:{} }
@@ -1327,6 +1331,7 @@ function drawPortrait(cv, name, ratio){
 }
 
 function artistMedia(a, ratio){
+  if(a.placeholder) return `<div class="ph ph-placeholder" data-fr="À venir" data-en="Coming soon">À venir</div>`;
   if(a.img) return `<img class="ph" src="${a.img}" alt="${a.name}" loading="lazy">`;
   return `<canvas class="ph" data-name="${a.name}" data-ratio="${ratio||1}"></canvas>`;
 }
@@ -2030,7 +2035,7 @@ document.addEventListener('keydown', e=>{
     // iOS n'a pas de prompt natif : on affiche l'instruction "Partager → Sur l'écran d'accueil"
     document.getElementById('ib-text-body').textContent = (document.documentElement.lang === 'en')
       ? 'Add MAPP_MTL to your home screen: tap Share, then "Add to Home Screen".'
-      : 'Ajoutez MAPP_MTL à votre écran d\\'accueil : appuyez sur Partager, puis « Sur l\\'écran d\\'accueil ».';
+      : 'Ajoutez MAPP_MTL à votre écran d\'accueil : appuyez sur Partager, puis « Sur l\'écran d\'accueil ».';
     setTimeout(showInstallBanner, 1200);
   }
   function showInstallBanner(){
