@@ -466,6 +466,17 @@ nav{
 .acat-tab:last-child{border-right:none}
 .acat-tab:hover{opacity:1}
 .acat-tab.active{background:var(--lime);color:var(--black);opacity:1}
+.country-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:18px}
+.country-bar[hidden]{display:none}
+.country-chips{display:flex;flex-wrap:wrap;gap:6px}
+.country-chip{
+  font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--white);background:transparent;border:1px solid var(--grey);
+  padding:6px 12px;cursor:pointer;transition:.12s;opacity:.65;
+}
+.country-chip:hover{opacity:1;border-color:var(--white)}
+.country-chip.active{background:var(--violet);border-color:var(--violet);color:var(--white);opacity:1}
+.country-count{font-family:var(--mono);font-size:10.5px;color:var(--grey-light);letter-spacing:.04em;margin-left:auto}
 .agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
 .acard{border:1px solid var(--grey);background:var(--gris-fonce);cursor:pointer;transition:transform .12s,box-shadow .12s;text-align:left}
 .acard:hover,.acard:focus-visible{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--white);outline:none}
@@ -903,6 +914,10 @@ footer a{color:var(--violet);text-decoration:none}
       <button class="acat-tab" data-cat="dj" onclick="setArtistCat('dj',this)">DJ</button>
       <button class="acat-tab" data-cat="minute" onclick="setArtistCat('minute',this)" data-fr="MINUTE_MAPP" data-en="MINUTE_MAPP">MINUTE_MAPP</button>
     </div>
+    <div class="country-bar" id="country-bar" hidden>
+      <div class="country-chips" id="country-chips"></div>
+      <div class="country-count" id="country-count"></div>
+    </div>
     <div class="agrid reveal" id="agrid"></div>
   </div>
 </section>
@@ -1141,191 +1156,191 @@ const ARTISTS = [
     fr:{ disc:"Programmation à venir", bio:"La programmation DJ sera annoncée prochainement." },
     en:{ disc:"Lineup coming soon", bio:"The DJ lineup will be announced soon." },
     links:{} },
-  { slug:"minute-01", name:"Artiste 01", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-01", name:"Artiste 01", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-02", name:"Artiste 02", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-02", name:"Artiste 02", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-03", name:"Artiste 03", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-03", name:"Artiste 03", dayIdx:2, venue:"vanhorne", cat:"minute", country:"BE",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-04", name:"Artiste 04", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-04", name:"Artiste 04", dayIdx:2, venue:"vanhorne", cat:"minute", country:"FR",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-05", name:"Artiste 05", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-05", name:"Artiste 05", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-06", name:"Artiste 06", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-06", name:"Artiste 06", dayIdx:2, venue:"vanhorne", cat:"minute", country:"FR",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-07", name:"Artiste 07", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-07", name:"Artiste 07", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-08", name:"Artiste 08", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-08", name:"Artiste 08", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-09", name:"Artiste 09", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-09", name:"Artiste 09", dayIdx:2, venue:"vanhorne", cat:"minute", country:"ES",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-10", name:"Artiste 10", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-10", name:"Artiste 10", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-11", name:"Artiste 11", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-11", name:"Artiste 11", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-12", name:"Artiste 12", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-12", name:"Artiste 12", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-13", name:"Artiste 13", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-13", name:"Artiste 13", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-14", name:"Artiste 14", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-14", name:"Artiste 14", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-15", name:"Artiste 15", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-15", name:"Artiste 15", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-16", name:"Artiste 16", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-16", name:"Artiste 16", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-17", name:"Artiste 17", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-17", name:"Artiste 17", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-18", name:"Artiste 18", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-18", name:"Artiste 18", dayIdx:2, venue:"vanhorne", cat:"minute", country:"FR",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-19", name:"Artiste 19", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-19", name:"Artiste 19", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-20", name:"Artiste 20", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-20", name:"Artiste 20", dayIdx:2, venue:"vanhorne", cat:"minute", country:"FR",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-21", name:"Artiste 21", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-21", name:"Artiste 21", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-22", name:"Artiste 22", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-22", name:"Artiste 22", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-23", name:"Artiste 23", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-23", name:"Artiste 23", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-24", name:"Artiste 24", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-24", name:"Artiste 24", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-25", name:"Artiste 25", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-25", name:"Artiste 25", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-26", name:"Artiste 26", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-26", name:"Artiste 26", dayIdx:2, venue:"vanhorne", cat:"minute", country:"JP",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-27", name:"Artiste 27", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-27", name:"Artiste 27", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-28", name:"Artiste 28", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-28", name:"Artiste 28", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-29", name:"Artiste 29", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-29", name:"Artiste 29", dayIdx:2, venue:"vanhorne", cat:"minute", country:"AR",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-30", name:"Artiste 30", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-30", name:"Artiste 30", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-31", name:"Artiste 31", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-31", name:"Artiste 31", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-32", name:"Artiste 32", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-32", name:"Artiste 32", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-33", name:"Artiste 33", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-33", name:"Artiste 33", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-34", name:"Artiste 34", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-34", name:"Artiste 34", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-35", name:"Artiste 35", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-35", name:"Artiste 35", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-36", name:"Artiste 36", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-36", name:"Artiste 36", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-37", name:"Artiste 37", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-37", name:"Artiste 37", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-38", name:"Artiste 38", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-38", name:"Artiste 38", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-39", name:"Artiste 39", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-39", name:"Artiste 39", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA/DE",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-40", name:"Artiste 40", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-40", name:"Artiste 40", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-41", name:"Artiste 41", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-41", name:"Artiste 41", dayIdx:2, venue:"vanhorne", cat:"minute", country:"FR",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-42", name:"Artiste 42", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-42", name:"Artiste 42", dayIdx:2, venue:"vanhorne", cat:"minute", country:"FR",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-43", name:"Artiste 43", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-43", name:"Artiste 43", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-44", name:"Artiste 44", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-44", name:"Artiste 44", dayIdx:2, venue:"vanhorne", cat:"minute", country:"FR",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-45", name:"Artiste 45", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-45", name:"Artiste 45", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-46", name:"Artiste 46", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-46", name:"Artiste 46", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
-  { slug:"minute-47", name:"Artiste 47", dayIdx:2, venue:"vanhorne", cat:"minute", country:"",
+  { slug:"minute-47", name:"Artiste 47", dayIdx:2, venue:"vanhorne", cat:"minute", country:"CA",
     fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
     en:{ disc:"Country to confirm", bio:"Bio coming soon." },
     links:{ ig:"" } },
@@ -1454,6 +1469,7 @@ function applyLang(){
   renderMarquee();
   renderInstalls();
   renderGrid();
+  renderCountryBar();
   renderArtists();
   renderLegend();
   renderHeroStatus();
@@ -1635,15 +1651,67 @@ function paintPortraits(root){
 }
 
 let currentArtistCat = 'vj';
+let currentCountry = 'ALL';
+
 function setArtistCat(cat, btn){
   currentArtistCat = cat;
+  currentCountry = 'ALL';
   document.querySelectorAll('.acat-tab').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderCountryBar();
+  renderArtists();
+}
+
+function renderCountryBar(){
+  const bar = document.getElementById('country-bar');
+  if(currentArtistCat !== 'minute'){ bar.hidden = true; return; }
+
+  const countries = ARTISTS
+    .filter(a => a.cat === 'minute' && a.country)
+    .map(a => a.country);
+  const unique = [...new Set(countries)].sort();
+
+  if(!unique.length){ bar.hidden = true; return; }
+  bar.hidden = false;
+
+  const allLabel = lang === 'fr' ? 'TOUS' : 'ALL';
+  const chips = document.getElementById('country-chips');
+  chips.innerHTML = [allLabel].concat(unique).map(c => {
+    const isAll = c === allLabel;
+    const val = isAll ? 'ALL' : c;
+    const active = currentCountry === val ? ' active' : '';
+    return `<button class="country-chip${active}" onclick="setCountry('${val}',this)">${c}</button>`;
+  }).join('');
+
+  updateCountryCount();
+}
+
+function setCountry(val, btn){
+  currentCountry = val;
+  document.querySelectorAll('.country-chip').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
   renderArtists();
 }
+
+function updateCountryCount(){
+  const el = document.getElementById('country-count');
+  if(!el) return;
+  const total = ARTISTS.filter(a => a.cat === 'minute').length;
+  const visible = getArtistList().length;
+  el.textContent = lang === 'fr' ? `${visible} / ${total} artistes` : `${visible} / ${total} artists`;
+}
+
+function getArtistList(){
+  return ARTISTS.filter(a => {
+    if((a.cat||'vj') !== currentArtistCat) return false;
+    if(currentArtistCat === 'minute' && currentCountry !== 'ALL' && a.country !== currentCountry) return false;
+    return true;
+  });
+}
+
 function renderArtists(){
   const el = document.getElementById('agrid');
-  const list = ARTISTS.filter(a => (a.cat||'vj') === currentArtistCat);
+  const list = getArtistList();
   el.innerHTML = list.length ? list.map(a=>`
     <button class="acard" onclick="openArtist('${a.slug}')" aria-haspopup="dialog">
       ${artistMedia(a,1)}
@@ -1651,6 +1719,7 @@ function renderArtists(){
       ${a.placeholder ? '' : `<span class="ad">${a[lang].disc}</span>`}
     </button>`).join('') : `<div class="nores" style="padding:24px 0;grid-column:1/-1" data-fr="Programmation à venir dans cette catégorie." data-en="Lineup coming soon in this category.">Programmation à venir dans cette catégorie.</div>`;
   paintPortraits(el);
+  if(currentArtistCat === 'minute') updateCountryCount();
 }
 
 const MINUTE_MAPP_NAMES = [
