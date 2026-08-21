@@ -1,0 +1,17 @@
+{
+  "name": "MAPP_MTL 2026 (TEST)",
+  "short_name": "MAPP TEST",
+  "description": "Version test — programmation MAPP_MTL 2026",
+  "start_url": "/index_tempo.html",
+  "scope": "/",
+  "id": "/index_tempo.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/icon-192.png",    "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/maskable-512.png","sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icon-512.png",    "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
