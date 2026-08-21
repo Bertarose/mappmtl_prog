@@ -226,9 +226,9 @@ select{
 .ov-stat strong{display:block;font-size:26px;font-weight:900;color:var(--text);letter-spacing:0;text-transform:none;margin-bottom:2px}
 .ov-section-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);padding:1.5rem var(--pad) .5rem}
 .ov-gap-list,.ov-una-list{display:flex;flex-direction:column;gap:1px;background:var(--gridline)}
-.ov-gap-row{background:var(--card);padding:10px var(--pad);display:flex;justify-content:space-between;font-size:13px}
+.ov-gap-row{background:var(--card);padding:10px var(--pad);display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px}
 .ov-gap-day{color:var(--mu)}
-.ov-gap-poste{font-weight:700;color:#a32d2d}
+.ov-gap-poste{font-weight:700;color:#a32d2d;flex:1;min-width:120px}
 .ov-una-group{margin-bottom:1px}
 .ov-una-group-head{padding:10px var(--pad);background:var(--s);border-top:1px solid var(--mu2);border-bottom:1px solid var(--mu2);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--text);display:flex;align-items:center}
 .ov-una-group-count{margin-left:auto;font-size:11px;font-weight:700;color:var(--mu);text-transform:none;letter-spacing:0}
@@ -1016,6 +1016,20 @@ function admRenderOverview() {
   const totalAssigned = assignedIds.size;
   const totalRepas = Object.values(hbRepasById).filter(r => r.repasOk).length;
 
+// Liste des lieux distincts qui s'appliquent un jour donné (le lieu par
+// défaut, plus tout lieu spécial si un des quarts de cette journée en a un
+// — ex. Mercredi a Skatepark Van Horne pour les 2 premiers quarts ET Moment
+// Factory pour la soirée réseautage). Utilisé pour donner un repère de lieu
+// même dans les vues qui ne descendent pas jusqu'au niveau du quart (ex.
+// "Postes à combler", qui liste par jour+poste sans détail de quart).
+function bvDayLocations(date) {
+  const d = BV_DAYS.find(x => x.date === date);
+  if (!d) return [DEFAULT_LOCATION];
+  const locs = new Set([d.full.location || DEFAULT_LOCATION]);
+  (d.shifts || []).forEach(s => locs.add(s.location || DEFAULT_LOCATION));
+  return Array.from(locs);
+}
+
   // Postes vides (jour × poste avec 0 bénévole assigné) — seulement parmi
   // les postes réellement offerts cette journée-là (ex. le dimanche
   // démontage n'a pas besoin de Sécurité/Bar/etc., donc ça ne doit pas
@@ -1023,7 +1037,7 @@ function admRenderOverview() {
   const gaps = [];
   days.forEach(d => {
     postesForDay(hbData, d.date).forEach(p => {
-      if ((data[d.date][p] || []).length === 0) gaps.push({ label: d.label, poste: p });
+      if ((data[d.date][p] || []).length === 0) gaps.push({ label: d.label, poste: p, date: d.date });
     });
   });
 
@@ -1031,7 +1045,11 @@ function admRenderOverview() {
   const nonAssignes = bvVols.filter(v => !assignedIds.has(String(v.id)));
 
   const gapsHtml = gaps.length
-    ? gaps.map(g => `<div class="ov-gap-row"><span class="ov-gap-day">${g.label}</span><span class="ov-gap-poste">${g.poste}</span></div>`).join('')
+    ? gaps.map(g => {
+        const locsHtml = bvDayLocations(g.date)
+          .map(loc => `<span class="mh-shift-location ${loc !== DEFAULT_LOCATION ? 'special' : ''}">📍 ${loc}</span>`).join('');
+        return `<div class="ov-gap-row"><span class="ov-gap-day">${g.label}</span><span class="ov-gap-poste">${g.poste}</span>${locsHtml}</div>`;
+      }).join('')
     : '<div class="ov-allgood">🎉 Tous les postes sont comblés pour l\'instant !</div>';
 
   // Regroupe les bénévoles non assignés par fonction souhaitée (une même
@@ -1102,11 +1120,11 @@ function admRenderOverview() {
     <div class="ov-section-label">⚠️ Postes à combler (${gaps.length})</div>
     <div class="ov-gap-list">${gapsHtml}</div>
 
-    <div class="ov-section-label">👤 Bénévoles pas encore assignés (${nonAssignes.length})</div>
-    <div class="ov-una-list">${nonAssignesHtml}</div>
-
     <div class="ov-section-label">📅 Couverture par jour</div>
     <div class="ov-coverage">${coverageHtml}</div>
+
+    <div class="ov-section-label">👤 Bénévoles pas encore assignés (${nonAssignes.length})</div>
+    <div class="ov-una-list">${nonAssignesHtml}</div>
   `;
 }
 
