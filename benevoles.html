@@ -1,0 +1,2238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAPP MTL 2026 — Bénévoles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Narrow:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script>
+// Applique le thème AVANT le rendu de la page pour éviter un flash visuel
+// (sombre par défaut — cohérent avec disponibilites.html / index.html)
+(function(){
+  var t = 'dark';
+  try { t = localStorage.getItem('mapp_theme') || 'dark'; } catch(e) {}
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;font-size:16px;line-height:1.5;transition:background .15s,color .15s}
+:root{
+  --g:#00b6ff;--violet:#7600ff;
+  --bg:#0e0e0e;--card:#1a1a1a;--text:#f0f0f0;
+  --mu:rgba(255,255,255,.55);--mu2:rgba(255,255,255,.14);
+  --s:#1f1f1f;--hover:#242424;--gridline:rgba(255,255,255,.08);
+  --pill-bg:var(--g);--pill-text:#0a0a0a;
+  --pad:1.5rem;--font:'Archivo',Helvetica,Arial,sans-serif;--cond:'Archivo Narrow','Archivo',sans-serif;--mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace}
+[data-theme="light"]{
+  --bg:#f5f5f5;--card:#fff;--text:#0a0a0a;
+  --mu:rgba(0,0,0,.45);--mu2:rgba(0,0,0,.1);
+  --s:#ebebeb;--hover:#f9f9f9;--gridline:rgba(0,0,0,.08);
+  --pill-bg:#0a0a0a;--pill-text:var(--g);
+}
+
+.ticker{background:#0a0a0a;padding:8px 0;overflow:hidden;white-space:nowrap;position:sticky;top:0;z-index:200}
+.ti{display:inline-block;animation:tick 22s linear infinite}
+.titem{display:inline;font-size:12px;font-weight:700;letter-spacing:.08em;color:#00b6ff;padding:0 2.5rem;text-transform:uppercase}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:1rem var(--pad);border-bottom:1px solid var(--mu2);position:sticky;top:36px;z-index:199;background:var(--bg);gap:1rem;flex-wrap:wrap}
+.nav-logo{font-size:16px;font-weight:900;letter-spacing:.05em;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-logo svg{height:30px;width:30px;display:block;fill:var(--text)}
+.theme-toggle{background:none;border:1px solid var(--mu2);color:var(--text);font-size:16px;padding:11px 15px;cursor:pointer;line-height:1;-webkit-tap-highlight-color:transparent;min-height:48px}
+.theme-toggle:hover{border-color:var(--text)}
+.nav-pages{display:flex;border:1px solid var(--mu2);overflow:hidden}
+.npbtn{font-size:13px;padding:13px 20px;background:transparent;color:var(--mu);cursor:pointer;border-right:1px solid var(--mu2);letter-spacing:.06em;text-transform:uppercase;transition:all .15s;border-top:none;border-bottom:none;border-left:none;white-space:nowrap;min-height:44px}
+.npbtn:last-child{border-right:none}
+.npbtn:hover{color:var(--text)}
+.npbtn.active{background:var(--pill-bg);color:var(--pill-text);font-weight:800}
+.back-link{font-size:13px;padding:12px 14px;background:none;border:none;color:var(--mu);letter-spacing:.04em;cursor:pointer;white-space:nowrap;text-decoration:none;min-height:48px;display:inline-flex;align-items:center}
+.back-link:hover{color:var(--text)}
+
+.page{display:none}
+.page.active{display:block}
+.subview{display:none}
+.subview.active{display:block}
+
+.hero{padding:3rem var(--pad) 2.5rem;border-bottom:1px solid var(--mu2);background:var(--card)}
+.hlabel{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--g);margin-bottom:1rem}
+.htitle{font-family:var(--cond);font-weight:600;font-size:clamp(48px,10vw,96px);line-height:.88;letter-spacing:-.03em;text-transform:uppercase;margin-bottom:1.5rem;color:var(--text)}
+.htitle .g{color:var(--g)}
+.hmeta{display:flex;gap:2rem;margin-bottom:2rem;flex-wrap:wrap}
+.hmi{font-size:12px;color:var(--mu);letter-spacing:.06em;text-transform:uppercase}
+.hmi strong{color:var(--text);font-size:16px;font-weight:700;display:block;margin-bottom:3px}
+
+.tab-row{display:flex;border:1px solid var(--mu2);width:fit-content;flex-wrap:wrap;gap:0}
+.tabx{font-size:13px;padding:14px 20px;background:transparent;color:var(--mu);cursor:pointer;border-right:1px solid var(--mu2);letter-spacing:.06em;text-transform:uppercase;transition:all .15s;border-top:none;border-bottom:none;border-left:none;white-space:nowrap;min-height:48px}
+.tabx:last-child{border-right:none}
+.tabx:hover{color:var(--text)}
+.tabx.active{background:var(--pill-bg);color:var(--pill-text);font-weight:800}
+
+.fbar{display:flex;gap:8px;padding:.875rem var(--pad);border-bottom:1px solid var(--mu2);flex-wrap:wrap;align-items:center;background:var(--s)}
+.flabel{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-right:4px}
+.fbtn{font-size:13px;padding:12px 18px;border:1px solid var(--mu2);background:var(--card);color:var(--mu);cursor:pointer;letter-spacing:.04em;text-transform:uppercase;transition:all .15s;display:flex;align-items:center;gap:6px;white-space:nowrap;-webkit-tap-highlight-color:transparent;min-height:44px}
+.fbtn:hover,.fbtn:active{border-color:var(--text);color:var(--text)}
+.fbtn.active{background:var(--pill-bg);color:var(--pill-text);border-color:transparent;font-weight:700}
+.fdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+.body{padding:2rem var(--pad);max-width:1200px;margin:0 auto}
+.nores{padding:3rem;text-align:center;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
+
+.lock-wrap{min-height:60vh;display:flex;align-items:center;justify-content:center;padding:2rem var(--pad)}
+.lock-box{max-width:360px;width:100%;text-align:center}
+.lock-title{font-size:22px;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;margin-bottom:8px}
+.lock-sub{font-size:13px;color:var(--mu);margin-bottom:20px;line-height:1.5}
+.lock-input{width:100%;padding:13px 14px;font-size:16px;border:1px solid var(--mu2);margin-bottom:12px;font-family:inherit}
+.lock-input:focus{outline:none;border-color:var(--text)}
+.lock-btn{width:100%;padding:13px;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:#0a0a0a;color:var(--g);border:1px solid var(--mu2);cursor:pointer}
+.lock-btn:active{opacity:.85}
+.lock-err{font-size:12px;color:#a32d2d;margin-top:10px;display:none}
+
+/* BÉNÉVOLES — cartes bénévole */
+.bv-grid{display:flex;flex-direction:column;gap:1px;background:var(--gridline);overflow-x:auto}
+.bv-row{background:var(--card);padding:14px var(--pad);display:grid;grid-template-columns:28px 1.8fr 1.4fr;gap:14px;align-items:center;min-width:420px}
+.bv-row.hdr{background:#0a0a0a}
+.bv-row.hdr .bv-h{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.bv-check{width:16px;height:16px}
+.bv-name{font-size:14px;font-weight:700;color:var(--text)}
+.bv-sub{font-size:11px;color:var(--mu);margin-top:2px}
+.bv-days{display:flex;gap:5px;flex-wrap:wrap}
+.bv-day{width:26px;height:26px;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;background:var(--s);color:var(--mu)}
+.bv-day.q1{background:#ffe08a;color:#5c4400}
+.bv-day.q2{background:#8ab4ff;color:#0a2b6e}
+.bv-day.q3{background:#8ae0a8;color:#0a5c28}
+.bv-day.full{background:var(--violet);color:#fff}
+.dispo-legend{display:flex;gap:1.25rem;flex-wrap:wrap;padding:.75rem var(--pad);font-size:11px;color:var(--mu);align-items:center;background:var(--s);border-bottom:1px solid var(--mu2)}
+.dl-item{display:flex;align-items:center;gap:6px}
+.bv-fonction{font-size:12px;color:var(--text)}
+.bv-fonction.empty{color:var(--mu);font-style:italic}
+
+/* GRILLE DES QUARTS (référence) */
+.qg-wrap{border-bottom:1px solid var(--mu2);background:var(--card)}
+.qg-block{padding:1.25rem var(--pad) 1.5rem}
+.qg-title{font-size:15px;font-weight:800;margin-bottom:.75rem}
+.qg-scroll{overflow-x:auto;border:1px solid var(--mu2)}
+.qg-table{border-collapse:collapse;font-size:12px;min-width:760px;width:100%}
+.qg-table th,.qg-table td{padding:10px 12px;border-bottom:1px solid var(--mu2);border-right:1px solid var(--mu2);text-align:center;white-space:nowrap}
+.qg-table th:last-child,.qg-table td:last-child{border-right:none}
+.qg-table thead th{background:#0a0a0a;color:#fff;font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.qg-table td:first-child{font-weight:700;background:var(--s)}
+.qg-note{font-size:12px;color:var(--mu);padding:.75rem var(--pad);border-top:1px solid var(--mu2);background:var(--s)}
+.bv-role-select{font-size:12px;padding:7px 8px 7px 8px;border:1px solid var(--mu2);background:var(--card);font-family:inherit;width:100%}
+
+/* Flèche de menu déroulant personnalisée — la flèche par défaut du
+   navigateur colle trop près du texte, surtout sur macOS/Chrome. On la
+   remplace par une flèche plus légère, avec de l'espace tout autour. */
+select{
+  appearance:none;-webkit-appearance:none;-moz-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;background-size:15px;
+  padding-right:42px !important;
+  cursor:pointer;
+}
+[data-theme="light"] select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+.bv-mlabel{display:none}
+.bv-warn{font-size:9px;font-weight:700;padding:2px 7px;letter-spacing:.05em;text-transform:uppercase;background:#faeeda;color:#854f0b;margin-left:6px;white-space:nowrap}
+
+/* COMMUNICATIONS */
+.comm-panel{border-top:1px solid var(--mu2);padding:1.5rem 0 2rem;margin-top:1rem}
+.comm-row{display:flex;align-items:center;gap:10px;padding:0 var(--pad);margin:1rem 0;flex-wrap:wrap}
+.comm-count{font-size:12px;color:var(--mu);margin-left:auto}
+.comm-fields{padding:0 var(--pad);display:flex;flex-direction:column;gap:10px;max-width:640px}
+.comm-fields input,.comm-fields textarea,.comm-fields select{padding:14px 16px;font-size:15px;border:1px solid var(--mu2);font-family:inherit;background:var(--card);color:var(--text);min-height:48px}
+.comm-fields textarea{min-height:120px;resize:vertical}
+.comm-subhead{padding:0 var(--pad);margin-top:1.5rem;margin-bottom:.25rem;font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--text)}
+.comm-hint{padding:0 var(--pad);margin-bottom:.75rem;font-size:12px;color:var(--mu);line-height:1.5;max-width:640px}
+.comm-msg{font-size:13px;padding:10px 12px;display:none}
+.comm-msg.ok{display:block;background:rgba(0,182,255,.1);color:#0a5c28}
+.comm-msg.err{display:block;background:#fcebeb;color:#a32d2d}
+
+/* MON HORAIRE — recherche personnalisée */
+.mh-wrap{padding:1.75rem var(--pad);border-bottom:1px solid var(--mu2);background:var(--card)}
+.mh-label{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:.85rem;font-weight:700}
+.mh-search-row{display:flex;gap:8px;align-items:center;max-width:480px}
+.mh-input{flex:1;padding:14px 16px;font-size:16px;border:1px solid var(--mu2);font-family:inherit;background:var(--card);color:var(--text);min-width:0}
+.mh-input:focus{outline:none;border-color:var(--text)}
+.mh-clear{display:none;width:44px;height:44px;flex-shrink:0;border:1px solid var(--mu2);background:var(--card);color:var(--mu);font-size:20px;cursor:pointer;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
+.mh-clear:hover{color:var(--text);border-color:var(--text)}
+.mh-result{margin-top:1.25rem;max-width:640px}
+.mh-hint{font-size:13px;color:var(--mu);padding:.4rem 0;line-height:1.5}
+.mh-hint.mh-none{color:#a32d2d}
+.mh-picker{display:flex;flex-wrap:wrap;gap:8px;margin-top:.5rem}
+.mh-pick-btn{font-size:14px;padding:14px 18px;border:1px solid var(--mu2);background:var(--card);color:var(--text);cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent;min-height:44px}
+.mh-pick-btn:hover,.mh-pick-btn:active{border-color:var(--text)}
+.mh-person{display:flex;align-items:center;gap:8px;margin-bottom:.15rem;flex-wrap:wrap}
+.mh-person-name{font-size:20px;font-weight:900}
+.mh-shift-count{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--g);font-weight:800;margin:.5rem 0 1rem;background:#0a0a0a;display:inline-block;padding:5px 10px}
+.mh-shift-list{display:flex;flex-direction:column;gap:1px;background:var(--gridline);border:1px solid var(--mu2)}
+.mh-shift-card{background:var(--card);padding:16px var(--pad);display:flex;align-items:center;gap:14px;flex-wrap:wrap;position:relative}
+.mh-shift-card.today{background:var(--pill-bg)}
+.mh-shift-card.today .mh-shift-poste{color:var(--pill-text)}
+.mh-shift-card.today .mh-shift-time{color:var(--pill-text)}
+.mh-today-badge{position:absolute;top:-9px;left:var(--pad);background:var(--g);color:#0a0a0a;font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px}
+.mh-shift-day{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);min-width:64px;font-weight:700;flex-shrink:0}
+.mh-shift-card.today .mh-shift-day{color:var(--pill-text)}
+.mh-shift-poste{font-size:15px;font-weight:700;flex:1;min-width:120px;color:var(--text)}
+.mh-shift-time{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--g);white-space:nowrap}
+
+/* Fiche bénévole — section Repas */
+.mh-repas-card{margin-top:14px;border:1px solid var(--mu2);background:var(--card);padding:14px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.mh-repas-card.ok{border-color:var(--g);background:rgba(0,182,255,.06)}
+.mh-repas-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);font-weight:700}
+.mh-repas-status{font-size:14px;font-weight:800}
+.mh-repas-card.ok .mh-repas-status{color:#0a5c28}
+.mh-repas-shifts{font-size:12px;color:var(--mu);margin-left:auto}
+
+.poste-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;flex-shrink:0;vertical-align:middle}
+.adm-delete-btn{width:100%;margin-top:18px;padding:13px;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:none;border:1px solid #a32d2d;color:#a32d2d;cursor:pointer}
+.adm-delete-btn:hover{background:#a32d2d;color:#fff}
+
+/* Carte d'accueil — première visite seulement */
+.welcome-card{margin:0 var(--pad) 1.25rem;padding:1.25rem 1.5rem;background:rgba(0,182,255,.08);border:1px solid var(--g);position:relative}
+.welcome-close{position:absolute;top:10px;right:10px;background:none;border:none;font-size:22px;color:var(--mu);cursor:pointer;line-height:1;padding:8px 12px;min-height:40px}
+.welcome-close:hover{color:var(--text)}
+.welcome-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px}
+.welcome-text{font-size:14px;color:var(--text);line-height:1.6;max-width:520px}
+
+/* Fiche bénévole — T-shirt / restrictions alimentaires */
+.mh-info-card{margin-top:10px;border:1px solid var(--mu2);background:var(--card);display:flex;flex-wrap:wrap}
+.mh-info-item{flex:1;min-width:140px;padding:12px 16px;border-right:1px solid var(--mu2)}
+.mh-info-item:last-child{border-right:none}
+.mh-info-label{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:3px}
+.mh-info-val{font-size:14px;font-weight:700;color:var(--text)}
+
+/* Fiche bénévole — vue Admin (modal) */
+.bv-name-link{cursor:pointer}
+.bv-name-link:hover{text-decoration:underline}
+.adm-fiche-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;display:none;align-items:center;justify-content:center;padding:1rem}
+.adm-fiche-overlay.open{display:flex}
+.adm-fiche-panel{background:var(--card);max-width:520px;width:100%;max-height:85vh;overflow-y:auto;position:relative;padding:1.75rem var(--pad) 1.5rem}
+.adm-fiche-close{position:absolute;top:10px;right:10px;background:none;border:none;font-size:24px;color:var(--mu);cursor:pointer;line-height:1;padding:6px 10px}
+.adm-fiche-close:hover{color:var(--text)}
+.adm-fiche-contact{font-size:13px;color:var(--mu);margin-bottom:12px;display:flex;flex-direction:column;gap:2px}
+.adm-fiche-alert{font-size:13px;background:#faeeda;color:#633806;border:1px solid #f0c97a;padding:10px 12px;margin-bottom:14px}
+.adm-fiche-section-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);font-weight:700;margin:16px 0 8px}
+
+/* Vue d'ensemble — centre de contrôle admin */
+.ov-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--gridline);margin-bottom:1px}
+.ov-stat{background:var(--card);padding:1rem var(--pad);text-align:center;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mu)}
+.ov-stat strong{display:block;font-size:26px;font-weight:900;color:var(--text);letter-spacing:0;text-transform:none;margin-bottom:2px}
+.ov-section-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);padding:1.5rem var(--pad) .5rem}
+.ov-gap-list,.ov-una-list{display:flex;flex-direction:column;gap:1px;background:var(--gridline)}
+.ov-gap-row{background:var(--card);padding:10px var(--pad);display:flex;justify-content:space-between;font-size:13px}
+.ov-gap-day{color:var(--mu)}
+.ov-gap-poste{font-weight:700;color:#a32d2d}
+.ov-una-group{margin-bottom:1px}
+.ov-una-group-head{padding:10px var(--pad);background:var(--s);border-top:1px solid var(--mu2);border-bottom:1px solid var(--mu2);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--text);display:flex;align-items:center}
+.ov-una-group-count{margin-left:auto;font-size:11px;font-weight:700;color:var(--mu);text-transform:none;letter-spacing:0}
+.ov-una-row{background:var(--card);padding:10px var(--pad);display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:600;cursor:pointer}
+.ov-una-row:hover{background:var(--hover)}
+.ov-una-tag{font-size:10px;font-weight:700;padding:3px 8px;letter-spacing:.05em;text-transform:uppercase;background:rgba(0,182,255,.15);color:#0a5c28}
+.ov-una-tag.warn{background:#faeeda;color:#854f0b}
+.ov-allgood{padding:18px var(--pad);text-align:center;color:var(--mu);font-size:13px;background:var(--card)}
+.ov-coverage{display:flex;flex-direction:column;gap:10px;padding:0 var(--pad) 1.5rem}
+.ov-day-block{border:1px solid var(--mu2)}
+.ov-day-block.ov-today{border-color:var(--g)}
+.ov-day-head{padding:10px 14px;background:var(--s);display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;color:var(--text)}
+.ov-today-tag{font-size:9px;background:var(--g);color:#0a0a0a;padding:2px 6px;margin-left:6px;text-transform:uppercase;font-weight:800}
+.ov-day-status.ok{color:#0a5c28}
+.ov-day-status.warn{color:#a32d2d}
+.ov-cov-row{padding:8px 14px;display:flex;justify-content:space-between;font-size:12px;border-top:1px solid var(--mu2);background:var(--card)}
+.ov-cov-poste{color:var(--text)}
+.ov-cov-count{font-weight:700}
+.ov-cov-row.ov-cov-empty .ov-cov-count{color:#a32d2d}
+.ov-cov-row.ov-cov-ok .ov-cov-count{color:#0a5c28}
+
+/* Toggle « voir l'horaire complet » */
+.hb-toggle-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:1.1rem var(--pad);background:var(--s);border:none;border-bottom:1px solid var(--mu2);cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text);-webkit-tap-highlight-color:transparent;text-align:left;min-height:52px}
+.hb-toggle-btn:hover,.hb-toggle-btn:active{background:var(--hover)}
+
+/* Grille de référence — repliable */
+.qg-details{border-bottom:1px solid var(--mu2)}
+.qg-summary{padding:1.1rem var(--pad);cursor:pointer;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--mu);background:var(--card);-webkit-tap-highlight-color:transparent;min-height:52px;display:block}
+.qg-summary::-webkit-details-marker{display:none}
+.qg-summary::before{content:'▸ ';color:var(--g)}
+.qg-details[open] .qg-summary::before{content:'▾ '}
+
+/* HORAIRE BÉNÉVOLES — postes publics */
+.hb-poste{margin-bottom:1px;background:var(--card)}
+.hb-heures{padding:10px var(--pad);font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--g);background:#0a0a0a}
+.hb-poste-head{padding:16px var(--pad);background:var(--s);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--mu2)}
+.hb-poste-name{font-size:14px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--text)}
+.hb-poste-count{font-size:11px;color:var(--mu)}
+.hb-vol{padding:14px var(--pad);border-bottom:1px solid var(--mu2);font-size:15px;color:var(--text);display:flex;justify-content:space-between;align-items:center}
+.hb-vol.mine{background:rgba(0,182,255,.1);font-weight:800}
+.hb-vol-mine-tag{font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;background:var(--g);color:#0a0a0a;padding:2px 7px;margin-left:6px;vertical-align:middle}
+.hb-vol-time{font-family:var(--mono);font-size:13px;color:var(--g);font-weight:700}
+.hb-empty{padding:14px var(--pad);font-size:12px;color:var(--mu);font-style:italic}
+
+/* HORAIRE ADMIN — assignation */
+.adm-poste{margin-bottom:8px;background:var(--card);border:1px solid var(--mu2)}
+.adm-poste-head{padding:16px var(--pad);background:var(--s);display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--mu2)}
+.adm-poste-name{font-size:15px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--text)}
+.adm-poste-count{font-size:12px;color:var(--mu);font-weight:600}
+.adm-vol-row{padding:14px var(--pad);border-bottom:1px solid var(--mu2);font-size:16px;font-weight:600;color:var(--text);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.adm-vol-edit{background:none;border:1px solid var(--mu2);border-radius:50%;color:var(--mu);cursor:pointer;font-size:16px;width:36px;height:36px;line-height:1;flex-shrink:0}
+.adm-vol-edit:hover{color:#0a0a0a;background:var(--g);border-color:var(--g)}
+.adm-vol-remove{background:none;border:1px solid var(--mu2);border-radius:50%;color:var(--mu);cursor:pointer;font-size:20px;width:36px;height:36px;line-height:1;flex-shrink:0}
+.adm-vol-remove:hover{color:#fff;background:#a32d2d;border-color:#a32d2d}
+.adm-vol-heure-wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.adm-vol-heure{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--g);background:#0a0a0a;padding:5px 10px}
+.adm-vol-quart{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text);background:var(--s);border:1px solid var(--mu2);padding:5px 10px}
+
+/* Carte d'ajout — étiquettes visibles, gros champs tactiles, empile en colonne sur mobile */
+.adm-add-card{padding:18px var(--pad);display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;background:var(--s)}
+.adm-add-field{flex:1;min-width:220px;display:flex;flex-direction:column;gap:6px}
+.adm-add-field.narrow{flex:0 0 auto;min-width:160px}
+.adm-add-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);font-weight:700}
+.adm-add-card select,.adm-add-field select{width:100%;font-size:15px;padding:13px 14px;border:1px solid var(--mu2);background:var(--card);color:var(--text);min-height:48px}
+.adm-heure-preview{font-family:var(--mono);font-size:15px;color:var(--g);font-weight:700;padding:13px 0;display:block;min-height:48px}
+.adm-add-btn{font-size:14px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:14px 26px;background:var(--g);color:#0a0a0a;border:none;cursor:pointer;min-height:48px;white-space:nowrap;flex-shrink:0}
+.adm-add-btn:hover{opacity:.9}
+.adm-add-btn:disabled{opacity:.35;cursor:not-allowed;background:var(--mu2);color:var(--mu)}
+.adm-conflict-warn{padding:0 var(--pad) 16px;font-size:13px;color:#a32d2d;font-weight:600;line-height:1.5;background:var(--s)}
+.adm-toggle-all{padding:12px var(--pad) 18px;font-size:13px;color:var(--mu);text-decoration:underline;text-align:left;background:var(--s);display:block;min-height:24px}
+.adm-toggle-all:hover{color:var(--text)}
+
+@media(max-width:767px){
+  .adm-add-card{flex-direction:column;align-items:stretch}
+  .adm-add-field,.adm-add-field.narrow{min-width:0;width:100%}
+  .adm-add-btn{width:100%}
+  .adm-vol-row{font-size:15px}
+}
+
+
+/* REPAS */
+.meal-row{background:var(--card);padding:12px var(--pad);display:grid;grid-template-columns:1fr 100px 90px;gap:14px;align-items:center;border-bottom:1px solid var(--mu2)}
+.meal-row.hdr{background:#0a0a0a}
+.meal-row.hdr .meal-h{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.meal-name{font-size:14px;font-weight:700;color:var(--text)}
+.meal-toggle{width:46px;height:26px;border-radius:20px;border:1px solid var(--mu2);background:var(--s);cursor:pointer;position:relative;transition:background .15s}
+.meal-toggle.on{background:var(--g)}
+.meal-toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.meal-toggle.on::after{left:22px}
+
+/* CHECK-IN */
+.ci-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--gridline);margin-bottom:1px}
+.ci-stat{background:var(--card);padding:1rem;text-align:center}
+.ci-stat-num{font-size:26px;font-weight:900}
+.ci-stat-lbl{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-top:2px}
+.ci-row{background:var(--card);padding:12px var(--pad);display:grid;grid-template-columns:1fr 90px 90px 90px;gap:14px;align-items:center;border-bottom:1px solid var(--mu2)}
+.ci-row.hdr{background:#0a0a0a}
+.ci-row.hdr .ci-h{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.ci-name{font-size:14px;font-weight:700;color:var(--text)}
+.ci-time{font-family:var(--mono);font-size:13px}
+.ci-status{font-size:10px;font-weight:700;padding:3px 8px;letter-spacing:.05em;text-transform:uppercase;display:inline-block}
+.ci-status.in{background:rgba(0,182,255,.15);color:#0a5c28}
+.ci-status.out{background:var(--s);color:var(--mu)}
+.ci-status.absent{background:#fcebeb;color:#a32d2d}
+.ci-hours{font-weight:700;color:var(--g)}
+@media(max-width:640px){
+  .meal-row{grid-template-columns:1fr 70px 60px;padding:12px var(--pad)}
+  .ci-row{grid-template-columns:1fr 70px 70px 60px;font-size:12px}
+}
+
+footer{border-top:1px solid var(--mu2);padding:1.5rem var(--pad);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-top:1rem;background:var(--card)}
+.flogo{font-size:13px;font-weight:900;color:var(--text)}
+.fnote{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+
+@media(max-width:767px){
+  :root{--pad:1rem}
+  body{font-size:15px}
+  nav{top:34px;padding:.875rem var(--pad)}
+  .bv-row{grid-template-columns:1fr;gap:10px;padding:14px var(--pad) 14px 40px;position:relative;min-width:0}
+  .bv-row .bv-check{position:absolute;left:var(--pad);top:16px;margin:0}
+  .bv-row.hdr{display:none}
+  .bv-mlabel{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:4px;font-weight:600}
+  footer{flex-direction:column;align-items:flex-start;gap:.5rem}
+
+  /* Onglets (jours, admin, etc.) : scroll horizontal au lieu de wrap sur mobile */
+  .tab-row{width:100%;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-left:none;border-right:none}
+  .tab-row::-webkit-scrollbar{display:none}
+  .tabx{flex-shrink:0;padding:11px 16px}
+
+  /* Mon horaire : pleine largeur, cartes plus compactes */
+  .mh-wrap{padding:1.25rem var(--pad)}
+  .mh-search-row{max-width:none}
+  .mh-person-name{font-size:18px}
+  .mh-shift-card{padding:14px var(--pad);gap:10px}
+  .mh-shift-poste{font-size:14px}
+  .hb-toggle-btn{font-size:11px;padding:.875rem var(--pad)}
+
+  /* Grille de référence : compacte, scroll tactile fluide */
+  .qg-scroll{-webkit-overflow-scrolling:touch}
+}
+</style>
+</head>
+<body>
+
+<div class="ticker"><div class="ti">
+  <span class="titem">MAPP MTL 2026 — Bénévoles ↗</span>
+  <span class="titem">29 SEPT – 4 OCT 2026 · MONTRÉAL ↗</span>
+  <span class="titem">DOCUMENT INTERNE — NE PAS DIFFUSER ↗</span>
+  <span class="titem">MAPP MTL 2026 — Bénévoles ↗</span>
+  <span class="titem">29 SEPT – 4 OCT 2026 · MONTRÉAL ↗</span>
+  <span class="titem">DOCUMENT INTERNE — NE PAS DIFFUSER ↗</span>
+</div></div>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <svg viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MAPP">
+      <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M54.776,9.639h3.384l7.2,18.574h-3.384l-1.731-4.759h-7.71l-1.755,4.759h-3.283l7.277-18.574h.002ZM59.28,20.835l-2.901-7.913-2.901,7.913h5.801Z"/>
+      <path d="M16.511,28.213l-3.718-15.266h-.051v15.266h-3.103V9.639h5.168l3.686,15.139h.051l3.688-15.139h5.168v18.574h-3.105v-15.266h-.051l-3.718,15.266h-4.014Z"/>
+      <path d="M9.639,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM17.964,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
+      <path d="M3.448,65.361H0V0h65.361v3.448H3.448v61.912Z"/>
+      <path d="M75,75H9.639v-3.446h61.913V9.639h3.448v65.361Z"/>
+    </svg>
+  </a>
+  <div class="nav-pages">
+    <button class="npbtn active" onclick="setView('horaire',this)">Horaire bénévoles</button>
+  </div>
+  <button class="theme-toggle" onclick="mappToggleTheme()" title="Changer le thème">☀️</button>
+</nav>
+
+<!-- ===== VUE PUBLIQUE — HORAIRE BÉNÉVOLES (sans mot de passe) ===== -->
+<div class="page active" id="view-horaire">
+  <div class="hero">
+    <div class="hlabel">Horaire des postes — vue bénévoles</div>
+    <div class="htitle">HORAIRE<br><span class="g">BÉNÉVOLES</span></div>
+    <div class="hmeta">
+      <div class="hmi"><strong>28 sept – 4 oct</strong>Dates</div>
+      <div class="hmi"><strong id="hb-postes-count">7</strong>Postes</div>
+    </div>
+  </div>
+
+  <!-- ── Carte d'accueil — visible seulement à la première visite ── -->
+  <div class="welcome-card" id="welcome-card" style="display:none">
+    <button class="welcome-close" onclick="dismissWelcome()" title="Fermer">×</button>
+    <div class="welcome-title">👋 Bienvenue !</div>
+    <div class="welcome-text">
+      Écris ton nom ci-dessous pour voir <strong>tes quarts assignés</strong> et l'état de tes repas.
+      Si tu veux voir l'horaire complet de tout le monde, le bouton juste en dessous est déjà ouvert.
+    </div>
+  </div>
+
+  <!-- ── MON HORAIRE — recherche personnalisée (priorité #1 pour le bénévole) ── -->
+  <div class="mh-wrap">
+    <div class="mh-label">🔍 Trouve ta fiche bénévole</div>
+    <div class="mh-search-row">
+      <input id="mh-input" class="mh-input" type="text" placeholder="Ton prénom, nom ou courriel…" autocomplete="off" oninput="mhOnInput()">
+      <button class="mh-clear" id="mh-clear-btn" onclick="mhClear()" title="Effacer">×</button>
+    </div>
+    <div id="mh-result" class="mh-result">
+      <div class="mh-hint">Écris ton nom ci-dessus pour voir ton horaire et tes repas. 👆</div>
+    </div>
+  </div>
+
+  <!-- ── Vue complète par poste (visible par défaut — l'usager peut la fermer) ── -->
+  <button class="hb-toggle-btn" onclick="hbToggleAll()">
+    <span id="hb-toggle-label">Masquer l'horaire complet par poste</span>
+    <span id="hb-toggle-arrow">▲</span>
+  </button>
+
+  <div id="hb-view-all" style="display:block">
+    <div class="tab-row" id="hb-day-tabs"></div>
+    <div class="body"><div id="hb-container"><div class="nores">Chargement de l'horaire…</div></div></div>
+    <details class="qg-details">
+      <summary class="qg-summary">Grille de référence des quarts (structure générale)</summary>
+      <div class="qg-wrap">
+        <div class="qg-block">
+          <div class="qg-title">Jeudi – Vendredi (17h – 22h)</div>
+          <div class="qg-scroll"><table class="qg-table">
+            <thead><tr><th>Quart</th><th>Billetterie</th><th>Accueil</th><th>Gestion de foule / Info</th><th>Bar (×2)</th><th>Cantine</th><th>Volant</th><th>Support technique (+ tag tool)</th></tr></thead>
+            <tbody>
+              <tr><td>Quart 1</td><td>4 pers.<br>16h–20h</td><td>2 pers.<br>16h–20h</td><td>1 pers.<br>16h–20h</td><td>6-8/bar<br>16h–20h</td><td>3 pers.<br>15h–19h</td><td>4 pers.<br>15h–19h</td><td>3 pers.<br>15h–19h</td></tr>
+              <tr><td>Quart 2</td><td>6 pers.<br>19h–23h</td><td>3 pers.<br>19h–23h</td><td>2 pers.<br>19h–23h</td><td>6-8/bar<br>19h–23h</td><td>4 pers.<br>18h30–23h</td><td>4 pers.<br>18h30–23h</td><td>4 pers.<br>18h30–23h</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="qg-note">Vendredi à Moment Factory (Soirée MAPP 2026) : 4 bar + busboy + assistant/shift (10 au total), 21h→00h30, 00h→3h30/4h.</div>
+        <div class="qg-block">
+          <div class="qg-title">Samedi (12h – 22h)</div>
+          <div class="qg-scroll"><table class="qg-table">
+            <thead><tr><th>Quart</th><th>Billetterie</th><th>Accueil</th><th>Gestion de foule / Info</th><th>Bar</th><th>Cantine</th><th>Volant</th><th>Support technique (+ tag tool)</th></tr></thead>
+            <tbody>
+              <tr><td>Quart 1</td><td>3 pers.<br>11h–15h</td><td>2 pers.<br>11h–15h</td><td>2 pers.<br>11h–15h</td><td>4 pers.<br>11h–15h</td><td>3 pers.<br>10h–15h</td><td>3 pers.<br>10h–15h</td><td>2 pers.<br>10h–15h</td></tr>
+              <tr><td>Quart 2</td><td>3 pers.<br>14h–19h</td><td>4 pers.<br>14h–19h</td><td>2 pers.<br>14h–19h</td><td>6/bar<br>14h–19h</td><td>4 pers.<br>14h30–19h30</td><td>5 pers.<br>14h30–19h30</td><td>4 pers.<br>14h30–19h30</td></tr>
+              <tr><td>Quart 3</td><td>4 pers.<br>19h–23h</td><td>4 pers.<br>19h–23h</td><td>3 pers.<br>19h–23h</td><td>6-8/bar<br>19h–23h</td><td>4 pers.<br>19h–23h</td><td>4 pers.<br>19h–23h</td><td>4 pers.<br>19h–23h</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div class="qg-note">Bar et Cantine : à confirmer avec Rebecca et Mathilde respectivement.</div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ===== VUE ADMIN — RAYANE (protégée) ===== -->
+<div class="page" id="view-admin">
+  <div id="bv-lock" class="lock-wrap">
+    <div class="lock-box">
+      <div class="lock-title">Accès admin</div>
+      <div class="lock-sub">Cette section contient des coordonnées et des contraintes de santé — accès protégé.</div>
+      <input id="bv-pw" class="lock-input" type="password" placeholder="Mot de passe" autocomplete="current-password">
+      <button class="lock-btn" onclick="bvUnlock()">Déverrouiller</button>
+      <div class="lock-err" id="bv-err">Mot de passe incorrect.</div>
+    </div>
+  </div>
+
+  <div id="bv-content" style="display:none">
+    <div class="hero">
+      <div class="hlabel" style="display:flex;justify-content:space-between;align-items:center">
+        <span>Vue admin</span>
+        <button class="back-link" onclick="bvLock()" style="padding:0;min-height:auto;color:var(--mu)" title="Reverrouiller l'accès admin">🔒 Verrouiller</button>
+      </div>
+      <div class="htitle">BÉNÉVOLES<br><span class="g">2026</span></div>
+      <div class="hmeta">
+        <div class="hmi"><strong id="bv-total">—</strong>Inscrits</div>
+        <div class="hmi"><strong id="bv-dispo">—</strong>Ont rempli leurs dispo</div>
+        <div class="hmi"><strong id="bv-repas-count">—</strong>Repas accordés</div>
+      </div>
+      <div class="tab-row">
+        <button class="tabx active" onclick="bvSetSubView('overview',this)">Vue d'ensemble</button>
+        <button class="tabx" onclick="bvSetSubView('liste',this)">Bénévoles</button>
+        <button class="tabx" onclick="bvSetSubView('horaire',this)">Horaire</button>
+        <button class="tabx" onclick="bvSetSubView('repas',this)">Repas</button>
+        <button class="tabx" onclick="bvSetSubView('checkin',this)">Check-in</button>
+      </div>
+    </div>
+
+    <!-- ── Sous-vue : vue d'ensemble (centre de contrôle) ── -->
+    <div class="subview active" id="sub-overview">
+      <div class="body"><div id="ov-container"><div class="nores">Chargement…</div></div></div>
+    </div>
+
+    <!-- ── Sous-vue : liste des bénévoles ── -->
+    <div class="subview" id="sub-liste">
+      <div class="fbar">
+        <span class="flabel">Filtrer ·</span>
+        <button class="fbtn active" onclick="bvSetFilter('tous',this)">Tous</button>
+        <button class="fbtn" onclick="bvSetFilter('sansdispo',this)">Sans dispo remplie</button>
+        <button class="fbtn" onclick="bvRefresh()" style="margin-left:auto">↻ Actualiser</button>
+        <button class="fbtn" onclick="bvSyncTally(this)" style="background:#0a0a0a;color:var(--g);border-color:transparent">↻ Synchroniser depuis Tally</button>
+      </div>
+      <div class="dispo-legend">
+        <span class="dl-item" style="color:var(--text);font-weight:600">La lettre = jour de la semaine (M M J V S D) · la couleur = quart choisi (varie selon le jour, survole une pastille pour le détail) :</span>
+        <span class="dl-item"><span class="bv-day q1" style="width:16px;height:16px"></span>Quart 1</span>
+        <span class="dl-item"><span class="bv-day q2" style="width:16px;height:16px"></span>Quart 2</span>
+        <span class="dl-item"><span class="bv-day q3" style="width:16px;height:16px"></span>Quart 3</span>
+        <span class="dl-item"><span class="bv-day full" style="width:16px;height:16px"></span>Toute la journée</span>
+      </div>
+      <div class="body"><div id="bv-container"><div class="nores">Chargement…</div></div></div>
+
+      <div class="comm-panel">
+        <div class="hlabel" style="padding:0 var(--pad)">Communications</div>
+        <div class="comm-row">
+          <button class="fbtn" onclick="bvSelectAll(true)">Sélectionner tout le filtre</button>
+          <button class="fbtn" onclick="bvSelectAll(false)">Désélectionner</button>
+          <span class="comm-count" id="comm-count">0 sélectionné(s)</span>
+        </div>
+
+        <div class="comm-subhead">✉️ Envoyer un courriel</div>
+        <div class="comm-hint">Choisis un modèle pour préremplir le sujet et le message (tu peux les ajuster avant d'envoyer), ou pars d'un message vide.</div>
+        <div class="comm-fields">
+          <select id="comm-template" onchange="bvApplyTemplate()">
+            <option value="">— Message libre —</option>
+            <option value="bienvenue">Modèle : Bienvenue (nouvelle inscription)</option>
+            <option value="rencontre">Modèle : Convocation à une rencontre</option>
+            <option value="info">Modèle : Info générale / rappel</option>
+          </select>
+          <input id="comm-subject" type="text" placeholder="Sujet du courriel">
+          <textarea id="comm-body" placeholder="Message… (ex. rappel, remerciement, information générale)"></textarea>
+          <button class="lock-btn" onclick="bvSendBroadcast()" id="comm-send-btn">Envoyer aux sélectionnés</button>
+          <div class="comm-msg" id="comm-msg"></div>
+        </div>
+
+        <div class="comm-subhead">📅 Convocation — événement Google Calendar</div>
+        <div class="comm-hint">Recommandé pour une rencontre : les personnes invitées répondent Oui/Non/Peut-être directement dans Calendar — pas de courriels de réponse à gérer.</div>
+        <div class="comm-fields">
+          <input id="cal-title" type="text" placeholder="Titre de l'événement (ex. Rencontre bénévoles MAPP MTL)">
+          <div class="comm-row" style="padding:0">
+            <input id="cal-start" type="datetime-local" style="flex:1">
+            <input id="cal-end" type="datetime-local" style="flex:1">
+          </div>
+          <input id="cal-location" type="text" placeholder="Lieu (ex. Skatepark Van Horne)">
+          <textarea id="cal-desc" placeholder="Description (optionnel — programme, informations à savoir avant la rencontre)"></textarea>
+          <button class="lock-btn" onclick="bvCreateCalendarEvent()" id="cal-send-btn">Créer l'événement et inviter les sélectionnés</button>
+          <div class="comm-msg" id="cal-msg"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Sous-vue : horaire par poste (admin, assignation) ── -->
+    <div class="subview" id="sub-horaire">
+      <div class="tab-row" id="adm-day-tabs"></div>
+      <div class="body"><div id="adm-horaire-container"><div class="nores">Chargement…</div></div></div>
+    </div>
+
+    <!-- ── Sous-vue : repas ── -->
+    <div class="subview" id="sub-repas">
+      <div class="fbar">
+        <span class="flabel">Règle ·</span>
+        <select id="meal-rule-select" onchange="mealSaveRule()" style="font-size:12px;padding:6px 10px;border:1px solid var(--mu2)">
+          <option value="">— Aucune règle —</option>
+          <option value="2shifts">2 quarts = 1 repas</option>
+          <option value="pernight">1 repas / soir présent</option>
+          <option value="manual">Manuel (au cas par cas)</option>
+        </select>
+        <button class="fbtn" onclick="mealRefresh()" style="margin-left:auto">↻ Actualiser</button>
+      </div>
+      <div class="body"><div id="meal-container"><div class="nores">Chargement…</div></div></div>
+    </div>
+
+    <!-- ── Sous-vue : check-in / heures travaillées ── -->
+    <div class="subview" id="sub-checkin">
+      <div class="tab-row" id="ci-day-tabs"></div>
+      <div class="fbar">
+        <span class="flabel">Ajouter un check-in manuel ·</span>
+        <input id="ci-manual-email" type="text" placeholder="Courriel du bénévole" style="font-size:12px;padding:6px 10px;border:1px solid var(--mu2);flex:1;min-width:180px">
+        <button class="fbtn" onclick="ciManualCheckin()">Check-in</button>
+      </div>
+      <div class="body"><div id="ci-container"><div class="nores">Chargement…</div></div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="flogo">MAPP MTL 2026</div>
+  <div class="fnote">Document interne · Ne pas diffuser</div>
+</footer>
+
+<!-- ── Fiche bénévole (vue Admin) — contact, dispo, horaire assigné, repas ── -->
+<div class="adm-fiche-overlay" id="adm-fiche-overlay" onclick="admCloseFicheBackdrop(event)">
+  <div class="adm-fiche-panel">
+    <button class="adm-fiche-close" onclick="admCloseFiche()" title="Fermer">×</button>
+    <div id="adm-fiche-content"></div>
+  </div>
+</div>
+
+<!-- ── Modifier une assignation (changer le poste et/ou le quart) ── -->
+<div class="adm-fiche-overlay" id="adm-edit-overlay" onclick="admEditBackdrop(event)">
+  <div class="adm-fiche-panel">
+    <button class="adm-fiche-close" onclick="admCloseEditAssignment()" title="Fermer">×</button>
+    <div id="adm-edit-title" style="margin-bottom:18px"></div>
+    <div class="adm-add-field" style="margin-bottom:14px">
+      <label class="adm-add-label" for="adm-edit-poste">Poste</label>
+      <select id="adm-edit-poste" onchange="admEditOnChange()"></select>
+    </div>
+    <div class="adm-add-field" style="margin-bottom:14px">
+      <label class="adm-add-label" for="adm-edit-quart">Quart</label>
+      <select id="adm-edit-quart" onchange="admEditOnChange()"></select>
+    </div>
+    <div class="adm-add-field" style="margin-bottom:16px">
+      <span class="adm-add-label">Heures</span>
+      <span class="adm-heure-preview" id="adm-edit-heure-preview">—</span>
+    </div>
+    <div id="adm-edit-warn" class="adm-conflict-warn" style="padding:0 0 14px"></div>
+    <button class="adm-add-btn" id="adm-edit-confirm-btn" style="width:100%" onclick="admConfirmEditAssignment()">Confirmer le changement</button>
+  </div>
+</div>
+
+<script>
+function setView(v, btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  document.querySelectorAll('.npbtn').forEach(b=>b.classList.remove('active'));
+  if(v==='horaire') document.querySelector('.npbtn').classList.add('active');
+  if(v==='horaire') hbLoad();
+}
+
+const BV_API_URL = 'https://script.google.com/a/macros/mappmtl.com/s/AKfycbzjYpQWAtM5sOT3R_LLY_GJ6XqU7amkQwagDbV7B6Q1mXixzqqDuqgryGZlx2bcMC7zhg/exec';
+const BV_ADMIN_PASSWORD = 'rayane2026'; // doit correspondre à CONFIG.ADMIN_PASSWORD dans Code.gs
+
+// Doit rester synchro avec FESTIVAL_DAYS dans disponibilites.html — c'est ce
+// qui permet de comprendre les quarts (q1/q2/q3/full) que les bénévoles
+// choisissent dans le formulaire public. type = 'montage' (mar/mer),
+// 'festival' (jeu/ven/sam), 'demontage' (dim).
+const BV_DAYS = [
+  { label:'Mar 29', date:'2026-09-29', type:'montage',   heures:'9h à 17h',
+    postes: ['Installation / démontage'],
+    shifts:[
+      {key:'q1',label:'9h – 13h',  hours:'9h à 13h'},  {key:'q2',label:'13h – 17h', hours:'13h à 17h'} ], full:{hours:'9h à 17h'} },
+  { label:'Mer 30', date:'2026-09-30', type:'montage',   heures:'10h à 22h',
+    postes: ['Installation / démontage', 'Bar', 'Kiosque culinaire', 'Entrée / sortie', 'Renfort / Float'],
+    shifts:[
+      {key:'q1',label:'10h – 14h', hours:'10h à 14h'}, {key:'q2',label:'13h – 17h', hours:'13h à 17h'},
+      {key:'q3',label:'Soirée réseautage — Tournoi ping-pong (Moment Factory)', hours:'17h à 22h', location:'Moment Factory'} ], full:{hours:'10h à 22h'} },
+  { label:'Jeu 1',  date:'2026-10-01', type:'festival',  heures:'16h à 23h',
+    postes: ['Sécurité / gestion des foules', 'Entrée / sortie', 'Bar', 'Kiosque culinaire', 'Support technique', 'Renfort / Float'],
+    shifts:[
+      {key:'q1',label:'Quart 1', hours:'16h à 20h'}, {key:'q2',label:'Quart 2', hours:'19h à 23h'} ], full:{hours:'16h à 23h'} },
+  { label:'Ven 2',  date:'2026-10-02', type:'festival',  heures:'16h à 23h',
+    postes: ['Sécurité / gestion des foules', 'Entrée / sortie', 'Bar', 'Kiosque culinaire', 'Support technique', 'Renfort / Float'],
+    shifts:[
+      {key:'q1',label:'Quart 1', hours:'16h à 20h'}, {key:'q2',label:'Quart 2', hours:'19h à 23h'},
+      {key:'q3',label:'Soirée MAPP — Moment Factory', hours:'22h à 3h', location:'Moment Factory'} ], full:{hours:'16h à 23h'} },
+  { label:'Sam 3',  date:'2026-10-03', type:'festival',  heures:'11h à 23h',
+    postes: ['Sécurité / gestion des foules', 'Entrée / sortie', 'Bar', 'Kiosque culinaire', 'Support technique', 'Renfort / Float'],
+    shifts:[
+      {key:'q1',label:'Quart 1', hours:'11h à 15h'}, {key:'q2',label:'Quart 2', hours:'14h à 19h'}, {key:'q3',label:'Quart 3', hours:'19h à 23h'} ], full:{hours:'11h à 23h'} },
+  { label:'Dim 4',  date:'2026-10-04', type:'demontage', heures:'9h à 17h',
+    postes: ['Installation / démontage', 'Entrée / sortie', 'Coordinateur Tagtool'],
+    shifts:[
+      {key:'q1',label:'9h – 13h',  hours:'9h à 13h'},  {key:'q2',label:'13h – 17h', hours:'13h à 17h'},
+      {key:'q3',label:'Caserne — Accueil & Tagtool', hours:'14h à 18h', location:'Caserne'} ], full:{hours:'9h à 17h'} },
+];
+
+// Nom lisible d'un quart pour une journée donnée (le nombre de quarts varie
+// selon le jour — ex. Samedi en a 3 alors que les autres n'en ont que 2).
+// Lieu par défaut de la plupart des quarts — le site principal du festival.
+// Seuls certains quarts spéciaux ont un `location` explicite différent (ex.
+// la soirée Moment Factory le vendredi, l'événement à la Caserne le
+// dimanche) — voir BV_DAYS ci-dessus.
+const DEFAULT_LOCATION = 'Skatepark Van Horne';
+
+function bvShiftName(date, shift) {
+  if (!shift) return 'Non disponible';
+  const d = BV_DAYS.find(x => x.date === date);
+  if (!d) return shift;
+  if (shift === 'full') return `Toute la journée (${d.full.hours} · ${d.full.location || DEFAULT_LOCATION})`;
+  const s = d.shifts.find(x => x.key === shift);
+  return s ? `${s.label} (${s.hours} · ${s.location || DEFAULT_LOCATION})` : shift;
+}
+
+// Heures + lieu pour un quart donné — utilisé pour l'heure affichée partout
+// (fiche bénévole, horaire, recherche "Mon horaire"), pas seulement l'heure
+// seule, pour qu'on sache toujours où se rendre (Skatepark Van Horne par
+// défaut, Moment Factory ou la Caserne pour les quarts spéciaux).
+function bvShiftHours(date, shift) {
+  if (!shift) return '';
+  const d = BV_DAYS.find(x => x.date === date);
+  if (!d) return '';
+  if (shift === 'full') return `${d.full.hours} · ${d.full.location || DEFAULT_LOCATION}`;
+  const s = d.shifts.find(x => x.key === shift);
+  return s ? `${s.hours} · ${s.location || DEFAULT_LOCATION}` : '';
+}
+
+// Options <option> pour un <select> de quart, propres à une journée donnée
+// (le nombre de quarts varie — Samedi en a 3, les autres 2). Utilisé à la
+// fois pour ajouter une nouvelle assignation et pour en modifier une.
+function bvQuartOptionsHtml(date, selected) {
+  const d = BV_DAYS.find(x => x.date === date);
+  if (!d) return '';
+  const opts = [...d.shifts.map(s => ({ value: s.key, label: `${s.label} (${s.hours})` })),
+                { value: 'full', label: `Toute la journée (${d.full.hours})` }];
+  return opts.map(o => `<option value="${o.value}" ${o.value === selected ? 'selected' : ''}>${o.label}</option>`).join('');
+}
+
+// Doit correspondre exactement à CONFIG.POSTES dans Code.gs — mettre à jour le backend Apps Script aussi
+const BV_POSTES = [
+  'Billetterie',
+  'Accueil',
+  'Gestion de foule / Info',
+  'Bar',
+  'Cantine',
+  'Volant',
+  'Support technique (+ tag tool)',
+];
+
+let bvVols = [], bvDispo = [], bvFilter = 'tous', bvUnlocked = false;
+let bvSelected = new Set();
+
+function bvApi(action, params) {
+  params = params || {};
+  const qs = Object.keys(params).map(k => encodeURIComponent(k)+'='+encodeURIComponent(params[k])).join('&');
+  const url = BV_API_URL + '?action=' + encodeURIComponent(action) + (qs ? '&'+qs : '');
+  return fetch(url).then(r => r.json()).then(res => {
+    if (!res.ok) throw new Error(res.error || 'Erreur inconnue');
+    return res;
+  });
+}
+
+// Reverrouille volontairement l'accès admin (ex. avant de quitter un
+// ordinateur partagé) — redemande le mot de passe à la prochaine visite.
+function bvLock() {
+  bvUnlocked = false;
+  try { localStorage.removeItem('mapp_admin_unlocked'); } catch (e) {}
+  document.getElementById('bv-content').style.display = 'none';
+  document.getElementById('bv-lock').style.display = 'block';
+  document.getElementById('bv-pw').value = '';
+}
+
+function bvUnlock() {
+  const pw = document.getElementById('bv-pw').value.trim();
+  if (pw === BV_ADMIN_PASSWORD) {
+    bvUnlocked = true;
+    try { localStorage.setItem('mapp_admin_unlocked', '1'); } catch (e) {}
+    document.getElementById('bv-lock').style.display = 'none';
+    document.getElementById('bv-content').style.display = 'block';
+    bvRefresh();
+    admOverviewLoad();
+  } else {
+    document.getElementById('bv-err').style.display = 'block';
+  }
+}
+document.getElementById('bv-pw') && document.getElementById('bv-pw').addEventListener('keydown', e => {
+  if (e.key === 'Enter') bvUnlock();
+});
+
+// Reste déverrouillé d'une visite à l'autre (localStorage, pas juste la
+// session du navigateur) — Rayane n'a pas à retaper le mot de passe à
+// chaque fois qu'elle revient sur la page.
+// ⚠️ Appelée à la TOUTE FIN du script (pas ici) — elle dépend de hbData,
+// admOverviewLoad, etc. qui ne sont déclarées que plus bas. L'exécuter ici
+// directement causait « Cannot access 'hbData' before initialization ».
+function bvAutoUnlock() {
+  let already = false;
+  try { already = localStorage.getItem('mapp_admin_unlocked') === '1'; } catch (e) {}
+  if (already) {
+    bvUnlocked = true;
+    document.getElementById('bv-lock').style.display = 'none';
+    document.getElementById('bv-content').style.display = 'block';
+    bvRefresh();
+    admOverviewLoad();
+  }
+}
+
+function bvSetFilter(f, btn) {
+  bvFilter = f;
+  document.querySelectorAll('#page-benevoles .fbtn').forEach(b => {
+    b.classList.remove('active');
+    b.style.background=''; b.style.color=''; b.style.borderColor='';
+  });
+  btn.classList.add('active');
+  bvRender();
+}
+
+function bvSyncTally(btn) {
+  btn.disabled = true;
+  btn.textContent = 'Synchronisation…';
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'syncFromTally' })
+  }).then(r => r.json()).then(res => {
+    btn.disabled = false;
+    btn.textContent = '↻ Synchroniser depuis Tally';
+    if (res.ok) {
+      bvRefresh();
+    }
+  }).catch(() => {
+    btn.disabled = false;
+    btn.textContent = '↻ Synchroniser depuis Tally';
+  });
+}
+
+function bvRefresh() {
+  if (BV_API_URL.includes('COLLE_ICI')) {
+    document.getElementById('bv-container').innerHTML = '<div class="nores">Configuration manquante — colle l\'URL Apps Script (BV_API_URL) dans index.html.</div>';
+    return Promise.resolve();
+  }
+  document.getElementById('bv-container').innerHTML = '<div class="nores">Chargement…</div>';
+  return Promise.all([bvApi('getBenevoles'), bvApi('getDispo')])
+    .then(([volsRes, dispoRes]) => {
+      bvVols = volsRes.data || [];
+      bvDispo = dispoRes.data || [];
+      const dispoMap = {};
+      bvDispo.forEach(d => { dispoMap[d.email] = d; });
+      bvVols.forEach(v => { v._dispo = dispoMap[String(v.email||'').trim().toLowerCase()] || null; });
+
+      document.getElementById('bv-total').textContent = bvVols.length;
+      document.getElementById('bv-dispo').textContent = bvVols.filter(v => v._dispo).length;
+      bvRender();
+    })
+    .catch(err => {
+      document.getElementById('bv-container').innerHTML = '<div class="nores">Erreur : ' + err.message + '</div>';
+    });
+}
+
+function bvRender() {
+  let list = bvVols;
+  if (bvFilter === 'sansdispo') list = list.filter(v => !v._dispo);
+
+  const header = `<div class="bv-row hdr">
+    <div></div><div class="bv-h">Bénévole</div><div class="bv-h">Disponibilités</div>
+  </div>`;
+
+  const rows = list.map(v => {
+    const days = BV_DAYS.map(d => {
+      const shift = v._dispo && v._dispo.jours ? v._dispo.jours[d.date] : '';
+      const shiftName = bvShiftName(d.date, shift);
+      return `<div class="bv-day ${shift||''}" title="${d.label} · ${shiftName}">${d.label.slice(0,1)}</div>`;
+    }).join('');
+    const daysEditable = BV_DAYS.map(d => {
+      const shift = v._dispo && v._dispo.jours ? v._dispo.jours[d.date] : '';
+      const shiftName = shift ? bvShiftName(d.date, shift) : 'Non disponible — clique pour ajuster';
+      return `<div class="bv-day ${shift||''}" style="cursor:pointer" title="${d.label} · ${shiftName}" onclick="bvCycleShift('${v.email}','${d.date}',this)">${d.label.slice(0,1)}</div>`;
+    }).join('');
+    const horsTally = String(v.id||'').startsWith('DISPO-');
+    const bienvenueBadge = v.bienvenueEnvoyee ? '<span class="bv-warn" style="background:rgba(0,182,255,.15);color:#0a5c28">Bienvenue envoyée</span>' : '';
+    const checked = bvSelected.has(v.id) ? 'checked' : '';
+    return `<div class="bv-row">
+      <input type="checkbox" class="bv-check" ${checked} ${v.email?'':'disabled'} onchange="bvToggleSelect('${v.id}', this.checked)">
+      <div>
+        <div class="bv-name bv-name-link" onclick="admOpenFiche('${v.id}')" title="Voir la fiche complète">${v.prenom} ${v.nom} ${v.contrainte ? '<span class="bv-warn">Santé</span>' : ''} ${horsTally ? '<span class="bv-warn" style="background:var(--s);color:var(--mu)">Pas encore Tally</span>' : ''} ${bienvenueBadge}</div>
+        <div class="bv-sub">${v.email || ''}</div>
+      </div>
+      <div class="bv-days"><span class="bv-mlabel">Disponibilités (clique pour changer)</span>${v.email ? daysEditable : '<span class="bv-fonction empty">Pas de courriel — impossible à modifier</span>'}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('bv-container').innerHTML = list.length
+    ? `<div class="bv-grid">${header}${rows}</div>`
+    : '<div class="nores">Aucun bénévole pour ce filtre.</div>';
+}
+
+// ============================================================
+// FICHE BÉNÉVOLE — vue Admin (contact, dispo, horaire assigné, repas)
+// Réutilise mhAllShiftsFor / mhRepasCard déjà construits pour la
+// recherche « Ma fiche » côté public — même données, même logique.
+// ============================================================
+function admOpenFiche(id) {
+  const v = bvVols.find(x => String(x.id) === String(id));
+  if (!v) return;
+  document.getElementById('adm-fiche-overlay').classList.add('open');
+  document.getElementById('adm-fiche-content').innerHTML = '<div class="nores">Chargement…</div>';
+  onHbReady(() => admRenderFiche(v));
+  hbLoad(); // no-op si déjà chargé ou déjà en cours
+}
+
+function admRenderFiche(v) {
+  const shifts = mhAllShiftsFor(v);
+  const today = bvRealToday();
+  const repasHtml = mhRepasCard(v);
+  const infosHtml = mhInfosCard(v);
+
+  const daysHtml = BV_DAYS.map(d => {
+    const shift = v._dispo && v._dispo.jours ? v._dispo.jours[d.date] : '';
+    const shiftName = bvShiftName(d.date, shift);
+    return `<div class="bv-day ${shift||''}" title="${d.label} · ${shiftName}">${d.label.slice(0,1)}</div>`;
+  }).join('');
+
+  const shiftsHtml = shifts.length
+    ? shifts.map(s => `
+      <div class="mh-shift-card ${s.date === today ? 'today' : ''}">
+        ${s.date === today ? '<div class="mh-today-badge">Aujourd\'hui</div>' : ''}
+        <div class="mh-shift-day">${s.label}</div>
+        <div class="mh-shift-poste">${posteDot(s.poste)}${s.poste}</div>
+        <div class="mh-shift-time">${s.time || ''}</div>
+      </div>`).join('')
+    : '<div class="hb-empty">Pas encore assigné·e à un poste.</div>';
+
+  document.getElementById('adm-fiche-content').innerHTML = `
+    <div class="mh-person" style="margin-bottom:4px">
+      <span class="mh-person-name">${v.prenom} ${v.nom}</span>
+      ${v.contrainte ? '<span class="bv-warn">Santé</span>' : ''}
+    </div>
+    <div class="adm-fiche-contact">
+      ${v.email ? `<div>${v.email}</div>` : ''}
+      ${v.tel ? `<div>${v.tel}</div>` : ''}
+    </div>
+    ${v.contrainte ? `<div class="adm-fiche-alert"><strong>Contrainte santé :</strong> ${v.contrainte}</div>` : ''}
+    <div class="adm-fiche-section-label">Disponibilités déclarées</div>
+    <div class="bv-days" style="margin-bottom:4px">${daysHtml}</div>
+    <div class="adm-fiche-section-label">Quarts assignés</div>
+    <div class="mh-shift-list" style="margin-bottom:14px">${shiftsHtml}</div>
+    ${repasHtml}
+    ${infosHtml}
+    <button class="adm-delete-btn" onclick="admDeleteBenevole('${v.id}','${(v.prenom||'').replace(/'/g,"\\'")}','${(v.nom||'').replace(/'/g,"\\'")}')">🗑 Supprimer ce bénévole</button>
+  `;
+}
+
+// Supprime définitivement un bénévole (ex. quelqu'un qui se désiste) — à
+// utiliser au lieu d'aller modifier le Google Sheet directement. Retire sa
+// fiche de "Benevoles" ET ses assignations existantes dans l'horaire (sinon
+// son nom continuerait d'apparaître partout alors qu'il n'est plus dans le
+// système). Ses dispo et son historique de check-in restent intacts dans le
+// sheet, au cas où — ils ne s'affichent simplement plus nulle part.
+function admDeleteBenevole(id, prenom, nom) {
+  const confirmed = confirm(`Supprimer définitivement ${prenom} ${nom} ?\n\nÇa va aussi retirer toutes ses assignations dans l'horaire. Cette action ne peut pas être annulée.`);
+  if (!confirmed) return;
+
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'deleteBenevole', id })
+  }).then(r => r.json()).then(res => {
+    if (res.ok) {
+      bvVols = bvVols.filter(x => String(x.id) !== String(id));
+      admCloseFiche();
+      bvRender();
+      toast(`${prenom} ${nom} supprimé·e ✓`);
+    } else {
+      toast('Erreur : ' + res.error);
+    }
+  }).catch(err => toast('Erreur : ' + err.message));
+}
+
+function admCloseFiche() {
+  document.getElementById('adm-fiche-overlay').classList.remove('open');
+}
+function admCloseFicheBackdrop(e) {
+  if (e.target.id === 'adm-fiche-overlay') admCloseFiche();
+}
+
+// ============================================================
+// VUE D'ENSEMBLE — centre de contrôle pour Rayane :
+// postes à combler, bénévoles pas encore assignés, couverture par jour.
+// Réutilise hbData (horaire) + bvVols (bénévoles) déjà chargés ailleurs.
+// ============================================================
+function admOverviewLoad() {
+  const el = document.getElementById('ov-container');
+  if (el) el.innerHTML = '<div class="nores">Chargement…</div>';
+  const tryRender = () => { if (hbData && bvVols.length) admRenderOverview(); };
+  onHbReady(tryRender);
+  hbLoad();
+  if (bvVols.length) {
+    tryRender();
+  } else {
+    bvRefresh().then(tryRender).catch(() => {});
+  }
+}
+
+function admRenderOverview() {
+  const days = hbData.days, postes = hbData.postes, data = hbData.data;
+  const today = bvRealToday();
+
+  // Qui est assigné à au moins un quart, n'importe où
+  const assignedIds = new Set();
+  days.forEach(d => postes.forEach(p => (data[d.date][p] || []).forEach(a => assignedIds.add(String(a.id)))));
+
+  const totalInscrits = bvVols.length;
+  const totalDispo = bvVols.filter(v => v._dispo).length;
+  const totalAssigned = assignedIds.size;
+  const totalRepas = Object.values(hbRepasById).filter(r => r.repasOk).length;
+
+  // Postes vides (jour × poste avec 0 bénévole assigné) — seulement parmi
+  // les postes réellement offerts cette journée-là (ex. le dimanche
+  // démontage n'a pas besoin de Sécurité/Bar/etc., donc ça ne doit pas
+  // apparaître comme un "poste vide" à combler).
+  const gaps = [];
+  days.forEach(d => {
+    postesForDay(hbData, d.date).forEach(p => {
+      if ((data[d.date][p] || []).length === 0) gaps.push({ label: d.label, poste: p });
+    });
+  });
+
+  // Bénévoles inscrits mais jamais assignés à un poste
+  const nonAssignes = bvVols.filter(v => !assignedIds.has(String(v.id)));
+
+  const gapsHtml = gaps.length
+    ? gaps.map(g => `<div class="ov-gap-row"><span class="ov-gap-day">${g.label}</span><span class="ov-gap-poste">${g.poste}</span></div>`).join('')
+    : '<div class="ov-allgood">🎉 Tous les postes sont comblés pour l\'instant !</div>';
+
+  // Regroupe les bénévoles non assignés par fonction souhaitée (une même
+  // personne peut apparaître dans plusieurs groupes si elle a coché plusieurs
+  // fonctions) — beaucoup plus facile pour Rayane que de faire défiler une
+  // grande liste plate pour trouver « qui veut faire le Bar ».
+  const groups = {};
+  postes.forEach(p => { groups[p] = []; });
+  const AUCUNE = 'Aucune préférence indiquée';
+  groups[AUCUNE] = [];
+
+  nonAssignes.forEach(v => {
+    const fonctionsChoisies = (v._dispo && v._dispo.fonction)
+      ? v._dispo.fonction.split(',').map(s => s.trim()).filter(Boolean)
+      : [];
+    const matched = fonctionsChoisies.filter(f => groups[f] !== undefined);
+    if (matched.length) {
+      matched.forEach(f => groups[f].push(v));
+    } else {
+      groups[AUCUNE].push(v);
+    }
+  });
+
+  const nonAssignesHtml = nonAssignes.length
+    ? [...postes, AUCUNE].map(groupName => {
+        const vols = groups[groupName];
+        if (!vols.length) return '';
+        const dot = groupName === AUCUNE ? '<span class="poste-dot" style="background:var(--mu2)"></span>' : posteDot(groupName);
+        const rows = vols.map(v => `<div class="ov-una-row" onclick="admOpenFiche('${v.id}')" title="Voir la fiche">
+          <span>${v.prenom} ${v.nom}</span>
+          ${v._dispo ? '<span class="ov-una-tag">Dispo remplie</span>' : '<span class="ov-una-tag warn">Sans dispo</span>'}
+        </div>`).join('');
+        return `<div class="ov-una-group">
+          <div class="ov-una-group-head">${dot}${groupName}<span class="ov-una-group-count">${vols.length}</span></div>
+          ${rows}
+        </div>`;
+      }).join('')
+    : '<div class="ov-allgood">Tout le monde est assigné à au moins un quart ✓</div>';
+
+  const coverageHtml = days.map(d => {
+    const postesJour = postesForDay(hbData, d.date);
+    const dayGapCount = postesJour.filter(p => (data[d.date][p] || []).length === 0).length;
+    const rows = postesJour.map(p => {
+      const n = (data[d.date][p] || []).length;
+      const cls = n === 0 ? 'ov-cov-empty' : 'ov-cov-ok';
+      return `<div class="ov-cov-row ${cls}">
+        <span class="ov-cov-poste">${posteDot(p)}${p}</span>
+        <span class="ov-cov-count">${n === 0 ? '— Vide' : n + ' bénévole' + (n !== 1 ? 's' : '')}</span>
+      </div>`;
+    }).join('');
+    return `<div class="ov-day-block ${d.date === today ? 'ov-today' : ''}">
+      <div class="ov-day-head">
+        <span class="ov-day-label">${d.label}${d.date === today ? '<span class="ov-today-tag">Aujourd\'hui</span>' : ''}</span>
+        <span class="ov-day-status ${dayGapCount === 0 ? 'ok' : 'warn'}">${dayGapCount === 0 ? 'Tout comblé ✓' : dayGapCount + ' poste' + (dayGapCount !== 1 ? 's' : '') + ' vide' + (dayGapCount !== 1 ? 's' : '')}</span>
+      </div>
+      ${rows}
+    </div>`;
+  }).join('');
+
+  document.getElementById('ov-container').innerHTML = `
+    <div class="ov-stats">
+      <div class="ov-stat"><strong>${totalInscrits}</strong>Inscrits</div>
+      <div class="ov-stat"><strong>${totalDispo}</strong>Dispo remplie</div>
+      <div class="ov-stat"><strong>${totalAssigned}</strong>Assignés (≥1 quart)</div>
+      <div class="ov-stat"><strong>${totalRepas}</strong>Repas accordés</div>
+    </div>
+
+    <div class="ov-section-label">⚠️ Postes à combler (${gaps.length})</div>
+    <div class="ov-gap-list">${gapsHtml}</div>
+
+    <div class="ov-section-label">👤 Bénévoles pas encore assignés (${nonAssignes.length})</div>
+    <div class="ov-una-list">${nonAssignesHtml}</div>
+
+    <div class="ov-section-label">📅 Couverture par jour</div>
+    <div class="ov-coverage">${coverageHtml}</div>
+  `;
+}
+
+// Cycle Non dispo → Quart 1 → Quart 2 → (Quart 3 si le jour en a un) →
+// Toute la journée → Non dispo, directement depuis l'onglet admin (au lieu
+// d'attendre que le bénévole remplisse à nouveau). Le nombre de quarts
+// dépend de la journée (Samedi en a 3, les autres en ont 2) — le cycle est
+// donc calculé à partir de BV_DAYS plutôt que d'une liste fixe.
+function bvCycleShift(email, date, el) {
+  if (!email) return;
+  const v = bvVols.find(x => String(x.email||'').toLowerCase() === String(email).toLowerCase());
+  if (!v) return;
+  if (!v._dispo) v._dispo = { jours: {} };
+  if (!v._dispo.jours) v._dispo.jours = {};
+
+  const day = BV_DAYS.find(d => d.date === date);
+  const cycle = ['', ...(day ? day.shifts.map(s => s.key) : ['q1', 'q2']), 'full'];
+  const current = v._dispo.jours[date] || '';
+  const next = cycle[(cycle.indexOf(current) + 1) % cycle.length];
+  const jours = {}; BV_DAYS.forEach(d => { jours[d.date] = d.date === date ? next : (v._dispo.jours[d.date] || ''); });
+
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({
+      action: 'saveDispo',
+      email: v.email, prenom: v.prenom, nom: v.nom,
+      jours: jours,
+      fonction: (v._dispo && v._dispo.fonction) || '',
+      notes: (v._dispo && v._dispo.notes) || ''
+    })
+  }).then(r => r.json()).then(res => {
+    if (res.ok) {
+      v._dispo.jours[date] = next;
+      bvRender();
+      toast('Disponibilité mise à jour ✓');
+    } else {
+      toast('Erreur : ' + res.error);
+    }
+  }).catch(err => toast('Erreur : ' + err.message));
+}
+
+function bvSaveFonction(email, fonction) {
+  if (!email) return;
+  const v = bvVols.find(x => String(x.email||'').toLowerCase() === String(email).toLowerCase());
+  if (!v) return;
+  if (!v._dispo) v._dispo = { jours: {} };
+
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({
+      action: 'saveDispo',
+      email: v.email, prenom: v.prenom, nom: v.nom,
+      jours: v._dispo.jours || {},
+      fonction: fonction,
+      notes: (v._dispo && v._dispo.notes) || ''
+    })
+  }).then(r => r.json()).then(res => {
+    if (res.ok) {
+      v._dispo.fonction = fonction;
+      toast('Fonction mise à jour ✓');
+    } else {
+      toast('Erreur : ' + res.error);
+    }
+  }).catch(err => toast('Erreur : ' + err.message));
+}
+
+function toast(msg) {
+  const el = document.getElementById('bv-toast') || (() => {
+    const t = document.createElement('div');
+    t.id = 'bv-toast';
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0a0a0a;color:var(--g);font-size:13px;font-weight:600;padding:10px 20px;z-index:999;opacity:0;transition:opacity .2s';
+    document.body.appendChild(t);
+    return t;
+  })();
+  el.textContent = msg;
+  el.style.opacity = '1';
+  clearTimeout(window._bvToastTimer);
+  window._bvToastTimer = setTimeout(() => { el.style.opacity = '0'; }, 2200);
+}
+
+// ── Communications : sélection de destinataires + envoi manuel ──
+function bvToggleSelect(id, checked) {
+  if (checked) bvSelected.add(id); else bvSelected.delete(id);
+  bvUpdateCommCount();
+}
+
+function bvUpdateCommCount() {
+  document.getElementById('comm-count').textContent = bvSelected.size + ' sélectionné(s)';
+}
+
+function bvSelectAll(select) {
+  let list = bvVols;
+  if (bvFilter === 'sansdispo') list = list.filter(v => !v._dispo);
+  if (select) list.forEach(v => { if (v.email) bvSelected.add(v.id); });
+  else bvSelected.clear();
+  bvRender();
+  bvUpdateCommCount();
+}
+
+// Préremplit Sujet + Message selon le modèle choisi — Rayane peut ensuite
+// tout ajuster avant d'envoyer. Un seul flux d'envoi pour tous les types de
+// courriel (bienvenue, convocation, info générale), au lieu d'un bouton
+// séparé juste pour la bienvenue.
+// ⚠️ Ces modèles envoient un message IDENTIQUE à tout le monde (pas de
+// "Bonjour [Prénom]" personnalisé par personne, contrairement à l'ancien
+// courriel de bienvenue automatique) — c'est le compromis pour n'avoir
+// qu'un seul système d'envoi simple à utiliser.
+const BV_EMAIL_TEMPLATES = {
+  bienvenue: {
+    subject: 'MAPP MTL 2026 — Bienvenue, prochaine étape : tes disponibilités',
+    body: `Bonjour,
+
+Merci beaucoup de t'être inscrit·e comme bénévole pour MAPP MTL 2026 (29 sept – 3 oct, Montréal) !
+
+Prochaine étape : remplis tes disponibilités et la fonction qui t'intéresse ici :
+https://mappmtl.vercel.app/disponibilites.html
+
+On s'en sert pour bâtir l'horaire. Tu auras bientôt de nos nouvelles pour une courte rencontre d'orientation et une visite de terrain avant le festival.
+
+Merci encore — à bientôt !
+L'équipe MAPP MTL 2026`
+  },
+  rencontre: {
+    subject: 'MAPP MTL 2026 — Convocation à la rencontre bénévoles',
+    body: `Bonjour,
+
+On a hâte de vous voir bientôt pour le festival MAPP MTL 2026 !
+
+📅 RENCONTRE D'ORIENTATION
+Date : [à compléter]
+Heure : [à compléter]
+Lieu : [à compléter]
+
+Au programme :
+— Présentation de l'équipe et de l'horaire
+— Visite du site
+— Vos questions
+
+Merci de confirmer votre présence.
+
+Au plaisir de vous voir !
+L'équipe MAPP MTL 2026`
+  },
+  info: {
+    subject: 'MAPP MTL 2026 — Information importante',
+    body: `Bonjour,
+
+[Ton message ici]
+
+Merci et à bientôt,
+L'équipe MAPP MTL 2026`
+  },
+};
+
+function bvApplyTemplate() {
+  const key = document.getElementById('comm-template').value;
+  if (!key || !BV_EMAIL_TEMPLATES[key]) return;
+  document.getElementById('comm-subject').value = BV_EMAIL_TEMPLATES[key].subject;
+  document.getElementById('comm-body').value = BV_EMAIL_TEMPLATES[key].body;
+}
+
+function bvSendBroadcast() {
+  const subject = document.getElementById('comm-subject').value.trim();
+  const body = document.getElementById('comm-body').value.trim();
+  const msgEl = document.getElementById('comm-msg');
+  msgEl.className = 'comm-msg';
+
+  if (bvSelected.size === 0) {
+    msgEl.textContent = 'Sélectionne au moins un·e bénévole.';
+    msgEl.classList.add('err');
+    return;
+  }
+  if (!subject || !body) {
+    msgEl.textContent = 'Le sujet et le message sont requis.';
+    msgEl.classList.add('err');
+    return;
+  }
+
+  const emails = bvVols.filter(v => bvSelected.has(v.id) && v.email).map(v => v.email);
+  const btn = document.getElementById('comm-send-btn');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours…';
+
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'sendBroadcast', emails: emails, subject: subject, body: body })
+  }).then(r => r.json()).then(res => {
+    btn.disabled = false;
+    btn.textContent = 'Envoyer aux sélectionnés';
+    if (res.ok) {
+      const detail = (res.errors && res.errors.length) ? '\n' + res.errors.join('\n') : '';
+      msgEl.textContent = `Envoyé à ${res.sent} personne(s)${res.failed ? `, ${res.failed} échec(s)` : ''}.${detail}`;
+      msgEl.style.whiteSpace = 'pre-line';
+      msgEl.classList.add(res.failed ? 'err' : 'ok');
+      if (!res.failed) {
+        document.getElementById('comm-subject').value = '';
+        document.getElementById('comm-body').value = '';
+      }
+      bvSelectAll(false);
+    } else {
+      msgEl.textContent = 'Erreur : ' + res.error;
+      msgEl.classList.add('err');
+    }
+  }).catch(err => {
+    btn.disabled = false;
+    btn.textContent = 'Envoyer aux sélectionnés';
+    msgEl.textContent = 'Erreur : ' + err.message;
+    msgEl.classList.add('err');
+  });
+}
+
+function bvCreateCalendarEvent() {
+  const title    = document.getElementById('cal-title').value.trim();
+  const startVal = document.getElementById('cal-start').value;
+  const endVal   = document.getElementById('cal-end').value;
+  const location = document.getElementById('cal-location').value.trim();
+  const desc     = document.getElementById('cal-desc').value.trim();
+  const msgEl    = document.getElementById('cal-msg');
+  msgEl.className = 'comm-msg';
+
+  if (bvSelected.size === 0) {
+    msgEl.textContent = 'Sélectionne au moins un·e bénévole.';
+    msgEl.classList.add('err');
+    return;
+  }
+  if (!title || !startVal || !endVal) {
+    msgEl.textContent = 'Titre, date/heure de début et de fin sont requis.';
+    msgEl.classList.add('err');
+    return;
+  }
+
+  const emails = bvVols.filter(v => bvSelected.has(v.id) && v.email).map(v => v.email);
+  const btn = document.getElementById('cal-send-btn');
+  btn.disabled = true;
+  btn.textContent = 'Création en cours…';
+
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({
+      action: 'createCalendarEvent',
+      emails, title, location, description: desc,
+      startISO: new Date(startVal).toISOString(),
+      endISO: new Date(endVal).toISOString(),
+    })
+  }).then(r => r.json()).then(res => {
+    btn.disabled = false;
+    btn.textContent = "Créer l'événement et inviter les sélectionnés";
+    if (res.ok) {
+      msgEl.textContent = `Événement créé ✓ — invitation Google Calendar envoyée à ${emails.length} personne(s). Les réponses (Oui/Non/Peut-être) apparaîtront directement dans ton calendrier.`;
+      msgEl.classList.add('ok');
+      document.getElementById('cal-title').value = '';
+      document.getElementById('cal-start').value = '';
+      document.getElementById('cal-end').value = '';
+      document.getElementById('cal-location').value = '';
+      document.getElementById('cal-desc').value = '';
+      bvSelectAll(false);
+    } else {
+      msgEl.textContent = 'Erreur : ' + res.error;
+      msgEl.classList.add('err');
+    }
+  }).catch(err => {
+    btn.disabled = false;
+    btn.textContent = "Créer l'événement et inviter les sélectionnés";
+    msgEl.textContent = 'Erreur : ' + err.message;
+    msgEl.classList.add('err');
+  });
+}
+
+// ── Horaire bénévoles (public, lecture seule) ──
+let hbData = null, hbActiveDay = 0, hbLoading = false;
+
+let hbDispoByEmail = {}, hbVolsById = {}, hbRepasById = {};
+
+// Callbacks en attente que hbData (horaire + repas) soit chargé — utilisé
+// par la fiche admin, qui peut être ouverte avant que ces données arrivent.
+let hbReadyCallbacks = [];
+function onHbReady(cb) {
+  if (hbData) { cb(); return; }
+  hbReadyCallbacks.push(cb);
+}
+
+function hbLoad() {
+  if (hbData) { hbRenderDayTabs(); return; }
+  if (hbLoading) return; // déjà en cours — évite un double fetch
+  if (BV_API_URL.includes('COLLE_ICI')) {
+    document.getElementById('hb-container').innerHTML = '<div class="nores">Configuration manquante — colle l\'URL Apps Script (BV_API_URL) dans index.html.</div>';
+    return;
+  }
+  hbLoading = true;
+  Promise.all([
+    bvApi('getHoraire'),
+    bvApi('getBenevoles'),
+    bvApi('getDispo'),
+    // Repas : best-effort — si ça échoue, la fiche s'affiche quand même sans cette section
+    bvApi('getRepas', { date: bvTodayDate() }).catch(() => ({ data: [] }))
+  ])
+    .then(([horaireRes, volsRes, dispoRes, repasRes]) => {
+      hbData = horaireRes;
+      hbLoading = false;
+      (volsRes.data || []).forEach(v => { hbVolsById[String(v.id)] = v; });
+      (dispoRes.data || []).forEach(d => { hbDispoByEmail[String(d.email||'').toLowerCase()] = d; });
+      (repasRes.data || []).forEach(r => { hbRepasById[String(r.id)] = r; });
+      document.getElementById('hb-postes-count').textContent = (hbData.postes||[]).length;
+      const todayIdx = hbData.days.findIndex(d => d.date === bvTodayDate());
+      hbActiveDay = todayIdx >= 0 ? todayIdx : 1;
+      hbRenderDayTabs();
+      // Les données sont prêtes : si une recherche était déjà tapée (ou sauvegardée), on l'affiche
+      const q = document.getElementById('mh-input').value;
+      if (q) mhRender(q);
+      // Idem pour la fiche admin, si elle attendait ces données
+      hbReadyCallbacks.forEach(cb => cb());
+      hbReadyCallbacks = [];
+    }).catch(err => {
+      hbLoading = false;
+      document.getElementById('hb-container').innerHTML = '<div class="nores">Erreur : ' + err.message + '</div>';
+    });
+}
+
+// ============================================================
+// MON HORAIRE — recherche personnalisée (bénévole trouve ses quarts)
+// ============================================================
+function mhNormalize(s) {
+  return (s || '').toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+// Compile tous les quarts assignés à un bénévole donné, à travers tous les jours
+function mhAllShiftsFor(vol) {
+  const out = [];
+  if (!hbData || !hbData.days || !hbData.data || !vol) return out;
+  hbData.days.forEach(day => {
+    const dayData = hbData.data[day.date] || {};
+    (hbData.postes || []).forEach(poste => {
+      const assigned = dayData[poste] || [];
+      const match = assigned.find(a => String(a.id) === String(vol.id));
+      if (match) {
+        // Priorité à l'heure choisie par Rayane pour ce quart précis ; sinon, dispo générale déclarée
+        out.push({ date: day.date, label: day.label, poste: poste, time: match.heure || hbShiftTime(vol.id, day.date) });
+      }
+    });
+  });
+  return out.sort((a, b) => a.date.localeCompare(b.date));
+}
+
+function mhFindMatches(query) {
+  const q = mhNormalize(query);
+  if (!q || q.length < 2) return [];
+  return Object.values(hbVolsById).filter(v => {
+    const full = mhNormalize((v.prenom || '') + ' ' + (v.nom || ''));
+    const fullRev = mhNormalize((v.nom || '') + ' ' + (v.prenom || ''));
+    const email = mhNormalize(v.email || '');
+    return full.includes(q) || fullRev.includes(q) || (email && email.includes(q));
+  });
+}
+
+function mhOnInput() {
+  const input = document.getElementById('mh-input');
+  const q = input.value;
+  document.getElementById('mh-clear-btn').style.display = q ? 'flex' : 'none';
+  try { localStorage.setItem('mapp_mon_horaire_query', q); } catch (e) {}
+  mhRender(q);
+}
+
+function mhClear() {
+  document.getElementById('mh-input').value = '';
+  document.getElementById('mh-clear-btn').style.display = 'none';
+  try { localStorage.removeItem('mapp_mon_horaire_query'); } catch (e) {}
+  mhRender('');
+  document.getElementById('mh-input').focus();
+}
+
+function mhSelectVol(id) {
+  mhRenderPersonSchedule(hbVolsById[String(id)]);
+}
+
+function mhRender(query) {
+  const resultEl = document.getElementById('mh-result');
+  const q = (query || '').trim();
+  if (!q) {
+    resultEl.innerHTML = '<div class="mh-hint">Écris ton nom ci-dessus pour voir ton horaire et tes repas. 👆</div>';
+    return;
+  }
+  if (!hbData) {
+    resultEl.innerHTML = '<div class="mh-hint">Chargement des données…</div>';
+    return;
+  }
+  const matches = mhFindMatches(q);
+  if (matches.length === 0) {
+    resultEl.innerHTML = '<div class="mh-hint mh-none">Aucun bénévole trouvé avec ce nom. Vérifie l\'orthographe, ou essaie ton courriel.</div>';
+    return;
+  }
+  if (matches.length === 1) {
+    mhRenderPersonSchedule(matches[0]);
+    return;
+  }
+  resultEl.innerHTML = '<div class="mh-hint">Plusieurs résultats — clique sur ton nom :</div>' +
+    '<div class="mh-picker">' +
+    matches.map(v => `<button class="mh-pick-btn" onclick="mhSelectVol('${v.id}')">${v.prenom} ${v.nom}</button>`).join('') +
+    '</div>';
+}
+
+function mhRenderPersonSchedule(vol) {
+  const resultEl = document.getElementById('mh-result');
+  if (!vol) { resultEl.innerHTML = '<div class="mh-hint mh-none">Erreur — bénévole introuvable.</div>'; return; }
+  // Mémorise qui c'est, pour surligner son nom automatiquement dans
+  // « Voir l'horaire complet par poste » — plus facile de se retrouver au
+  // milieu de plein d'autres noms.
+  try { localStorage.setItem('mapp_my_vol_id', String(vol.id)); } catch (e) {}
+  if (hbData && document.getElementById('hb-view-all').style.display !== 'none') hbRenderDay(); // ré-applique le surlignage si déjà ouvert
+  const shifts = mhAllShiftsFor(vol);
+  const today = bvRealToday();
+  const header = `<div class="mh-person"><span class="mh-person-name">${vol.prenom} ${vol.nom}</span>${vol.contrainte ? '<span class="bv-warn">Santé</span>' : ''}</div>`;
+  const repasHtml = mhRepasCard(vol);
+  const infosHtml = mhInfosCard(vol);
+  if (shifts.length === 0) {
+    resultEl.innerHTML = header + '<div class="mh-hint">Tu es inscrit·e mais pas encore assigné·e à un poste. Reviens plus tard, ça s\'en vient ! 🙂</div>' + repasHtml + infosHtml;
+    return;
+  }
+  const cards = shifts.map(s => `
+    <div class="mh-shift-card ${s.date === today ? 'today' : ''}">
+      ${s.date === today ? '<div class="mh-today-badge">Aujourd\'hui</div>' : ''}
+      <div class="mh-shift-day">${s.label}</div>
+      <div class="mh-shift-poste">${posteDot(s.poste)}${s.poste}</div>
+      <div class="mh-shift-time">${s.time || ''}</div>
+    </div>`).join('');
+  resultEl.innerHTML = header +
+    `<div class="mh-shift-count">${shifts.length} quart${shifts.length !== 1 ? 's' : ''} assigné${shifts.length !== 1 ? 's' : ''}</div>` +
+    `<div class="mh-shift-list">${cards}</div>` +
+    repasHtml + infosHtml;
+}
+
+// Section « Repas » de la fiche bénévole — basée sur l'onglet Repas (backend)
+// N'affiche rien si la donnée n'est pas disponible (ex. backend pas encore à jour) plutôt que d'induire en erreur.
+function mhRepasCard(vol) {
+  const r = hbRepasById[String(vol.id)];
+  if (!r) return '';
+  const ok = !!r.repasOk;
+  const shiftsTxt = (typeof r.shifts !== 'undefined' && r.shifts !== null) ? `${r.shifts} quart${r.shifts !== 1 ? 's' : ''} complété${r.shifts !== 1 ? 's' : ''}` : '';
+  return `
+    <div class="mh-repas-card ${ok ? 'ok' : ''}">
+      <div class="mh-repas-label">🍽 Repas</div>
+      <div class="mh-repas-status">${ok ? 'Accordé ✓' : 'Pas encore accordé'}</div>
+      ${shiftsTxt ? `<div class="mh-repas-shifts">${shiftsTxt}</div>` : ''}
+    </div>`;
+}
+
+// Section « T-shirt / restrictions alimentaires » — basée sur les dispo (backend)
+// N'affiche rien si la personne n'a pas encore rempli ces champs.
+function mhInfosCard(vol) {
+  const dispo = vol.email ? hbDispoByEmail[String(vol.email).toLowerCase()] : null;
+  if (!dispo) return '';
+  const tshirt = dispo.tshirt || '';
+  const restriction = dispo.restriction || '';
+  const details = dispo.restrictionDetails || '';
+  if (!tshirt && !restriction) return '';
+  const items = [];
+  if (tshirt) items.push(`<div class="mh-info-item"><span class="mh-info-label">T-shirt</span><span class="mh-info-val">${tshirt}</span></div>`);
+  if (restriction) items.push(`<div class="mh-info-item"><span class="mh-info-label">Alimentaire</span><span class="mh-info-val">${restriction}${details ? ' — ' + details : ''}</span></div>`);
+  return `<div class="mh-info-card">${items.join('')}</div>`;
+}
+
+// Toggle « voir l'horaire complet par poste » — replié par défaut (priorité à Mon horaire)
+function hbToggleAll() {
+  const el = document.getElementById('hb-view-all');
+  const isOpen = el.style.display !== 'none';
+  el.style.display = isOpen ? 'none' : 'block';
+  document.getElementById('hb-toggle-arrow').textContent = isOpen ? '▾' : '▲';
+  document.getElementById('hb-toggle-label').textContent = isOpen
+    ? 'Voir l\'horaire complet par poste (tous les bénévoles)'
+    : 'Masquer l\'horaire complet par poste';
+  if (!isOpen) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function hbRenderDayTabs() {
+  document.getElementById('hb-day-tabs').innerHTML = hbData.days.map((d,i) =>
+    `<button class="tabx ${i===hbActiveDay?'active':''}" onclick="hbSelectDay(${i})">${d.label}</button>`
+  ).join('');
+  hbRenderDay();
+}
+
+function hbSelectDay(i) { hbActiveDay = i; hbRenderDayTabs(); }
+
+function hbShiftTime(volId, date) {
+  const v = hbVolsById[String(volId)];
+  if (!v || !v.email) return '';
+  const dispo = hbDispoByEmail[String(v.email).toLowerCase()];
+  const shift = dispo && dispo.jours ? dispo.jours[date] : '';
+  return bvShiftHours(date, shift);
+}
+
+function hbRenderDay() {
+  const day = hbData.days[hbActiveDay];
+  const dayData = (hbData.data && hbData.data[day.date]) || {};
+  const heuresHtml = day.heures ? `<div class="hb-heures">Heures d'ouverture du site : ${day.heures}</div>` : '';
+  let myVolId = null;
+  try { myVolId = localStorage.getItem('mapp_my_vol_id'); } catch (e) {}
+  document.getElementById('hb-container').innerHTML = heuresHtml + postesForDay(hbData, day.date).map(poste => {
+    const assigned = dayData[poste] || [];
+    const volRows = assigned.length
+      ? assigned.map(v => {
+          // Priorité à l'heure choisie par Rayane pour ce quart précis ; sinon, dispo générale déclarée
+          const t = v.heure || hbShiftTime(v.id, day.date);
+          const mine = myVolId && String(v.id) === String(myVolId);
+          return `<div class="hb-vol ${mine ? 'mine' : ''}"><span>${v.prenom} ${v.nom}${mine ? ' <span class="hb-vol-mine-tag">C\'est toi</span>' : ''}</span>${t ? `<span class="hb-vol-time">${t}</span>` : ''}</div>`;
+        }).join('')
+      : '<div class="hb-empty">Personne assigné pour l\'instant</div>';
+    return `<div class="hb-poste">
+      <div class="hb-poste-head"><span class="hb-poste-name">${posteDot(poste)}${poste}</span><span class="hb-poste-count">${assigned.length} bénévole${assigned.length!==1?'s':''}</span></div>
+      ${volRows}
+    </div>`;
+  }).join('');
+}
+
+
+// ============================================================
+// SOUS-ONGLETS DE LA VUE ADMIN
+// ============================================================
+function bvSetSubView(v, btn) {
+  document.querySelectorAll('.subview').forEach(s => s.classList.remove('active'));
+  document.getElementById('sub-' + v).classList.add('active');
+  document.querySelectorAll('#bv-content .tab-row .tabx').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (v === 'overview') admOverviewLoad();
+  if (v === 'horaire') admHoraireLoad();
+  if (v === 'repas') mealRefresh();
+  if (v === 'checkin') ciLoad();
+}
+
+function bvTodayDate() {
+  const today = new Date().toISOString().slice(0, 10);
+  const found = BV_DAYS.find(d => d.date === today);
+  return found ? found.date : BV_DAYS[2].date; // par défaut : Jeudi (premier jour de festival)
+}
+
+// À ne PAS confondre avec bvTodayDate() ci-dessus : celle-ci retombe sur
+// Jeudi par défaut quand on est hors festival, ce qui est voulu pour choisir
+// un onglet actif par défaut — mais ce même repli faisait à tort apparaître
+// le badge "Aujourd'hui" et le contour bleu sur Jeudi même hors festival.
+// bvRealToday() ne renvoie une date que si on est VRAIMENT dans la semaine
+// du festival, sinon null — à utiliser pour tout ce qui affiche "Aujourd'hui".
+function bvRealToday() {
+  const today = new Date().toISOString().slice(0, 10);
+  return BV_DAYS.some(d => d.date === today) ? today : null;
+}
+
+// ============================================================
+// HORAIRE ADMIN — assigner des bénévoles à un poste, par jour
+// ============================================================
+let admHoraireData = null, admActiveDay = 0;
+
+function admHoraireLoad() {
+  document.getElementById('adm-horaire-container').innerHTML = '<div class="nores">Chargement…</div>';
+  // S'assure que bvVols a bien ses disponibilités (._dispo) attachées — pas
+  // seulement la liste brute — sinon le filtrage par poste souhaité/dispo
+  // ci-dessous ne peut pas fonctionner (ex. si Rayane arrive directement sur
+  // "Horaire" sans être passée par "Vue d'ensemble" ou "Bénévoles" avant).
+  const ensureVols = (bvVols.length && bvVols[0]._dispo !== undefined) ? Promise.resolve() : bvRefresh();
+  Promise.all([bvApi('getHoraire'), ensureVols])
+    .then(([horaireRes]) => {
+      admHoraireData = horaireRes;
+      const todayIdx = admHoraireData.days.findIndex(d => d.date === bvTodayDate());
+      admActiveDay = todayIdx >= 0 ? todayIdx : 1;
+      admRenderDayTabs();
+    })
+    .catch(err => {
+      document.getElementById('adm-horaire-container').innerHTML = '<div class="nores">Erreur : ' + err.message + '</div>';
+    });
+}
+
+function admRenderDayTabs() {
+  document.getElementById('adm-day-tabs').innerHTML = admHoraireData.days.map((d, i) =>
+    `<button class="tabx ${i===admActiveDay?'active':''}" onclick="admSelectDay(${i})">${d.label}</button>`
+  ).join('');
+  admRenderDay();
+}
+
+function admSelectDay(i) { admActiveDay = i; admRenderDayTabs(); }
+
+// Fallback générique (sans le détail des heures, qui varie par journée —
+// voir bvShiftName(date, quart) quand la date est disponible pour un label précis).
+const QUART_LABELS = { q1: 'Quart 1', q2: 'Quart 2', q3: 'Quart 3', full: 'Toute la journée' };
+
+// Une couleur distincte par poste, pour repérer visuellement en un coup
+// d'œil qui fait quoi dans l'horaire — volontairement différentes des
+// couleurs de quart (jaune/bleu/violet) pour ne pas mélanger les deux systèmes.
+const POSTE_COLORS = {
+  'Sécurité / gestion des foules': '#e6353b', // rouge
+  'Entrée / sortie':               '#0d9488', // sarcelle
+  'Bar':                           '#c026d3', // magenta
+  'Kiosque culinaire':             '#f97316', // orange
+  'Support technique':             '#2563eb', // bleu roi
+  'Renfort / Float':               '#16a34a', // vert
+  'Installation / démontage':      '#78350f', // brun
+  'Coordinateur Tagtool':          '#7600ff', // violet
+};
+function posteColor(poste) { return POSTE_COLORS[poste] || '#8a8a8a'; }
+function posteDot(poste) { return `<span class="poste-dot" style="background:${posteColor(poste)}"></span>`; }
+
+// Certaines journées n'offrent qu'un sous-ensemble des postes, et certaines
+// journées "mixtes" (ex. Mercredi = montage le jour + soirée tournoi de
+// ping-pong avec Bar/Cantine/Entrée/Float) combinent plusieurs besoins à la
+// fois — c'est pourquoi le filtrage utilise la liste explicite `BV_DAYS[].postes`
+// plutôt qu'un type unique par journée. Le backend peut aussi renvoyer un
+// sous-ensemble dans data.postesByDate ; on prend l'intersection des deux
+// pour rester robuste même si l'un des deux côtés n'est pas encore à jour.
+function postesForDay(dataObj, date) {
+  if (!dataObj) return [];
+  const base = (dataObj.postesByDate && dataObj.postesByDate[date]) || dataObj.postes || [];
+  const day = BV_DAYS.find(d => d.date === date);
+  if (!day || !day.postes) return base;
+  return base.filter(p => day.postes.includes(p));
+}
+
+// Deux quarts se chevauchent-ils ? "full" (toute la journée) chevauche tout ;
+// un même quart (ex. "q1"/"q1") se chevauche avec lui-même. Ceci ne détecte
+// pas les chevauchements d'heures entre quarts différents d'une même journée
+// (ex. Samedi : Quart 1 11h-15h et Quart 2 14h-19h se touchent réellement) —
+// simplification existante, pas introduite par cette mise à jour. Un quart
+// manquant (assignation créée avant ce système) ne peut pas être vérifié —
+// on laisse passer plutôt que de bloquer sur une donnée absente.
+function admQuartsOverlap(a, b) {
+  if (!a || !b) return false;
+  if (a === 'full' || b === 'full') return true;
+  return a === b;
+}
+
+// Calcule automatiquement les heures réelles à partir du quart choisi et des
+// heures définies pour cette journée précise (BV_DAYS) — Rayane n'a plus à
+// les taper à la main, ce qui évite les fautes de frappe et les incohérences.
+function admComputeHeure(date, quart) {
+  return bvShiftHours(date, quart);
+}
+
+function admVolAssignmentsForDate(volId, date, excludePoste) {
+  if (!admHoraireData || !admHoraireData.data[date]) return [];
+  const out = [];
+  postesForDay(admHoraireData, date).forEach(p => {
+    if (p === excludePoste) return;
+    (admHoraireData.data[date][p] || []).forEach(a => {
+      if (String(a.id) === String(volId)) out.push({ poste: p, heure: a.heure || '', quart: a.quart || '' });
+    });
+  });
+  return out;
+}
+
+// La personne a-t-elle coché ce poste dans « Fonction(s) souhaitée(s) » ?
+function admFonctionMatches(dispo, poste) {
+  if (!dispo || !dispo.fonction) return false;
+  return dispo.fonction.split(',').map(s => s.trim()).includes(poste);
+}
+
+// Mémorise, par poste+jour, si Rayane a choisi d'afficher tout le monde
+// plutôt que la liste filtrée (poste souhaité + disponible ce jour-là).
+let admShowAllFor = {};
+
+function admToggleShowAll(key) {
+  admShowAllFor[key] = !admShowAllFor[key];
+  admRenderDay();
+}
+
+function admRenderDay() {
+  const day = admHoraireData.days[admActiveDay];
+  const dayData = admHoraireData.data[day.date] || {};
+  document.getElementById('adm-horaire-container').innerHTML = postesForDay(admHoraireData, day.date).map(poste => {
+    const assigned = dayData[poste] || [];
+    const assignedIds = new Set(assigned.map(v => String(v.id)));
+    const notAssigned = bvVols.filter(v => !assignedIds.has(String(v.id)));
+    const safeId = poste.replace(/[^a-zA-Z0-9]/g,'');
+    const toggleKey = safeId + '|' + day.date;
+
+    const rows = assigned.length
+      ? assigned.map(v => `<div class="adm-vol-row">
+          <span>${v.prenom} ${v.nom}</span>
+          <span class="adm-vol-heure-wrap">
+            ${v.quart ? `<span class="adm-vol-quart">${QUART_LABELS[v.quart] || v.quart}</span>` : ''}
+            ${v.heure ? `<span class="adm-vol-heure">${v.heure}</span>` : ''}
+            <button class="adm-vol-edit" onclick="admOpenEditAssignment('${day.date}','${poste}','${v.id}','${(v.prenom||'').replace(/'/g,"\\'")}','${(v.nom||'').replace(/'/g,"\\'")}','${v.quart||''}')" title="Modifier le poste ou le quart">✎</button>
+            <button class="adm-vol-remove" onclick="admRemove('${day.date}','${poste}','${v.id}')" title="Retirer">×</button>
+          </span>
+        </div>`).join('')
+      : '<div class="hb-empty">Personne assigné</div>';
+
+    // Par défaut : seulement les gens qui ont choisi CE poste ET qui sont
+    // disponibles CE jour-là. Rayane peut basculer pour voir tout le monde.
+    const eligible = notAssigned.filter(v => {
+      const dispo = v._dispo;
+      return dispo && dispo.jours && dispo.jours[day.date] && admFonctionMatches(dispo, poste);
+    });
+    const showingAll = admShowAllFor[toggleKey] || eligible.length === 0;
+    const listToShow = showingAll ? notAssigned : eligible;
+
+    const options = listToShow.map(v => {
+      const declared = v._dispo && v._dispo.jours ? v._dispo.jours[day.date] : '';
+      const declaredTag = declared ? ` — ${QUART_LABELS[declared] || declared}` : '';
+      const conflicts = admVolAssignmentsForDate(v.id, day.date, poste);
+      const warn = conflicts.length
+        ? ` ⚠️ déjà : ${conflicts.map(c => c.poste + ' — ' + (QUART_LABELS[c.quart] || 'quart inconnu')).join(', ')}`
+        : '';
+      return `<option value="${v.id}" data-prenom="${v.prenom}" data-nom="${v.nom}">${v.prenom} ${v.nom}${declaredTag}${warn}</option>`;
+    }).join('');
+
+    const toggleLabel = showingAll
+      ? (eligible.length ? `← Revenir aux ${eligible.length} bénévole${eligible.length!==1?'s':''} qui ont choisi ce poste` : 'Personne n\'a choisi ce poste pour cette date — tous les bénévoles sont affichés')
+      : `Afficher tous les bénévoles (${notAssigned.length}) au lieu des ${eligible.length} qui ont choisi ce poste`;
+    const toggleClickable = eligible.length > 0;
+
+    return `<div class="adm-poste">
+      <div class="adm-poste-head"><span class="adm-poste-name">${posteDot(poste)}${poste}</span><span class="adm-poste-count">${assigned.length} bénévole${assigned.length!==1?'s':''}</span></div>
+      ${rows}
+      <div class="adm-add-card">
+        <div class="adm-add-field">
+          <label class="adm-add-label" for="adm-sel-${safeId}">Bénévole</label>
+          <select id="adm-sel-${safeId}" onchange="admOnSelectionChange('${safeId}','${day.date}','${poste}')">${'<option value="">— Choisir —</option>' + options}</select>
+        </div>
+        <div class="adm-add-field narrow">
+          <label class="adm-add-label" for="adm-quart-${safeId}">Quart</label>
+          <select id="adm-quart-${safeId}" class="adm-quart-select" onchange="admOnSelectionChange('${safeId}','${day.date}','${poste}')">
+            <option value="">— Choisir —</option>
+            ${bvQuartOptionsHtml(day.date)}
+          </select>
+        </div>
+        <div class="adm-add-field narrow">
+          <span class="adm-add-label">Heures</span>
+          <span class="adm-heure-preview" id="adm-heure-preview-${safeId}">—</span>
+        </div>
+        <button class="adm-add-btn" id="adm-add-btn-${safeId}" onclick="admAssign('${day.date}','${poste}','adm-sel-${safeId}','adm-quart-${safeId}')">+ Ajouter</button>
+      </div>
+      <div class="adm-conflict-warn" id="adm-conflict-${safeId}"></div>
+      <div class="adm-toggle-all" ${toggleClickable ? `onclick="admToggleShowAll('${toggleKey}')"` : ''} style="${toggleClickable ? 'cursor:pointer' : 'cursor:default;opacity:.6'}">${toggleLabel}</div>
+    </div>`;
+  }).join('');
+}
+
+// Appelé dès que le bénévole OU le quart change dans une ligne d'ajout :
+// met à jour l'aperçu d'heure, suggère le quart déclaré la première fois,
+// et — surtout — vérifie tout de suite s'il y a un conflit, pour griser le
+// bouton "+ Ajouter" et l'expliquer AVANT le clic plutôt qu'au clic.
+function admOnSelectionChange(safeId, date, poste) {
+  const sel = document.getElementById('adm-sel-' + safeId);
+  const quartSelect = document.getElementById('adm-quart-' + safeId);
+  const preview = document.getElementById('adm-heure-preview-' + safeId);
+  const btn = document.getElementById('adm-add-btn-' + safeId);
+  const warnBox = document.getElementById('adm-conflict-' + safeId);
+  const volId = sel.value;
+
+  // Suggère le quart déclaré seulement s'il n'a pas encore été touché manuellement
+  if (volId && !quartSelect.value) {
+    const v = bvVols.find(x => String(x.id) === String(volId));
+    const declared = v && v._dispo && v._dispo.jours ? v._dispo.jours[date] : '';
+    if (declared) quartSelect.value = declared;
+  }
+
+  const quart = quartSelect.value;
+  preview.textContent = quart ? (admComputeHeure(date, quart) || '—') : '—';
+
+  if (!volId || !quart) {
+    btn.disabled = false;
+    warnBox.textContent = '';
+    return;
+  }
+
+  const conflicts = admVolAssignmentsForDate(volId, date, poste).filter(c => admQuartsOverlap(c.quart, quart));
+  if (conflicts.length) {
+    const opt = sel.options[sel.selectedIndex];
+    const who = (opt.dataset.prenom || '') + ' ' + (opt.dataset.nom || '');
+    const details = conflicts.map(c => `${c.poste} (${QUART_LABELS[c.quart] || c.quart})`).join(', ');
+    btn.disabled = true;
+    warnBox.textContent = `❌ Impossible : ${who.trim()} est déjà assigné·e à ${details} — une personne ne peut être qu'à un seul poste à la fois.`;
+  } else {
+    btn.disabled = false;
+    warnBox.textContent = '';
+  }
+}
+
+// Répercute une modification (ajout/retrait) dans hbData — sinon "Vue
+// d'ensemble", "Horaire bénévoles" (public) et les fiches continuent d'afficher
+// les anciennes données jusqu'au prochain rechargement complet de la page,
+// puisque admHoraireData et hbData sont deux copies séparées en mémoire.
+function admSyncToHbData(date, poste, mutateFn) {
+  if (!hbData || !hbData.data[date]) return;
+  if (!hbData.data[date][poste]) hbData.data[date][poste] = [];
+  hbData.data[date][poste] = mutateFn(hbData.data[date][poste]);
+}
+
+function admAssign(date, poste, selectId, quartSelectId) {
+  const sel = document.getElementById(selectId);
+  const opt = sel.options[sel.selectedIndex];
+  if (!opt || !opt.value) return;
+  const volId = opt.value, prenom = opt.dataset.prenom, nom = opt.dataset.nom;
+  const quartSelect = document.getElementById(quartSelectId);
+  const quart = quartSelect ? quartSelect.value : '';
+
+  if (!quart) {
+    toast('Choisis le quart avant d\'ajouter.');
+    return;
+  }
+  const heure = admComputeHeure(date, quart); // calculée, jamais tapée à la main
+
+  // Une personne ne peut être qu'à un seul endroit à la fois : on bloque tout
+  // ajout qui chevauche un quart déjà assigné ce jour-là (peu importe le poste).
+  // Un même jour à des quarts DIFFÉRENTS (ex. jour + soir) reste permis.
+  const conflicts = admVolAssignmentsForDate(volId, date, poste)
+    .filter(c => admQuartsOverlap(c.quart, quart));
+  if (conflicts.length) {
+    const details = conflicts.map(c => `• ${c.poste} — ${QUART_LABELS[c.quart] || c.quart}${c.heure ? ' (' + c.heure + ')' : ''}`).join('\n');
+    alert(
+      `❌ Impossible : ${prenom} ${nom} est déjà assigné·e à ce moment-là :\n${details}\n\n` +
+      `Une personne ne peut être qu'à un seul poste à la fois. Choisis un autre quart (ex. Soir au lieu de Jour), ou retire d'abord son assignation existante.`
+    );
+    return;
+  }
+
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'saveAssignment', date, poste, volId, prenom, nom, heure, quart })
+  }).then(r => r.json()).then(res => {
+    if (res.ok) {
+      if (!admHoraireData.data[date]) admHoraireData.data[date] = {};
+      if (!admHoraireData.data[date][poste]) admHoraireData.data[date][poste] = [];
+      admHoraireData.data[date][poste].push({ id: volId, prenom, nom, heure, quart });
+      admSyncToHbData(date, poste, arr => { arr.push({ id: volId, prenom, nom, heure, quart }); return arr; });
+      admRenderDay();
+      toast(prenom + ' assigné ✓ (' + (QUART_LABELS[quart] || quart) + (heure ? ' · ' + heure : '') + ')');
+    } else {
+      toast('Erreur : ' + res.error);
+    }
+  }).catch(err => toast('Erreur : ' + err.message));
+}
+
+function admRemove(date, poste, volId) {
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'removeAssignment', date, poste, volId })
+  }).then(r => r.json()).then(res => {
+    if (res.ok) {
+      const arr = admHoraireData.data[date][poste] || [];
+      admHoraireData.data[date][poste] = arr.filter(v => String(v.id) !== String(volId));
+      admSyncToHbData(date, poste, hbArr => hbArr.filter(v => String(v.id) !== String(volId)));
+      admRenderDay();
+      toast('Retiré de l\'horaire');
+    } else {
+      toast('Erreur : ' + res.error);
+    }
+  }).catch(err => toast('Erreur : ' + err.message));
+}
+
+// ============================================================
+// MODIFIER UNE ASSIGNATION — changer le poste et/ou le quart d'une
+// personne déjà assignée, sans passer par « retirer puis réajouter ».
+// Ex. : quelqu'un est en Sécurité le matin mais n'aime pas ça — Rayane peut
+// directement la déplacer vers un autre poste ou un autre quart ici.
+// ============================================================
+let admEditCtx = null;
+
+function admOpenEditAssignment(date, poste, volId, prenom, nom, quart) {
+  admEditCtx = { date, oldPoste: poste, volId, prenom, nom, currentQuart: quart };
+  document.getElementById('adm-edit-poste').innerHTML = postesForDay(admHoraireData, date)
+    .map(p => `<option value="${p}" ${p === poste ? 'selected' : ''}>${p}</option>`).join('');
+  // Les quarts proposés dépendent de la journée (Samedi en a 3, les autres 2)
+  document.getElementById('adm-edit-quart').innerHTML = bvQuartOptionsHtml(date, quart);
+  document.getElementById('adm-edit-title').innerHTML = `<span class="mh-person-name">${prenom} ${nom}</span>`;
+  admEditOnChange();
+  document.getElementById('adm-edit-overlay').classList.add('open');
+}
+
+function admCloseEditAssignment() {
+  document.getElementById('adm-edit-overlay').classList.remove('open');
+  admEditCtx = null;
+}
+function admEditBackdrop(e) {
+  if (e.target.id === 'adm-edit-overlay') admCloseEditAssignment();
+}
+
+// Vérifie en direct (avant même de cliquer Confirmer) si le nouveau
+// poste/quart choisi entre en conflit avec une AUTRE assignation existante
+// ce jour-là — l'assignation qu'on est en train de modifier elle-même est
+// exclue de la vérification, sinon elle serait toujours en conflit avec elle-même.
+function admEditOnChange() {
+  if (!admEditCtx) return;
+  const poste = document.getElementById('adm-edit-poste').value;
+  const quart = document.getElementById('adm-edit-quart').value;
+  const preview = document.getElementById('adm-edit-heure-preview');
+  const warnBox = document.getElementById('adm-edit-warn');
+  const btn = document.getElementById('adm-edit-confirm-btn');
+  preview.textContent = quart ? (admComputeHeure(admEditCtx.date, quart) || '—') : '—';
+
+  if (!quart) { btn.disabled = false; warnBox.textContent = ''; return; }
+
+  const conflicts = admVolAssignmentsForDate(admEditCtx.volId, admEditCtx.date, admEditCtx.oldPoste)
+    .filter(c => admQuartsOverlap(c.quart, quart));
+  if (conflicts.length) {
+    btn.disabled = true;
+    warnBox.textContent = `❌ Impossible : déjà assigné·e à ${conflicts.map(c => c.poste + ' — ' + (QUART_LABELS[c.quart] || c.quart)).join(', ')}.`;
+  } else {
+    btn.disabled = false;
+    warnBox.textContent = '';
+  }
+}
+
+// Recharge admHoraireData/hbData directement depuis le serveur (source de
+// vérité) sans réinitialiser le jour actif — plus simple et plus sûr que de
+// tenter de patcher les deux copies en mémoire après un déplacement.
+function admRefreshHoraireData() {
+  return bvApi('getHoraire').then(res => {
+    admHoraireData = res;
+    hbData = res; // même forme de données exactement — partager évite toute désynchronisation
+    admRenderDay();
+  });
+}
+
+function admConfirmEditAssignment() {
+  if (!admEditCtx) return;
+  const { date, oldPoste, volId, prenom, nom, currentQuart } = admEditCtx;
+  const newPoste = document.getElementById('adm-edit-poste').value;
+  const newQuart = document.getElementById('adm-edit-quart').value;
+  if (!newQuart) { toast('Choisis un quart.'); return; }
+
+  if (newPoste === oldPoste && newQuart === currentQuart) {
+    admCloseEditAssignment(); // rien n'a changé
+    return;
+  }
+
+  const heure = admComputeHeure(date, newQuart);
+
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'removeAssignment', date, poste: oldPoste, volId })
+  }).then(r => r.json()).then(res1 => {
+    if (!res1.ok) { toast('Erreur : ' + res1.error); return; }
+    return fetch(BV_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'saveAssignment', date, poste: newPoste, volId, prenom, nom, heure, quart: newQuart })
+    }).then(r => r.json()).then(res2 => {
+      if (!res2.ok) { toast('Erreur : ' + res2.error); return; }
+      admCloseEditAssignment();
+      return admRefreshHoraireData().then(() => {
+        toast(`${prenom} déplacé·e vers ${newPoste} ✓ (${QUART_LABELS[newQuart] || newQuart})`);
+      });
+    });
+  }).catch(err => toast('Erreur : ' + err.message));
+}
+
+
+// ============================================================
+// REPAS — accorder/retirer un repas, régle globale
+// ============================================================
+let mealData = [], mealRule = '';
+
+function mealRefresh() {
+  document.getElementById('meal-container').innerHTML = '<div class="nores">Chargement…</div>';
+  bvApi('getRepas', { date: bvTodayDate() }).then(res => {
+    mealData = res.data || [];
+    mealRule = res.rule || '';
+    document.getElementById('meal-rule-select').value = mealRule;
+    document.getElementById('bv-repas-count').textContent = mealData.filter(r => r.repasOk).length;
+    mealRender();
+  }).catch(err => {
+    document.getElementById('meal-container').innerHTML = '<div class="nores">Erreur : ' + err.message + '</div>';
+  });
+}
+
+function mealRender() {
+  const header = `<div class="meal-row hdr"><div class="meal-h">Bénévole</div><div class="meal-h">Quarts faits</div><div class="meal-h">Repas</div></div>`;
+  const rows = mealData.map(r => `<div class="meal-row">
+    <div><span class="meal-name">${r.prenom} ${r.nom}</span>${r.contrainte ? ' <span class="bv-warn">'+r.contrainte+'</span>' : ''}</div>
+    <div>${r.shifts}</div>
+    <div><div class="meal-toggle ${r.repasOk?'on':''}" onclick="mealToggle('${r.id}', this)"></div></div>
+  </div>`).join('');
+  document.getElementById('meal-container').innerHTML = `<div class="bv-grid">${header}${rows}</div>`;
+}
+
+function mealToggle(volId, el) {
+  const on = el.classList.toggle('on');
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'toggleRepas', volId, value: on })
+  }).then(r => r.json()).then(res => {
+    if (res.ok) {
+      const r = mealData.find(x => String(x.id) === String(volId));
+      if (r) r.repasOk = on;
+      document.getElementById('bv-repas-count').textContent = mealData.filter(x => x.repasOk).length;
+    } else {
+      el.classList.toggle('on'); // revert
+      toast('Erreur : ' + res.error);
+    }
+  }).catch(() => { el.classList.toggle('on'); });
+}
+
+function mealSaveRule() {
+  const rule = document.getElementById('meal-rule-select').value;
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'saveMealRule', rule, mealShifts: 2 })
+  }).then(r => r.json()).then(res => {
+    if (res.ok) toast('Règle enregistrée ✓');
+  });
+}
+
+// ============================================================
+// CHECK-IN — présences en direct + heures travaillées
+// ============================================================
+let ciData = [], ciActiveDay = 0, ciDays = [];
+
+function ciLoad() {
+  ciDays = BV_DAYS;
+  const todayIdx = ciDays.findIndex(d => d.date === bvTodayDate());
+  ciActiveDay = todayIdx >= 0 ? todayIdx : 1;
+  ciRenderDayTabs();
+}
+
+function ciRenderDayTabs() {
+  document.getElementById('ci-day-tabs').innerHTML = ciDays.map((d, i) =>
+    `<button class="tabx ${i===ciActiveDay?'active':''}" onclick="ciSelectDay(${i})">${d.label}</button>`
+  ).join('');
+  ciFetchAndRender();
+}
+
+function ciSelectDay(i) { ciActiveDay = i; ciRenderDayTabs(); }
+
+function ciFetchAndRender() {
+  document.getElementById('ci-container').innerHTML = '<div class="nores">Chargement…</div>';
+  const date = ciDays[ciActiveDay].date;
+  bvApi('getCheckin', { date }).then(res => {
+    ciData = res.data || [];
+    ciRender();
+  }).catch(err => {
+    document.getElementById('ci-container').innerHTML = '<div class="nores">Erreur : ' + err.message + '</div>';
+  });
+}
+
+function ciHoursBetween(inStr, outStr) {
+  if (!inStr || !outStr) return null;
+  const [ih, im] = inStr.split(':').map(Number);
+  const [oh, om] = outStr.split(':').map(Number);
+  let mins = (oh * 60 + om) - (ih * 60 + im);
+  if (mins < 0) mins += 24 * 60; // shift traversant minuit
+  return (mins / 60).toFixed(1);
+}
+
+function ciRender() {
+  const checkinMap = {}; ciData.forEach(c => { checkinMap[String(c.volId)] = c; });
+  let arrives = 0, absents = 0, attendus = 0;
+  const rows = bvVols.map(v => {
+    const c = checkinMap[String(v.id)];
+    let statusHtml, hoursHtml = '—';
+    if (c && c.checkin && c.checkout) {
+      arrives++;
+      const h = ciHoursBetween(c.checkin, c.checkout);
+      hoursHtml = `<span class="ci-hours">${h}h</span>`;
+      statusHtml = `<span class="ci-status out">Terminé</span>`;
+    } else if (c && c.checkin) {
+      arrives++;
+      statusHtml = `<span class="ci-status in">Arrivé</span>`;
+    } else {
+      attendus++;
+      statusHtml = `<span class="ci-status absent">Pas encore</span>`;
+    }
+    return `<div class="ci-row">
+      <div class="ci-name">${v.prenom} ${v.nom}</div>
+      <div class="ci-time">${c && c.checkin ? c.checkin : '—'}</div>
+      <div class="ci-time">${c && c.checkout ? c.checkout : '—'}</div>
+      <div>${statusHtml}${c && c.checkin && c.checkout ? '<div style="margin-top:2px">'+hoursHtml+'</div>' : ''}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('ci-container').innerHTML = `
+    <div class="ci-stats">
+      <div class="ci-stat"><div class="ci-stat-num" style="color:#0a5c28">${arrives}</div><div class="ci-stat-lbl">Arrivés</div></div>
+      <div class="ci-stat"><div class="ci-stat-num" style="color:#854f0b">${attendus}</div><div class="ci-stat-lbl">Pas encore</div></div>
+      <div class="ci-stat"><div class="ci-stat-num">${bvVols.length}</div><div class="ci-stat-lbl">Total inscrits</div></div>
+    </div>
+    <div class="ci-row hdr"><div class="ci-h">Bénévole</div><div class="ci-h">Arrivée</div><div class="ci-h">Départ</div><div class="ci-h">Statut</div></div>
+    ${rows}`;
+}
+
+function ciManualCheckin() {
+  const email = document.getElementById('ci-manual-email').value.trim().toLowerCase();
+  if (!email) return;
+  const v = bvVols.find(x => String(x.email||'').toLowerCase() === email);
+  if (!v) { toast('Courriel introuvable parmi les bénévoles.'); return; }
+  const date = ciDays[ciActiveDay].date;
+
+  fetch(BV_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'checkinVol', date, volId: v.id, prenom: v.prenom, nom: v.nom })
+  }).then(r => r.json()).then(res => {
+    if (res.ok) {
+      document.getElementById('ci-manual-email').value = '';
+      toast(v.prenom + ' — check-in enregistré (' + res.time + ')');
+      ciFetchAndRender();
+    } else {
+      toast('Erreur : ' + res.error);
+    }
+  }).catch(err => toast('Erreur : ' + err.message));
+}
+
+// Chargement initial : vue publique horaire
+(function restoreMhQuery() {
+  try {
+    const saved = localStorage.getItem('mapp_mon_horaire_query');
+    if (saved) {
+      document.getElementById('mh-input').value = saved;
+      document.getElementById('mh-clear-btn').style.display = 'flex';
+    }
+  } catch (e) {}
+})();
+hbLoad();
+
+// ── Thème clair/sombre (sombre par défaut, persiste via localStorage) ──
+function mappToggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('mapp_theme', next); } catch (e) {}
+  mappUpdateToggleIcon(next);
+}
+function mappUpdateToggleIcon(theme) {
+  document.querySelectorAll('.theme-toggle').forEach(b => { b.textContent = theme === 'dark' ? '☀️' : '🌙'; });
+}
+mappUpdateToggleIcon(document.documentElement.getAttribute('data-theme') || 'dark');
+
+// ── Carte d'accueil — affichée seulement tant qu'elle n'a pas été fermée ──
+function dismissWelcome() {
+  document.getElementById('welcome-card').style.display = 'none';
+  try { localStorage.setItem('mapp_welcome_seen', '1'); } catch (e) {}
+}
+(function initWelcome() {
+  let seen = false;
+  try { seen = localStorage.getItem('mapp_welcome_seen') === '1'; } catch (e) {}
+  if (!seen) document.getElementById('welcome-card').style.display = 'block';
+})();
+
+// Accès admin retiré de cette page — voir admin.html.
+</script>
+</body>
+</html>
