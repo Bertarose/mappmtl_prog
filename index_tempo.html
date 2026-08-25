@@ -1268,6 +1268,9 @@ updateArtistProfile("vj-bunbun", {
 
 updateArtistProfile("jules-roze", {
   dayIdx:3, venue:"moment",
+  // photo très verticale (portrait) : le recadrage large de la fiche détail (16/10) coupait
+  // le visage par défaut (object-position "center top") — on redescend le point de cadrage.
+  sheetFocus:"center 55%",
   appearances:[
     { venue:"moment", fr:"VEN 2 OCT · MOMENT FACTORY", en:"FRI OCT 2 · MOMENT FACTORY" }
   ]
@@ -1304,6 +1307,9 @@ updateArtistProfile("marc-olivier-lamothe", {
 
 updateArtistProfile("collectif-ferias", {
   dayIdx:4, venue:"vanhorne",
+  // visuel carré (boule disco) : le recadrage large de la fiche détail (16/10) coupait le
+  // bas du visuel — on garde l'image entière (fond déjà noir, se fond avec la fiche).
+  sheetFit:"contain",
   appearances:[
     { venue:"vanhorne", fr:"SAM 3 OCT · SKATEPARK VAN HORNE", en:"SAT OCT 3 · VAN HORNE SKATEPARK" }
   ],
@@ -1655,9 +1661,19 @@ function drawPortrait(cv, name, ratio){
   ctx.fillText(ini, W/2, H/2+W*0.012);
 }
 
-function artistMedia(a, ratio){
+function artistMedia(a, ratio, sheetMode){
   if(a.placeholder) return `<div class="ph ph-placeholder"></div>`;
-  if(a.img) return `<img class="ph" src="${a.img}" alt="${a.name}" loading="lazy">`;
+  if(a.img){
+    // certaines photos (portrait très vertical, ou visuel carré symétrique) sont mal cadrées
+    // par le recadrage "cover / center top" par défaut une fois affichées dans la fiche détail
+    // (ratio 16/10, plus large que la vignette carrée) — on peut leur donner un cadrage dédié
+    // via sheetFit ("contain" pour garder un visuel entier sans le rogner) et/ou sheetFocus
+    // (object-position, ex. "center 55%" pour redescendre le cadrage sur un visage).
+    const style = sheetMode && (a.sheetFit || a.sheetFocus)
+      ? ` style="${a.sheetFit ? `object-fit:${a.sheetFit};` : ''}${a.sheetFocus ? `object-position:${a.sheetFocus};` : ''}"`
+      : '';
+    return `<img class="ph" src="${a.img}" alt="${a.name}" loading="lazy"${style}>`;
+  }
   return `<canvas class="ph" data-name="${a.name}" data-ratio="${ratio||1}"></canvas>`;
 }
 function paintPortraits(root){
@@ -1761,7 +1777,7 @@ function openArtist(slug, fromHash){
   const appearances = Array.isArray(a.appearances) && a.appearances.length
     ? `<div class="artist-appearances">${a.appearances.map(ap => `<span class="when" onclick="closeArtist();focusVenue('${ap.venue}')">📍 ${ap[lang]}</span>`).join('')}</div>`
     : `<span class="when" onclick="closeArtist();focusVenue('${a.venue}')">📍 ${when} · ${v[lang]}</span>`;
-  document.getElementById('sheet-media').innerHTML = artistMedia(a, 0.625);
+  document.getElementById('sheet-media').innerHTML = artistMedia(a, 0.625, true);
   document.getElementById('sheet-body').innerHTML = `
     <h2 id="sheet-name">${a.name}</h2>
     <div class="disc">${a[lang].disc}</div>
