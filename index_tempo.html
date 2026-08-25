@@ -1278,6 +1278,9 @@ updateArtistProfile("jules-roze", {
 
 updateArtistProfile("thisisnotdesign", {
   name:"TIND & Aza", dayIdx:3, venue:"moment",
+  // visuel carré : le recadrage large de la fiche détail (16/10) coupait un peu trop bas
+  // (menton/bouche) — on redescend le point de cadrage pour garder les visages avec de l'air.
+  sheetFocus:"center 50%",
   appearances:[
     { venue:"moment", fr:"VEN 2 OCT · MOMENT FACTORY", en:"FRI OCT 2 · MOMENT FACTORY" }
   ],
