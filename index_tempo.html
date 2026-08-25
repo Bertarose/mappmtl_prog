@@ -177,9 +177,9 @@ nav{
 .hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:2}
 .hero h1{
   font-family:var(--cond);font-weight:500;
-  font-size:clamp(30px,7vw,96px);line-height:.9;
+  font-size:clamp(30px,7vw,96px);line-height:.95;
   text-transform:uppercase;letter-spacing:-0.03em;
-  color:var(--white);white-space:nowrap;
+  color:var(--white);
 }
 .hero .hero-kicker{
   font-family:var(--cond);font-weight:500;
@@ -332,6 +332,7 @@ nav{
 @media(max-width:600px){
   .install-card{padding:14px 15px}
   .install-card .idate{font-size:10.5px}
+  .hero h1{font-size:clamp(28px,8vw,38px);line-height:1.05}
 }
 
 /* ── Grille programme (6 jours) ──────────────────── */
@@ -955,7 +956,7 @@ footer a{color:var(--violet);text-decoration:none}
     <div class="eyebrow ed-eyebrow" data-fr="10e ÉDITION" data-en="10th EDITION">10e ÉDITION</div>
     <h1>MAPP_X | 10ème édition du Festival international de projection mapping</h1>
     <div class="hero-kicker" data-fr="Programmation" data-en="Program">Programmation</div>
-    <div class="sub" data-fr="29 SEPT — 4 OCT 2026 · MONTRÉAL · CROISEMENTS" data-en="SEPT 29 — OCT 4, 2026 · MONTRÉAL · CROSSINGS">29 SEPT — 4 OCT 2026 · MONTRÉAL · CROISEMENTS</div>
+    <div class="sub" data-fr="29 SEPT — 4 OCT 2026 · MONTRÉAL" data-en="SEPT 29 — OCT 4, 2026 · MONTRÉAL">29 SEPT — 4 OCT 2026 · MONTRÉAL</div>
     <div id="hero-status"></div>
     <a class="hero-tix" href="https://www.mappmtl.com/billetterie" target="_blank" rel="noopener" onclick="vib(10)"><span data-fr="Réservez votre billet ici" data-en="Reserve your ticket here">Réservez votre billet ici</span> <span class="arrow">→</span></a>
   </div>
@@ -1142,13 +1143,13 @@ const DAYS = [
   ]},
   { date:"2026-09-30", d:"30", moFr:"SEPT", moEn:"SEPT", wFr:"MER", wEn:"WED", events:[
     { time:"17h — 22h", venue:"moment", tixUrl:"https://www.zeffy.com/fr-CA/ticketing/tournoi-de-ping-pong-interactif-de-la-creativite-numerique-de-montreal", img:"/media/soiree-tournoi-ping-pong.jpg",
-      fr:{ t:"Soirée bénéfice / réseautage - Tournoi de ping-pong interactif de la créativité numérique de Montréal", d:"<p>Dans le cadre de sa campagne de levée de fonds, MAPP_MTL convie le public et la communauté créative montréalaise à sa 4ᵉ édition du tournoi de ping-pong. Cette soirée unique en son genre réunira les studios, les collectifs et les organisations du milieu de la créativité numérique dans une compétition amicale sur une table augmentée avec projection interactive, au cœur des studios de son partenaire de longue date, Moment Factory. Au-delà du tournoi, cette soirée est une excellente occasion de rencontrer les professionnels des studios, de discuter, d'échanger et de créer des liens dans un cadre convivial.</p>", price:"10 $ – Tarif étudiant et artiste · 20 $ – Admission générale · 100 $ – Billet donateur (inclus boisson, nourriture, siège réservé, rencontre avec le directeur et le conseil d'administration de MAPP)" },
-      en:{ t:"Benefit / Networking Night - Montreal Digital Creativity Interactive Ping-Pong Tournament", d:"<p>As part of its fundraising campaign, MAPP_MTL invites the public and Montreal's creative community to the 4th edition of its ping-pong tournament. This one-of-a-kind evening will bring together studios, collectives and organizations from the digital creativity scene in a friendly competition on an augmented table with interactive projection, at the heart of the studios of its long-time partner, Moment Factory. Beyond the tournament, this evening is an excellent opportunity to meet studio professionals, chat, exchange ideas and build connections in a welcoming setting.</p>", price:"$10 – Student and artist rate · $20 – General admission · $100 – Donor ticket (includes a drink, food, a reserved seat, and a meeting with MAPP's director and board of directors)" } }
+      fr:{ t:"Soirée bénéfice / réseautage - Tournoi de ping-pong interactif de la créativité numérique de Montréal", d:"<p>Dans le cadre de sa campagne de levée de fonds, MAPP_MTL convie le public et la communauté créative montréalaise à sa 4ᵉ édition du tournoi de ping-pong. Cette soirée unique en son genre réunira les studios, les collectifs et les organisations du milieu de la créativité numérique dans une compétition amicale sur une table augmentée avec projection interactive, au cœur des studios de son partenaire de longue date, Moment Factory.</p><p>Au-delà du tournoi, cette soirée est une excellente occasion de rencontrer les professionnels des studios, de discuter, d'échanger et de créer des liens dans un cadre convivial.</p>", price:"10 $ – Tarif étudiant et artiste · 20 $ – Admission générale · 100 $ – Billet donateur (inclus boisson, nourriture, siège réservé, rencontre avec le directeur et le conseil d'administration de MAPP)" },
+      en:{ t:"Benefit / Networking Night - Montreal Digital Creativity Interactive Ping-Pong Tournament", d:"<p>As part of its fundraising campaign, MAPP_MTL invites the public and Montreal's creative community to the 4th edition of its ping-pong tournament. This one-of-a-kind evening will bring together studios, collectives and organizations from the digital creativity scene in a friendly competition on an augmented table with interactive projection, at the heart of the studios of its long-time partner, Moment Factory.</p><p>Beyond the tournament, this evening is an excellent opportunity to meet studio professionals, chat, exchange ideas and build connections in a welcoming setting.</p>", price:"$10 – Student and artist rate · $20 – General admission · $100 – Donor ticket (includes a drink, food, a reserved seat, and a meeting with MAPP's director and board of directors)" } }
   ]},
   { date:"2026-10-01", d:"01", moFr:"OCT", moEn:"OCT", wFr:"JEU", wEn:"THU", events:[
     { time:"17h — 22h", venue:"vanhorne", free:true, pat:"p-black", tixUrl:"https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026", img:"/media/minute-mapp-night.jpg",
-      fr:{ t:"Soirée MINUTE_MAPP 2026", d:"<p>MINUTE_MAPP est une plateforme internationale de création où les artistes disposent de 60 secondes pour présenter une œuvre originale de projection mapping. Cette soirée mettra en lumière plus de 60 créateurs venus des quatre coins du monde, offrant au public un panorama de la relève internationale et des nouvelles tendances en arts numériques.</p>" },
-      en:{ t:"MINUTE_MAPP Night 2026", d:"<p>MINUTE_MAPP is an international creation platform where artists have 60 seconds to present an original projection mapping piece. This evening will showcase more than 60 creators from around the world, offering audiences a panorama of international emerging talent and new trends in digital art.</p>" } },
+      fr:{ t:"Soirée MINUTE_MAPP 2026", d:"<p>MINUTE_MAPP est une plateforme internationale de création où les artistes disposent de 60 secondes pour présenter une œuvre originale de projection mapping.</p><p>Cette soirée mettra en lumière plus de 60 créateurs venus des quatre coins du monde, offrant au public un panorama de la relève internationale et des nouvelles tendances en arts numériques.</p>" },
+      en:{ t:"MINUTE_MAPP Night 2026", d:"<p>MINUTE_MAPP is an international creation platform where artists have 60 seconds to present an original projection mapping piece.</p><p>This evening will showcase more than 60 creators from around the world, offering audiences a panorama of international emerging talent and new trends in digital art.</p>" } },
     { time:"17h — 22h", venue:"vanhorne", free:true, tixUrl:"https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026", img:"/media/fete-de-quartier.jpg",
       fr:{ t:"Fête de quartier numérique", d:"<p><strong>Événement phare du festival</strong></p><p>Fidèle à son ADN, cet événement propose un programme festif mêlant projections vidéos (mapping) avec plus de 60 artistes locaux et internationaux qui présenteront leurs créations sur l'ancien magasin iconique du quartier, Million Tapis et Tuiles. JS Baillat (QC/CA), Sabrina Ratté (QC/CA), Téo (FR/QC/CA), Aude Guivarc'h (QC/CA) présenteront des œuvres spectaculaires sur l'iconique entrepôt Saint-Lawrence, tandis que des performances de musique électronique seront offertes par le Studio Baillat le vendredi soir et le collectif Ferias le samedi soir, avec les artistes Alina et Guthrie. Les festivaliers pourront également profiter de kiosques de nourriture dans une ambiance conviviale de fête de quartier.</p>" },
       en:{ t:"Digital Block Party", d:"<p><strong>Festival flagship event</strong></p><p>True to its roots, this event offers a festive program blending video mapping projections with more than 60 local and international artists presenting their work on the neighbourhood's iconic former store, Million Tapis et Tuiles. JS Baillat (QC/CA), Sabrina Ratté (QC/CA), Téo (FR/QC/CA), and Aude Guivarc'h (QC/CA) will present spectacular works on the iconic Saint-Lawrence warehouse, while electronic music performances will be offered by Studio Baillat on Friday night and the Ferias collective on Saturday night, featuring artists Alina and Guthrie. Festival-goers can also enjoy food stands in a welcoming block-party atmosphere.</p>" } }
@@ -1158,8 +1159,8 @@ const DAYS = [
       fr:{ t:"Fête de quartier numérique", d:"<p><strong>Événement phare du festival</strong></p><p>Fidèle à son ADN, cet événement propose un programme festif mêlant projections vidéos (mapping) avec plus de 60 artistes locaux et internationaux qui présenteront leurs créations sur l'ancien magasin iconique du quartier, Million Tapis et Tuiles. JS Baillat (QC/CA), Sabrina Ratté (QC/CA), Téo (FR/QC/CA), Aude Guivarc'h (QC/CA) présenteront des œuvres spectaculaires sur l'iconique entrepôt Saint-Lawrence, tandis que des performances de musique électronique seront offertes par le Studio Baillat le vendredi soir et le collectif Ferias le samedi soir, avec les artistes Alina et Guthrie. Les festivaliers pourront également profiter de kiosques de nourriture dans une ambiance conviviale de fête de quartier.</p>" },
       en:{ t:"Digital Block Party", d:"<p><strong>Festival flagship event</strong></p><p>True to its roots, this event offers a festive program blending video mapping projections with more than 60 local and international artists presenting their work on the neighbourhood's iconic former store, Million Tapis et Tuiles. JS Baillat (QC/CA), Sabrina Ratté (QC/CA), Téo (FR/QC/CA), and Aude Guivarc'h (QC/CA) will present spectacular works on the iconic Saint-Lawrence warehouse, while electronic music performances will be offered by Studio Baillat on Friday night and the Ferias collective on Saturday night, featuring artists Alina and Guthrie. Festival-goers can also enjoy food stands in a welcoming block-party atmosphere.</p>" } },
     { time:"22h — 03h", venue:"moment", tixUrl:"https://www.zeffy.com/fr-CA/ticketing/soiree-mapp--2026", img:"/media/soiree-mapp-2026.jpg",
-      fr:{ t:"Soirée MAPP 2026", d:"<p>MAPP revient avec sa soirée incontournable chez Moment Factory, proposant un programme dansant et festif, une scénographie immersive et des projections mapping captivantes. La programmation musicale de la soirée sera assurée par le Studio Baillat (QC/CA), tandis que les créations visuelles seront signées BunBun (QC/CA), JS Baillat (QC/CA), Thisisnodesign (QC/CA) et Jules Roze (FR/QC/CA). Célébrez cette 10e édition avec artistes, créateurs, partenaires et public fidèle.</p>", price:"20 $ – Early bird · 25 $ – Admission générale" },
-      en:{ t:"MAPP Night 2026", d:"<p>MAPP is back with its unmissable party at Moment Factory, featuring a dance-floor program, immersive scenography and captivating mapping projections. The evening's musical lineup will be led by Studio Baillat (QC/CA), while visual creations will be signed by BunBun (QC/CA), JS Baillat (QC/CA), Thisisnodesign (QC/CA) and Jules Roze (FR/QC/CA). Celebrate this 10th edition with artists, creators, partners and loyal audiences.</p>", price:"$20 – Early bird · $25 – General admission" } }
+      fr:{ t:"Soirée MAPP 2026", d:"<p>MAPP revient avec sa soirée incontournable chez Moment Factory, proposant un programme dansant et festif, une scénographie immersive et des projections mapping captivantes.</p><p>La programmation musicale de la soirée sera assurée par le Studio Baillat (QC/CA), tandis que les créations visuelles seront signées BunBun (QC/CA), JS Baillat (QC/CA), Thisisnodesign (QC/CA) et Jules Roze (FR/QC/CA).</p><p>Célébrez cette 10e édition avec artistes, créateurs, partenaires et public fidèle.</p>", price:"20 $ – Early bird · 25 $ – Admission générale" },
+      en:{ t:"MAPP Night 2026", d:"<p>MAPP is back with its unmissable party at Moment Factory, featuring a dance-floor program, immersive scenography and captivating mapping projections.</p><p>The evening's musical lineup will be led by Studio Baillat (QC/CA), while visual creations will be signed by BunBun (QC/CA), JS Baillat (QC/CA), Thisisnodesign (QC/CA) and Jules Roze (FR/QC/CA).</p><p>Celebrate this 10th edition with artists, creators, partners and loyal audiences.</p>", price:"$20 – Early bird · $25 – General admission" } }
   ]},
   { date:"2026-10-03", d:"03", moFr:"OCT", moEn:"OCT", wFr:"SAM", wEn:"SAT", events:[
     { time:"12h — 22h", venue:"vanhorne", free:true, tixUrl:"https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026", img:"/media/fete-de-quartier.jpg",
@@ -1409,21 +1410,10 @@ function renderHeroStatus(){
 function localDateStr(d){ return d.toLocaleDateString('en-CA',{timeZone:'America/Montreal'}); }
 
 // ============================================================
-// TITRE : s'ajuste exactement à la largeur, quelle que soit la police
+// TITRE : géré entièrement en CSS (clamp + retour à la ligne),
+// afin de rester grand et lisible même sur mobile pour les
+// titres longs plutôt que de forcer une seule ligne rétrécie.
 // ============================================================
-function fitTitle(){
-  const h = document.querySelector('.hero h1');
-  if(!h) return;
-  const max = h.parentElement.clientWidth;
-  h.style.fontSize = '100px';                 // taille de mesure
-  const w = h.scrollWidth;
-  if(!w) return;
-  const vw = window.innerWidth;
-  const cap = vw < 480 ? 44 : vw < 768 ? 56 : vw < 1024 ? 68 : 96; // mobile / tablette portrait / tablette paysage / desktop
-  h.style.fontSize = Math.min(cap, Math.floor(100 * max / w * 0.995)) + 'px';
-}
-window.addEventListener('resize', fitTitle);
-if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitTitle);
 setInterval(renderHeroStatus, 30000);
 setInterval(refreshProgramNow, 60000);
 
@@ -2057,7 +2047,6 @@ function boot(){
   initMap();
   initHeroVideo();
   applyLang();
-  fitTitle();
   initReveals();
   scheduleProgramAutoFocus();
   startHalftone(false); // effet trame activé par défaut ; l'icône permet de revenir à la vidéo
