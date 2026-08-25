@@ -977,9 +977,9 @@ footer a{color:var(--violet);text-decoration:none}
   <div class="float-obj" style="width:32px;height:32px;left:92%;top:70%;--fo-op:.55"><svg><use href="#fo-dancer"/></svg></div>
   <div class="float-obj" style="width:24px;height:24px;left:88%;top:12%;--fo-op:.5"><svg><use href="#fo-disco"/></svg></div>
   <div class="sec-inner">
-    <h2 class="eyebrow" data-fr="Artistes" data-en="Artists" style="color:var(--white)">Artistes</h2>
+    <h2 class="eyebrow" data-fr="Invités" data-en="Guests" style="color:var(--white)">Invités</h2>
     <div class="acat-tabs" id="acat-tabs">
-      <button class="acat-tab active" data-cat="vj" onclick="setArtistCat('vj',this)">VJ</button>
+      <button class="acat-tab active" data-cat="vj" onclick="setArtistCat('vj',this)" data-fr="Artistes" data-en="Artists">Artistes</button>
       <button class="acat-tab" data-cat="dj" onclick="setArtistCat('dj',this)">DJ</button>
       <button class="acat-tab" data-cat="minute" onclick="setArtistCat('minute',this)" data-fr="MINUTE_MAPP" data-en="MINUTE_MAPP">MINUTE_MAPP</button>
     </div>
@@ -1224,6 +1224,10 @@ const ARTISTS = [
     fr:{ disc:"Fête de quartier numérique", bio:"Ferias est profondément enraciné dans la communauté dance montréalaise. Ses résidents, Guthrie & Alina, naviguent librement à travers les sonorités venues de tous horizons. Présent·e·s de façon régulière dans des lieux emblématiques tels que Sans Soleil et Système, ainsi qu’à Piknic Électronik, la SAT, Igloofest et le Festival International de Jazz de Montréal — sans oublier leurs célèbres marathons musicaux jusqu’au lever du soleil — le collectif est né de l’effervescence musicale qui anime Montréal depuis toujours." },
     en:{ disc:"Digital Block Party", bio:"Ferias is deeply rooted in the Montreal dance community, with residents Guthrie & Alina flowing through sounds from all corners. Holding down residencies at local haunts such as Sans Soleil and Système alongside regular appearances at Piknic Électronik, the SAT, Igloofest and the Montreal International Jazz Festival — not to mention their famed ’til-sunrise jams — the collective was built around Montreal’s ever-present musical buzz." },
     links:{} },
+  { slug:"cuerpos", name:"Cuerpos", dayIdx:null, venue:"vanhorne", cat:"dj",
+    fr:{ disc:"Détails à venir", bio:"Programmation à venir." },
+    en:{ disc:"Details to come", bio:"Lineup details coming soon." },
+    links:{} },
 ];
 
 // Associations confirmées à partir de la programmation officielle.
@@ -1308,7 +1312,7 @@ updateArtistProfile("collectif-ferias", {
 });
 
 ARTISTS.push(
-  { slug:"js-baillat", name:"JS Baillat", dayIdx:3, venue:"moment", cat:"vj",
+  { slug:"js-baillat", name:"Baillat", dayIdx:3, venue:"moment", cat:"vj",
     appearances:[
       { venue:"vanhorne", fr:"1–3 OCT · SKATEPARK VAN HORNE", en:"OCT 1–3 · VAN HORNE SKATEPARK" },
       { venue:"moment", fr:"VEN 2 OCT · MOMENT FACTORY", en:"FRI OCT 2 · MOMENT FACTORY" }
@@ -1323,22 +1327,6 @@ ARTISTS.push(
     fr:{ disc:"Fête de quartier numérique · QC/CA", bio:"Artiste visuelle québécoise dont une œuvre est présentée sur la façade de Million Tapis et Tuiles pendant la Fête de quartier numérique." },
     en:{ disc:"Digital Block Party · QC/CA", bio:"Quebec visual artist whose work is presented on the Million Tapis et Tuiles façade during the Digital Block Party." },
     links:{} },
-  { slug:"melesul3", name:"Melesul3", img:"/media/artists/melesul3.jpg", dayIdx:2, venue:"vanhorne", cat:"minute",
-    fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
-    en:{ disc:"Country to confirm", bio:"Bio coming soon." },
-    links:{} },
-  { slug:"maggi", name:"Maggi", img:"/media/artists/maggi.jpg", dayIdx:2, venue:"vanhorne", cat:"minute",
-    fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
-    en:{ disc:"Country to confirm", bio:"Bio coming soon." },
-    links:{} },
-  { slug:"robert-young", name:"Robert Young", img:"/media/artists/robert-young.jpg", dayIdx:2, venue:"vanhorne", cat:"minute",
-    fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
-    en:{ disc:"Country to confirm", bio:"Bio coming soon." },
-    links:{} },
-  { slug:"dedoy", name:"Dedoy", img:"/media/artists/dedoy.jpg", dayIdx:2, venue:"vanhorne", cat:"minute",
-    fr:{ disc:"Pays à confirmer", bio:"Bio à venir." },
-    en:{ disc:"Country to confirm", bio:"Bio coming soon." },
-    links:{} }
 );
 
 const FESTIVAL_START = new Date("2026-09-29T00:00:00-04:00");
@@ -1755,10 +1743,10 @@ function renderArtists(){
   const el = document.getElementById('agrid');
   const list = getArtistList();
   const emptyFr = currentArtistCat === 'minute'
-    ? "Plus de 60 artistes participeront à MINUTE_MAPP 2026. Les noms seront annoncés prochainement."
+    ? "Dévoilement des artistes à venir."
     : "Programmation à venir dans cette catégorie.";
   const emptyEn = currentArtistCat === 'minute'
-    ? "More than 60 artists will take part in MINUTE_MAPP 2026. Names will be announced soon."
+    ? "Artist lineup reveal coming soon."
     : "Lineup coming soon in this category.";
   el.innerHTML = list.length ? list.map(a=>`
     <button class="acard" onclick="openArtist('${a.slug}')" aria-haspopup="dialog">
