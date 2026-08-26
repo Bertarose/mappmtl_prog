@@ -288,12 +288,13 @@ nav{
 .gcol.dim .ghead{opacity:0.25;}
 
 /* ── Installations permanentes (toute la durée du festival) ── */
-.installs{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.installs{display:flex;flex-direction:column;gap:0;margin-top:0;border-top:1px solid var(--black)}
 .install-card{
-  border:1px solid var(--black);padding:16px 18px;cursor:pointer;
+  border:none;border-bottom:1px solid var(--black);padding:16px 18px;cursor:pointer;
   display:flex;align-items:center;gap:18px;flex-wrap:wrap;
   position:relative;transition:transform .12s, box-shadow .12s, opacity .2s, filter .2s;
 }
+.install-card:last-child{border-bottom:none}
 .install-card.dim{opacity:0.12;filter:grayscale(0.8);pointer-events:none;transform:none!important;box-shadow:none!important;}
 .install-card:hover{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--black)}
 .install-card .idate{
@@ -336,10 +337,11 @@ nav{
 }
 
 /* ── Grille programme (6 jours) ──────────────────── */
+.grid-wrap{border:1px solid var(--black);background:var(--white)}
 .grid{
   display:grid;
   grid-template-columns:repeat(6,1fr);
-  border:1px solid var(--black);
+  align-items:start;
   background:var(--white);
 }
 .gcol{
@@ -965,8 +967,10 @@ footer a{color:var(--violet);text-decoration:none}
 <!-- PROGRAMMATION : grille 6 jours -->
 <section class="sec" id="prog">  <div class="sec-inner">
     <button type="button" class="now-guide" id="now-guide" hidden aria-live="polite" aria-label="Prochaine activité" onclick="focusCurrentProgram()"></button>
-    <div class="grid reveal" id="grid"></div>
-    <div class="installs reveal" id="installs"></div>
+    <div class="grid-wrap">
+      <div class="grid reveal" id="grid"></div>
+      <div class="installs reveal" id="installs"></div>
+    </div>
   </div>
 </section>
 
