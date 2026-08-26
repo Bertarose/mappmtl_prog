@@ -288,7 +288,7 @@ nav{
 .gcol.dim .ghead{opacity:0.25;}
 
 /* ── Installations permanentes (toute la durée du festival) ── */
-.installs{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.installs{display:flex;flex-direction:column;gap:10px;margin-top:18px}
 .install-card{
   border:1px solid var(--black);padding:16px 18px;cursor:pointer;
   display:flex;align-items:center;gap:18px;flex-wrap:wrap;
@@ -966,9 +966,9 @@ footer a{color:var(--violet);text-decoration:none}
 <section class="sec" id="prog">
   <div class="float-obj" style="width:26px;height:26px;left:92%;top:8%;--fo-op:.5"><svg><use href="#fo-note"/></svg></div>
   <div class="sec-inner">
-    <div class="installs reveal" id="installs"></div>
     <button type="button" class="now-guide" id="now-guide" hidden aria-live="polite" aria-label="Prochaine activité" onclick="focusCurrentProgram()"></button>
     <div class="grid reveal" id="grid"></div>
+    <div class="installs reveal" id="installs"></div>
   </div>
 </section>
 
