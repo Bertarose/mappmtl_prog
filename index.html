@@ -112,7 +112,7 @@ body{
   background:var(--fluo);color:var(--black);
   border-bottom:1px solid var(--black);
   overflow:hidden;white-space:nowrap;
-  height:34px;display:flex;align-items:center;
+  height:58px;display:flex;align-items:center;
   text-decoration:none;cursor:pointer;
 }
 .marquee-track{
@@ -121,16 +121,21 @@ body{
 }
 
 .marquee-track span{
-  font-family:var(--cond);font-weight:500;font-size:14px;
-  letter-spacing:.04em;padding:0 26px;text-transform:uppercase;
-  display:inline-flex;align-items:center;gap:26px;
+  font-family:var(--cond);font-weight:500;font-size:24px;
+  letter-spacing:.01em;padding:0 22px;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:22px;
 }
 @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(max-width:640px){
+  .marquee{height:44px}
+  .marquee-track span{font-size:16px;padding:0 16px;gap:16px}
+  nav{top:44px}
+}
 @media (prefers-reduced-motion: reduce){.marquee-track{animation:none}}
 
 /* ── Nav ─────────────────────────────────────────── */
 nav{
-  position:sticky;top:34px;z-index:190;transform:translateZ(0);will-change:transform;
+  position:sticky;top:58px;z-index:190;transform:translateZ(0);will-change:transform;
   background:var(--navy);border-bottom:1px solid #1e1e1e;
   display:flex;align-items:center;justify-content:space-between;
   padding:14px 18px;color:var(--white);
@@ -153,8 +158,30 @@ nav{
 .nav-link.solid{background:var(--white);border-color:var(--white);color:var(--black)}
 .nav-link.solid:hover{background:var(--lime);border-color:var(--lime)}
 
+/* ── Sous-navigation (accès rapide Artistes / Carte / Infos) ── */
+.subnav{
+  position:sticky;top:133px;z-index:180;
+  background:var(--black);border-bottom:1px solid rgba(255,255,255,.15);
+  display:flex;gap:2px;padding:0 14px;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.subnav::-webkit-scrollbar{display:none}
+.subnav a{
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.05em;
+  text-transform:uppercase;color:rgba(255,255,255,.55);
+  padding:13px 14px;white-space:nowrap;text-decoration:none;transition:.15s;
+}
+.subnav a:hover{color:var(--white)}
+.subnav a.active{color:var(--black);background:var(--fluo)}
+@media(max-width:640px){
+  .subnav{top:119px;padding:0 10px}
+  .subnav a{font-size:10px;padding:12px 12px}
+}
+
 /* ── Section scaffolding ─────────────────────────── */
 .sec{padding:54px 18px;border-bottom:1px solid var(--black);position:relative}
+#artistes,#carte,#infos{scroll-margin-top:178px}
+@media(max-width:640px){#artistes,#carte,#infos{scroll-margin-top:160px}}
 .sec-inner{max-width:1180px;margin:0 auto}
 .sec-inner.narrow{max-width:820px}
 .eyebrow{
@@ -934,6 +961,12 @@ footer a{color:var(--lime);text-decoration:none}
   </div>
 </nav>
 
+<div class="subnav" id="subnav">
+  <a href="#artistes" data-target="artistes" data-fr="Artistes" data-en="Artists">Artistes</a>
+  <a href="#carte" data-target="carte" data-fr="Carte" data-en="Map">Carte</a>
+  <a href="#infos" data-target="infos" data-fr="Infos utiles" data-en="Useful info">Infos utiles</a>
+</div>
+
 <main id="main-content">
 <!-- HERO -->
 <div class="hero">
@@ -1217,7 +1250,7 @@ const ARTISTS = [
     fr:{ disc:"Fête de quartier numérique", bio:"Ferias est profondément enraciné dans la communauté dance montréalaise. Ses résidents, Guthrie & Alina, naviguent librement à travers les sonorités venues de tous horizons. Présent·e·s de façon régulière dans des lieux emblématiques tels que Sans Soleil et Système, ainsi qu’à Piknic Électronik, la SAT, Igloofest et le Festival International de Jazz de Montréal — sans oublier leurs célèbres marathons musicaux jusqu’au lever du soleil — le collectif est né de l’effervescence musicale qui anime Montréal depuis toujours." },
     en:{ disc:"Digital Block Party", bio:"Ferias is deeply rooted in the Montreal dance community, with residents Guthrie & Alina flowing through sounds from all corners. Holding down residencies at local haunts such as Sans Soleil and Système alongside regular appearances at Piknic Électronik, the SAT, Igloofest and the Montreal International Jazz Festival — not to mention their famed ’til-sunrise jams — the collective was built around Montreal’s ever-present musical buzz." },
     links:{} },
-  { slug:"cuerpos", name:"Cuerpos", dayIdx:null, venue:"vanhorne", cat:"dj",
+  { slug:"cuerpos", name:"Cuerpos", img:"/media/artists/cuerpos.webp", dayIdx:null, venue:"vanhorne", cat:"dj",
     fr:{ disc:"Détails à venir", bio:"Programmation à venir." },
     en:{ disc:"Details to come", bio:"Lineup details coming soon." },
     links:{} },
@@ -2032,6 +2065,32 @@ function stopHalftone(playSound){
 }
 
 // ============================================================
+// SOUS-NAVIGATION (Artistes / Carte / Infos)
+// ============================================================
+function initSubnav(){
+  const links = document.querySelectorAll('.subnav a');
+  if(!links.length) return;
+  const targets = Array.from(links).map(a=>document.getElementById(a.dataset.target)).filter(Boolean);
+  if(!targets.length) return;
+
+  const setActive = (id)=>{
+    links.forEach(a=> a.classList.toggle('active', a.dataset.target === id));
+  };
+
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting) setActive(entry.target.id);
+    });
+  }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+
+  targets.forEach(t=> io.observe(t));
+
+  links.forEach(a=>{
+    a.addEventListener('click', ()=> vib(6));
+  });
+}
+
+// ============================================================
 // INIT
 // ============================================================
 function boot(){
@@ -2042,6 +2101,7 @@ function boot(){
   initReveals();
   scheduleProgramAutoFocus();
   startHalftone(false); // effet trame activé par défaut ; l'icône permet de revenir à la vidéo
+  initSubnav();
 
   // ── LUEUR VIOLETTE — suit la souris (desktop) et le doigt (mobile) sur toute la page ──
   (function(){
