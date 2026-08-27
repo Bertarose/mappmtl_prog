@@ -571,6 +571,7 @@ nav{
 .ev-sheet .ev-header span{
   font-family:var(--cond);font-weight:500;font-size:clamp(22px,4.5vw,40px);
   text-transform:uppercase;letter-spacing:-0.02em;text-align:center;line-height:1;
+  color:var(--black);
 }
 .ev-sheet .ev-time{
   font-family:var(--mono);font-size:11px;color:var(--grey);
@@ -610,11 +611,11 @@ nav{
 .sheet.open{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
 .sheet-head{position:sticky;top:0;z-index:2;background:var(--white);border-bottom:1px solid var(--black);display:flex;justify-content:space-between;align-items:center;padding:12px 16px}
 .sheet-head .t{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--grey)}
-.sheet-close{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--black);background:var(--white);padding:6px 11px;cursor:pointer;transition:.12s}
+.sheet-close{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--black);background:var(--white);color:var(--black);padding:6px 11px;cursor:pointer;transition:.12s}
 .sheet-close:hover{background:var(--lime)}
 .sheet .ph{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:center top;border-bottom:1px solid var(--black)}
 .sheet-body{padding:20px 18px 26px}
-.sheet-body h2{font-family:var(--cond);font-weight:500;font-size:32px;text-transform:uppercase;line-height:.95;letter-spacing:-0.02em}
+.sheet-body h2{font-family:var(--cond);font-weight:500;font-size:32px;text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;color:var(--black)}
 .sheet-body .disc{font-family:var(--mono);font-size:10.5px;color:var(--grey);text-transform:uppercase;letter-spacing:.1em;margin-top:7px}
 .sheet-body .when{
   display:inline-flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;
@@ -1128,7 +1129,7 @@ const VENUES = {
 const DAYS = [
   { date:"2026-09-29", d:"29", moFr:"SEPT", moEn:"SEPT", wFr:"MAR", wEn:"TUE", events:[
     { time:"19h00", venue:"stlaurent", free:true, img:"/media/cite-memoire-temp.jpg",
-      fr:{ t:"Lancement — Cité Mémoire et Quartier des spectacles", d:"<p>Joignez-vous à nous pour le lancement officiel du festival et découvrez les projections de Cité Mémoire ainsi que l'installation du Quartier des spectacles.</p><p>Point de rendez-vous à 19 h au métro St-Laurent. Les deux sites de projection seront présentés au cours de la soirée.</p><p>Cité Mémoire est présentée tous les soirs du 24 septembre au 3 octobre à partir de 19 h dans le Vieux-Montréal. L'installation du Quartier des spectacles est présentée tous les soirs du 29 septembre au 5 octobre à partir de 19 h aux abords du métro St-Laurent.</p>" },
+      fr:{ t:"MAPP_X I Montréal en Histoires", d:"<p>Joignez-vous à nous pour le lancement officiel du festival et découvrez les projections de Cité Mémoire ainsi que l'installation du Quartier des spectacles.</p><p>Point de rendez-vous à 19 h au métro St-Laurent. Les deux sites de projection seront présentés au cours de la soirée.</p><p>Cité Mémoire est présentée tous les soirs du 24 septembre au 3 octobre à partir de 19 h dans le Vieux-Montréal. L'installation du Quartier des spectacles est présentée tous les soirs du 29 septembre au 5 octobre à partir de 19 h aux abords du métro St-Laurent.</p>" },
       en:{ t:"Launch — Cité Mémoire and Quartier des spectacles", d:"<p>Join us for the festival's official launch and discover the Cité Mémoire projections along with the Quartier des spectacles installation.</p><p>Meeting point at 7 p.m. at St-Laurent metro. Both projection sites will be presented during the evening.</p><p>Cité Mémoire runs every evening from September 24 to October 3 starting at 7 p.m. in Old Montreal. The Quartier des spectacles installation runs every evening from September 29 to October 5 starting at 7 p.m. near St-Laurent metro.</p>" } }
   ]},
   { date:"2026-09-30", d:"30", moFr:"SEPT", moEn:"SEPT", wFr:"MER", wEn:"WED", events:[
@@ -2187,7 +2188,7 @@ function openEvent(dayIdx, evIdx){
     </div>
     <div style="padding:20px 18px 28px;">
       <span class="ev-time">${dateFmt} · ${ev.time}</span>
-      <h2 id="ev-title" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
+      <h2 id="ev-title" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;color:var(--black);">${c.t}</h2>
       ${freeTag}${priceTag}
       <div class="ev-desc">${c.d}</div>
       ${tixLink}
@@ -2224,7 +2225,7 @@ function openInstallation(idx){
     </div>
     <div style="padding:20px 18px 28px;">
       <span class="ev-time">${dateLabel}</span>
-      <h2 id="ev-title" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;">${c.t}</h2>
+      <h2 id="ev-title" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;color:var(--black);">${c.t}</h2>
       ${freeTag}
       <div class="ev-desc">${c.d}</div>
       <button class="ev-map-link" onclick="closeEvent();focusVenue('${ins.venue}')">
