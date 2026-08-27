@@ -147,6 +147,7 @@ nav{
   border:1px solid var(--white);color:var(--white);
   padding:7px 12px;background:transparent;cursor:pointer;
   text-decoration:none;transition:.15s;
+  min-width:56px;text-align:center;display:inline-flex;align-items:center;justify-content:center;
 }
 .nav-link:hover{background:var(--lime);border-color:var(--lime);color:var(--black)}
 .nav-link.solid{background:var(--white);border-color:var(--white);color:var(--black)}
@@ -2170,10 +2171,10 @@ function openEvent(dayIdx, evIdx){
     : day.wEn+' '+day.d+' '+day.moEn;
 
   const freeTag = ev.free
-    ? `<span style="display:inline-block;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;background:var(--white);color:var(--black);margin-bottom:14px;">${ev.venue==='vanhorne' ? (lang==='fr'?'Gratuit · Sur inscription':'Free · Registration required') : (lang==='fr'?'Gratuit · Entrée libre':'Free · All welcome')}</span><br>`
+    ? `<span style="display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 9px;background:var(--black);color:var(--white);white-space:nowrap;">${ev.venue==='vanhorne' ? (lang==='fr'?'Gratuit · Sur inscription':'Free · Registration required') : (lang==='fr'?'Gratuit · Entrée libre':'Free · All welcome')}</span>`
     : '';
   const priceTag = c.price
-    ? `<span style="display:inline-block;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;background:var(--white);color:var(--black);margin-bottom:14px;">🎟 ${c.price}</span><br>`
+    ? `<span style="display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 9px;background:var(--black);color:var(--white);white-space:nowrap;">🎟 ${c.price}</span>`
     : '';
   const tixUrl = ev.tixUrl || (ev.free ? null : "https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026");
   const tixLink = tixUrl
@@ -2187,9 +2188,11 @@ function openEvent(dayIdx, evIdx){
       ${ev.img ? '' : `<span>${c.t}</span>`}
     </div>
     <div style="padding:20px 18px 28px;">
-      <span class="ev-time">${dateFmt} · ${ev.time}</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+        <span class="ev-time" style="margin-bottom:0;">${dateFmt} · ${ev.time}</span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">${freeTag}${priceTag}</div>
+      </div>
       <h2 id="ev-title" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;color:var(--black);">${c.t}</h2>
-      ${freeTag}${priceTag}
       <div class="ev-desc">${c.d}</div>
       ${tixLink}
       <button class="ev-map-link" onclick="closeEvent();focusVenue('${ev.venue}')">
@@ -2216,7 +2219,7 @@ function openInstallation(idx){
   const dateLabel = lang==='fr' ? ins.dateFr : ins.dateEn;
 
   const freeTag = ins.free
-    ? `<span style="display:inline-block;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;background:var(--white);color:var(--black);margin-bottom:14px;">${lang==='fr'?'Gratuit · Entrée libre':'Free · All welcome'}</span><br>`
+    ? `<span style="display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 9px;background:var(--black);color:var(--white);white-space:nowrap;">${lang==='fr'?'Gratuit · Entrée libre':'Free · All welcome'}</span>`
     : '';
 
   document.getElementById('ev-body').innerHTML = `
@@ -2224,9 +2227,11 @@ function openInstallation(idx){
       ${ins.img ? '' : `<span>${c.t}</span>`}
     </div>
     <div style="padding:20px 18px 28px;">
-      <span class="ev-time">${dateLabel}</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+        <span class="ev-time" style="margin-bottom:0;">${dateLabel}</span>
+        ${freeTag}
+      </div>
       <h2 id="ev-title" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;color:var(--black);">${c.t}</h2>
-      ${freeTag}
       <div class="ev-desc">${c.d}</div>
       <button class="ev-map-link" onclick="closeEvent();focusVenue('${ins.venue}')">
         📍 ${v[lang]} <span style="opacity:.5;margin-left:4px;">${lang==='fr'?'→ voir sur la carte':'→ view on map'}</span>
