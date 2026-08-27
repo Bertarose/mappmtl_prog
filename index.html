@@ -110,7 +110,7 @@ body{
 /* ── Marquee ─────────────────────────────────────── */
 .marquee{
   position:sticky;top:0;z-index:200;transform:translateZ(0);will-change:transform;
-  background:var(--lime);color:var(--black);
+  background:#39ff14;color:var(--black);
   border-bottom:1px solid var(--black);
   overflow:hidden;white-space:nowrap;
   height:34px;display:flex;align-items:center;
@@ -1174,9 +1174,9 @@ const DAYS = [
 // Installations présentes sur toute la durée du festival — affichées une seule fois,
 // hors de la grille des 6 jours, avec une plage de dates plutôt qu'un horaire quotidien.
 const INSTALLATIONS = [
-  { venue:"cite", free:true, img:"/media/cite-memoire-temp.jpg",
+  { venue:"cite", free:true, img:"/media/montreal-en-histoires.png",
     dateFr:"24 SEPT — 3 OCT · DÈS 19 H", dateEn:"SEPT 24 — OCT 3 · FROM 7 P.M.",
-    fr:{ t:"MAPP x Cité Mémoire", d:"<p>Pour la première année, MAPP collabore avec Cité Mémoire pour présenter une murale numérique spectaculaire, réalisée par l'artiste Téo (FR/QC/CA).</p><p>La projection est présentée tous les soirs à partir de 19 h, du 24 septembre au 3 octobre, dans le Vieux-Montréal, en libre accès.</p>" },
+    fr:{ t:"MAPP_X I Montréal en Histoires", d:"<p>Pour la première année, MAPP collabore avec Cité Mémoire pour présenter une murale numérique spectaculaire, réalisée par l'artiste Téo (FR/QC/CA).</p><p>La projection est présentée tous les soirs à partir de 19 h, du 24 septembre au 3 octobre, dans le Vieux-Montréal, en libre accès.</p>" },
     en:{ t:"MAPP x Cité Mémoire", d:"<p>For the first year, MAPP is collaborating with Cité Mémoire to present a spectacular digital mural, created by artist Téo (FR/QC/CA).</p><p>The projection runs every evening starting at 7 p.m., from September 24 to October 3, in Old Montreal, with free access.</p>" } },
   { venue:"stlaurent", free:true, img:"/media/quartier-des-spectacles.jpg",
     dateFr:"29 SEPT — 5 OCT · DÈS 19 H", dateEn:"SEPT 29 — OCT 5 · FROM 7 P.M.",
