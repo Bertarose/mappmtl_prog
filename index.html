@@ -308,7 +308,7 @@ nav{
   font-family:var(--cond);font-weight:500;font-size:18px;
   text-transform:uppercase;letter-spacing:.04em;padding:12px 22px;
 }
-.live-dot{width:10px;height:10px;background:#c026ff;border-radius:50%;animation:blink 1.4s infinite}
+.live-dot{width:10px;height:10px;background:var(--black);border-radius:50%;animation:blink 1.4s infinite}
 @keyframes blink{50%{opacity:.25}}
 
 .card{transition:opacity .2s,filter .2s;}
@@ -437,7 +437,7 @@ nav{
   font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
   background:var(--white);color:var(--black);border:1px solid var(--white);
 }
-.card.is-now .card-status::before{content:'● ';color:#c026ff;animation:blink 1.4s infinite}
+.card.is-now .card-status::before{content:'● ';color:var(--black);animation:blink 1.4s infinite}
 .today-tag{
   display:block;margin-top:6px;
   font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
