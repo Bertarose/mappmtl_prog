@@ -57,7 +57,7 @@
   --black:#000;
   --navy:#000;
   --lime:#fff;
-  --fluo:#39ff14;
+  --fluo:#00ff5a;
   --white:#fff;
   --grey:#5f5f5f;
   --grey-light:#aaaaaa;
@@ -274,7 +274,7 @@ nav{
 }
 .halftone-wrap .green-fade{
   position:absolute;left:0;right:0;bottom:0;height:55%;z-index:2;pointer-events:none;
-  background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 68%, rgba(57,255,20,.15) 100%);
+  background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 68%, rgba(0,255,90,.15) 100%);
 }
 .halftone-toggle{
   position:absolute;top:12px;right:12px;z-index:4;
@@ -2102,20 +2102,34 @@ function stopHalftone(playSound){
 function initSubnav(){
   const links = document.querySelectorAll('.subnav a');
   if(!links.length) return;
-  const targets = Array.from(links).map(a=>document.getElementById(a.dataset.target)).filter(Boolean);
-  if(!targets.length) return;
+  const items = Array.from(links)
+    .map(a=>({ a, target: document.getElementById(a.dataset.target) }))
+    .filter(x=>x.target);
+  if(!items.length) return;
+
+  // Distance depuis le haut de la fenêtre en dessous de laquelle une section
+  // est considérée "atteinte" (hauteur du bandeau + nav + sous-nav collés).
+  const STACK_OFFSET = 190;
 
   const setActive = (id)=>{
     links.forEach(a=> a.classList.toggle('active', a.dataset.target === id));
   };
 
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting) setActive(entry.target.id);
+  let ticking = false;
+  function update(){
+    ticking = false;
+    let current = null;
+    items.forEach(({a, target})=>{
+      const top = target.getBoundingClientRect().top;
+      if(top <= STACK_OFFSET) current = a.dataset.target; // dernière section dont on a dépassé le haut
     });
-  }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+    setActive(current); // null tant qu'on est encore dans la Programmation (aucun onglet actif)
+  }
 
-  targets.forEach(t=> io.observe(t));
+  window.addEventListener('scroll', ()=>{
+    if(!ticking){ requestAnimationFrame(update); ticking = true; }
+  }, { passive:true });
+  update(); // état initial (au chargement, en Programmation → aucun onglet actif)
 
   links.forEach(a=>{
     a.addEventListener('click', ()=> vib(6));
