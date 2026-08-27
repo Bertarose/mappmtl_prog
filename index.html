@@ -246,7 +246,7 @@ nav{
 }
 .halftone-wrap .green-fade{
   position:absolute;left:0;right:0;bottom:0;height:55%;z-index:2;pointer-events:none;
-  background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 68%, var(--lime) 100%);
+  background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 68%, rgba(57,255,20,.55) 100%);
 }
 .halftone-toggle{
   position:absolute;top:12px;right:12px;z-index:4;
@@ -1134,7 +1134,7 @@ const DAYS = [
   ]},
   { date:"2026-09-30", d:"30", moFr:"SEPT", moEn:"SEPT", wFr:"MER", wEn:"WED", events:[
     { time:"17h — 22h", venue:"moment", tixUrl:"https://www.zeffy.com/fr-CA/ticketing/tournoi-de-ping-pong-interactif-de-la-creativite-numerique-de-montreal", img:"/media/soiree-tournoi-ping-pong.jpg",
-      fr:{ t:"Soirée bénéfice / réseautage - Tournoi de ping-pong interactif de la créativité numérique de Montréal", d:"<p>Dans le cadre de sa campagne de levée de fonds, MAPP_MTL convie le public et la communauté créative montréalaise à sa 4ᵉ édition du tournoi de ping-pong. Cette soirée unique en son genre réunira les studios, les collectifs et les organisations du milieu de la créativité numérique dans une compétition amicale sur une table augmentée avec projection interactive, au cœur des studios de son partenaire de longue date, Moment Factory.</p><p>Au-delà du tournoi, cette soirée est une excellente occasion de rencontrer les professionnels des studios, de discuter, d'échanger et de créer des liens dans un cadre convivial.</p>", price:"10 $ – Tarif étudiant et artiste · 20 $ – Admission générale · 100 $ – Billet donateur (inclus boisson, nourriture, siège réservé, rencontre avec le directeur et le conseil d'administration de MAPP)" },
+      fr:{ t:"MAPP_X | Soirée bénéfice / réseautage MAPP - Tournoi de ping-pong interactif de la créativité numérique 🏓", d:"<p>Le mercredi 30 septembre de 17h à 22h aura lieu la 4ᵉ édition de la Soirée bénéfice / réseautage MAPP - Tournoi de ping-pong interactif de la créativité numérique de Montréal.</p><p>🕒 Mercredi 30 septembre de 17h à 22h<br>📍 Lieu: Moment Factory, 6250 Av du Parc, Montréal</p><p>Assistez à la 4ᵉ édition du tournoi inter-studios de ping-pong sur table augmentée avec projection interactive, dans le cadre de la campagne de levée de fonds de MAPP_MTL. Un événement convivial réunissant les studios de création numérique de Montréal, offrant une belle occasion de rencontrer les professionnels du milieu, réseauter et soutenir votre studio préféré. Tous les fonds récoltés seront reversés à MAPP_MTL pour soutenir ses activités.</p><p>🎟 10$ - Tarif étudiant et artiste<br>🎟 20$ - Admission générale<br>🎟 100$ - Billet donateur (inclus boisson, nourriture, siège réservé, rencontre avec le directeur et le conseil d'administration de MAPP)</p><p><a href=\"https://www.zeffy.com/fr-CA/ticketing/tournoi-de-ping-pong-interactif-de-la-creativite-numerique-de-montreal\" target=\"_blank\" rel=\"noopener\">Réservez vos billets ici</a></p>", price:"10 $ – Tarif étudiant et artiste · 20 $ – Admission générale · 100 $ – Billet donateur (inclus boisson, nourriture, siège réservé, rencontre avec le directeur et le conseil d'administration de MAPP)" },
       en:{ t:"Benefit / Networking Night - Montreal Digital Creativity Interactive Ping-Pong Tournament", d:"<p>As part of its fundraising campaign, MAPP_MTL invites the public and Montreal's creative community to the 4th edition of its ping-pong tournament. This one-of-a-kind evening will bring together studios, collectives and organizations from the digital creativity scene in a friendly competition on an augmented table with interactive projection, at the heart of the studios of its long-time partner, Moment Factory.</p><p>Beyond the tournament, this evening is an excellent opportunity to meet studio professionals, chat, exchange ideas and build connections in a welcoming setting.</p>", price:"$10 – Student and artist rate · $20 – General admission · $100 – Donor ticket (includes a drink, food, a reserved seat, and a meeting with MAPP's director and board of directors)" } }
   ]},
   { date:"2026-10-01", d:"01", moFr:"OCT", moEn:"OCT", wFr:"JEU", wEn:"THU", events:[
@@ -2170,10 +2170,10 @@ function openEvent(dayIdx, evIdx){
     : day.wEn+' '+day.d+' '+day.moEn;
 
   const freeTag = ev.free
-    ? `<span style="display:inline-block;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;background:var(--navy);color:var(--white);border:1px solid var(--black);margin-bottom:14px;">${ev.venue==='vanhorne' ? (lang==='fr'?'Gratuit · Sur inscription':'Free · Registration required') : (lang==='fr'?'Gratuit · Entrée libre':'Free · All welcome')}</span><br>`
+    ? `<span style="display:inline-block;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;background:var(--white);color:var(--black);border:1px solid var(--black);margin-bottom:14px;">${ev.venue==='vanhorne' ? (lang==='fr'?'Gratuit · Sur inscription':'Free · Registration required') : (lang==='fr'?'Gratuit · Entrée libre':'Free · All welcome')}</span><br>`
     : '';
   const priceTag = c.price
-    ? `<span style="display:inline-block;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;background:var(--navy);color:var(--white);margin-bottom:14px;">🎟 ${c.price}</span><br>`
+    ? `<span style="display:inline-block;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;background:var(--white);color:var(--black);border:1px solid var(--black);margin-bottom:14px;">🎟 ${c.price}</span><br>`
     : '';
   const tixUrl = ev.tixUrl || (ev.free ? null : "https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026");
   const tixLink = tixUrl
@@ -2216,7 +2216,7 @@ function openInstallation(idx){
   const dateLabel = lang==='fr' ? ins.dateFr : ins.dateEn;
 
   const freeTag = ins.free
-    ? `<span style="display:inline-block;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;background:var(--navy);color:var(--white);border:1px solid var(--black);margin-bottom:14px;">${lang==='fr'?'Gratuit · Entrée libre':'Free · All welcome'}</span><br>`
+    ? `<span style="display:inline-block;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;background:var(--white);color:var(--black);border:1px solid var(--black);margin-bottom:14px;">${lang==='fr'?'Gratuit · Entrée libre':'Free · All welcome'}</span><br>`
     : '';
 
   document.getElementById('ev-body').innerHTML = `
