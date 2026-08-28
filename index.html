@@ -1374,7 +1374,7 @@ updateArtistProfile("collectif-ferias", {
 });
 
 ARTISTS.push(
-  { slug:"aude-guivarch", name:"Aude Guivarc'h", dayIdx:2, venue:"vanhorne", cat:"vj",
+  { slug:"aude-guivarch", name:"Aude Guivarc'h", img:"/media/artists/aude-guivarch.jpg", dayIdx:2, venue:"vanhorne", cat:"vj",
     appearances:[
       { venue:"vanhorne", fr:"1–3 OCT · SKATEPARK VAN HORNE", en:"OCT 1–3 · VAN HORNE SKATEPARK" }
     ],
@@ -2538,8 +2538,8 @@ document.addEventListener('keydown', e=>{
       return;
     }
     if(isIOS){
-      showHint(isEn ? 'On iPhone/iPad: tap the Share icon, then "Add to Home Screen".'
-                    : 'Sur iPhone/iPad : appuyez sur l\'icône Partager, puis « Sur l\'écran d\'accueil ».');
+      showHint(isEn ? 'On iPhone/iPad: tap the Share icon in the address bar, then "Add to Home Screen".'
+                    : 'Sur iPhone/iPad : appuyez sur l\'icône Partager dans la barre d\'adresse, puis « Sur l\'écran d\'accueil ».');
       return;
     }
     if(isAndroid){
@@ -2577,8 +2577,8 @@ document.addEventListener('keydown', e=>{
   if(isIOS){
     // iOS n'a pas de prompt natif : on affiche l'instruction "Partager → Sur l'écran d'accueil"
     document.getElementById('ib-text-body').textContent = (document.documentElement.lang === 'en')
-      ? 'Add MAPP_MTL to your home screen: tap Share, then "Add to Home Screen".'
-      : 'Ajoutez MAPP_MTL à votre écran d\'accueil : appuyez sur Partager, puis « Sur l\'écran d\'accueil ».';
+      ? 'Add MAPP_MTL to your home screen: tap the Share icon in the address bar, then "Add to Home Screen".'
+      : 'Ajoutez MAPP_MTL à votre écran d\'accueil : appuyez sur l\'icône Partager dans la barre d\'adresse, puis « Sur l\'écran d\'accueil ».';
     setTimeout(showInstallBanner, 1200);
   }
   // Android + desktop (Chrome/Edge) : le bandeau s'affiche dès que
