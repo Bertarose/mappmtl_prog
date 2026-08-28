@@ -1089,7 +1089,11 @@ footer a{color:var(--lime);text-decoration:none}
         <p data-fr="Ajoutez MAPP_MTL à votre écran d'accueil pour une meilleure expérience : plein écran, plus rapide, sans barre de navigateur."
            data-en="Add MAPP_MTL to your home screen for a better experience: fullscreen, faster, no browser bar.">Ajoutez MAPP_MTL à votre écran d'accueil pour une meilleure expérience : plein écran, plus rapide, sans barre de navigateur.</p>
         <button type="button" class="pwa-btn" id="pwa-install-btn" onclick="promptInstallApp()">
-          📲 <span data-fr="Installer l'app" data-en="Install the app">Installer l'app</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="flex-shrink:0">
+            <rect x="6" y="2" width="12" height="20" rx="2" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M12 8v6M9 11h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span data-fr="Installer l'app" data-en="Install the app">Installer l'app</span>
         </button>
         <p class="pwa-hint" id="pwa-hint"></p>
       </div>
@@ -2548,10 +2552,24 @@ document.addEventListener('keydown', e=>{
       hint.classList.add('show');
     }
   };
+  // Toujours écouter l'événement natif d'installation (même si le petit
+  // bandeau du bas a déjà été fermé) — sinon le bouton "Installer l'app"
+  // dans Infos utiles ne pourrait plus jamais déclencher le vrai prompt.
+  if(!isStandalone && !isIOS){
+    window.addEventListener('beforeinstallprompt', function(e){
+      e.preventDefault();
+      deferredPrompt = e;
+      var ibBtn = document.getElementById('ib-install-btn');
+      if(ibBtn) ibBtn.classList.remove('hide');
+      if(!bannerDismissed) showInstallBanner();
+    });
+  }
+
+  var bannerDismissed = false;
+  try{ bannerDismissed = localStorage.getItem(KEY) === '1'; }catch(e){}
+
   if(isStandalone) return;
-  var dismissed = false;
-  try{ dismissed = localStorage.getItem(KEY) === '1'; }catch(e){}
-  if(dismissed) return;
+  if(bannerDismissed) return;
 
   if(isIOS){
     // iOS n'a pas de prompt natif : on affiche l'instruction "Partager → Sur l'écran d'accueil"
@@ -2559,17 +2577,9 @@ document.addEventListener('keydown', e=>{
       ? 'Add MAPP_MTL to your home screen: tap Share, then "Add to Home Screen".'
       : 'Ajoutez MAPP_MTL à votre écran d\'accueil : appuyez sur Partager, puis « Sur l\'écran d\'accueil ».';
     setTimeout(showInstallBanner, 1200);
-  } else {
-    // Android + desktop (Chrome/Edge) : le navigateur propose l'installation
-    // native via beforeinstallprompt. Safari desktop ne le déclenche pas —
-    // dans ce cas, le bandeau ne s'affiche simplement jamais.
-    window.addEventListener('beforeinstallprompt', function(e){
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('ib-install-btn').classList.remove('hide');
-      showInstallBanner();
-    });
   }
+  // Android + desktop (Chrome/Edge) : le bandeau s'affiche dès que
+  // beforeinstallprompt se déclenche (géré ci-dessus).
   function showInstallBanner(){
     var el = document.getElementById('install-banner');
     if(el) el.classList.add('show');
