@@ -107,8 +107,12 @@ body{
 }
 
 /* ── Marquee ─────────────────────────────────────── */
-.marquee{
+.site-header{
   position:sticky;top:0;z-index:200;transform:translateZ(0);will-change:transform;
+  background:var(--black);
+}
+.marquee{
+  position:relative;z-index:auto;
   background:var(--fluo);color:var(--black);
   border-bottom:1px solid var(--black);
   overflow:hidden;white-space:nowrap;
@@ -129,13 +133,12 @@ body{
 @media(max-width:640px){
   .marquee{height:44px}
   .marquee-track span{font-size:16px;padding:0 16px;gap:16px}
-  nav{top:44px}
 }
 @media (prefers-reduced-motion: reduce){.marquee-track{animation:none}}
 
 /* ── Nav ─────────────────────────────────────────── */
 nav{
-  position:sticky;top:58px;z-index:190;transform:translateZ(0);will-change:transform;
+  position:relative;z-index:auto;
   background:var(--navy);border-bottom:1px solid #1e1e1e;
   display:flex;align-items:center;justify-content:space-between;
   padding:14px 18px;color:var(--white);
@@ -160,7 +163,7 @@ nav{
 
 /* ── Sous-navigation (accès rapide Artistes / Carte / Infos) ── */
 .subnav{
-  position:sticky;top:133px;z-index:180;
+  position:relative;z-index:auto;
   background:var(--black);border-bottom:1px solid rgba(255,255,255,.15);
   display:flex;gap:2px;padding:6px 14px;overflow-x:auto;
   -webkit-overflow-scrolling:touch;scrollbar-width:none;
@@ -174,7 +177,7 @@ nav{
 .subnav a:hover{color:var(--white)}
 .subnav a.active{color:var(--black);background:var(--white)}
 @media(max-width:640px){
-  .subnav{top:119px;padding:8px 10px}
+  .subnav{padding:8px 10px}
   .subnav a{font-size:15px;padding:14px 16px}
 }
 
@@ -573,12 +576,13 @@ nav{
 .ev-sheet.open{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
 .ev-sheet .ev-header{
   aspect-ratio:21/9;display:flex;align-items:center;justify-content:center;
-  border-bottom:1px solid var(--black);padding:20px;
+  border:1px solid var(--black);padding:20px;
 }
 .ev-sheet .ev-header.has-img{
   aspect-ratio:16/9;padding:0;background-size:contain;background-repeat:no-repeat;
-  background-position:center;background-color:var(--navy);position:relative;
+  background-position:center;background-color:var(--navy);position:relative;overflow:hidden;
 }
+.ev-glitch-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:pointer;}
 .ev-sheet .ev-header span{
   font-family:var(--cond);font-weight:500;font-size:clamp(22px,4.5vw,40px);
   text-transform:uppercase;letter-spacing:-0.02em;text-align:center;line-height:1;
@@ -932,6 +936,9 @@ footer a{color:var(--lime);text-decoration:none}
   </div>
 </div>
 
+<!-- EN-TÊTE (marquee + nav + sous-nav) : un seul bloc sticky pour éviter
+     tout décalage/flash de contenu au scroll sur mobile (Safari iOS) -->
+<div class="site-header">
 <!-- MARQUEE -->
 <a class="marquee" href="https://www.mappmtl.com/billetterie" target="_blank" rel="noopener" onclick="vib(10)" aria-label="Réserver un billet">
   <div class="marquee-track" id="marquee-track"></div>
@@ -959,6 +966,7 @@ footer a{color:var(--lime);text-decoration:none}
   <a href="#artistes" data-target="artistes" data-fr="Artistes" data-en="Artists">Artistes</a>
   <a href="#carte" data-target="carte" data-fr="Carte" data-en="Map">Carte</a>
   <a href="#infos" data-target="infos" data-fr="Infos utiles" data-en="Useful info">Infos utiles</a>
+</div>
 </div>
 
 <main id="main-content">
@@ -2122,6 +2130,150 @@ if (typeof _ca === 'function') {
 })();
 
 // ── FICHE ÉVÉNEMENT ──
+// ============================================================
+// EFFET GLITCH GÉNÉRATIF (façon TouchDesigner) sur les images
+// événement/installation. L'image reste nette, puis après 3s
+// l'effet démarre tout seul (bandes décalées + aberration
+// chromatique + scanlines) ; le doigt / la souris intensifie
+// localement l'effet au passage.
+// ============================================================
+let activeGlitch = null;
+
+function stopGlitch(){
+  if(!activeGlitch) return;
+  if(activeGlitch.timeoutId) clearTimeout(activeGlitch.timeoutId);
+  if(activeGlitch.raf) cancelAnimationFrame(activeGlitch.raf);
+  if(activeGlitch.cleanup) activeGlitch.cleanup();
+  activeGlitch = null;
+}
+
+function initGlitchImage(headerEl, imgUrl){
+  stopGlitch();
+  const canvas = document.createElement('canvas');
+  canvas.className = 'ev-glitch-canvas';
+  headerEl.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+
+  const state = { on:false, t:0, px:.5, py:.5, tx:.5, ty:.5, energy:0 };
+  let ready = false, redLayer = null, blueLayer = null;
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+
+  function fit(w,h){
+    const iw = img.naturalWidth, ih = img.naturalHeight;
+    if(!iw || !ih) return { dx:0, dy:0, dw:w, dh:h };
+    const scale = Math.min(w/iw, h/ih);
+    const dw = iw*scale, dh = ih*scale;
+    return { dx:(w-dw)/2, dy:(h-dh)/2, dw, dh };
+  }
+
+  function drawClean(){
+    const w = headerEl.clientWidth, h = headerEl.clientHeight;
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0,0,w,h);
+    if(!ready) return;
+    const { dx, dy, dw, dh } = fit(w,h);
+    ctx.drawImage(img, dx, dy, dw, dh);
+  }
+
+  function resize(){
+    const dpr = Math.min(window.devicePixelRatio||1, 2);
+    const w = headerEl.clientWidth, h = headerEl.clientHeight;
+    canvas.width = Math.max(1, w*dpr); canvas.height = Math.max(1, h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    drawClean();
+  }
+
+  img.onload = ()=>{
+    ready = true;
+    redLayer = document.createElement('canvas');
+    redLayer.width = img.naturalWidth; redLayer.height = img.naturalHeight;
+    const rctx = redLayer.getContext('2d');
+    rctx.drawImage(img,0,0);
+    rctx.globalCompositeOperation = 'multiply';
+    rctx.fillStyle = 'rgb(255,60,60)';
+    rctx.fillRect(0,0,redLayer.width,redLayer.height);
+
+    blueLayer = document.createElement('canvas');
+    blueLayer.width = img.naturalWidth; blueLayer.height = img.naturalHeight;
+    const bctx = blueLayer.getContext('2d');
+    bctx.drawImage(img,0,0);
+    bctx.globalCompositeOperation = 'multiply';
+    bctx.fillStyle = 'rgb(60,140,255)';
+    bctx.fillRect(0,0,blueLayer.width,blueLayer.height);
+
+    resize();
+  };
+  img.src = imgUrl;
+
+  function frame(){
+    if(!activeGlitch) return;
+    activeGlitch.raf = requestAnimationFrame(frame);
+    if(!state.on || !ready) return;
+
+    state.t += 1;
+    state.energy *= 0.93;
+    state.px += (state.tx - state.px) * 0.15;
+    state.py += (state.ty - state.py) * 0.15;
+
+    const w = headerEl.clientWidth, h = headerEl.clientHeight;
+    const { dx, dy, dw, dh } = fit(w,h);
+    drawClean();
+    if(dw <= 0 || dh <= 0) return;
+
+    // aberration chromatique légère
+    const shift = 2 + state.energy*10;
+    ctx.globalCompositeOperation = 'screen';
+    ctx.globalAlpha = 0.55;
+    ctx.drawImage(redLayer, dx-shift, dy, dw, dh);
+    ctx.drawImage(blueLayer, dx+shift, dy, dw, dh);
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+
+    // bandes décalées (slit-scan), amplifiées près du pointeur
+    const bands = 24;
+    const bandH = dh/bands;
+    for(let i=0;i<bands;i++){
+      const bandCenterNorm = (i+0.5)/bands;
+      const distToPointer = Math.abs(bandCenterNorm - state.py);
+      const amp = 3 + state.energy*40*(1 - Math.min(distToPointer*2.2, 1));
+      const noise = Math.sin(state.t*0.045 + i*1.9) * amp;
+      if(Math.abs(noise) < 1) continue;
+      const sy = i*(img.naturalHeight/bands);
+      const sh = img.naturalHeight/bands;
+      ctx.drawImage(img, 0, sy, img.naturalWidth, sh, dx+noise, dy+i*bandH, dw, bandH+1);
+    }
+
+    // scanlines discrètes
+    ctx.fillStyle = 'rgba(0,0,0,.08)';
+    for(let y=0; y<h; y+=3){ ctx.fillRect(0,y,w,1); }
+  }
+
+  function onMove(e){
+    const rect = headerEl.getBoundingClientRect();
+    const p = e.touches ? e.touches[0] : e;
+    state.tx = Math.min(1, Math.max(0, (p.clientX-rect.left)/rect.width));
+    state.ty = Math.min(1, Math.max(0, (p.clientY-rect.top)/rect.height));
+    state.energy = Math.min(1, state.energy + 0.35);
+  }
+  headerEl.addEventListener('mousemove', onMove);
+  headerEl.addEventListener('touchmove', onMove, { passive:true });
+  window.addEventListener('resize', resize);
+
+  const startTimer = setTimeout(()=>{ state.on = true; }, 3000);
+
+  activeGlitch = {
+    raf: requestAnimationFrame(frame),
+    timeoutId: startTimer,
+    cleanup(){
+      headerEl.removeEventListener('mousemove', onMove);
+      headerEl.removeEventListener('touchmove', onMove);
+      window.removeEventListener('resize', resize);
+    }
+  };
+}
+
 function openEvent(dayIdx, evIdx){
   vib(8);
   const day = DAYS[dayIdx], ev = day.events[evIdx];
@@ -2169,6 +2321,9 @@ function openEvent(dayIdx, evIdx){
   document.getElementById('ev-back').classList.add('open');
   document.getElementById('ev-sheet').classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  const evHeader = document.querySelector('#ev-body .ev-header.has-img');
+  if(evHeader && ev.img) initGlitchImage(evHeader, ev.img);
 }
 
 // ── FICHE INSTALLATION (toute la durée du festival) ──
@@ -2201,6 +2356,9 @@ function openInstallation(idx){
   document.getElementById('ev-back').classList.add('open');
   document.getElementById('ev-sheet').classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  const insHeader = document.querySelector('#ev-body .ev-header.has-img');
+  if(insHeader && ins.img) initGlitchImage(insHeader, ins.img);
 }
 
 // Convertit "19h00" / "17h — 22h" / "22h — 03h" en plage horaire exploitable
@@ -2270,6 +2428,7 @@ function shareEvent(dayIdx, evIdx){
 
 function closeEvent(){
   vib(6);
+  stopGlitch();
   document.getElementById('ev-back').classList.remove('open');
   document.getElementById('ev-sheet').classList.remove('open');
   document.body.style.overflow = '';
