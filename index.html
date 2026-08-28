@@ -249,6 +249,8 @@ nav{
   object-fit:cover;display:block;
 }
 .halftone-wrap .hero-media.hidden{display:none}
+/* l'image fixe doit rester entière (pas de recadrage), contrairement à la vidéo */
+.halftone-wrap img.hero-media{object-fit:contain;background:#000}
 #cursor-glow{
   position:fixed;inset:0;width:100vw;height:100vh;z-index:450;pointer-events:none;
   background:radial-gradient(260px circle at var(--gx,50%) var(--gy,50%), rgba(70,0,140,.75), rgba(70,0,140,0) 70%);
@@ -814,7 +816,7 @@ footer a{color:var(--lime);text-decoration:none}
 .ib-close{
   background:transparent;border:none;color:var(--grey-light);font-size:18px;line-height:1;cursor:pointer;padding:4px 2px;flex-shrink:0;
 }
-@media(min-width:641px){.install-banner{display:none!important}}
+@media(min-width:641px){.install-banner{padding-bottom:14px}}
 
 .hide{display:none!important}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
@@ -1918,6 +1920,8 @@ function renderLegend(){
 // HERO — bannière image par défaut / vidéo à la demande, sans effet
 // ============================================================
 let heroVideoOn = false;
+let heroGlitch = null;
+let activeModalGlitch = null;
 
 function toggleHeroVideo(){
   vib(10);
@@ -1930,6 +1934,7 @@ function startHeroVideo(){
   const img = document.getElementById('hero-banner');
   const vid = document.getElementById('hero-video');
   if(img) img.classList.add('hidden');
+  if(heroGlitch) heroGlitch.setActive(false);
   if(vid){
     vid.classList.remove('hidden');
     vid.currentTime = 0;
@@ -1945,6 +1950,7 @@ function stopHeroVideo(){
   const vid = document.getElementById('hero-video');
   if(vid){ vid.pause(); vid.classList.add('hidden'); }
   if(img) img.classList.remove('hidden');
+  if(heroGlitch) heroGlitch.setActive(true);
   setHeroToggleLabel();
 }
 
@@ -2003,13 +2009,26 @@ function initSubnav(){
 // ============================================================
 // INIT
 // ============================================================
-function boot(){
-  if(typeof L === 'undefined'){ return setTimeout(boot, 60); }
-  initMap();
+function boot(bootAttempt){
+  bootAttempt = bootAttempt || 0;
+  // On attend Leaflet pour la carte, mais pas indéfiniment : au-delà de ~4s
+  // (ex. CDN bloqué/lent), on démarre quand même le reste du site (bandeau,
+  // langue, etc.) plutôt que de tout laisser en suspens.
+  if(typeof L === 'undefined' && bootAttempt < 66){
+    return setTimeout(()=>boot(bootAttempt+1), 60);
+  }
+  try{ if(typeof L !== 'undefined') initMap(); }
+  catch(e){ console.error('initMap a échoué, on continue sans la carte :', e); }
   applyLang();
   initReveals();
   scheduleProgramAutoFocus();
   initSubnav();
+
+  // ── BANNIÈRE D'ACCUEIL — effet glitch générique sur l'image (pause si vidéo affichée) ──
+  const videoHeroEl = document.getElementById('video-hero');
+  if(videoHeroEl){
+    heroGlitch = createGlitchImage(videoHeroEl, '/media/mapp-dix-x-mapp10-banner.jpg', { fit:'cover' });
+  }
 
   // ── LUEUR VIOLETTE — suit la souris (desktop) et le doigt (mobile) sur toute la page ──
   (function(){
@@ -2137,32 +2156,25 @@ if (typeof _ca === 'function') {
 // chromatique + scanlines) ; le doigt / la souris intensifie
 // localement l'effet au passage.
 // ============================================================
-let activeGlitch = null;
+function createGlitchImage(headerEl, imgUrl, opts){
+  opts = opts || {};
+  const fitMode = opts.fit || 'contain';
+  const startDelay = opts.startDelay != null ? opts.startDelay : 3000;
 
-function stopGlitch(){
-  if(!activeGlitch) return;
-  if(activeGlitch.timeoutId) clearTimeout(activeGlitch.timeoutId);
-  if(activeGlitch.raf) cancelAnimationFrame(activeGlitch.raf);
-  if(activeGlitch.cleanup) activeGlitch.cleanup();
-  activeGlitch = null;
-}
-
-function initGlitchImage(headerEl, imgUrl){
-  stopGlitch();
   const canvas = document.createElement('canvas');
   canvas.className = 'ev-glitch-canvas';
   headerEl.appendChild(canvas);
   const ctx = canvas.getContext('2d');
 
-  const state = { on:false, t:0, px:.5, py:.5, tx:.5, ty:.5, energy:0 };
-  let ready = false, redLayer = null, blueLayer = null;
+  const state = { on:false, active:true, t:0, px:.5, py:.5, tx:.5, ty:.5, energy:0 };
+  let ready = false, redLayer = null, blueLayer = null, rafId = null;
   const img = new Image();
   img.crossOrigin = 'anonymous';
 
   function fit(w,h){
     const iw = img.naturalWidth, ih = img.naturalHeight;
     if(!iw || !ih) return { dx:0, dy:0, dw:w, dh:h };
-    const scale = Math.min(w/iw, h/ih);
+    const scale = fitMode === 'cover' ? Math.max(w/iw, h/ih) : Math.min(w/iw, h/ih);
     const dw = iw*scale, dh = ih*scale;
     return { dx:(w-dw)/2, dy:(h-dh)/2, dw, dh };
   }
@@ -2179,6 +2191,7 @@ function initGlitchImage(headerEl, imgUrl){
   function resize(){
     const dpr = Math.min(window.devicePixelRatio||1, 2);
     const w = headerEl.clientWidth, h = headerEl.clientHeight;
+    if(w<=0 || h<=0) return;
     canvas.width = Math.max(1, w*dpr); canvas.height = Math.max(1, h*dpr);
     canvas.style.width = w+'px'; canvas.style.height = h+'px';
     ctx.setTransform(dpr,0,0,dpr,0,0);
@@ -2205,12 +2218,12 @@ function initGlitchImage(headerEl, imgUrl){
 
     resize();
   };
+  img.onerror = ()=>{ ready = false; };
   img.src = imgUrl;
 
   function frame(){
-    if(!activeGlitch) return;
-    activeGlitch.raf = requestAnimationFrame(frame);
-    if(!state.on || !ready) return;
+    rafId = requestAnimationFrame(frame);
+    if(!state.active || !state.on || !ready) return;
 
     state.t += 1;
     state.energy *= 0.93;
@@ -2261,15 +2274,21 @@ function initGlitchImage(headerEl, imgUrl){
   headerEl.addEventListener('touchmove', onMove, { passive:true });
   window.addEventListener('resize', resize);
 
-  const startTimer = setTimeout(()=>{ state.on = true; }, 3000);
+  const startTimer = setTimeout(()=>{ state.on = true; }, startDelay);
+  rafId = requestAnimationFrame(frame);
 
-  activeGlitch = {
-    raf: requestAnimationFrame(frame),
-    timeoutId: startTimer,
-    cleanup(){
+  return {
+    setActive(active){
+      state.active = active;
+      canvas.style.display = active ? '' : 'none';
+    },
+    stop(){
+      clearTimeout(startTimer);
+      if(rafId) cancelAnimationFrame(rafId);
       headerEl.removeEventListener('mousemove', onMove);
       headerEl.removeEventListener('touchmove', onMove);
       window.removeEventListener('resize', resize);
+      if(canvas.parentNode) canvas.parentNode.removeChild(canvas);
     }
   };
 }
@@ -2323,7 +2342,8 @@ function openEvent(dayIdx, evIdx){
   document.body.style.overflow = 'hidden';
 
   const evHeader = document.querySelector('#ev-body .ev-header.has-img');
-  if(evHeader && ev.img) initGlitchImage(evHeader, ev.img);
+  if(activeModalGlitch){ activeModalGlitch.stop(); activeModalGlitch = null; }
+  if(evHeader && ev.img) activeModalGlitch = createGlitchImage(evHeader, ev.img);
 }
 
 // ── FICHE INSTALLATION (toute la durée du festival) ──
@@ -2358,7 +2378,8 @@ function openInstallation(idx){
   document.body.style.overflow = 'hidden';
 
   const insHeader = document.querySelector('#ev-body .ev-header.has-img');
-  if(insHeader && ins.img) initGlitchImage(insHeader, ins.img);
+  if(activeModalGlitch){ activeModalGlitch.stop(); activeModalGlitch = null; }
+  if(insHeader && ins.img) activeModalGlitch = createGlitchImage(insHeader, ins.img);
 }
 
 // Convertit "19h00" / "17h — 22h" / "22h — 03h" en plage horaire exploitable
@@ -2428,7 +2449,7 @@ function shareEvent(dayIdx, evIdx){
 
 function closeEvent(){
   vib(6);
-  stopGlitch();
+  if(activeModalGlitch){ activeModalGlitch.stop(); activeModalGlitch = null; }
   document.getElementById('ev-back').classList.remove('open');
   document.getElementById('ev-sheet').classList.remove('open');
   document.body.style.overflow = '';
@@ -2477,21 +2498,23 @@ document.addEventListener('keydown', e=>{
   var dismissed = false;
   try{ dismissed = localStorage.getItem(KEY) === '1'; }catch(e){}
   if(dismissed) return;
-  if(!isIOS && !isAndroid) return; // desktop: banner reste masqué (voir CSS)
 
-  if(isAndroid){
+  if(isIOS){
+    // iOS n'a pas de prompt natif : on affiche l'instruction "Partager → Sur l'écran d'accueil"
+    document.getElementById('ib-text-body').textContent = (document.documentElement.lang === 'en')
+      ? 'Add MAPP_MTL to your home screen: tap Share, then "Add to Home Screen".'
+      : 'Ajoutez MAPP_MTL à votre écran d\'accueil : appuyez sur Partager, puis « Sur l\'écran d\'accueil ».';
+    setTimeout(showInstallBanner, 1200);
+  } else {
+    // Android + desktop (Chrome/Edge) : le navigateur propose l'installation
+    // native via beforeinstallprompt. Safari desktop ne le déclenche pas —
+    // dans ce cas, le bandeau ne s'affiche simplement jamais.
     window.addEventListener('beforeinstallprompt', function(e){
       e.preventDefault();
       deferredPrompt = e;
       document.getElementById('ib-install-btn').classList.remove('hide');
       showInstallBanner();
     });
-  } else if(isIOS){
-    // iOS n'a pas de prompt natif : on affiche l'instruction "Partager → Sur l'écran d'accueil"
-    document.getElementById('ib-text-body').textContent = (document.documentElement.lang === 'en')
-      ? 'Add MAPP_MTL to your home screen: tap Share, then "Add to Home Screen".'
-      : 'Ajoutez MAPP_MTL à votre écran d\'accueil : appuyez sur Partager, puis « Sur l\'écran d\'accueil ».';
-    setTimeout(showInstallBanner, 1200);
   }
   function showInstallBanner(){
     var el = document.getElementById('install-banner');
