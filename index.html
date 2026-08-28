@@ -1871,10 +1871,17 @@ function initReveals(){
 function initMap(){
   const vh = VENUES.vanhorne;
   map = L.map('map',{scrollWheelZoom:false, dragging:false, tap:false}).setView([vh.lat, vh.lng], 13);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-    attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19, className:'map-tiles-bright'
+  // CARTO exige désormais une clé API pour ses fonds de carte gratuits (les
+  // tuiles "dark_all" affichent "API KEY REQUIRED" sans clé) — on utilise à la
+  // place le fond sombre d'Esri (gratuit, sans clé), en deux couches : le fond
+  // (couleurs/routes) puis les libellés (noms de rues, quartiers) par-dessus.
+  L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',{
+    attribution:'&copy; Esri &copy; OpenStreetMap contributors', maxZoom:16, className:'map-tiles-bright'
   }).addTo(map);
-  map.attributionControl.setPrefix(false); // enlève juste le lien "Leaflet", garde le crédit OSM/CARTO requis par leurs conditions d'utilisation
+  L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',{
+    maxZoom:16, className:'map-tiles-bright'
+  }).addTo(map);
+  map.attributionControl.setPrefix(false); // enlève juste le lien "Leaflet", garde le crédit Esri/OSM requis par leurs conditions d'utilisation
   Object.entries(VENUES).forEach(([key,v])=>{
     if (v.lat == null || v.lng == null) return; // lieu pas encore géolocalisé (adresse à confirmer) — pas de pin tant qu'on n'a pas la vraie adresse
     const sz = v.main?24:16;
