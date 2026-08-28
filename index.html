@@ -756,6 +756,15 @@ nav{
 .info-card h3{font-family:var(--cond);font-weight:500;font-size:19px;text-transform:uppercase;margin-bottom:8px;letter-spacing:-0.01em}
 .info-card p{font-size:17px;line-height:1.6;color:rgba(0,0,0,.75)}
 .info-card a{color:var(--black);font-weight:700;text-decoration:underline;text-decoration-color:var(--lime);text-decoration-thickness:2px}
+.pwa-btn{
+  display:inline-flex;align-items:center;gap:8px;margin-top:12px;cursor:pointer;
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  border:1px solid var(--black);color:var(--black);background:transparent;
+  padding:9px 14px;transition:.12s;
+}
+.pwa-btn:hover{background:var(--lime)}
+.pwa-hint{margin-top:10px;font-size:14px;line-height:1.5;color:rgba(0,0,0,.65);display:none}
+.pwa-hint.show{display:block}
 @media(min-width:640px){.info-grid{grid-template-columns:1fr 1fr}
   .info-card:nth-child(odd){border-right:1px solid var(--black)}
   .info-card:nth-last-child(2){border-bottom:none}
@@ -1074,6 +1083,15 @@ footer a{color:var(--lime);text-decoration:none}
       <div class="info-card">
         <h3 data-fr="Suivez MAPP" data-en="Follow MAPP">Suivez MAPP</h3>
         <p><a href="https://www.mappmtl.com" target="_blank" rel="noopener">mappmtl.com</a> · <a href="https://www.instagram.com/mapp_mtl" target="_blank" rel="noopener">@mapp_mtl</a></p>
+      </div>
+      <div class="info-card" id="pwa-card">
+        <h3 data-fr="Installez l'app" data-en="Install the app">Installez l'app</h3>
+        <p data-fr="Ajoutez MAPP_MTL à votre écran d'accueil pour une meilleure expérience : plein écran, plus rapide, sans barre de navigateur."
+           data-en="Add MAPP_MTL to your home screen for a better experience: fullscreen, faster, no browser bar.">Ajoutez MAPP_MTL à votre écran d'accueil pour une meilleure expérience : plein écran, plus rapide, sans barre de navigateur.</p>
+        <button type="button" class="pwa-btn" id="pwa-install-btn" onclick="promptInstallApp()">
+          📲 <span data-fr="Installer l'app" data-en="Install the app">Installer l'app</span>
+        </button>
+        <p class="pwa-hint" id="pwa-hint"></p>
       </div>
     </div>
   </div>
@@ -2493,6 +2511,42 @@ document.addEventListener('keydown', e=>{
     var el = document.getElementById('install-banner');
     if(el) el.classList.remove('show');
     if(!silent){ try{ localStorage.setItem(KEY, '1'); }catch(e){} }
+  };
+
+  // ── Bouton "Installer l'app" dans Infos utiles ──
+  // Réutilise le même deferredPrompt que le bandeau ; couvre aussi les cas
+  // où le bandeau a déjà été fermé/ignoré, ou n'est jamais apparu (Safari desktop).
+  window.promptInstallApp = function(){
+    vib(10);
+    var hint = document.getElementById('pwa-hint');
+    var isEn = document.documentElement.lang === 'en';
+    if(isStandalone){
+      showHint(isEn ? 'MAPP_MTL is already installed on this device — look for it on your home screen.'
+                    : 'MAPP_MTL est déjà installée sur cet appareil — vous la trouverez sur votre écran d\'accueil.');
+      return;
+    }
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.finally(function(){ deferredPrompt = null; dismissInstallBanner(true); });
+      return;
+    }
+    if(isIOS){
+      showHint(isEn ? 'On iPhone/iPad: tap the Share icon, then "Add to Home Screen".'
+                    : 'Sur iPhone/iPad : appuyez sur l\'icône Partager, puis « Sur l\'écran d\'accueil ».');
+      return;
+    }
+    if(isAndroid){
+      showHint(isEn ? 'Open your browser menu (⋮) and choose "Install app" or "Add to Home screen".'
+                    : 'Ouvrez le menu de votre navigateur (⋮) et choisissez « Installer l\'application » ou « Ajouter à l\'écran d\'accueil ».');
+      return;
+    }
+    showHint(isEn ? 'Look for an install icon in your browser\'s address bar (usually on the right).'
+                  : 'Cherchez l\'icône d\'installation dans la barre d\'adresse de votre navigateur (généralement à droite).');
+    function showHint(msg){
+      if(!hint) return;
+      hint.textContent = msg;
+      hint.classList.add('show');
+    }
   };
   if(isStandalone) return;
   var dismissed = false;
