@@ -1256,8 +1256,8 @@ const DAYS = [
   ]},
   { date:"2026-10-01", d:"01", moFr:"OCT", moEn:"OCT", wFr:"JEU", wEn:"THU", events:[
     { time:"17h — 22h", venue:"vanhorne", free:true, pat:"p-black", tixUrl:"https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026", img:"/media/minute-mapp-night.jpg",
-      fr:{ t:"Soirée MINUTE_MAPP 2026", d:"<p>MINUTE_MAPP est une plateforme internationale de création où les artistes disposent de 60 secondes pour présenter une œuvre originale de projection mapping.</p><p>Cette soirée mettra en lumière plus de 60 créateurs venus des quatre coins du monde, offrant au public un panorama de la relève internationale et des nouvelles tendances en arts numériques.</p>" },
-      en:{ t:"MINUTE_MAPP Night 2026", d:"<p>MINUTE_MAPP is an international creation platform where artists have 60 seconds to present an original projection mapping piece.</p><p>This evening will showcase more than 60 creators from around the world, offering audiences a panorama of international emerging talent and new trends in digital art.</p>" } },
+      fr:{ t:"Soirée MINUTE_MAPP 2026", d:"<p>Le thème de cette année est CROISEMENT — celui des disciplines, des cultures et des époques qui se rencontrent sur la façade emblématique de l'ancien Million Tapis et Tuiles, au cœur du Mile End.</p><p>MINUTE_MAPP est une plateforme ouverte d'expression et d'exploration de nouvelles idées sous la forme de projections mapping de 60 secondes. Les artistes sont invité·e·s à transformer la façade emblématique surplombant le skatepark Van Horne en une toile pour des idées audacieuses et novatrices, inspirées par le thème de cette année.</p><p>Un jury prestigieux offrira un prix à leur MINUTE_MAPP préférée. L'événement sera également diffusé en ligne, où l'audience pourra voter pour le prix du public.</p><p>MINUTE_MAPP a vu le jour à Montréal en 2013 et présente un éventail diversifié de créateurs de différents milieux, dont plusieurs expérimentent pour la première fois cette forme de création. Cette soirée mettra en lumière plus de 60 créateurs venus des quatre coins du monde.</p>" },
+      en:{ t:"MINUTE_MAPP Night 2026", d:"<p>This year's theme is CROISEMENT — the intersection of disciplines, cultures, and eras meeting on the iconic façade of the former Million Tapis et Tuiles, in the heart of Mile End.</p><p>MINUTE_MAPP is an open platform for expression and the exploration of new ideas through 60-second projection mapping pieces. Artists are invited to transform the iconic façade overlooking the Van Horne skatepark into a canvas for bold, innovative ideas inspired by this year's theme.</p><p>A prestigious jury will award a prize to their favourite MINUTE_MAPP piece. The event will also be streamed online, where audiences can vote for the People's Choice award.</p><p>MINUTE_MAPP was born in Montreal in 2013 and features a diverse range of creators from different backgrounds, many of whom are experimenting with this form of creation for the first time. The evening will showcase more than 60 creators from around the world.</p>" } },
     { time:"17h — 22h", venue:"vanhorne", free:true, tixUrl:"https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026", img:"/media/fete-de-quartier-numerique.webp",
       timeline:[
         { fr:"Scène", en:"Stage", items:[
@@ -2338,6 +2338,7 @@ function createGlitchImage(headerEl, imgUrl, opts){
   opts = opts || {};
   const fitMode = opts.fit || 'contain';
   const startDelay = opts.startDelay != null ? opts.startDelay : 3000;
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const canvas = document.createElement('canvas');
   canvas.className = 'ev-glitch-canvas';
@@ -2452,8 +2453,16 @@ function createGlitchImage(headerEl, imgUrl, opts){
   headerEl.addEventListener('touchmove', onMove, { passive:true });
   window.addEventListener('resize', resize);
 
-  const startTimer = setTimeout(()=>{ state.on = true; }, startDelay);
-  rafId = requestAnimationFrame(frame);
+  // Respecte "réduire les animations" (OS/navigateur) : l'image reste statique et
+  // nette, sans effet glitch/aberration chromatique ni boucle d'animation continue.
+  let startTimer = null;
+  if(reduceMotion){
+    headerEl.removeEventListener('mousemove', onMove);
+    headerEl.removeEventListener('touchmove', onMove);
+  } else {
+    startTimer = setTimeout(()=>{ state.on = true; }, startDelay);
+    rafId = requestAnimationFrame(frame);
+  }
 
   return {
     setActive(active){
