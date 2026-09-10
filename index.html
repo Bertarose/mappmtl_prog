@@ -612,25 +612,30 @@ nav{
 .ev-sheet .ev-desc p,.sheet-body .bio p{margin:0 0 14px}
 .ev-sheet .ev-desc p:last-child,.sheet-body .bio p:last-child{margin-bottom:0}
 .ev-timeline{margin-top:18px;padding-top:16px;border-top:1px solid rgba(0,0,0,.12)}
-.ev-tl-track{margin-bottom:12px}
+.ev-tl-track{margin-bottom:18px}
 .ev-tl-track:last-of-type{margin-bottom:0}
-.ev-tl-track-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);margin-bottom:5px}
-.ev-tl-bar{position:relative;height:34px;background:rgba(0,0,0,.05);border:1px solid var(--black)}
-.ev-tl-seg{
-  position:absolute;top:0;bottom:0;background:var(--black);color:var(--white);
-  display:flex;align-items:center;padding:0 7px;overflow:hidden;border-right:1px solid var(--white);
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap;
-}
-.ev-tl-seg span{overflow:hidden;text-overflow:ellipsis}
-.ev-tl-seg.live{background:var(--lime);color:var(--black)}
-.ev-tl-now{position:absolute;top:-5px;bottom:-5px;width:2px;background:#e0353d;z-index:5;pointer-events:none}
+.ev-tl-track-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);margin-bottom:6px}
+.ev-tl-bar{position:relative;height:8px;background:rgba(0,0,0,.08);margin-bottom:8px}
+.ev-tl-seg{position:absolute;top:0;bottom:0;background:rgba(0,0,0,.35)}
+.ev-tl-seg.live{background:var(--lime)}
+.ev-tl-now{position:absolute;top:-4px;bottom:-4px;width:2px;background:#e0353d;z-index:5;pointer-events:none}
 .ev-tl-now::before{
   content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);
   width:6px;height:6px;border-radius:50%;background:#e0353d;
 }
-.ev-tl-hours{display:flex;justify-content:space-between;align-items:center;margin-top:6px;
-  font-family:var(--mono);font-size:10px;color:var(--grey);letter-spacing:.05em;text-transform:uppercase}
-.ev-tl-now-label{color:#e0353d;font-weight:700}
+.ev-tl-list{display:flex;flex-direction:column;gap:5px}
+.ev-tl-row{
+  display:flex;align-items:baseline;gap:9px;font-size:13.5px;line-height:1.4;
+  padding:5px 7px;border:1px solid transparent;
+}
+.ev-tl-row.live{background:rgba(200,255,0,.18);border-color:var(--lime)}
+.ev-tl-row-time{font-family:var(--mono);font-size:10.5px;color:var(--grey);white-space:nowrap;flex-shrink:0}
+.ev-tl-row.live .ev-tl-row-time{color:var(--black)}
+.ev-tl-row-label{flex:1;color:rgba(0,0,0,.85)}
+.ev-tl-live-tag{
+  font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.05em;
+  color:#c4270f;white-space:nowrap;flex-shrink:0;
+}
 @media(max-width:640px){
   .ev-sheet{left:0;right:0;top:auto;bottom:0;width:100%;max-height:88vh;
     transform:translateY(102%);border-left:none;border-right:none;border-bottom:none;box-shadow:none}
@@ -2524,7 +2529,7 @@ function renderEventTimeline(day, ev){
   };
 
   const tracksHtml = ev.timeline.map(track => {
-    const segsHtml = track.items.map(it => {
+    const items = track.items.map(it => {
       const segStart = toDate(it.start);
       const segEnd = it.end ? toDate(it.end) : new Date(segStart.getTime() + 30*60000);
       const left = Math.min(100, Math.max(0, (segStart-startDate)/totalMs*100));
@@ -2533,26 +2538,29 @@ function renderEventTimeline(day, ev){
       const live = nowInRange && now >= segStart && now <= segEnd;
       const timeLabel = it.end ? `${it.start}–${it.end}` : it.start;
       const label = it[lang] || it.fr;
-      return `<div class="ev-tl-seg${live?' live':''}" style="left:${left}%;width:${width}%;" title="${timeLabel} — ${label}"><span>${label}</span></div>`;
-    }).join('');
+      return { left, width, live, timeLabel, label };
+    });
+
+    const barSegs = items.map(it =>
+      `<div class="ev-tl-seg${it.live?' live':''}" style="left:${it.left}%;width:${it.width}%;"></div>`
+    ).join('');
+
+    const listRows = items.map(it => `
+      <div class="ev-tl-row${it.live?' live':''}">
+        <span class="ev-tl-row-time">${it.timeLabel}</span>
+        <span class="ev-tl-row-label">${it.label}</span>
+        ${it.live ? `<span class="ev-tl-live-tag">● ${lang==='fr'?'EN DIRECT':'LIVE'}</span>` : ''}
+      </div>`).join('');
+
     const trackLabel = track[lang] || track.fr;
     return `<div class="ev-tl-track">
       <div class="ev-tl-track-label">${trackLabel}</div>
-      <div class="ev-tl-bar">${segsHtml}${nowPct!=null ? `<div class="ev-tl-now" style="left:${nowPct}%;"></div>` : ''}</div>
+      <div class="ev-tl-bar">${barSegs}${nowPct!=null ? `<div class="ev-tl-now" style="left:${nowPct}%;"></div>` : ''}</div>
+      <div class="ev-tl-list">${listRows}</div>
     </div>`;
   }).join('');
 
-  const startLabel = day.date && ev.time.split('—')[0] ? ev.time.split('—')[0].trim() : '';
-  const endLabel = ev.time.includes('—') ? ev.time.split('—')[1].trim() : '';
-
-  return `<div class="ev-timeline">
-    ${tracksHtml}
-    <div class="ev-tl-hours">
-      <span>${startLabel}</span>
-      ${nowPct!=null ? `<span class="ev-tl-now-label">● ${lang==='fr'?'en ce moment':'happening now'}</span>` : ''}
-      <span>${endLabel}</span>
-    </div>
-  </div>`;
+  return `<div class="ev-timeline">${tracksHtml}</div>`;
 }
 function icsEscape(s){ return String(s).replace(/([,;])/g,'\\$1').replace(/\n/g,'\\n'); }
 function toICSDate(d){
