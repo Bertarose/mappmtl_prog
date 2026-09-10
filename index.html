@@ -2343,7 +2343,7 @@ function openEvent(dayIdx, evIdx){
     ? `<span style="display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 9px;background:var(--black);color:var(--white);white-space:nowrap;">${ev.venue==='vanhorne' ? (lang==='fr'?'Gratuit · Sur inscription':'Free · Registration required') : (lang==='fr'?'Gratuit · Entrée libre':'Free · All welcome')}</span>`
     : '';
   const priceTag = c.price
-    ? `<span style="display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 9px;background:var(--black);color:var(--white);white-space:nowrap;">🎟 ${c.price}</span>`
+    ? `<span style="display:block;width:fit-content;max-width:100%;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:6px 9px;background:var(--black);color:var(--white);white-space:normal;line-height:1.5;">🎟 ${c.price}</span>`
     : '';
   const tixUrl = ev.tixUrl || (ev.free ? null : "https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026");
   const tixLink = tixUrl
@@ -2357,10 +2357,11 @@ function openEvent(dayIdx, evIdx){
       ${ev.img ? '' : `<span>${c.t}</span>`}
     </div>
     <div style="padding:20px 18px 28px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:${priceTag?'6px':'10px'};">
         <span class="ev-time" style="margin-bottom:0;">${dateFmt} · ${ev.time}</span>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;">${freeTag}${priceTag}</div>
+        ${freeTag}
       </div>
+      ${priceTag ? `<div style="margin-bottom:10px;">${priceTag}</div>` : ''}
       <h2 id="ev-title" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;color:var(--black);">${c.t}</h2>
       <div class="ev-desc">${c.d}</div>
       ${tixLink}
