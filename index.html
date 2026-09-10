@@ -611,6 +611,26 @@ nav{
 .ev-sheet .ev-desc{font-size:18px;line-height:1.65;margin-top:16px;color:rgba(0,0,0,.8)}
 .ev-sheet .ev-desc p,.sheet-body .bio p{margin:0 0 14px}
 .ev-sheet .ev-desc p:last-child,.sheet-body .bio p:last-child{margin-bottom:0}
+.ev-timeline{margin-top:18px;padding-top:16px;border-top:1px solid rgba(0,0,0,.12)}
+.ev-tl-track{margin-bottom:12px}
+.ev-tl-track:last-of-type{margin-bottom:0}
+.ev-tl-track-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);margin-bottom:5px}
+.ev-tl-bar{position:relative;height:34px;background:rgba(0,0,0,.05);border:1px solid var(--black)}
+.ev-tl-seg{
+  position:absolute;top:0;bottom:0;background:var(--black);color:var(--white);
+  display:flex;align-items:center;padding:0 7px;overflow:hidden;border-right:1px solid var(--white);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap;
+}
+.ev-tl-seg span{overflow:hidden;text-overflow:ellipsis}
+.ev-tl-seg.live{background:var(--lime);color:var(--black)}
+.ev-tl-now{position:absolute;top:-5px;bottom:-5px;width:2px;background:#e0353d;z-index:5;pointer-events:none}
+.ev-tl-now::before{
+  content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);
+  width:6px;height:6px;border-radius:50%;background:#e0353d;
+}
+.ev-tl-hours{display:flex;justify-content:space-between;align-items:center;margin-top:6px;
+  font-family:var(--mono);font-size:10px;color:var(--grey);letter-spacing:.05em;text-transform:uppercase}
+.ev-tl-now-label{color:#e0353d;font-weight:700}
 @media(max-width:640px){
   .ev-sheet{left:0;right:0;top:auto;bottom:0;width:100%;max-height:88vh;
     transform:translateY(102%);border-left:none;border-right:none;border-bottom:none;box-shadow:none}
@@ -1203,12 +1223,33 @@ const DAYS = [
       fr:{ t:"Soirée MINUTE_MAPP 2026", d:"<p>MINUTE_MAPP est une plateforme internationale de création où les artistes disposent de 60 secondes pour présenter une œuvre originale de projection mapping.</p><p>Cette soirée mettra en lumière plus de 60 créateurs venus des quatre coins du monde, offrant au public un panorama de la relève internationale et des nouvelles tendances en arts numériques.</p>" },
       en:{ t:"MINUTE_MAPP Night 2026", d:"<p>MINUTE_MAPP is an international creation platform where artists have 60 seconds to present an original projection mapping piece.</p><p>This evening will showcase more than 60 creators from around the world, offering audiences a panorama of international emerging talent and new trends in digital art.</p>" } },
     { time:"17h — 22h", venue:"vanhorne", free:true, tixUrl:"https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026", img:"/media/fete-de-quartier-numerique.webp",
-      fr:{ t:"Fête de quartier numérique", d:"<p><strong>Événement phare du festival</strong></p><p>Soirée d'ouverture de la Fête de quartier numérique.</p><p>+ KIOSQUES CULINAIRES | Cantine MAPP + Ta Chido Snack-bar mexicain 🌮</p><p>▪ 17h–18h30 — Cuerpos (DJ set)<br>▪ 21h–22h — Cuerpos (DJ set)</p><p><strong>Million Tapis et Tuiles</strong><br>▪ 18h30 — Soirée d'ouverture<br>▪ 19h — MINUTE_MAPP : 60 créateurs locaux et internationaux</p><p><strong>Entrepôt St-Lawrence (projections)</strong><br>▪ 19h–22h — Studio Baillat (QC/CA), Sabrina Ratté (QC/CA), Téo (FR/QC/CA), Aude Guivarc'h (QC/CA)</p><p>☔ L'événement aura lieu même en cas de pluie.<br>MAPP s'engage à assurer un environnement festif aussi sécuritaire, convivial et inclusif que possible pour toutes et tous.</p>" },
+      timeline:[
+        { fr:"Scène", en:"Stage", items:[
+          { start:"17h", end:"18h30", fr:"Cuerpos (DJ set)", en:"Cuerpos (DJ set)" },
+          { start:"21h", end:"22h", fr:"Cuerpos (DJ set)", en:"Cuerpos (DJ set)" }
+        ]},
+        { fr:"Million Tapis et Tuiles", en:"Million Tapis et Tuiles", items:[
+          { start:"18h30", fr:"Soirée d'ouverture", en:"Opening night" },
+          { start:"19h", fr:"MINUTE_MAPP · 60 créateurs", en:"MINUTE_MAPP · 60 creators" }
+        ]},
+        { fr:"Entrepôt St-Lawrence (projections)", en:"St-Lawrence Warehouse (projections)", items:[
+          { start:"19h", end:"22h", fr:"Studio Baillat, Sabrina Ratté, Téo, Aude Guivarc'h", en:"Studio Baillat, Sabrina Ratté, Téo, Aude Guivarc'h" }
+        ]}
+      ],
+      fr:{ t:"Fête de quartier numérique", d:"<p><strong>Événement phare du festival</strong></p><p>Soirée d'ouverture de la Fête de quartier numérique.</p><p>+ KIOSQUES CULINAIRES | Cantine MAPP + Ta Chido Snack-bar mexicain 🌮</p><p>☔ L'événement aura lieu même en cas de pluie.<br>MAPP s'engage à assurer un environnement festif aussi sécuritaire, convivial et inclusif que possible pour toutes et tous.</p>" },
       en:{ t:"Digital Block Party", d:"<p><strong>Festival flagship event</strong></p><p>True to its roots, this event offers a festive program blending video mapping projections with more than 60 local and international artists presenting their work on the neighbourhood's iconic former store, Million Tapis et Tuiles.</p><p>JS Baillat (QC/CA), Sabrina Ratté (QC/CA), Téo (FR/QC/CA), and Aude Guivarc'h (QC/CA) will present spectacular works on the iconic Saint-Lawrence warehouse, while electronic music performances will be offered by Studio Baillat on Friday night and the Ferias collective on Saturday night, featuring artists Alina and Guthrie. Festival-goers can also enjoy food stands in a welcoming block-party atmosphere.</p>" } }
   ]},
   { date:"2026-10-02", d:"02", moFr:"OCT", moEn:"OCT", wFr:"VEN", wEn:"FRI", events:[
     { time:"17h — 22h", venue:"vanhorne", free:true, tixUrl:"https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026", img:"/media/fete-de-quartier-numerique.webp",
-      fr:{ t:"Fête de quartier numérique", d:"<p><strong>Événement phare du festival</strong></p><p>+ KIOSQUES CULINAIRES | Cantine MAPP + Ta Chido Snack-bar mexicain 🌮</p><p>▪ 17h–22h — Programmation musicale présentée par Baillat Studio</p><p><strong>Entrepôt St-Lawrence (projections)</strong><br>▪ 19h–22h — Studio Baillat (QC/CA), Sabrina Ratté (QC/CA), Téo (FR/QC/CA), Aude Guivarc'h (QC/CA)</p><p>☔ L'événement aura lieu même en cas de pluie.<br>MAPP s'engage à assurer un environnement festif aussi sécuritaire, convivial et inclusif que possible pour toutes et tous.</p>" },
+      timeline:[
+        { fr:"Scène", en:"Stage", items:[
+          { start:"17h", end:"22h", fr:"Programmation musicale — Studio Baillat", en:"Music program — Studio Baillat" }
+        ]},
+        { fr:"Entrepôt St-Lawrence (projections)", en:"St-Lawrence Warehouse (projections)", items:[
+          { start:"19h", end:"22h", fr:"Studio Baillat, Sabrina Ratté, Téo, Aude Guivarc'h", en:"Studio Baillat, Sabrina Ratté, Téo, Aude Guivarc'h" }
+        ]}
+      ],
+      fr:{ t:"Fête de quartier numérique", d:"<p><strong>Événement phare du festival</strong></p><p>+ KIOSQUES CULINAIRES | Cantine MAPP + Ta Chido Snack-bar mexicain 🌮</p><p>☔ L'événement aura lieu même en cas de pluie.<br>MAPP s'engage à assurer un environnement festif aussi sécuritaire, convivial et inclusif que possible pour toutes et tous.</p>" },
       en:{ t:"Digital Block Party", d:"<p><strong>Festival flagship event</strong></p><p>True to its roots, this event offers a festive program blending video mapping projections with more than 60 local and international artists presenting their work on the neighbourhood's iconic former store, Million Tapis et Tuiles.</p><p>JS Baillat (QC/CA), Sabrina Ratté (QC/CA), Téo (FR/QC/CA), and Aude Guivarc'h (QC/CA) will present spectacular works on the iconic Saint-Lawrence warehouse, while electronic music performances will be offered by Studio Baillat on Friday night and the Ferias collective on Saturday night, featuring artists Alina and Guthrie. Festival-goers can also enjoy food stands in a welcoming block-party atmosphere.</p>" } },
     { time:"22h — 03h", venue:"moment", tixUrl:"https://www.zeffy.com/fr-CA/ticketing/soiree-mapp--2026", img:"/media/soiree_mapp.webp",
       fr:{ t:"Soirée MAPP 2026", d:"<p>MAPP revient avec sa soirée incontournable chez Moment Factory, proposant un programme dansant et festif, une scénographie immersive et des projections mapping captivantes.</p><p>La programmation musicale de la soirée sera assurée par le Studio Baillat (QC/CA), tandis que les créations visuelles seront signées JS Baillat (QC/CA), Thisisnodesign (QC/CA) et Jules Roze (FR/QC/CA).</p><p>Célébrez cette 10e édition avec artistes, créateurs, partenaires et public fidèle.</p>", price:"20 $ – Early bird · 25 $ – Admission générale" },
@@ -1216,7 +1257,17 @@ const DAYS = [
   ]},
   { date:"2026-10-03", d:"03", moFr:"OCT", moEn:"OCT", wFr:"SAM", wEn:"SAT", events:[
     { time:"12h — 22h", venue:"vanhorne", free:true, tixUrl:"https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026", img:"/media/fete-de-quartier-numerique.webp",
-      fr:{ t:"Fête de quartier numérique", d:"<p><strong>Événement phare du festival</strong></p><p>+ KIOSQUES CULINAIRES | Cantine MAPP + Ta Chido Snack-bar mexicain 🌮</p><p>▪ 12h–17h — MAPP & Friends aux platines<br>▪ 17h–22h — Jam Tagtool<br>▪ 17h–22h — Programmation musicale présentée par le collectif Ferias : Alina et Guthrie (DJ sets)</p><p><strong>Entrepôt St-Lawrence (projections)</strong><br>▪ 19h–22h — Studio Baillat (QC/CA), Sabrina Ratté (QC/CA), Téo (FR/QC/CA), Aude Guivarc'h (QC/CA)</p><p>☔ L'événement aura lieu même en cas de pluie.<br>MAPP s'engage à assurer un environnement festif aussi sécuritaire, convivial et inclusif que possible pour toutes et tous.</p>" },
+      timeline:[
+        { fr:"Scène", en:"Stage", items:[
+          { start:"12h", end:"17h", fr:"MAPP & Friends aux platines", en:"MAPP & Friends on the decks" },
+          { start:"17h", end:"22h", fr:"Jam Tagtool", en:"Tagtool Jam" },
+          { start:"17h", end:"22h", fr:"Collectif Ferias · Alina & Guthrie (DJ sets)", en:"Collectif Ferias · Alina & Guthrie (DJ sets)" }
+        ]},
+        { fr:"Entrepôt St-Lawrence (projections)", en:"St-Lawrence Warehouse (projections)", items:[
+          { start:"19h", end:"22h", fr:"Studio Baillat, Sabrina Ratté, Téo, Aude Guivarc'h", en:"Studio Baillat, Sabrina Ratté, Téo, Aude Guivarc'h" }
+        ]}
+      ],
+      fr:{ t:"Fête de quartier numérique", d:"<p><strong>Événement phare du festival</strong></p><p>+ KIOSQUES CULINAIRES | Cantine MAPP + Ta Chido Snack-bar mexicain 🌮</p><p>☔ L'événement aura lieu même en cas de pluie.<br>MAPP s'engage à assurer un environnement festif aussi sécuritaire, convivial et inclusif que possible pour toutes et tous.</p>" },
       en:{ t:"Digital Block Party", d:"<p><strong>Festival flagship event</strong></p><p>True to its roots, this event offers a festive program blending video mapping projections with more than 60 local and international artists presenting their work on the neighbourhood's iconic former store, Million Tapis et Tuiles.</p><p>JS Baillat (QC/CA), Sabrina Ratté (QC/CA), Téo (FR/QC/CA), and Aude Guivarc'h (QC/CA) will present spectacular works on the iconic Saint-Lawrence warehouse, while electronic music performances will be offered by Studio Baillat on Friday night and the Ferias collective on Saturday night, featuring artists Alina and Guthrie. Festival-goers can also enjoy food stands in a welcoming block-party atmosphere.</p>" } }
   ]},
   { date:"2026-10-04", d:"04", moFr:"OCT", moEn:"OCT", wFr:"DIM", wEn:"SUN", events:[
@@ -2369,6 +2420,7 @@ function openEvent(dayIdx, evIdx){
       ${priceTag ? `<div style="margin-bottom:10px;">${priceTag}</div>` : ''}
       <h2 id="ev-title" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;color:var(--black);">${c.t}</h2>
       <div class="ev-desc">${c.d}</div>
+      ${renderEventTimeline(day, ev)}
       ${tixLink}
       <button class="ev-map-link" onclick="closeEvent();focusVenue('${ev.venue}')">
         📍 ${v[lang]} <span style="opacity:.5;margin-left:4px;">${lang==='fr'?'→ voir sur la carte':'→ view on map'}</span>
@@ -2450,6 +2502,57 @@ function eventDateRange(day, ev){
     endDate = new Date(startDate.getTime() + 3*3600*1000); // durée par défaut : 3h
   }
   return { startDate, endDate };
+}
+
+// Construit la mini-timeline visuelle d'un événement (ev.timeline), avec une
+// ligne "en ce moment" quand l'heure réelle tombe dans la plage de l'événement.
+function renderEventTimeline(day, ev){
+  if(!Array.isArray(ev.timeline) || !ev.timeline.length) return '';
+  const { startDate, endDate } = eventDateRange(day, ev);
+  const totalMs = endDate - startDate;
+  if(totalMs <= 0) return '';
+  const [Y,M,D] = day.date.split('-').map(Number);
+  const now = new Date();
+  const nowInRange = now >= startDate && now <= endDate;
+  const nowPct = nowInRange ? Math.min(100, Math.max(0, (now - startDate) / totalMs * 100)) : null;
+
+  const toDate = (hm) => {
+    const p = parseHM(hm);
+    let d = new Date(Y, M-1, D, p.h, p.m, 0);
+    if(d < startDate) d.setDate(d.getDate()+1); // passe minuit (ex. items après 00h)
+    return d;
+  };
+
+  const tracksHtml = ev.timeline.map(track => {
+    const segsHtml = track.items.map(it => {
+      const segStart = toDate(it.start);
+      const segEnd = it.end ? toDate(it.end) : new Date(segStart.getTime() + 30*60000);
+      const left = Math.min(100, Math.max(0, (segStart-startDate)/totalMs*100));
+      const rawWidth = (segEnd-segStart)/totalMs*100;
+      const width = Math.max(2, Math.min(100-left, rawWidth));
+      const live = nowInRange && now >= segStart && now <= segEnd;
+      const timeLabel = it.end ? `${it.start}–${it.end}` : it.start;
+      const label = it[lang] || it.fr;
+      return `<div class="ev-tl-seg${live?' live':''}" style="left:${left}%;width:${width}%;" title="${timeLabel} — ${label}"><span>${label}</span></div>`;
+    }).join('');
+    const trackLabel = track[lang] || track.fr;
+    return `<div class="ev-tl-track">
+      <div class="ev-tl-track-label">${trackLabel}</div>
+      <div class="ev-tl-bar">${segsHtml}${nowPct!=null ? `<div class="ev-tl-now" style="left:${nowPct}%;"></div>` : ''}</div>
+    </div>`;
+  }).join('');
+
+  const startLabel = day.date && ev.time.split('—')[0] ? ev.time.split('—')[0].trim() : '';
+  const endLabel = ev.time.includes('—') ? ev.time.split('—')[1].trim() : '';
+
+  return `<div class="ev-timeline">
+    ${tracksHtml}
+    <div class="ev-tl-hours">
+      <span>${startLabel}</span>
+      ${nowPct!=null ? `<span class="ev-tl-now-label">● ${lang==='fr'?'en ce moment':'happening now'}</span>` : ''}
+      <span>${endLabel}</span>
+    </div>
+  </div>`;
 }
 function icsEscape(s){ return String(s).replace(/([,;])/g,'\\$1').replace(/\n/g,'\\n'); }
 function toICSDate(d){
