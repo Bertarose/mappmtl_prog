@@ -80,6 +80,29 @@
   padding:10px 16px;text-decoration:none;transition:top .15s;
 }
 .skip-link:focus{top:12px}
+#update-banner{
+  position:fixed;left:50%;bottom:16px;transform:translate(-50%,140%);
+  z-index:10001;display:flex;align-items:center;gap:12px;
+  background:var(--black);color:var(--white);border:1px solid var(--lime);
+  padding:11px 12px 11px 16px;box-shadow:5px 5px 0 var(--lime);
+  font-family:var(--mono);font-size:12px;letter-spacing:.03em;
+  transition:transform .3s cubic-bezier(.2,.8,.2,1);
+  max-width:calc(100vw - 32px);
+}
+#update-banner.show{transform:translate(-50%,0)}
+#update-banner-btn{
+  font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  background:var(--lime);color:var(--black);border:none;padding:7px 12px;cursor:pointer;white-space:nowrap;
+}
+#update-banner-btn:hover{background:var(--white)}
+#update-banner-dismiss{
+  background:none;border:none;color:var(--grey);font-size:16px;line-height:1;cursor:pointer;padding:2px 4px;
+}
+#update-banner-dismiss:hover{color:var(--white)}
+@media(max-width:480px){
+  #update-banner{left:16px;right:16px;transform:translateY(140%);max-width:none}
+  #update-banner.show{transform:translateY(0)}
+}
 h1,h3,h4,.f-logo,.ghead .num,.live-badge,.marquee-track span{font-synthesis:none}
 html{scroll-behavior:smooth}
 body{
@@ -926,6 +949,14 @@ footer a{color:var(--lime);text-decoration:none}
 <body>
 <div id="cursor-glow" aria-hidden="true"></div>
 <a class="skip-link" href="#prog" data-fr="Aller au contenu" data-en="Skip to content">Aller au contenu</a>
+
+<!-- BANNIÈRE MISE À JOUR — masquée par défaut, affichée par le script SW ci-dessous
+     quand une nouvelle version de la app est détectée en arrière-plan. -->
+<div id="update-banner" role="status">
+  <span id="update-banner-text">Nouvelle version disponible</span>
+  <button id="update-banner-btn" type="button">Actualiser →</button>
+  <button id="update-banner-dismiss" type="button" aria-label="Fermer">×</button>
+</div>
 
 <!-- Sprite des formes utilisées par .float-obj (voir CSS + initReveals() dans le script) -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -2158,11 +2189,59 @@ function boot(bootAttempt){
 }
 boot();
 
-// ── SW — version auto ──
+// ── SW — version auto + bannière de mise à jour ──
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js?v=' + Math.floor(Date.now()/86400000))
+    .then(reg => {
+      // Une mise à jour est détectée pendant que la app est déjà ouverte/contrôlée
+      // (et non lors de la toute première installation) : on avertit la personne.
+      function watchForUpdate(worker){
+        if(!worker) return;
+        worker.addEventListener('statechange', () => {
+          if(worker.state === 'installed' && navigator.serviceWorker.controller){
+            showUpdateBanner();
+          }
+        });
+      }
+      if(reg.waiting && navigator.serviceWorker.controller) showUpdateBanner();
+      watchForUpdate(reg.installing);
+      reg.addEventListener('updatefound', () => watchForUpdate(reg.installing));
+
+      // Les PWA restent parfois ouvertes en arrière-plan pendant des jours sans
+      // jamais recharger : on relance une vérification quand la app redevient visible.
+      document.addEventListener('visibilitychange', () => {
+        if(document.visibilityState === 'visible') reg.update().catch(()=>{});
+      });
+    })
     .catch(()=>{});
+
+  // Recharge une seule fois lorsque le nouveau service worker prend le contrôle
+  // (déclenché par skipWaiting()/clients.claim() côté sw.js).
+  let swRefreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if(swRefreshing) return;
+    if(document.getElementById('update-banner').classList.contains('show')){
+      swRefreshing = true;
+      window.location.reload();
+    }
+  });
 }
+
+function showUpdateBanner(){
+  const el = document.getElementById('update-banner');
+  if(!el || el.classList.contains('show')) return;
+  document.getElementById('update-banner-text').textContent =
+    lang === 'fr' ? 'Nouvelle version disponible' : 'New version available';
+  document.getElementById('update-banner-btn').textContent =
+    lang === 'fr' ? 'Actualiser →' : 'Refresh →';
+  el.classList.add('show');
+}
+document.getElementById('update-banner-btn').addEventListener('click', () => {
+  window.location.reload();
+});
+document.getElementById('update-banner-dismiss').addEventListener('click', () => {
+  document.getElementById('update-banner').classList.remove('show');
+});
 
 // ── HAPTIQUE (iOS bloque vibrate — on détecte) ──
 const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent);
