@@ -2141,51 +2141,55 @@ function initSubnav(){
 // ============================================================
 function boot(bootAttempt){
   bootAttempt = bootAttempt || 0;
-  // On attend Leaflet pour la carte, mais pas indéfiniment : au-delà de ~4s
-  // (ex. CDN bloqué/lent), on démarre quand même le reste du site (bandeau,
-  // langue, etc.) plutôt que de tout laisser en suspens.
+  // Le bandeau, la langue, les cartes-événements etc. ne dépendent pas de la carte
+  // Leaflet — ils démarrent immédiatement, sans attendre quoi que ce soit du réseau.
+  if(bootAttempt === 0){
+    applyLang();
+    initReveals();
+    scheduleProgramAutoFocus();
+    initSubnav();
+
+    // ── BANNIÈRE D'ACCUEIL — effet glitch générique sur l'image (pause si vidéo affichée) ──
+    const videoHeroEl = document.getElementById('video-hero');
+    if(videoHeroEl){
+      heroGlitch = createGlitchImage(videoHeroEl, '/media/mapp-dix-x-mapp10-banner.jpg', { fit:'cover' });
+    }
+
+    // ── LUEUR VIOLETTE — suit la souris (desktop) et le doigt (mobile) sur toute la page ──
+    (function(){
+      const glow = document.getElementById('cursor-glow');
+      if(!glow) return;
+      let raf = null, pending = null;
+
+      function setPos(clientX, clientY){
+        pending = { x: clientX + 'px', y: clientY + 'px' };
+        if(!raf){
+          raf = requestAnimationFrame(()=>{
+            if(pending){ glow.style.setProperty('--gx', pending.x); glow.style.setProperty('--gy', pending.y); }
+            raf = null;
+          });
+        }
+      }
+      window.addEventListener('pointermove', e=>{
+        setPos(e.clientX, e.clientY);
+        glow.classList.add('active');
+      });
+      window.addEventListener('pointerleave', ()=> glow.classList.remove('active'));
+      window.addEventListener('touchmove', e=>{
+        if(e.touches[0]){ setPos(e.touches[0].clientX, e.touches[0].clientY); glow.classList.add('active'); }
+      }, {passive:true});
+      window.addEventListener('touchend', ()=> glow.classList.remove('active'));
+    })();
+    if(location.hash.startsWith('#a/')) openArtist(location.hash.slice(3), true);
+  }
+
+  // La carte, elle, dépend réellement de Leaflet : on l'attend séparément, sans
+  // bloquer le reste (au-delà de ~4s — CDN bloqué/lent — on abandonne simplement).
   if(typeof L === 'undefined' && bootAttempt < 66){
     return setTimeout(()=>boot(bootAttempt+1), 60);
   }
   try{ if(typeof L !== 'undefined') initMap(); }
   catch(e){ console.error('initMap a échoué, on continue sans la carte :', e); }
-  applyLang();
-  initReveals();
-  scheduleProgramAutoFocus();
-  initSubnav();
-
-  // ── BANNIÈRE D'ACCUEIL — effet glitch générique sur l'image (pause si vidéo affichée) ──
-  const videoHeroEl = document.getElementById('video-hero');
-  if(videoHeroEl){
-    heroGlitch = createGlitchImage(videoHeroEl, '/media/mapp-dix-x-mapp10-banner.jpg', { fit:'cover' });
-  }
-
-  // ── LUEUR VIOLETTE — suit la souris (desktop) et le doigt (mobile) sur toute la page ──
-  (function(){
-    const glow = document.getElementById('cursor-glow');
-    if(!glow) return;
-    let raf = null, pending = null;
-
-    function setPos(clientX, clientY){
-      pending = { x: clientX + 'px', y: clientY + 'px' };
-      if(!raf){
-        raf = requestAnimationFrame(()=>{
-          if(pending){ glow.style.setProperty('--gx', pending.x); glow.style.setProperty('--gy', pending.y); }
-          raf = null;
-        });
-      }
-    }
-    window.addEventListener('pointermove', e=>{
-      setPos(e.clientX, e.clientY);
-      glow.classList.add('active');
-    });
-    window.addEventListener('pointerleave', ()=> glow.classList.remove('active'));
-    window.addEventListener('touchmove', e=>{
-      if(e.touches[0]){ setPos(e.touches[0].clientX, e.touches[0].clientY); glow.classList.add('active'); }
-    }, {passive:true});
-    window.addEventListener('touchend', ()=> glow.classList.remove('active'));
-  })();
-  if(location.hash.startsWith('#a/')) openArtist(location.hash.slice(3), true);
 }
 boot();
 
