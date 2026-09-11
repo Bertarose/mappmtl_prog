@@ -142,10 +142,15 @@ body{
   overflow:hidden;white-space:nowrap;
   height:58px;display:flex;align-items:center;
   text-decoration:none;cursor:pointer;
+  /* isole ce bloc dans sa propre couche de composition : sur Safari iOS,
+     une animation CSS imbriquée dans un ancêtre position:sticky peut
+     geler/disparaître au scroll si elle ne possède pas sa propre couche */
+  transform:translateZ(0);-webkit-transform:translateZ(0);
 }
 .marquee-track{
   display:inline-flex;gap:0;animation:scroll 28s linear infinite;
   will-change:transform;
+  -webkit-backface-visibility:hidden;backface-visibility:hidden;
 }
 
 .marquee-track span{
