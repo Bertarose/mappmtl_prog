@@ -2054,6 +2054,10 @@ function openArtist(slug, fromHash){
   document.getElementById('sheet').classList.add('open');
   document.body.style.overflow = 'hidden';
   document.getElementById('sheet-close').focus({preventScroll:true});
+  // iOS Safari ignore parfois preventScroll et fait défiler la fiche pour amener
+  // l'élément focus dans le viewport, ce qui décale l'image vers le haut (le nom
+  // de l'artiste disparaît sous l'en-tête sticky). On force le retour en haut.
+  requestAnimationFrame(() => { document.getElementById('sheet').scrollTop = 0; });
   if(!fromHash) history.replaceState(null,'','#a/'+slug);
 }
 function closeArtist(){
