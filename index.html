@@ -830,6 +830,16 @@ nav{
 }
 
 /* ── Footer (noir) ───────────────────────────────── */
+.partners{padding:56px 18px 8px;text-align:center;background:var(--navy)}
+.partners-title{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:32px}
+.partners-grid{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:36px 44px;max-width:1000px;margin:0 auto}
+.partner-logo{height:34px;width:auto;max-width:140px;object-fit:contain;filter:grayscale(1) brightness(0) invert(1);opacity:.72;transition:opacity .15s}
+.partner-logo:hover{opacity:1}
+@media(max-width:640px){
+  .partners{padding:40px 16px 4px}
+  .partners-grid{gap:26px 30px}
+  .partner-logo{height:26px;max-width:110px}
+}
 footer{padding:48px 18px 60px;text-align:center;background:var(--navy);color:var(--white)}
 footer p{font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.78);margin-top:12px;letter-spacing:.05em;text-transform:uppercase;line-height:1.8}
 footer a{color:var(--lime);text-decoration:none}
@@ -1162,6 +1172,29 @@ footer a{color:var(--lime);text-decoration:none}
 
 </main>
 
+<section class="partners">
+  <p class="partners-title" data-fr="Partenaires" data-en="Partners">Partenaires</p>
+  <div class="partners-grid">
+    <img class="partner-logo" src="/media/partners/gouvernement-canada.png" alt="Gouvernement du Canada" loading="lazy">
+    <img class="partner-logo" src="/media/partners/gouvernement-quebec.png" alt="Gouvernement du Québec" loading="lazy">
+    <img class="partner-logo" src="/media/partners/ville-montreal.png" alt="Ville de Montréal" loading="lazy">
+    <img class="partner-logo" src="/media/partners/conseil-arts-canada.png" alt="Conseil des arts du Canada" loading="lazy">
+    <img class="partner-logo" src="/media/partners/conseil-arts-montreal.png" alt="Conseil des arts de Montréal" loading="lazy">
+    <img class="partner-logo" src="/media/partners/moment-factory.png" alt="Moment Factory" loading="lazy">
+    <img class="partner-logo" src="/media/partners/quartier-des-spectacles.png" alt="Quartier des Spectacles Montréal" loading="lazy">
+    <img class="partner-logo" src="/media/partners/cite-memoire.png" alt="Cité Mémoire" loading="lazy">
+    <img class="partner-logo" src="/media/partners/baillat-studio.png" alt="Baillat Studio" loading="lazy">
+    <img class="partner-logo" src="/media/partners/asahi.png" alt="Asahi" loading="lazy">
+    <img class="partner-logo" src="/media/partners/the-main.png" alt="The Main" loading="lazy">
+    <img class="partner-logo" src="/media/partners/tourisme-montreal.png" alt="Tourisme Montréal" loading="lazy">
+    <img class="partner-logo" src="/media/partners/bonjour-quebec.png" alt="Bonjour Québec" loading="lazy">
+    <img class="partner-logo" src="/media/partners/esse.png" alt="esse" loading="lazy">
+    <img class="partner-logo" src="/media/partners/le-lien-multimedia.png" alt="Le Lien Multimédia · Qui fait quoi" loading="lazy">
+    <img class="partner-logo" src="/media/partners/mtl-only.png" alt="MTL Only" loading="lazy">
+    <img class="partner-logo" src="/media/partners/le-fifa.png" alt="Le FIFA" loading="lazy">
+  </div>
+</section>
+
 <footer>
   <svg class="logo f-mark" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MAPP_MTL">
     <path d="M49.734,46.787h8.758c4.326,0,6.87,2.01,6.87,5.649s-2.544,5.878-6.844,5.878h-5.653v7.048h-3.129v-18.574l-.002-.002ZM58.059,55.667c2.696,0,4.046-1.018,4.046-3.129s-1.348-3.079-4.046-3.079h-5.196v6.208h5.196Z"/>
@@ -1357,7 +1390,7 @@ const ARTISTS = [
     fr:{ disc:"Fête de quartier numérique", bio:"TEO est un artiste visuel multidisciplinaire originaire du Sud de la France, basé entre Toulouse et Montréal. Son univers ludique et coloré s\u2019exprime à travers fresques murales, mapping vidéo, illustrations et environnements immersifs. Aussi engagé dans l\u2019enseignement du muralisme et de l\u2019animation, il crée des espaces qui reflètent les communautés qui les habitent, avec l\u2019intention d\u2019éveiller l\u2019enfant en chacun de nous." },
     en:{ disc:"Digital Block Party", bio:"TEO is a multidisciplinary visual artist from the South of France, based between Toulouse and Montreal. His playful, colourful world takes shape through murals, video mapping, illustration and immersive environments. Also active teaching muralism and animation, he creates spaces that reflect the communities they inhabit, aiming to awaken the child in all of us." },
     links:{} },
-  { slug:"dalkhafine", name:"Dalkhafine", img:"/media/artists/Dalkhafine.png", dayIdx:null, venue:"cite", cat:"vj",
+  { slug:"dalkhafine", name:"Dalkhafine", img:"/media/artists/Dalkhafine.jpg", dayIdx:null, venue:"cite", cat:"vj",
     sheetFocus:"center 30%",
     fr:{ disc:"Artiste visuelle · Montréal en Histoires", bio:"<p>Artiste multidisciplinaire franco-canadienne, Dalkhafine développe des univers immersifs à la croisée de l'illustration, du motion design, de la peinture, de l'installation et des arts visuels live.</p><p>Après une expérience dans le cinéma d'animation et le live show, elle construit un langage artistique singulier, porté par des couleurs franches, des compositions dynamiques et un imaginaire inspiré des cultures urbaines et de l'esthétique des années 90.</p><p>Elle collabore avec des marques et institutions internationales telles qu'Adobe, Adidas, Red Bull et Ubisoft, ainsi qu'avec des artistes comme Pharrell, Major Lazer et Jain.</p><p>Son travail se déploie également à travers des installations immersives et expériences grand format présentées au Canada, aux États-Unis, en Europe et en Asie, notamment à Art Basel et au Festival Croisements à Chengdu, en Chine.</p>" },
     en:{ disc:"Visual artist · Montréal en Histoires", bio:"<p>A French-Canadian multidisciplinary artist, Dalkhafine builds immersive worlds at the crossroads of illustration, motion design, painting, installation and live visual arts.</p><p>After working in animated film and live shows, she developed a distinctive artistic language marked by bold colours, dynamic compositions and an imagination drawn from urban culture and 90s aesthetics.</p><p>She has collaborated with international brands and institutions such as Adobe, Adidas, Red Bull and Ubisoft, as well as artists including Pharrell, Major Lazer and Jain.</p><p>Her work also extends to immersive installations and large-scale experiences presented across Canada, the United States, Europe and Asia, including at Art Basel and the Croisements Festival in Chengdu, China.</p>" },
@@ -1501,7 +1534,7 @@ ARTISTS.push(
     fr:{ disc:"MINUTE_MAPP · Émergence", bio:"Artiste multidisciplinaire belge, questionne la frontière entre intelligence humaine et artificielle." },
     en:{ disc:"MINUTE_MAPP · Émergence", bio:"A Belgian multidisciplinary artist, questioning the line between human and artificial intelligence." },
     links:{} },
-  { slug:"melesul3", name:"Melesul3", img:"/media/artists/MELSUL3.png", dayIdx:null, venue:"vanhorne", cat:"minute", country:"QC/CA", sheetRatio:"4/5",
+  { slug:"melesul3", name:"Melesul3", img:"/media/artists/melesul3.jpg", dayIdx:null, venue:"vanhorne", cat:"minute", country:"QC/CA", sheetRatio:"4/5",
     appearances:[{ venue:"vanhorne", fr:"1 oct. 2026 · Skatepark Van Horne", en:"Oct 1, 2026 · Van Horne Skatepark" }],
     fr:{ disc:"MINUTE_MAPP · Vitesse Limite", bio:"Actif dans la scène immersive montréalaise, relecture cinétique du croisement inspirée de 2001, l'odyssée de l'espace." },
     en:{ disc:"MINUTE_MAPP · Vitesse Limite", bio:"Active in Montreal's immersive scene, a kinetic take on crossing inspired by 2001: A Space Odyssey." },
@@ -1531,17 +1564,17 @@ ARTISTS.push(
     fr:{ disc:"MINUTE_MAPP · Planète Latente", bio:"Cinéaste et artiste en IA montréalais, exoplanète imaginaire née de l'espace latent d'une machine." },
     en:{ disc:"MINUTE_MAPP · Planète Latente", bio:"A Montreal filmmaker and AI artist, an imaginary exoplanet born from a machine's latent space." },
     links:{} },
-  { slug:"nikus", name:"Nikus", img:"/media/artists/NIKUS.png", dayIdx:null, venue:"vanhorne", cat:"minute", country:"AR", sheetRatio:"4/5",
+  { slug:"nikus", name:"Nikus", img:"/media/artists/nikus.jpg", dayIdx:null, venue:"vanhorne", cat:"minute", country:"AR", sheetRatio:"4/5",
     appearances:[{ venue:"vanhorne", fr:"1 oct. 2026 · Skatepark Van Horne", en:"Oct 1, 2026 · Van Horne Skatepark" }],
     fr:{ disc:"MINUTE_MAPP · Borders", bio:"Artiste VJ de La Plata (Argentine), explore le passage du temps à travers visuels et installations." },
     en:{ disc:"MINUTE_MAPP · Borders", bio:"A VJ artist from La Plata, Argentina, exploring the passage of time through visuals and installations." },
     links:{} },
-  { slug:"juko", name:"Juko", img:"/media/artists/JUKO.png", dayIdx:null, venue:"vanhorne", cat:"minute", country:"FR", sheetRatio:"4/5",
+  { slug:"juko", name:"Juko", img:"/media/artists/juko.jpg", dayIdx:null, venue:"vanhorne", cat:"minute", country:"FR", sheetRatio:"4/5",
     appearances:[{ venue:"vanhorne", fr:"1 oct. 2026 · Skatepark Van Horne", en:"Oct 1, 2026 · Van Horne Skatepark" }],
     fr:{ disc:"MINUTE_MAPP · Crossrift", bio:"Motion designer et sound designer basé près de Lyon, à la croisée de l'art génératif et de l'expérimentation sonore." },
     en:{ disc:"MINUTE_MAPP · Crossrift", bio:"A motion and sound designer based near Lyon, at the crossroads of generative art and sonic experimentation." },
     links:{} },
-  { slug:"thierno-toure", name:"Thierno Touré", img:"/media/artists/THIERNO.png", dayIdx:null, venue:"vanhorne", cat:"minute", country:"FR", sheetRatio:"4/5",
+  { slug:"thierno-toure", name:"Thierno Touré", img:"/media/artists/thierno-toure.jpg", dayIdx:null, venue:"vanhorne", cat:"minute", country:"FR", sheetRatio:"4/5",
     appearances:[{ venue:"vanhorne", fr:"1 oct. 2026 · Skatepark Van Horne", en:"Oct 1, 2026 · Van Horne Skatepark" }],
     fr:{ disc:"MINUTE_MAPP · City Life", bio:"Motion designer basé à Paris, vidéomappings pour plusieurs villes françaises." },
     en:{ disc:"MINUTE_MAPP · City Life", bio:"A Paris-based motion designer, creating video mappings for several French cities." },
