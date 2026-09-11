@@ -1,7 +1,7 @@
 // ══════════════════════════════════════════════════════════
 //  MAPP_MTL 2026 — Service Worker  (Network First)
 // ══════════════════════════════════════════════════════════
-const CACHE = 'mapp-2026-v6';
+const CACHE = 'mapp-2026-v7';
 const ASSETS = [
   '/',
   '/index.html',
