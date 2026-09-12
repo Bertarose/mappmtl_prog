@@ -131,6 +131,31 @@
   }
   .lede b{font-weight:700; background:#000; color:var(--cyan); padding:1px 6px;}
 
+  /* ── COMPTE À REBOURS — date limite de dépôt ── */
+  .countdown{
+    margin-top:20px; display:flex; flex-direction:column; align-items:center; gap:10px;
+  }
+  .countdown-label{
+    font-family:var(--mono); font-size:10px; font-weight:700; color:rgba(255,255,255,.6);
+    letter-spacing:.16em; text-transform:uppercase;
+  }
+  .countdown-grid{
+    display:flex; gap:10px;
+  }
+  .countdown-unit{
+    display:flex; flex-direction:column; align-items:center;
+    background:var(--panel); border:1px solid var(--line);
+    padding:10px 12px; min-width:58px;
+  }
+  .countdown-unit .num{
+    font-family:var(--mono); font-weight:700; font-size:22px; color:var(--cyan); line-height:1;
+  }
+  .countdown-unit .unit{
+    font-family:var(--mono); font-size:9px; color:rgba(255,255,255,.55);
+    letter-spacing:.1em; text-transform:uppercase; margin-top:4px;
+  }
+  .countdown.ended .countdown-label{color:var(--red);}
+
   /* ── BANDE SIGNAL — entre le hero et le formulaire ── */
   .signal-strip{
     position:relative; z-index:2;
@@ -470,6 +495,16 @@
       <p class="lede"
          data-fr-html="<b>300 Mo maximum</b>"
          data-en-html="<b>300 MB maximum</b>"><b>300 Mo maximum</b></p>
+
+      <div class="countdown" id="countdown">
+        <p class="countdown-label" id="countdownLabel" data-fr="Date limite — 21 sept. 2026, 9h HAE" data-en="Deadline — Sept 21, 2026, 9am EDT">Date limite — 21 sept. 2026, 9h HAE</p>
+        <div class="countdown-grid">
+          <div class="countdown-unit"><span class="num" id="cdDays">--</span><span class="unit" data-fr="jours" data-en="days">jours</span></div>
+          <div class="countdown-unit"><span class="num" id="cdHours">--</span><span class="unit" data-fr="heures" data-en="hours">heures</span></div>
+          <div class="countdown-unit"><span class="num" id="cdMinutes">--</span><span class="unit" data-fr="min" data-en="min">min</span></div>
+          <div class="countdown-unit"><span class="num" id="cdSeconds">--</span><span class="unit" data-fr="sec" data-en="sec">sec</span></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -694,6 +729,51 @@
 
 
   applyLang();
+
+  // ── COMPTE À REBOURS — date limite 21 sept. 2026, 9h (heure de l'Est, EDT = UTC-4) ──
+  (function(){
+    const DEADLINE = new Date("2026-09-21T09:00:00-04:00").getTime();
+    const els = {
+      days: document.getElementById('cdDays'),
+      hours: document.getElementById('cdHours'),
+      minutes: document.getElementById('cdMinutes'),
+      seconds: document.getElementById('cdSeconds'),
+      wrap: document.getElementById('countdown'),
+      label: document.getElementById('countdownLabel')
+    };
+    const ENDED_MSG = { fr: "Date limite dépassée", en: "Deadline has passed" };
+
+    function tick(){
+      const now = Date.now();
+      const diff = DEADLINE - now;
+
+      if(diff <= 0){
+        els.days.textContent = '00';
+        els.hours.textContent = '00';
+        els.minutes.textContent = '00';
+        els.seconds.textContent = '00';
+        els.wrap.classList.add('ended');
+        els.label.removeAttribute('data-fr');
+        els.label.removeAttribute('data-en');
+        els.label.textContent = ENDED_MSG[lang];
+        clearInterval(cdInterval);
+        return;
+      }
+
+      const d = Math.floor(diff / (1000*60*60*24));
+      const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+      const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+      const s = Math.floor((diff % (1000*60)) / 1000);
+
+      els.days.textContent = String(d).padStart(2,'0');
+      els.hours.textContent = String(h).padStart(2,'0');
+      els.minutes.textContent = String(m).padStart(2,'0');
+      els.seconds.textContent = String(s).padStart(2,'0');
+    }
+
+    tick();
+    const cdInterval = setInterval(tick, 1000);
+  })();
 
   // ── FORMULAIRE D'INFOS (nom/titre/courriel) — texte seulement, envoyé à Apps Script ──
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0YMOmybhDLgQYWJApWBB1qmY179_USdXUPSXDlINV8nQ2VyW-29j9qSDgmMGV1h0zqw/exec";
