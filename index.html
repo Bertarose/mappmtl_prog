@@ -282,8 +282,8 @@ nav{
 .halftone-wrap img.hero-media{object-fit:contain;background:#000}
 #cursor-glow{
   position:fixed;inset:0;width:100vw;height:100vh;z-index:450;pointer-events:none;
-  background:radial-gradient(260px circle at var(--gx,50%) var(--gy,50%), rgba(70,0,140,.75), rgba(70,0,140,0) 70%);
-  mix-blend-mode:screen;opacity:0;transition:opacity .3s;
+  background:radial-gradient(420px circle at var(--gx,50%) var(--gy,50%), rgba(170,110,255,.5), rgba(170,110,255,.16) 40%, rgba(170,110,255,0) 72%);
+  mix-blend-mode:screen;opacity:0;transition:opacity .15s;
 }
 #cursor-glow.active{opacity:1}
 @media (prefers-reduced-motion: reduce){ #cursor-glow{display:none} }
@@ -1666,8 +1666,8 @@ const FESTIVAL_START = new Date("2026-09-29T00:00:00-04:00");
 const FESTIVAL_END   = new Date("2026-10-05T03:00:00-04:00");
 
 const MARQUEE = {
-  fr:["10e ÉDITION","29 SEPT — 4 OCT 2026","FÊTE DE QUARTIER NUMÉRIQUE","GRATUIT SUR INSCRIPTION AU SKATEPARK VAN HORNE","SOUTENEZ MAPP"],
-  en:["10th EDITION","SEPT 29 — OCT 4 2026","DIGITAL BLOCK PARTY","FREE WITH REGISTRATION AT VAN HORNE SKATEPARK","SUPPORT MAPP"]
+  fr:["10e ÉDITION","29 SEPT — 4 OCT 2026","FÊTE DE QUARTIER NUMÉRIQUE","GRATUIT SUR INSCRIPTION AU SKATEPARK VAN HORNE"],
+  en:["10th EDITION","SEPT 29 — OCT 4 2026","DIGITAL BLOCK PARTY","FREE WITH REGISTRATION AT VAN HORNE SKATEPARK"]
 };
 
 // ============================================================
@@ -2367,6 +2367,9 @@ function boot(bootAttempt){
       window.addEventListener('pointerleave', ()=> glow.classList.remove('active'));
       window.addEventListener('touchmove', e=>{
         if(e.touches[0]){ setPos(e.touches[0].clientX, e.touches[0].clientY); glow.classList.add('active'); }
+      }, {passive:true});
+      window.addEventListener('touchstart', e=>{
+        if(e.touches[0]){ setPos(e.touches[0].clientX, e.touches[0].clientY); glow.classList.add('active'); vib(12); }
       }, {passive:true});
       window.addEventListener('touchend', ()=> glow.classList.remove('active'));
     })();
