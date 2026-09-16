@@ -676,6 +676,17 @@ nav{
   font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.05em;
   color:#c4270f;white-space:nowrap;flex-shrink:0;
 }
+.ev-artists{margin-top:18px;padding-top:16px;border-top:1px solid rgba(0,0,0,.12)}
+.ev-artists-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--grey);margin-bottom:10px}
+.ev-artists-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+.ev-acard{display:grid;border:1px solid var(--black);background:var(--white);cursor:pointer;transition:transform .12s,box-shadow .12s;text-align:left;padding:0}
+.ev-acard:hover,.ev-acard:focus-visible{transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--black);outline:none}
+.ev-acard .ph{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;object-position:center top;border-bottom:1px solid var(--black);background:var(--white)}
+.ev-acard .ph-placeholder{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;width:100%;border-bottom:1px solid var(--black);
+  background-color:var(--white)!important;background-image:radial-gradient(rgba(0,0,0,.35) 1.4px, transparent 1.4px);
+  background-size:14px 14px;background-position:0 0;
+  font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(0,0,0,.5)}
+.ev-acard .an{font-family:var(--cond);font-weight:500;font-size:13.5px;text-transform:uppercase;padding:8px 9px 9px;letter-spacing:-0.01em;line-height:1.15;color:var(--black)}
 @media(max-width:640px){
   .ev-sheet{left:0;right:0;top:auto;bottom:0;width:100%;max-height:88vh;
     transform:translateY(102%);border-left:none;border-right:none;border-bottom:none;box-shadow:none}
@@ -1314,6 +1325,7 @@ const DAYS = [
       fr:{ t:"Soirée MINUTE_MAPP 2026", d:"<p>Le thème de cette année est CROISEMENT — celui des disciplines, des cultures et des époques qui se rencontrent sur la façade emblématique de l'ancien Million Tapis et Tuiles, au cœur du Mile End.</p><p>MINUTE_MAPP est une plateforme ouverte d'expression et d'exploration de nouvelles idées sous la forme de projections mapping de 60 secondes. Les artistes sont invité·e·s à transformer la façade emblématique surplombant le skatepark Van Horne en une toile pour des idées audacieuses et novatrices, inspirées par le thème de cette année.</p><p>Un jury prestigieux offrira un prix à leur MINUTE_MAPP préférée. L'événement sera également diffusé en ligne, où l'audience pourra voter pour le prix du public.</p><p>MINUTE_MAPP a vu le jour à Montréal en 2013 et présente un éventail diversifié de créateurs de différents milieux, dont plusieurs expérimentent pour la première fois cette forme de création. Cette soirée mettra en lumière plus de 60 créateurs venus des quatre coins du monde.</p>" },
       en:{ t:"MINUTE_MAPP Night 2026", d:"<p>This year's theme is CROISEMENT — the intersection of disciplines, cultures, and eras meeting on the iconic façade of the former Million Tapis et Tuiles, in the heart of Mile End.</p><p>MINUTE_MAPP is an open platform for expression and the exploration of new ideas through 60-second projection mapping pieces. Artists are invited to transform the iconic façade overlooking the Van Horne skatepark into a canvas for bold, innovative ideas inspired by this year's theme.</p><p>A prestigious jury will award a prize to their favourite MINUTE_MAPP piece. The event will also be streamed online, where audiences can vote for the People's Choice award.</p><p>MINUTE_MAPP was born in Montreal in 2013 and features a diverse range of creators from different backgrounds, many of whom are experimenting with this form of creation for the first time. The evening will showcase more than 60 creators from around the world.</p>" } },
     { time:"17h — 22h", venue:"vanhorne", free:true, tixUrl:"https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026", img:"/media/fete-de-quartier-numerique.webp",
+      artists:["cuerpos","studio-baillat","sabrina-ratte","theo-leroux","aude-guivarch","dalkhafine","chien-champion"],
       timeline:[
         { fr:"Scène", en:"Stage", items:[
           { start:"17h", end:"18h30", fr:"Cuerpos (DJ set)", en:"Cuerpos (DJ set)" },
@@ -1332,6 +1344,7 @@ const DAYS = [
   ]},
   { date:"2026-10-02", d:"02", moFr:"OCT", moEn:"OCT", wFr:"VEN", wEn:"FRI", events:[
     { time:"17h — 22h", venue:"vanhorne", free:true, tixUrl:"https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026", img:"/media/fete-de-quartier-numerique.webp",
+      artists:["studio-baillat","sabrina-ratte","theo-leroux","aude-guivarch","dalkhafine","chien-champion"],
       timeline:[
         { fr:"Scène", en:"Stage", items:[
           { start:"17h", end:"22h", fr:"Programmation musicale — Studio Baillat", en:"Music program — Studio Baillat" },
@@ -1344,11 +1357,13 @@ const DAYS = [
       fr:{ t:"Fête de quartier numérique", d:"<p><strong>Événement phare du festival</strong></p><p>Venez célébrer les 10 ans de la Fête de quartier numérique ! Un programme festif, entre projections mapping, performances de musiques électroniques, stands de nourriture, ateliers de création dans une ambiance de fête de quartier!</p><p>+ KIOSQUES CULINAIRES | Cantine MAPP + Ta Chido Snack-bar mexicain 🌮</p><p>☔ L'événement aura lieu même en cas de pluie.<br>MAPP s'engage à assurer un environnement festif aussi sécuritaire, convivial et inclusif que possible pour toutes et tous.</p>" },
       en:{ t:"Digital Block Party", d:"<p><strong>Festival flagship event</strong></p><p>True to its roots, this event offers a festive program blending video mapping projections with more than 60 local and international artists presenting their work on the neighbourhood's iconic former store, Million Tapis et Tuiles.</p><p>JS Baillat (QC/CA), Sabrina Ratté (QC/CA), Téo (FR/QC/CA), and Aude Guivarc'h (QC/CA) will present spectacular works on the iconic Saint-Lawrence warehouse, while electronic music performances will be offered by Studio Baillat on Friday night and the Ferias collective on Saturday night, featuring artists Alina and Guthrie. Festival-goers can also enjoy food stands in a welcoming block-party atmosphere.</p>" } },
     { time:"22h — 03h", venue:"moment", tixUrl:"https://www.zeffy.com/fr-CA/ticketing/soiree-mapp--2026", img:"/media/soiree_mapp.webp",
+      artists:["studio-baillat","thisisnotdesign","jules-roze"],
       fr:{ t:"Soirée MAPP 2026", d:"<p>MAPP revient avec sa soirée incontournable chez Moment Factory, proposant un programme dansant et festif, une scénographie immersive et des projections mapping captivantes.</p><p>La programmation musicale de la soirée sera assurée par le Studio Baillat (QC/CA), tandis que les créations visuelles seront signées JS Baillat (QC/CA), Thisisnodesign (QC/CA) et Jules Roze (FR/QC/CA).</p><p>Célébrez cette 10e édition avec artistes, créateurs, partenaires et public fidèle.</p>", price:"20 $ – Early bird · 25 $ – Admission générale" },
       en:{ t:"MAPP Night 2026", d:"<p>MAPP is back with its unmissable party at Moment Factory, featuring a dance-floor program, immersive scenography and captivating mapping projections.</p><p>The evening's musical lineup will be led by Studio Baillat (QC/CA), while visual creations will be signed by JS Baillat (QC/CA), Thisisnodesign (QC/CA) and Jules Roze (FR/QC/CA).</p><p>Celebrate this 10th edition with artists, creators, partners and loyal audiences.</p>", price:"$20 – Early bird · $25 – General admission" } }
   ]},
   { date:"2026-10-03", d:"03", moFr:"OCT", moEn:"OCT", wFr:"SAM", wEn:"SAT", events:[
     { time:"12h — 22h", venue:"vanhorne", free:true, tixUrl:"https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026", img:"/media/fete-de-quartier-numerique.webp",
+      artists:["collectif-ferias","studio-baillat","sabrina-ratte","theo-leroux","aude-guivarch","dalkhafine","chien-champion"],
       timeline:[
         { fr:"Scène", en:"Stage", items:[
           { start:"12h", end:"17h", fr:"MAPP & Friends aux platines", en:"MAPP & Friends on the decks" },
@@ -1364,6 +1379,7 @@ const DAYS = [
   ]},
   { date:"2026-10-04", d:"04", moFr:"OCT", moEn:"OCT", wFr:"DIM", wEn:"SUN", events:[
     { time:"14h — 18h", venue:"caserne", free:true, img:"/media/jam-tagtool.webp",
+      artists:["marc-olivier-lamothe","theo-leroux"],
       fr:{ t:"MAPP_X I Jam Tagtool", d:"<p>Jam Tagtool avec <a href=\"https://www.instagram.com/marcolivierlamothe/?hl=fr\" target=\"_blank\" rel=\"noopener\">Marc-Olivier Lamothe</a> (QC/CA) et <a href=\"https://www.instagram.com/teoleroo/?hl=fr\" target=\"_blank\" rel=\"noopener\">Téo</a> (FR/QC/CA)</p><p>L'Espace culturel de la Caserne 26 invitent débutants comme expérimentés, artistes, créateur·rice·s, illustrateur·rice·s et public curieux d'explorer la projection mapping. Ils pourront créer des animations à partir d'une application sur iPad qui sera ensuite projeté dans la Caserne 26.</p>" },
       en:{ t:"Tagtool Jam with Marc-Olivier Lamothe (QC/CA) and Téo (FR/QC/CA)", d:"<p>Caserne 26's cultural space invites beginners and experienced alike, artists, creators, illustrators and curious audiences to explore projection mapping. They'll be able to create animations from an iPad app, which will then be projected in Caserne 26.</p><p>With artists Marc-Olivier Lamothe (QC/CA) and Téo (FR/QC/CA), and others to be confirmed.</p>" } }
   ]}
@@ -1374,6 +1390,7 @@ const DAYS = [
 const INSTALLATIONS = [
   { venue:"cite", free:true, img:"/media/montreal-en-histoires.webp",
     dateFr:"24 SEPT — 3 OCT · 19 H – 23 H", dateEn:"SEPT 24 — OCT 3 · 7 P.M. – 11 P.M.",
+    artists:["theo-leroux","dalkhafine"],
     spots:[
       { fr:"Dalkhafine (FR/QC/CA) — Stationnement du 465-467, rue de Longueuil", en:"Dalkhafine (FR/QC/CA) — Parking lot at 465-467 rue de Longueuil" },
       { fr:"Téo (FR) — 425, rue Saint-François-Xavier", en:"Téo (FR) — 425 rue Saint-François-Xavier" }
@@ -1428,6 +1445,12 @@ const ARTISTS = [
   { slug:"cuerpos", name:"Cuerpos", img:"/media/artists/cuerpos.webp", dayIdx:null, venue:"vanhorne", cat:"dj",
     fr:{ disc:"Fête de quartier numérique", bio:"<p>CUERPOS est un duo post-punk/dub/dance basé au Canada, aux racines latines.</p><p>Formé par deux ami·e·s de longue date, Francis Dawson et Nadia Duman, CUERPOS combine des éléments de musique latine et caribéenne à des rythmes et une production électronique taillés pour la piste de danse.</p><p>Le résultat est une fête dansante psychédélique à vivre pleinement lors de leurs performances live énergiques.</p>" },
     en:{ disc:"Digital Block Party", bio:"<p>CUERPOS is a post-punk/dub/dance duo based in Canada with Latin roots.</p><p>Formed by two longtime friends, Francis Dawson and Nadia Duman, CUERPOS combines elements from Latin and Caribbean music with club-ready, electronic beats and production.</p><p>The result is a psychedelic dance party that is best enjoyed during their animated live sets.</p>" },
+    links:{} },
+  // Photo pas encore reçue — un portrait généré automatiquement (initiales) sert de visuel temporaire
+  // tant que a.img n'est pas renseigné.
+  { slug:"chien-champion", name:"Chien Champion", dayIdx:null, venue:"vanhorne", cat:"vj",
+    fr:{ disc:"Fête de quartier numérique", bio:"<p>Bio à venir.</p>" },
+    en:{ disc:"Digital Block Party", bio:"<p>Bio coming soon.</p>" },
     links:{} },
 ];
 
@@ -1956,6 +1979,7 @@ function renderGrid(){
 // ARTISTES
 // ============================================================
 let currentArtist = null;
+let returnToEventAfterArtist = false;
 
 function seedRand(str){
   let h = 2166136261;
@@ -2024,6 +2048,34 @@ function paintPortraits(root){
   root.querySelectorAll('canvas.ph').forEach(cv=>{
     requestAnimationFrame(()=>drawPortrait(cv, cv.dataset.name, parseFloat(cv.dataset.ratio)));
   });
+}
+
+// ── Bloc "ARTISTES" réutilisable dans les fiches événement / installation ──
+// item.artists : liste explicite de slugs (ex. ["teo","dalkhafine"])
+// item.artistsCat : sinon, tous les ARTISTS de cette catégorie (ex. "minute")
+function getEventArtists(item){
+  if(Array.isArray(item.artists) && item.artists.length){
+    return item.artists.map(slug => ARTISTS.find(a=>a.slug===slug)).filter(Boolean);
+  }
+  if(item.artistsCat){
+    return ARTISTS.filter(a => a.cat === item.artistsCat && !a.pending);
+  }
+  return [];
+}
+function renderEventArtists(item){
+  const list = getEventArtists(item);
+  if(!list.length) return '';
+  return `
+    <div class="ev-artists">
+      <div class="ev-artists-label">${lang==='fr'?'Artistes':'Artists'}</div>
+      <div class="ev-artists-grid">
+        ${list.map(a => `
+          <button class="ev-acard" onclick="openArtistFromEvent('${a.slug}')" aria-haspopup="dialog">
+            ${artistMedia(a,1)}
+            <div class="an">${a.name}</div>
+          </button>`).join('')}
+      </div>
+    </div>`;
 }
 
 let currentArtistCat = 'vj';
@@ -2148,10 +2200,30 @@ function closeArtist(){
   currentArtist = null;
   document.getElementById('sheet-back').classList.remove('open');
   document.getElementById('sheet').classList.remove('open');
-  document.body.style.overflow = '';
+  if(returnToEventAfterArtist){
+    returnToEventAfterArtist = false;
+    document.getElementById('ev-back').classList.add('open');
+    document.getElementById('ev-sheet').classList.add('open');
+    // overflow reste hidden : on est toujours dans un pop-up
+  } else {
+    document.body.style.overflow = '';
+  }
   if(location.hash.startsWith('#a/')) history.replaceState(null,'','#');
 }
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeArtist(); });
+// Ouvre la fiche d'un artiste depuis le pop-up d'un événement : on masque temporairement
+// la fiche événement (sans réinitialiser son contenu ni le scroll de la page) pour la
+// retrouver telle quelle à la fermeture de la fiche artiste.
+function openArtistFromEvent(slug){
+  document.getElementById('ev-back').classList.remove('open');
+  document.getElementById('ev-sheet').classList.remove('open');
+  returnToEventAfterArtist = true;
+  openArtist(slug);
+}
+document.addEventListener('keydown', e=>{
+  if(e.key !== 'Escape') return;
+  if(document.getElementById('sheet').classList.contains('open')) closeArtist();
+  else if(document.getElementById('ev-sheet').classList.contains('open')) closeEvent();
+});
 window.addEventListener('hashchange', ()=>{
   if(location.hash.startsWith('#a/')) openArtist(location.hash.slice(3), true);
   else closeArtist();
@@ -2729,6 +2801,7 @@ function openEvent(dayIdx, evIdx){
       ${priceTag ? `<div style="margin-bottom:10px;">${priceTag}</div>` : ''}
       <h2 id="ev-title" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;color:var(--black);">${c.t}</h2>
       <div class="ev-desc">${c.d}</div>
+      ${renderEventArtists(ev)}
       ${renderEventTimeline(day, ev)}
       ${tixLink}
       <button class="ev-map-link" onclick="closeEvent();focusVenue('${ev.venue}')">
@@ -2749,6 +2822,7 @@ function openEvent(dayIdx, evIdx){
   const evHeader = document.querySelector('#ev-body .ev-header.has-img');
   if(activeModalGlitch){ activeModalGlitch.stop(); activeModalGlitch = null; }
   if(evHeader && ev.img) activeModalGlitch = createGlitchImage(evHeader, ev.img);
+  paintPortraits(document.getElementById('ev-body'));
 }
 
 // ── FICHE INSTALLATION (toute la durée du festival) ──
@@ -2773,6 +2847,7 @@ function openInstallation(idx){
       </div>
       <h2 id="ev-title" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;color:var(--black);">${c.t}</h2>
       <div class="ev-desc">${c.d}</div>
+      ${renderEventArtists(ins)}
       ${Array.isArray(ins.spots) && ins.spots.length ? `
       <div style="display:flex;flex-wrap:wrap;gap:8px;">
         ${ins.spots.map(sp => `<span class="ev-map-link" style="cursor:default;margin-top:14px;">📍 ${sp[lang]}</span>`).join('')}
@@ -2789,6 +2864,7 @@ function openInstallation(idx){
   const insHeader = document.querySelector('#ev-body .ev-header.has-img');
   if(activeModalGlitch){ activeModalGlitch.stop(); activeModalGlitch = null; }
   if(insHeader && ins.img) activeModalGlitch = createGlitchImage(insHeader, ins.img);
+  paintPortraits(document.getElementById('ev-body'));
 }
 
 // Convertit "19h00" / "17h — 22h" / "22h — 03h" en plage horaire exploitable
@@ -2918,10 +2994,8 @@ function closeEvent(){
   document.body.style.overflow = '';
 }
 
-// Escape ferme aussi ev-sheet
-document.addEventListener('keydown', e=>{
-  if(e.key==='Escape') closeEvent();
-});
+// Escape ferme aussi ev-sheet (géré par l'écouteur Escape unique plus haut,
+// qui priorise la fermeture de la fiche artiste si elle est ouverte).
 
 </script>
 <a class="sticky-tix" id="sticky-tix" href="https://www.zeffy.com/fr-CA/ticketing/fete-de-quartier-numerique-ou-festival-mapp--2026" target="_blank" rel="noopener" onclick="vib(10)" data-fr="🎟 Réservez votre billet →" data-en="🎟 Reserve your ticket →">🎟 Réservez votre billet →</a>
