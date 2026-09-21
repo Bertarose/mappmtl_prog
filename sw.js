@@ -1,3 +1,4 @@
+/*! © 2026 Kim Maurice — Tous droits réservés / All rights reserved. Conçu et développé par Kim Maurice (kimmaurice.com). Reproduction ou réutilisation interdite sans autorisation écrite. */
 // ══════════════════════════════════════════════════════════
 //  MAPP_MTL 2026 — Service Worker  (Network First)
 // ══════════════════════════════════════════════════════════
