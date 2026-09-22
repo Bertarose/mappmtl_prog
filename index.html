@@ -46,13 +46,11 @@
 <link rel="apple-touch-icon" href="/icon-512.png">
 <link rel="manifest" href="/manifest.json">
 
-<!-- Leaflet + Google Fonts chargés en asynchrone (n'bloquent plus le premier rendu) -->
-<link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<!-- Google Fonts en asynchrone. Leaflet (carte) est chargé plus tard en JS, voir loadLeaflet() -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800;900&family=Archivo+Narrow:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800;900&family=Archivo+Narrow:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
 </noscript>
 
@@ -1287,7 +1285,6 @@ footer a{color:var(--lime);text-decoration:none}
   <p class="f-credit"><span data-fr="Conçu et programmé par" data-en="Designed and developed by">Conçu et programmé par</span> <a href="https://kimmaurice.com" target="_blank" rel="noopener">Kim Maurice</a></p>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 /*! © 2026 Kim Maurice — Tous droits réservés / All rights reserved. Conçu et développé par Kim Maurice (kimmaurice.com). Reproduction ou réutilisation interdite sans autorisation écrite. */
 // ============================================================
@@ -2636,7 +2633,9 @@ function focusVenue(key, opts){
       <a class="vc-dir" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${v.lat},${v.lng}" onclick="event.stopPropagation();vib(10)">${lang==='fr'?'Itinéraire':'Directions'} →</a>`;
     cap.classList.add('show');
   }
-  setTimeout(()=>{ if(map){ map.invalidateSize(); map.setView([v.lat,v.lng], 15, {animate:true}); } }, (opts&&opts.fromMarker) ? 0 : 460);
+  ensureMap().then(()=>{
+    setTimeout(()=>{ if(map){ map.invalidateSize(); map.setView([v.lat,v.lng], 15, {animate:true}); } }, (opts&&opts.fromMarker) ? 0 : 460);
+  });
 }
 function renderLegend(){
   document.getElementById('map-legend').innerHTML = Object.entries(VENUES).map(([key,v])=>`
@@ -2797,13 +2796,49 @@ function boot(bootAttempt){
     if(location.hash.startsWith('#a/')) openArtist(location.hash.slice(3), true);
   }
 
-  // La carte, elle, dépend réellement de Leaflet : on l'attend séparément, sans
-  // bloquer le reste (au-delà de ~4s — CDN bloqué/lent — on abandonne simplement).
-  if(typeof L === 'undefined' && bootAttempt < 66){
-    return setTimeout(()=>boot(bootAttempt+1), 60);
-  }
-  try{ if(typeof L !== 'undefined') initMap(); }
-  catch(e){ console.error('initMap a échoué, on continue sans la carte :', e); }
+  // La carte (Leaflet + tuiles Esri) n'est chargée qu'après le chargement complet
+  // de la page, quand la section Carte approche de l'écran : elle ne retarde plus
+  // la page (l'onglet ne « tourne » plus en attendant des serveurs externes).
+  scheduleMap();
+}
+
+// ── Chargement différé de la carte ──
+let leafletPromise = null;
+function loadLeaflet(){
+  if(typeof L !== 'undefined') return Promise.resolve();
+  if(leafletPromise) return leafletPromise;
+  leafletPromise = new Promise((resolve, reject)=>{
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(css);
+    const js = document.createElement('script');
+    js.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    js.async = true;
+    js.onload = ()=> resolve();
+    js.onerror = ()=> { leafletPromise = null; reject(new Error('Leaflet indisponible')); };
+    document.head.appendChild(js);
+  });
+  return leafletPromise;
+}
+function ensureMap(){
+  if(map) return Promise.resolve();
+  return loadLeaflet()
+    .then(()=>{ if(!map) initMap(); })
+    .catch(e=> console.error('Carte indisponible, on continue sans :', e));
+}
+function scheduleMap(){
+  const start = ()=>{
+    const el = document.getElementById('map');
+    if(!el) return;
+    if(!('IntersectionObserver' in window)){ ensureMap(); return; }
+    const io = new IntersectionObserver(entries=>{
+      if(entries.some(e=>e.isIntersecting)){ io.disconnect(); ensureMap(); }
+    }, { rootMargin:'800px 0px' });
+    io.observe(el);
+  };
+  if(document.readyState === 'complete') start();
+  else window.addEventListener('load', start, { once:true });
 }
 boot();
 
