@@ -588,6 +588,10 @@ nav{
 .acat-tab:last-child{border-right:none}
 .acat-tab:hover{opacity:1}
 .acat-tab.active{background:var(--lime);color:var(--black);opacity:1}
+@media(max-width:640px){
+  .acat-tabs{display:grid;grid-template-columns:repeat(3,1fr);width:100%}
+  .acat-tab{display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 6px;font-size:10.5px;letter-spacing:.06em;line-height:1.3}
+}
 .country-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:18px}
 .country-bar[hidden]{display:none}
 .country-chips{display:flex;flex-wrap:wrap;gap:6px}
