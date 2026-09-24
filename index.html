@@ -146,6 +146,68 @@ body{
   background-color:var(--black);
 }
 
+/* ── Effet d'intro « jour du lancement » ────────────
+   Le jeudi 29 septembre (jour 1, au Skatepark Van Horne), tout l'écran
+   glitch en noir et blanc avec lignes de scan, secousses et flash
+   chromatique rouge/cyan pendant ~2s à l'arrivée sur la app. Désactivé
+   si la personne préfère un mouvement réduit. ── */
+#intro-fx{ position:fixed;inset:0;z-index:9999;pointer-events:none; }
+#intro-fx::before{
+  content:"";position:absolute;inset:0;mix-blend-mode:overlay;opacity:0;
+  background:
+    repeating-linear-gradient(to bottom, rgba(255,255,255,.95) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(to bottom, rgba(0,0,0,.6) 0 1px, transparent 1px 3px);
+}
+#intro-fx::after{
+  content:"";position:absolute;inset:-6px;mix-blend-mode:screen;opacity:0;
+  background:linear-gradient(90deg, rgba(255,0,70,.6) 0%, transparent 28%, transparent 72%, rgba(0,255,255,.6) 100%);
+}
+body.intro-active{
+  filter:grayscale(1) contrast(1.3);
+  transition:filter 2s ease;
+  animation:introJitter 2s steps(24) forwards;
+}
+body.intro-active #intro-fx::before{
+  opacity:1;
+  animation:introScan .07s steps(2) infinite, introShift 2s steps(14) forwards, introFade 2s ease forwards;
+}
+body.intro-active #intro-fx::after{
+  opacity:.7;
+  animation:introRGB .1s steps(2) infinite, introFade 2s ease forwards;
+}
+@keyframes introFade{ 0%{opacity:1} 55%{opacity:.8} 100%{opacity:0} }
+@keyframes introScan{ 0%{transform:translateY(0)} 100%{transform:translateY(6px)} }
+@keyframes introRGB{ 0%{opacity:.75} 100%{opacity:.35} }
+@keyframes introShift{
+  0%,100%{ transform:translateX(0) }
+  4%{ transform:translateX(-10px) }
+  8%{ transform:translateX(7px) }
+  12%{ transform:translateX(0) }
+  30%{ transform:translateX(14px) }
+  34%{ transform:translateX(-9px) }
+  38%{ transform:translateX(0) }
+  55%{ transform:translateX(-6px) }
+  58%{ transform:translateX(5px) }
+  61%{ transform:translateX(0) }
+  80%{ transform:translateX(9px) }
+  83%{ transform:translateX(0) }
+}
+@keyframes introJitter{
+  0%,100%{ transform:translate(0,0) }
+  3%{ transform:translate(-5px,2px) }
+  6%{ transform:translate(4px,-3px) }
+  9%{ transform:translate(-2px,0) }
+  12%{ transform:translate(0,0) }
+  27%{ transform:translate(6px,1px) }
+  30%{ transform:translate(-4px,2px) }
+  33%{ transform:translate(0,0) }
+  52%{ transform:translate(-3px,-2px) }
+  55%{ transform:translate(3px,0) }
+  58%{ transform:translate(0,0) }
+  75%{ transform:translate(-6px,1px) }
+  78%{ transform:translate(0,0) }
+}
+
 /* ── Marquee ─────────────────────────────────────── */
 .site-header{
   position:sticky;top:0;z-index:200;transform:translateZ(0);will-change:transform;
@@ -1024,6 +1086,7 @@ footer a{color:var(--lime);text-decoration:none}
 </script>
 </head>
 <body>
+<div id="intro-fx" aria-hidden="true"></div>
 <div id="cursor-glow" aria-hidden="true"></div>
 <a class="skip-link" href="#prog" data-fr="Aller au contenu" data-en="Skip to content">Aller au contenu</a>
 
@@ -1264,6 +1327,7 @@ footer a{color:var(--lime);text-decoration:none}
     <img class="partner-logo" src="/media/partners/le-lien-multimedia.webp" alt="Le Lien Multimédia · Qui fait quoi" loading="lazy">
     <img class="partner-logo" src="/media/partners/mtl-only.webp" alt="MTL Only" loading="lazy">
     <img class="partner-logo" src="/media/partners/le-fifa.webp" alt="Le FIFA" loading="lazy">
+    <img class="partner-logo" src="/media/partners/ckut.webp" alt="CKUT 90.3 FM" loading="lazy">
   </div>
 </section>
 
@@ -2740,6 +2804,24 @@ function setHeroToggleLabel(){
 }
 
 // ============================================================
+// EFFET D'INTRO — JOUR DU LANCEMENT (29 sept., Skatepark Van Horne)
+// ============================================================
+// Tout l'écran passe en noir et blanc avec des lignes de scan pendant ~2s
+// à l'arrivée sur la app, seulement le jour 1 du festival. Une fois par
+// session (pas à chaque changement d'onglet/de page dans la app).
+function initLaunchDayIntro(){
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduceMotion) return;
+  if(localDateStr(new Date()) !== '2026-09-29') return;
+  let seen = false;
+  try { seen = sessionStorage.getItem('mapp_intro_seen') === '1'; } catch(e){}
+  if(seen) return;
+  try { sessionStorage.setItem('mapp_intro_seen', '1'); } catch(e){}
+  document.body.classList.add('intro-active');
+  setTimeout(()=> document.body.classList.remove('intro-active'), 2000);
+}
+
+// ============================================================
 // EN-TÊTE COMPACT AU SCROLL
 // ============================================================
 // Replie le bandeau défilant et resserre la nav dès qu'on a un peu scrollé,
@@ -2825,6 +2907,7 @@ function boot(bootAttempt){
   if(bootAttempt === 0){
     applyLang();
     initReveals();
+    initLaunchDayIntro();
     scheduleProgramAutoFocus();
     initHeaderCompact();
     initSubnav();
