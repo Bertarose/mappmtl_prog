@@ -151,6 +151,11 @@ body{
   position:sticky;top:0;z-index:200;transform:translateZ(0);will-change:transform;
   background:var(--black);
 }
+/* En-tête compact : une fois qu'on a scrollé un peu, le bandeau défilant se
+   replie et la nav se resserre, pour redonner de la hauteur d'écran utile
+   (surtout en mobile, pendant le festival, quand on parcourt le programme). */
+.site-header.compact .marquee{ height:0; opacity:0; border-bottom:none; pointer-events:none }
+.site-header.compact nav{ padding-top:8px; padding-bottom:8px }
 .marquee{
   position:relative;z-index:auto;
   background:var(--fluo);color:var(--black);
@@ -158,6 +163,7 @@ body{
   overflow:hidden;white-space:nowrap;
   height:58px;display:flex;align-items:center;
   text-decoration:none;cursor:pointer;
+  transition:height .22s ease, opacity .18s ease;
   /* isole ce bloc dans sa propre couche de composition : sur Safari iOS,
      une animation CSS imbriquée dans un ancêtre position:sticky peut
      geler/disparaître au scroll si elle ne possède pas sa propre couche */
@@ -189,6 +195,7 @@ nav{
   background:var(--navy);border-bottom:1px solid #1e1e1e;
   display:flex;align-items:center;justify-content:space-between;
   padding:14px 18px;color:var(--white);
+  transition:padding .22s ease;
 }
 .brand{font-size:19px;font-weight:800;letter-spacing:-0.02em;display:flex;align-items:center;gap:10px}
 .brand span{color:var(--white)}
@@ -2233,6 +2240,15 @@ function focusCurrentProgram(options){
     : document.querySelector('.gcol.today');
   if(!target) return;
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(options && options.auto){
+    // Signale au header (voir initHeaderCompact) que ce scroll est automatique,
+    // pas un scroll de la personne — pour qu'il ne se replie pas tout seul.
+    window.__mappAutoScroll = true;
+    const clearFlag = ()=>{ window.__mappAutoScroll = false; };
+    if(reduceMotion){ clearFlag(); }
+    else if('onscrollend' in window){ window.addEventListener('scrollend', clearFlag, { once:true }); }
+    else { setTimeout(clearFlag, 2000); } // filet de sécurité si scrollend n'est pas supporté
+  }
   target.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:item?'center':'start'});
   if(item && !(options&&options.auto)) target.focus({preventScroll:true});
 }
@@ -2724,6 +2740,35 @@ function setHeroToggleLabel(){
 }
 
 // ============================================================
+// EN-TÊTE COMPACT AU SCROLL
+// ============================================================
+// Replie le bandeau défilant et resserre la nav dès qu'on a un peu scrollé,
+// pour libérer de la hauteur d'écran utile — surtout en mobile pendant le
+// festival, quand on parcourt le programme du jour.
+function initHeaderCompact(){
+  const header = document.querySelector('.site-header');
+  if(!header) return;
+  let compact = false;
+  let ticking = false;
+  function update(){
+    ticking = false;
+    // Ignore le scroll automatique vers "aujourd'hui" — seul un scroll fait
+    // par la personne elle-même doit replier le header (voir focusCurrentProgram).
+    if(window.__mappAutoScroll) return;
+    const y = window.scrollY || document.documentElement.scrollTop;
+    const shouldCompact = y > 40;
+    if(shouldCompact !== compact){
+      compact = shouldCompact;
+      header.classList.toggle('compact', compact);
+    }
+  }
+  window.addEventListener('scroll', ()=>{
+    if(!ticking){ requestAnimationFrame(update); ticking = true; }
+  }, { passive:true });
+  update();
+}
+
+// ============================================================
 // SOUS-NAVIGATION (Artistes / Carte / Infos)
 // ============================================================
 function initSubnav(){
@@ -2739,7 +2784,11 @@ function initSubnav(){
   // en page mobile 2 rangées et la mise en page paysage/desktop 1 rangée).
   const header = document.querySelector('.site-header');
   let STACK_OFFSET = header ? header.offsetHeight : 190;
-  window.addEventListener('resize', ()=>{ if(header) STACK_OFFSET = header.offsetHeight; }, { passive:true });
+  if(header && 'ResizeObserver' in window){
+    new ResizeObserver(()=>{ STACK_OFFSET = header.offsetHeight; }).observe(header);
+  } else {
+    window.addEventListener('resize', ()=>{ if(header) STACK_OFFSET = header.offsetHeight; }, { passive:true });
+  }
 
   const setActive = (id)=>{
     links.forEach(a=> a.classList.toggle('active', a.dataset.target === id));
@@ -2777,6 +2826,7 @@ function boot(bootAttempt){
     applyLang();
     initReveals();
     scheduleProgramAutoFocus();
+    initHeaderCompact();
     initSubnav();
 
     // ── BANNIÈRE D'ACCUEIL — effet glitch générique sur l'image (pause si vidéo affichée) ──
