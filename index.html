@@ -632,7 +632,6 @@ nav{
   .card .desc{font-size:14px;line-height:1.55}
   .card .tix{font-size:11.5px;padding:7px 11px}
   .acard .an{font-size:17px}
-  .acard .ad{font-size:11px}
   .hero-tix{font-size:14px}
   .halftone-wrap{height:min(48vh,380px)}
   .count-cell span{font-size:11px}
@@ -698,9 +697,8 @@ img.ph.ld{opacity:1}
   font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--grey-light)}
 .acard .ph-placeholder{aspect-ratio:1/1}
 .sheet .ph-placeholder{aspect-ratio:16/10;border-bottom:1px solid var(--black)}
-.acard .an{font-family:var(--cond);font-weight:500;font-size:16.5px;text-transform:uppercase;padding:10px 11px 6px;letter-spacing:-0.01em;line-height:1.2;color:var(--white)}
+.acard .an{font-family:var(--cond);font-weight:500;font-size:16.5px;text-transform:uppercase;padding:10px 11px 6px;letter-spacing:-0.01em;line-height:1.2;color:var(--white);overflow-wrap:break-word;word-break:break-word}
 .acard .an:last-child{padding-bottom:12px}
-.acard .ad{font-family:var(--mono);font-size:9.5px;color:var(--gris-999);text-transform:uppercase;letter-spacing:.08em;padding:2px 11px 12px;display:block}
 
 /* fiche artiste : modale desktop / bottom-sheet mobile */
 .ev-back{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:402;opacity:0;pointer-events:none;transition:opacity .22s}
@@ -783,7 +781,7 @@ img.ph.ld{opacity:1}
   background-color:var(--white)!important;background-image:radial-gradient(rgba(0,0,0,.35) 1.4px, transparent 1.4px);
   background-size:14px 14px;background-position:0 0;
   font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(0,0,0,.5)}
-.ev-acard .an{font-family:var(--cond);font-weight:500;font-size:13.5px;text-transform:uppercase;padding:8px 9px 9px;letter-spacing:-0.01em;line-height:1.15;color:var(--black)}
+.ev-acard .an{font-family:var(--cond);font-weight:500;font-size:13.5px;text-transform:uppercase;padding:8px 9px 9px;letter-spacing:-0.01em;line-height:1.15;color:var(--black);overflow-wrap:break-word;word-break:break-word}
 @media(max-width:640px){
   .ev-sheet{left:0;right:0;top:auto;bottom:0;width:100%;max-height:88vh;
     transform:translateY(102%);border-left:none;border-right:none;border-bottom:none;box-shadow:none}
@@ -2587,7 +2585,6 @@ function renderArtists(){
     <button class="acard" onclick="openArtist('${a.slug}')" aria-haspopup="dialog">
       ${artistMedia(a,1,false,i<6)}
       <div class="an">${a.name}</div>
-      ${a.placeholder ? '' : `<span class="ad">${a[lang].disc}</span>`}
     </button>`).join('') : `<div class="nores" style="padding:24px 0;grid-column:1/-1" data-fr="${emptyFr}" data-en="${emptyEn}">${lang === 'fr' ? emptyFr : emptyEn}</div>`;
   paintPortraits(el);
   if(currentArtistCat === 'minute') updateCountryCount();
