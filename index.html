@@ -2577,7 +2577,7 @@ function openArtist(slug, fromHash){
     <h2 id="sheet-name">${a.name}</h2>
     <div class="disc">${a[lang].disc}</div>
     ${appearances}
-    <div class="bio">${a[lang].bio}</div>
+    <div class="bio">${splitParas(a[lang].bio)}</div>
     <div class="links">
       ${a.links.web?`<a href="${a.links.web}" target="_blank" rel="noopener">Site ↗</a>`:''}
       ${a.links.ig?`<a href="${a.links.ig}" target="_blank" rel="noopener">Instagram ↗</a>`:''}
@@ -2594,8 +2594,11 @@ function openArtist(slug, fromHash){
   // l'élément focus dans le viewport, ce qui décale l'image vers le haut (le nom
   // de l'artiste disparaît sous l'en-tête sticky). On force le retour en haut.
   requestAnimationFrame(() => { document.getElementById('sheet').scrollTop = 0; });
-  if(!fromHash) history.replaceState(null,'','#a/'+slug);
+  if(!fromHash) safeReplaceHash('#a/'+slug);
 }
+// Met à jour l'adresse (#a/slug) sans erreur si le navigateur l'interdit
+// (ex. la page est affichée dans un cadre isolé/sandbox : SecurityError).
+function safeReplaceHash(h){ try{ history.replaceState(null,'',h); }catch(e){} }
 function closeArtist(){
   currentArtist = null;
   document.getElementById('sheet-back').classList.remove('open');
@@ -2608,7 +2611,7 @@ function closeArtist(){
   } else {
     document.body.style.overflow = '';
   }
-  if(location.hash.startsWith('#a/')) history.replaceState(null,'','#');
+  if(location.hash.startsWith('#a/')) safeReplaceHash('#');
 }
 // Ouvre la fiche d'un artiste depuis le pop-up d'un événement : on masque temporairement
 // la fiche événement (sans réinitialiser son contenu ni le scroll de la page) pour la
@@ -2774,6 +2777,114 @@ function setHeroToggleLabel(){
     : (lang==='fr' ? "Afficher la vidéo" : "Show the video");
   btn.setAttribute('aria-label', label);
   btn.title = label;
+}
+
+// ============================================================
+// PARAGRAPHES — découpe des longs blocs de texte (bios, descriptions)
+// ============================================================
+// Coupe aux fins de phrases tout paragraphe de plus de PARA_SPLIT_MIN caractères,
+// pour éviter les gros pavés dans les pop-up. Le texte n'est pas modifié : on ne
+// fait que répartir les phrases dans plusieurs <p> (les liens/gras internes sont
+// conservés, et les paragraphes contenant un <br> — listes, horaires — sont laissés tels quels).
+const PARA_SPLIT_MIN = 300;   // en dessous, le paragraphe reste intact
+const PARA_TARGET    = 240;   // longueur visée par paragraphe après découpe
+const PARA_ABBR = /(?:^|[\s(«"'])(?:st|ste|mme|mmes|mr|mrs|dr|pr|no|n°|nos|vs|etc|ex|jr|sr|inc|ltd|cie|fig|env|av|boul|tel|tél|max|min|approx|p\.ex|c\.-à-d|apr|av|j\.-c|éd)$/i;
+function paraSentenceEnds(text){
+  // renvoie les index (fin de phrase, espaces exclus) où une nouvelle phrase commence juste après
+  const ends = [];
+  const re = /[.!?…]+["»”’)\]]*(\s+)(?=[A-ZÀ-ÖØ-Þ0-9«"“(¿¡])/g;
+  let m;
+  while((m = re.exec(text))){
+    const endIdx = m.index + m[0].length - m[1].length;       // juste après la ponctuation/guillemet
+    const before = text.slice(0, m.index);                    // ce qui précède la ponctuation
+    if(PARA_ABBR.test(before)) continue;                      // "St. ", "M. ", "etc. "…
+    if(/(?:^|\s)[A-ZÀ-Ö]$/.test(before)) continue;            // initiale isolée : "J. Baillat"
+    ends.push({ end: endIdx, next: m.index + m[0].length });
+  }
+  return ends;
+}
+function splitParas(html){
+  if(!html || typeof html !== 'string') return html;
+  const tpl = document.createElement('template');
+  tpl.innerHTML = html;
+  const out = document.createElement('div');
+
+  function emit(p){
+    const txt = p.textContent.trim();
+    if(!txt) return;
+    if(txt.length <= PARA_SPLIT_MIN || p.querySelector('br')){ out.appendChild(p); return; }
+
+    // 1) phrases (séquences de nœuds), les éléments inline restent entiers
+    const sentences = []; let cur = [], curLen = 0;
+    const flush = ()=>{ if(cur.length){ sentences.push({nodes:cur, len:curLen}); } cur=[]; curLen=0; };
+    p.childNodes.forEach(n=>{
+      if(n.nodeType === 3){
+        const t = n.nodeValue; const ends = paraSentenceEnds(t); let from = 0;
+        ends.forEach(e=>{
+          const piece = t.slice(from, e.end);
+          if(piece.trim()){ cur.push(document.createTextNode(piece)); curLen += piece.trim().length; }
+          flush(); from = e.next;
+        });
+        const rest = t.slice(from);
+        if(rest.length){ cur.push(document.createTextNode(rest)); curLen += rest.trim().length; }
+      } else {
+        cur.push(n.cloneNode(true)); curLen += (n.textContent||'').length;
+      }
+    });
+    flush();
+
+    // 2) regroupe les phrases en paragraphes d'environ PARA_TARGET caractères
+    const groups = []; let g = [], gLen = 0;
+    sentences.forEach(sn=>{
+      if(g.length && gLen + sn.len > PARA_TARGET){ groups.push({s:g, len:gLen}); g=[]; gLen=0; }
+      g.push(sn); gLen += sn.len;
+    });
+    if(g.length) groups.push({s:g, len:gLen});
+    // évite un dernier paragraphe orphelin très court : on le rattache au précédent
+    // (seulement si le résultat reste raisonnable, sinon on garde la courte phrase seule)
+    if(groups.length > 1 && groups[groups.length-1].len < 70){
+      const prev = groups[groups.length-2], last = groups[groups.length-1];
+      if(prev.len + last.len <= PARA_TARGET * 1.25){
+        groups.pop(); prev.s = prev.s.concat(last.s); prev.len += last.len;
+      }
+    }
+
+    // 3) reconstruit les <p>
+    groups.forEach(gr=>{
+      const np = document.createElement('p');
+      gr.s.forEach((sn,i)=>{
+        if(i) np.appendChild(document.createTextNode(' '));
+        sn.nodes.forEach(x=>np.appendChild(x.cloneNode(true)));
+      });
+      out.appendChild(np);
+    });
+  }
+
+  // Suites de nœuds "inline" au niveau racine (texte nu, <strong>, <a>, <br>…) :
+  // si c'est du texte seul (ex. certaines bios sans <p>), on l'emballe dans un <p> ;
+  // s'il y a des balises mélangées, on n'y touche pas.
+  let run = [];
+  const flushRun = ()=>{
+    if(!run.length) return;
+    if(run.every(x=>x.nodeType === 3)){
+      const t = run.map(x=>x.nodeValue).join('').trim();
+      if(t){ const p = document.createElement('p'); p.textContent = t; emit(p); }
+    } else {
+      run.forEach(x=>out.appendChild(x.cloneNode(true)));
+    }
+    run = [];
+  };
+  tpl.content.childNodes.forEach(n=>{
+    if(n.nodeType === 1 && (n.tagName === 'P' || n.tagName === 'DIV')){
+      flushRun();
+      if(n.tagName === 'P') emit(n.cloneNode(true));
+      else out.appendChild(n.cloneNode(true));  // .work-label, etc.
+    } else {
+      run.push(n);
+    }
+  });
+  flushRun();
+  return out.innerHTML;
 }
 
 // ============================================================
@@ -3264,7 +3375,7 @@ function openEvent(dayIdx, evIdx){
       </div>
       ${priceTag ? `<div style="margin-bottom:10px;">${priceTag}</div>` : ''}
       <h2 id="ev-title" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;color:var(--black);">${c.t}</h2>
-      <div class="ev-desc">${c.d}</div>
+      <div class="ev-desc">${splitParas(c.d)}</div>
       ${renderEventArtists(ev)}
       ${renderEventTimeline(day, ev)}
       ${tixLink}
@@ -3310,7 +3421,7 @@ function openInstallation(idx){
         ${freeTag}
       </div>
       <h2 id="ev-title" style="font-family:var(--cond);font-weight:500;font-size:clamp(22px,5vw,36px);text-transform:uppercase;line-height:.95;letter-spacing:-0.02em;margin-bottom:12px;color:var(--black);">${c.t}</h2>
-      <div class="ev-desc">${c.d}</div>
+      <div class="ev-desc">${splitParas(c.d)}</div>
       ${renderEventArtists(ins)}
       ${Array.isArray(ins.spots) && ins.spots.length ? `
       <div style="display:flex;flex-wrap:wrap;gap:8px;">
