@@ -2913,19 +2913,40 @@ function initLaunchDayIntro(){
 // festival, quand on parcourt le programme du jour.
 function initHeaderCompact(){
   const header = document.querySelector('.site-header');
+  const marquee = header ? header.querySelector('.marquee') : null;
   if(!header) return;
   let compact = false;
   let ticking = false;
+  // ⚠️ Correctif tremblement (28 sept 2026, v2) : le repliement du bandeau
+  // (.marquee) est animé sur 220ms (transition CSS), pas instantané. Le
+  // vrai problème n'était pas la fréquence des bascules (déjà limitée par
+  // l'hystérésis ci-dessous), mais le fait qu'une bascule pouvait repartir
+  // dans l'autre sens EN PLEIN MILIEU de cette transition si le scroll
+  // repassait l'autre seuil entretemps — ce qui donne un à-coup très
+  // visible. `locked` empêche tout nouveau changement d'état tant que la
+  // transition en cours n'est pas VRAIMENT terminée (écoute 'transitionend'
+  // plutôt qu'un délai deviné, avec un filet de sécurité au cas où
+  // l'événement ne se déclenche pas — ex. onglet en arrière-plan).
+  let locked = false;
+  const COMPACT_ON = 60;
+  const COMPACT_OFF = 20;
+  const TRANSITION_FALLBACK_MS = 350; // filet de sécurité si 'transitionend' ne se déclenche pas
+  function unlock(){ locked = false; }
+  if(marquee){
+    marquee.addEventListener('transitionend', (e)=>{ if(e.propertyName === 'height') unlock(); });
+  }
   function update(){
     ticking = false;
     // Ignore le scroll automatique vers "aujourd'hui" — seul un scroll fait
     // par la personne elle-même doit replier le header (voir focusCurrentProgram).
-    if(window.__mappAutoScroll) return;
+    if(window.__mappAutoScroll || locked) return;
     const y = window.scrollY || document.documentElement.scrollTop;
-    const shouldCompact = y > 40;
+    const shouldCompact = compact ? (y > COMPACT_OFF) : (y > COMPACT_ON);
     if(shouldCompact !== compact){
       compact = shouldCompact;
       header.classList.toggle('compact', compact);
+      locked = true;
+      setTimeout(unlock, TRANSITION_FALLBACK_MS); // se déverrouille tout seul même si transitionend ne vient jamais
     }
   }
   window.addEventListener('scroll', ()=>{
