@@ -1291,11 +1291,11 @@ footer a{color:var(--lime);text-decoration:none}
     <img class="partner-logo" src="/media/partners/the-main.webp" alt="The Main" loading="lazy">
     <img class="partner-logo" src="/media/partners/tourisme-montreal.webp" alt="Tourisme Montréal" loading="lazy">
     <img class="partner-logo" src="/media/partners/bonjour-quebec.webp" alt="Bonjour Québec" loading="lazy">
+    <img class="partner-logo" src="/media/partners/ckut.webp" alt="CKUT 90.3 FM" loading="lazy">
     <img class="partner-logo" src="/media/partners/esse.webp" alt="esse" loading="lazy">
     <img class="partner-logo" src="/media/partners/le-lien-multimedia.webp" alt="Le Lien Multimédia · Qui fait quoi" loading="lazy">
     <img class="partner-logo" src="/media/partners/mtl-only.webp" alt="MTL Only" loading="lazy">
     <img class="partner-logo" src="/media/partners/le-fifa.webp" alt="Le FIFA" loading="lazy">
-    <img class="partner-logo" src="/media/partners/ckut.webp" alt="CKUT 90.3 FM" loading="lazy">
   </div>
 </section>
 
@@ -1389,6 +1389,7 @@ const DAYS = [
   ]},
   { date:"2026-09-30", d:"30", moFr:"SEPT", moEn:"SEPT", wFr:"MER", wEn:"WED", events:[
     { time:"17h — 22h", venue:"moment", tixUrl:"https://www.zeffy.com/fr-CA/ticketing/tournoi-de-ping-pong-interactif-de-la-creativite-numerique-de-montreal", img:"/media/pingpong.webp",
+      artists:["lucia","olipage"],
       fr:{ t:"MAPP_X | Soirée bénéfice / réseautage MAPP - Tournoi de ping-pong interactif de la créativité numérique 🏓", d:"<p>Le mercredi 30 septembre de 17 h à 22 h aura lieu la 4ᵉ édition de la Soirée bénéfice / réseautage MAPP - Tournoi de ping-pong interactif de la créativité numérique de Montréal.</p><p>Assistez à la 4ᵉ édition du tournoi inter-studios de ping-pong sur table augmentée avec projection interactive, dans le cadre de la campagne de levée de fonds de MAPP_MTL. Un événement convivial réunissant les studios de création numérique de Montréal, offrant une belle occasion de rencontrer les professionnels du milieu, réseauter et soutenir votre studio préféré. Tous les fonds récoltés seront reversés à MAPP_MTL pour soutenir ses activités.</p>", price:"10 $ – Tarif étudiant et artiste · 20 $ – Admission générale · 100 $ – Billet donateur (inclus boisson, nourriture, siège réservé, rencontre avec le directeur et le conseil d'administration de MAPP)" },
       en:{ t:"Benefit / Networking Night - Montreal Digital Creativity Interactive Ping-Pong Tournament", d:"<p>As part of its fundraising campaign, MAPP_MTL invites the public and Montreal's creative community to the 4th edition of its ping-pong tournament. This one-of-a-kind evening will bring together studios, collectives and organizations from the digital creativity scene in a friendly competition on an augmented table with interactive projection, at the heart of the studios of its long-time partner, Moment Factory.</p><p>Beyond the tournament, this evening is an excellent opportunity to meet studio professionals, chat, exchange ideas and build connections in a welcoming setting.</p>", price:"$10 – Student and artist rate · $20 – General admission · $100 – Donor ticket (includes a drink, food, a reserved seat, and a meeting with MAPP's director and board of directors)" } }
   ]},
@@ -1560,6 +1561,16 @@ const ARTISTS = [
     sheetFocus:"center 8%",
     fr:{ disc:"Soirée MAPP", bio:"<p>BunBun est un·e artiste multimédia et VJ basé·e à Montréal, dont le style se distingue par une esthétique vivement colorée, ultra-texturée, rythmiquement synchronisée et holographique. Elle performera en direct en utilisant okVJ, un outil TouchDesigner personnalisé qu'elle a co-créé avec supermarket_sallad.</p>" },
     en:{ disc:"MAPP Night", bio:"<p>BunBun is a Montreal-based VJ and multimedia artist specializing in real-time projection mapping, live visuals, and scenic design. Their style is best described as brightly-hued, ultra-textured, beat-synced, and holographic-like. She'll be performing live using okVJ, a custom TouchDesigner tool she co-created with supermarket_sallad.</p>" },
+    links:{} },
+  { slug:"lucia", name:"Lucia", img:"/media/artists/w1200/lucia.webp", dayIdx:1, venue:"moment", cat:"dj",
+    sheetFocus:"center 25%",
+    fr:{ disc:"Soirée bénéfice · Tournoi de ping-pong", bio:"<p>DJ électronique née à New York et basée à Montréal, elle carbure au maximalisme, aux polyrythmies et aux basses lourdes, avec des influences pop et hip-hop. Cofondatrice du collectif queer MESSY, elle est aussi chargée de projet chez Silent Partners Studio.</p>" },
+    en:{ disc:"Benefit Night · Ping-Pong Tournament", bio:"<p>An electronic DJ born in New York and based in Montreal, she runs on maximalism, polyrhythm and heavy bass, with pop and hip-hop influences. Co-founder of the queer collective MESSY, she's also a project manager at Silent Partners Studio.</p>" },
+    links:{} },
+  { slug:"olipage", name:"Olipage", img:"/media/artists/w1200/olipage.webp", dayIdx:1, venue:"moment", cat:"dj",
+    sheetFocus:"center 15%",
+    fr:{ disc:"Soirée bénéfice · Tournoi de ping-pong", bio:"<p>Décrit par La Presse comme « efficace et très drôle », Olipage produit en solo des symphonies électro-humoristiques en temps réel, avec des paroles trouvées sur le vif par la foule. Programmé chaque année au FAR depuis 2022 et habitué du Cabaret Le Monastère, il signe aussi du mapping vidéo pour Normal Studio et le Mixbus.</p>" },
+    en:{ disc:"Benefit Night · Ping-Pong Tournament", bio:"<p>Described by La Presse as \"efficient and very funny,\" Olipage produces solo, real-time electro-comedic symphonies, with lyrics pulled on the spot from the crowd. A regular at FAR since 2022 and a fixture at Cabaret Le Monastère, he also creates video mapping for Normal Studio and the Mixbus.</p>" },
     links:{} },
 ];
 
@@ -1983,7 +1994,7 @@ ARTISTS.push(
     fr:{ disc:"MINUTE_MAPP · Jean-Yves, Projectionniste", bio:"<p>Jean-Michel Bourgeois travaille dans le monde de la publicité, des arts et de l'animation depuis plus de 15 ans.</p><div class=\"work-label\">Description de l'œuvre</div><p>Jean-Yves coupe la projection pour nous faire découvrir le métier de projectionniste.</p>" },
     en:{ disc:"MINUTE_MAPP · Jean-Yves, Projectionniste", bio:"<p>Jean-Michel Bourgeois has worked in advertising, the arts and animation for over 15 years.</p><div class=\"work-label\">About the work</div><p>Jean-Yves cuts the projection to introduce us to the trade of the projectionist.</p>" },
     links:{ ig:"https://www.instagram.com/jmbourgeois/" } },
-  { slug:"julia-chhoy", name:"Julia Chhoy", img:"/media/artists/w1200/julia-chhoy.webp", dayIdx:null, venue:"vanhorne", cat:"minute", country:"QC/CA", sheetRatio:"4/5",
+  { slug:"julia-chhoy", name:"Julia", img:"/media/artists/w1200/julia-chhoy.webp", dayIdx:null, venue:"vanhorne", cat:"minute", country:"QC/CA", sheetRatio:"4/5",
     appearances:[{ venue:"vanhorne", fr:"1 oct. 2026 · Skatepark Van Horne", en:"Oct 1, 2026 · Van Horne Skatepark" }],
     fr:{ disc:"MINUTE_MAPP · Petit jeu dans l'espace", bio:"<p>Graphiste et artiste multidisciplinaire montréalaise, Julia explore différentes formes d'expression, avec un accent sur les arts visuels, numériques, littéraires et musicaux.</p>" },
     en:{ disc:"MINUTE_MAPP · Petit jeu dans l'espace", bio:"<p>A Montreal graphic designer and multidisciplinary artist, Julia explores different forms of expression, with a focus on visual, digital, literary and musical arts.</p>" },
@@ -2971,9 +2982,14 @@ if ('serviceWorker' in navigator) {
 
   // Dès qu'un nouveau service worker prend le contrôle (après self.skipWaiting()
   // côté sw.js), on recharge la page une seule fois pour servir la nouvelle version.
+  // On ne recharge QUE s'il y avait déjà un service worker en contrôle au chargement
+  // (= vraie mise à jour). À la toute première visite, il n'y en a pas : le SW
+  // s'installe et prend le contrôle, mais recharger alors couperait l'effet
+  // d'intro et ferait un chargement inutile.
+  const hadController = !!navigator.serviceWorker.controller;
   let swRefreshing = false;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if(swRefreshing) return;
+    if(!hadController || swRefreshing) return;
     swRefreshing = true;
     window.location.reload();
   });
